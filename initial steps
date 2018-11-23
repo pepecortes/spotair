@@ -1,0 +1,5 @@
+MYSQL SERVER
+https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-18-04
+root password: chaeTe4l
+login as root: mysql -u root -p
+checking mysql service: systemctl status mysql.service

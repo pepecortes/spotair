@@ -3,3 +3,32 @@ https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-
 root password: chaeTe4l
 login as root: mysql -u root -p
 checking mysql service: systemctl status mysql.service
+
+ENVIRONMENT
+mysql 5.5
+phpmyadmin
+node 11
+
+DOCKER
+https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-docker-ce-1
+(getting started: https://docs.docker.com/get-started/)
+
+- docker cheat sheet: https://docs.docker.com/get-started/#recap-and-cheat-sheet
+
+- GUI for docker management: https://www.portainer.io
+sudo docker volume create portainer_data
+sudo docker run -d -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
+
+- start mysql server mounting a path to local storage (to make it persistent)
+sudo docker run --name spotair_mysql_server -v /path/to/local/persistent_database_dir:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=motdepasse -d mysql:5.5 
+
+- start phpmyadmin server, link to mysql server and start serving at http://localhost:8080
+sudo docker run --name spotair_myadmin -d --link spotair_mysql_server:db -p 8080:80 phpmyadmin/phpmyadmin
+
+- dockerizing a node.js web app
+https://nodejs.org/en/docs/guides/nodejs-docker-webapp/
+
+- building your first node application using docker
+https://www.javascriptjanuary.com/blog/building-your-first-node-app-using-docker
+
+

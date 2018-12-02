@@ -1,6 +1,14 @@
-.git
-**/node_modules
+node_modules
+npm-debug.log
 
-# dotenv environment variables file
-.env
+# ignore the development database
+dev_database/
 
+# ignore the git files
+.git/
+.gitignore
+
+# ignore all markdown files (md) beside all README*.md other than README-secret.md
+*.md
+!README*.md
+README-secret.md

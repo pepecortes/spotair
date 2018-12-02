@@ -1,31 +1,23 @@
-## Specifies the base image we're extending
 FROM node:11
+# you might use "alpine" if in production: the image is lighter
 
-## Create base directory
-RUN mkdir /src
+# Create app directory
+WORKDIR /app
 
-## Specify the "working directory" for the rest of the Dockerfile
-WORKDIR /src
+# Install dependencies
+# Copy both package.json AND package-lock.json
+COPY package*.json ./
+RUN npm install
+RUN npm install -g nodemon
+# If you are building your code for production
+# RUN npm install --only=production
 
-## Install packages using NPM xx (bundled with the node:xx image)
-COPY ./package.json /src/package.json
-#COPY ./package-lock.json /src/package-lock.json
-RUN npm install --silent
+# copy some app starting files
+# app sources will be bound for development
+COPY ./app.js ./
+COPY ./nodemon.json ./
+COPY ./.env ./
 
-## Add application code
-COPY ./app_api /src/app_api
-COPY ./app_client /src/app_client
-COPY ./bin /src/bin
-COPY ./public /src/public
-
-## Add the nodemon configuration file
-COPY ./nodemon.json /src/nodemon.json
-
-## Set environment to "development" by default
-ENV NODE_ENV development
-
-## Allows port 3000 to be publicly available
-EXPOSE 3000
-
-## The command uses nodemon to run the application
-CMD ["node", "node_modules/.bin/nodemon", "-L", "bin/www"]
+EXPOSE $PORT
+#CMD [ "npm", "start" ]
+CMD [ "nodemon", "./app.js"]

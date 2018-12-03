@@ -10,6 +10,7 @@ services:
       - ./app_client:/app/app_client
       - ./bin:/app/bin
       - ./public:/app/public
+      - ./test:/app/test
     depends_on:
       - db
       - adminer

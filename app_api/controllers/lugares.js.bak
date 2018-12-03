@@ -1,0 +1,257 @@
+var mongoose = require('mongoose');
+var HTTPStatus = require('http-status');
+var lugar = mongoose.model('lugar');
+
+var sendJSONresponse = function(res, status, content) {
+  res.status(status);
+  res.json(content);
+};
+
+module.exports.allLugares = function(req, res) {
+  lugar
+    .find()
+    .populate('pretty')
+    .exec(function(err, lugares) {
+      if (!lugares) {
+        sendJSONresponse(res, HTTPStatus.NOT_FOUND, {
+          "message": "nothing found"
+        });
+        return;
+      } else if (err) {
+        sendJSONresponse(res, HTTPStatus.NOT_FOUND, err);
+        return;
+      }
+      sendJSONresponse(res, HTTPStatus.OK, lugares);
+    });
+};
+
+module.exports.lugarById = function(req, res) {
+  lugar
+    .findById(req.params.id)
+    .populate('pretty')
+    .exec(function(err, lugares) {
+      if (!lugares) {
+        sendJSONresponse(res, HTTPStatus.NOT_FOUND, {
+          "message": "nothing found"
+        });
+        return;
+      } else if (err) {
+        sendJSONresponse(res, HTTPStatus.NOT_FOUND, err);
+        return;
+      }
+      sendJSONresponse(res, HTTPStatus.OK, lugares);
+    });
+};
+
+module.exports.lugarByNombre = function(req, res) {
+  lugar
+    .findOne({nombre: req.params.nombre})
+    .populate('pretty')
+    .exec(function(err, lugares) {
+      if (!lugares) {
+        sendJSONresponse(res, HTTPStatus.NOT_FOUND, {
+          "message": "nothing found"
+        });
+        return;
+      } else if (err) {
+        sendJSONresponse(res, HTTPStatus.NOT_FOUND, err);
+        return;
+      }
+      sendJSONresponse(res, HTTPStatus.OK, lugares);
+    });
+};
+
+module.exports.lugarInRange = function(req, res) {
+	/**
+	 * Returns all lugares within given range
+	 * of the given latitude and longitude
+	 * Can input radial range (en meters). Defaults to 100 meters
+	 * example: /api/lugares/long/1.4112564/lat/43.602314?range=150
+	 */
+	var point = [req.params.long, req.params.lat];
+	var range = (req.query.range)? req.query.range : 100;
+	// default distance is 100 meters
+	var radians = range / 6371000;
+	// distance must be given in radians for geoqueries
+	var geoQueryOptions = {center: point, maxDistance: radians, spherical: true};
+	
+	function callback(err, lugares) {
+		if (err) {
+			sendJSONresponse(res, HTTPStatus.BAD_REQUEST, err);
+		} else {
+			sendJSONresponse(res, HTTPStatus.OK, lugares);
+		}
+	}
+	lugar
+		.find()
+		.where('geo')
+		.near(geoQueryOptions)
+		.exec(callback);	
+}
+
+module.exports.visitByGPS = function(req, res) {
+	/**
+	 * If the given latitude and longitude correspond to a lugar
+	 * (within range, defaults to 100 meters) then, log a visit
+	 * Can give a comentario
+	 * example: /api/lugares/visit/long/1.4112564/lat/43.602314?range=150
+	 */
+	var point = [req.params.long, req.params.lat];
+	var range = (req.query.range)? req.query.range : 100;
+	var radians = range / 6371000;
+	var geoQueryOptions = {center: point, maxDistance: radians, spherical: true};
+	var newLog = (req.query.comentario)? {comentario: req.query.comentario} : {};
+	var update = {$push: {geolog: newLog}};
+	var callback = function(err, result) {
+		if (err) {
+			sendJSONresponse(res, HTTPStatus.BAD_REQUEST, err);
+		} else if (!result) {
+			sendJSONresponse(res, HTTPStatus.NOT_FOUND, {});
+		} else {
+			sendJSONresponse(res, HTTPStatus.OK, result);
+		}
+	}
+		
+	lugar
+		.findOneAndUpdate({}, update, {new: true}, callback)
+		.where('geo')
+		.near(geoQueryOptions);
+}
+
+module.exports.visitById = function(req, res) {
+	/**
+	 * Log a visit to the lugar given by its id
+	 */
+	if (!req.params.id) {
+		sendJSONresponse(res, HTTPStatus.BAD_REQUEST, {"message": "malformed entry: id missing"});
+		return;
+	}
+	lugar
+	.findOne({_id: req.params.id})
+	.exec(
+		function(err, elLugar) {
+			var newLog = {comentario: req.query.comentario};
+			if (!elLugar.geolog) {
+				elLugar.geolog = newLog;
+			} else {
+				elLugar.geolog.push(newLog);
+			};
+			elLugar.save(function(err, elLugar) {
+				if (err) {
+					sendJSONresponse(res, HTTPStatus.NOT_MODIFIED, err);
+				} else {
+					sendJSONresponse(res, HTTPStatus.OK, elLugar);
+				}
+			});
+		});
+	
+}
+
+module.exports.visit = function(req, res) {
+	if (!req.params.nombre) {
+		sendJSONresponse(res, HTTPStatus.BAD_REQUEST, {"message": "malformed entry: nombre missing"});
+		return;
+	}
+	lugar
+	.findOne({nombre: req.params.nombre})
+	.exec(
+		function(err, elLugar) {
+			var newLog = {comentario: req.query.comentario};
+			if (!elLugar.geolog) {
+				elLugar.geolog = newLog;
+			} else {
+				elLugar.geolog.push(newLog);
+			};
+			elLugar.save(function(err, elLugar) {
+				if (err) {
+					sendJSONresponse(res, HTTPStatus.NOT_MODIFIED, err);
+				} else {
+					sendJSONresponse(res, HTTPStatus.OK, elLugar);
+				}
+			});
+		});
+}
+
+
+module.exports.createLugar = function(req, res) {
+	var newLugar = {
+		nombre: req.body.nombre,
+		nombre_largo: req.body.nombre_largo,
+		geo: [parseFloat(req.body.long), parseFloat(req.body.lat)]
+	}
+	
+	if (req.query.visit == "true") {
+		newLugar.geolog = {comentario: "nuevo lugar"};
+	}
+
+	lugar.create(newLugar, function(err, elLugar) {
+		if (err) {
+			sendJSONresponse(res, HTTPStatus.BAD_REQUEST, err);
+		} else {
+			sendJSONresponse(res, HTTPStatus.CREATED, elLugar);
+		}
+	});
+}
+
+module.exports.editLugar = function(req, res) {
+	/*
+	 * Edit a lugar
+	 * input: idLugar and an object: {nombre, nombre_largo, lat, long}
+	 * output: number affected + idLugar
+	 */
+	var id = req.params.id;
+	var updatedLugar = {
+		nombre: req.body.nombre,
+		nombre_largo: req.body.nombre_largo,
+		geo: [parseFloat(req.body.long), parseFloat(req.body.lat)]
+	};
+	lugar.update(
+			{_id: id},
+			updatedLugar,
+			{},
+			function(err, numAffected) {
+			if (err) {
+				sendJSONresponse(res, HTTPStatus.BAD_REQUEST, err);
+			} else {
+				result = numAffected;
+				result.id = id;
+				sendJSONresponse(res, HTTPStatus.OK, result);
+			}}
+		);
+}
+
+module.exports.deleteLugar = function(req, res) {
+	var id = req.params.id;  
+	lugar
+    .findByIdAndRemove(id)
+    .exec()
+    .then(function(result) {
+      var status = (result)? HTTPStatus.OK : HTTPStatus.NOT_FOUND;
+      sendJSONresponse(res, status, result);
+    }, function(err) {
+      sendJSONresponse(res, HTTPStatus.NOT_FOUND, err);
+    });
+}
+
+module.exports.removeGeolog = function(req, res) {
+	/*
+	 * Removes a log entry.
+	 * input: idLugar and idLog
+	 * output: number affected + idLugar
+	 */
+	lugar.update(
+		{_id: req.params.idLugar},
+		{$pull: {geolog: {_id: req.params.idLog}}},
+		{},
+		function(err, numAffected) {
+		if (err) {
+			sendJSONresponse(res, HTTPStatus.BAD_REQUEST, err);
+		} else {
+			result = numAffected;
+			result.id = req.params.idLugar;
+			sendJSONresponse(res, HTTPStatus.OK, result);
+		}}
+		);
+	
+}
+

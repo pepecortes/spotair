@@ -2,7 +2,9 @@
   "name": "spotair",
   "version": "0.0.0",
   "private": true,
-  "scripts": {},
+  "scripts": {
+		"test": "./node_modules/.bin/mocha --reporter spec"	
+	},
   "dependencies": {
     "body-parser": "~1.18.3",
     "cookie-parser": "~1.4.3",
@@ -14,6 +16,8 @@
     "serve-favicon": "~2.5.0",
     "uglify-js": "~3.4.9",
     "mysql2": "~1.6.4",
-    "sequelize": "~4.41.2"
+    "sequelize": "~4.41.2",
+    "mocha": "~5.2.0",
+    "chai": "~4.2.0" 
   }
 }

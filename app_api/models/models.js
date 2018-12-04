@@ -1,6 +1,3 @@
-console.log("bringing up models");
-
-
 //var mongoose = require('mongoose');
 //var Schema = mongoose.Schema
 

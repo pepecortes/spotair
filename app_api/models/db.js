@@ -1,5 +1,6 @@
 // MANAGE MYSQL DATABASE CONNECTION
 const mysql = require('mysql2');
+const debug = require('../../lib/debuggers').db;
 
 // create the connection to database
 const connection = mysql.createConnection({
@@ -11,18 +12,18 @@ const connection = mysql.createConnection({
 
 connection.connect(function(err) {
   if (err) console.error('mysql connection error');
-  else console.log('connected to database ' + process.env.DB_DATABASE);
+  else debug('connected to database ' + process.env.DB_DATABASE);
 });
 
 // report connection errors
 connection.on('error', function(err) {
-	console.log('mysql connection error: ' + JSON.stringify(err));
+	console.error('mysql connection error: ' + JSON.stringify(err));
 });
 
 // call this if the process is restarted or terminated
 function gracefulShutdown(msg, callback) {
 	connection.end(function(err) {
-		console.log('mysql disconnected through ' + msg);
+		console.error('mysql disconnected through ' + msg);
 		callback();
 	});
 }

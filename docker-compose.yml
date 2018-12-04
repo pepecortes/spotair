@@ -11,6 +11,7 @@ services:
       - ./bin:/app/bin
       - ./public:/app/public
       - ./test:/app/test
+      - ./lib:/app/lib
     depends_on:
       - db
       - adminer

@@ -9,6 +9,10 @@ var uglifyJs = require('uglify-js');
 var fs = require('fs');
 var HTTPStatus = require('http-status');
 
+// start debugging: check debugggers.js
+const debug = require('./lib/debuggers').main;
+debug("starting application");
+
 // connect database and models
 require('./app_api/models/db');
 

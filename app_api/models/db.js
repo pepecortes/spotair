@@ -1,6 +1,6 @@
 // MANAGE MYSQL DATABASE CONNECTION
 const mysql = require('mysql2');
-const debug = require('../../lib/debuggers').db;
+const debug = require('debug')('app:api:db');
 
 // create the connection to database
 const connection = mysql.createConnection({

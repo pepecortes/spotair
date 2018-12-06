@@ -1,53 +1,36 @@
 // MANAGE MYSQL DATABASE CONNECTION
-const mysql = require('mysql2');
+const Sequelize = require('sequelize');
 const debug = require('debug')('app:api:db');
 
-// create the connection to database
-const connection = mysql.createConnection({
+/** create the connection to database */
+const sequelize = new Sequelize({
   host: process.env.DB_HOST,
-  user: process.env.DB_USER,
+  username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE
+  database: process.env.DB_DATABASE,
+  operatorsAliases: false,
+  define: {timestamp:true, engine: 'MyISAM', underscored:false},
+  dialect: 'mysql'
 });
 
-connection.connect(function(err) {
-  if (err) console.error('mysql connection error');
-  else debug('connected to database ' + process.env.DB_DATABASE);
-});
+/** try to connect to database */
+sequelize
+  .authenticate()
+  .then(() => {
+    debug('connected to database ' + process.env.DB_DATABASE);
+  })
+  .catch(err => {
+    console.error('Unable to connect to the database:', err);
+  });
 
-// report connection errors
-connection.on('error', function(err) {
-	console.error('mysql connection error: ' + JSON.stringify(err));
-});
+/** Bring in the models that are defined in each file */
+const Aerodrome = sequelize.import('./aerodrome');
+const Annee = sequelize.import('./annee');
+const Theme = sequelize.import('./theme');
+const Contact = sequelize.import('./contact');
 
-// call this if the process is restarted or terminated
-function gracefulShutdown(msg, callback) {
-	connection.end(function(err) {
-		console.error('mysql disconnected through ' + msg);
-		callback();
-	});
-}
+sequelize.sync();
 
-// For nodemon restarts
-process.once('SIGUSR2', function() {
-	gracefulShutdown('nodemon restart', function() {
-		process.kill(process.pid, 'SIGUSR2');
-	});
-});
+// Should I export sequelize? perphaps not: think about it
+module.exports = sequelize;
 
-// For app termination
-process.on('SIGINT', function() {
-	gracefulShutdown('app termination', function() {
-		process.exit(0);
-	});
-});
-
-// For SIGTERM termination
-process.on('SIGTERM', function() {
-	gracefulShutdown('SIGTERM termination', function() {
-		process.exit(0);
-	});
-});
-
-// BRING IN YOUR SCHEMAS & MODELS
-require('./models');

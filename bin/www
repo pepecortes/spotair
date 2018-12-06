@@ -5,13 +5,13 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('spotair:server');
+var debug = require('debug')('www');
 var http = require('http');
 
 /**
  * Get port from environment and store in Express.
  */
-
+debug("starting the http server on port " + process.env.PORT);
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 

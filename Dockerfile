@@ -20,4 +20,4 @@ COPY ./.env ./
 
 EXPOSE $PORT
 #CMD [ "npm", "start" ]
-CMD [ "nodemon", "./app.js"]
+CMD [ "nodemon"]

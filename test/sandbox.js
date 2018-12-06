@@ -1,32 +1,21 @@
-// Default logger writes at 'debug' level
+// Sandbox for short term testing
+require('dotenv').config({path: '../.env'})
 
-require('dotenv').load();
-console.log("..." + JSON.stringify(process.env))
+// connect database and models
+const sequelize = require('../app_api/models/db');
 
-var log = require("log");
-require("log-node")();
- 
-// Log 'debug' level message:
-log("some debug message %s", "injected string");
- 
-// Get namespaced logger (debug lib style)
-log = log.get("my-lib");
- 
-// Log 'debug' level message in context of 'my-lib' namespace:
-log("some debug message in 'my-lib' namespace context");
- 
-// Namespaces can be nested
-log = log.get("func");
- 
-// Log 'debug' level message in context of 'my-lib:func' namespace:
-log("some debug message in 'my-lib:func' namespace context");
- 
-// Log 'error' level message in context of 'my-lib:func' namespace:
-log.error("some error message");
- 
-// log output can be dynamically enabled/disabled during runtime
-const { restore } = log.error.disable();
-log.error("error message not really logged");
-// Restore previous logs visibiity state
-restore();
-log.error("error message to be logged");
+
+const Contact = sequelize.import('../app_api/models/contact');
+const Aerodrome = sequelize.import('../app_api/models/aerodrome');
+
+//Aerodrome.create({nom: "NOMBRE", lieu: "LIEU"}).then(record => {
+	//console.log(record.nom);
+	//console.log(record.text);
+//});
+
+Aerodrome.findById(1).then(record => {
+  console.log("record: " + record.nom + record.lieu + record.text);
+});
+
+
+

@@ -2,6 +2,8 @@
 const Sequelize = require('sequelize');
 const debug = require('debug')('app:api:db');
 
+module.exports = {};
+
 /** create the connection to database */
 const sequelize = new Sequelize({
   host: process.env.DB_HOST,
@@ -23,14 +25,11 @@ sequelize
     console.error('Unable to connect to the database:', err);
   });
 
-/** Bring in the models that are defined in each file */
-const Aerodrome = sequelize.import('./aerodrome');
-const Annee = sequelize.import('./annee');
-const Theme = sequelize.import('./theme');
-const Contact = sequelize.import('./contact');
-
 sequelize.sync();
 
 // Should I export sequelize? perphaps not: think about it
-module.exports = sequelize;
+module.exports.sequelize = sequelize;
+
+/** Bring in the models that are defined in each file */
+module.exports.Aerodrome = sequelize.import('./aerodrome');
 

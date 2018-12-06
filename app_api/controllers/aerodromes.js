@@ -38,23 +38,24 @@ module.exports.create = function(req, res) {
 		.catch(err => sendJSONresponse(res, HTTPStatus.NOT_FOUND, err));
 };
 
-///**
- //* Update a single aerodrome
- //* Input: the record to update, which containes the ID
- //*/
-//module.exports.upsert = function(req, res) {
-	//var updatedRecord = {
-		//id: req.body.id,
-		//nom: req.body.nom,
-		//lieu: req.body.lieu,
-		//latitude: req.body.latitude,
-		//longitude: req.body.longitude
-	//}
-  //Aerodrome
-    //.upsert(updatedRecord)
-    //.then(record => sendJSONresponse(res, HTTPStatus.OK, record))
-		//.catch(err => sendJSONresponse(res, HTTPStatus.NOT_FOUND, err));
-//};
+/**
+ * Update a single aerodrome
+ * Input: the record to update, which containes the ID
+ */
+module.exports.update = function(req, res) {
+	const id = req.params.id;
+	var updatedRecord = {};
+	if (req.body.nom) updatedRecord.nom = req.body.nom;
+	if (req.body.lieu) updatedRecord.lieu = req.body.lieu;
+	if (req.body.latitude) updatedRecord.latitude = req.body.latitude;
+	if (req.body.longitude) updatedRecord.longitude = req.body.longitude;
+	//updatedRecord = buildRecordFromHttpRequest(['nom', 'lieu', 'latitude', 'longitude']);
+  Aerodrome
+    .update(updatedRecord, {where: {id: id}})
+    .then(() => Aerodrome.findById(id))
+    .then(record => sendJSONresponse(res, HTTPStatus.OK, record))
+		.catch(err => sendJSONresponse(res, HTTPStatus.NOT_FOUND, err));
+};
 
 
 //module.exports.lugarByNombre = function(req, res) {

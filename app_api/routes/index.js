@@ -8,5 +8,6 @@ var ctrlAerodromes = require('../controllers/aerodromes');
 router.get('/aerodromes', ctrlAerodromes.all);
 router.get('/aerodromes/:id', ctrlAerodromes.byId);
 router.post('/aerodromes', ctrlAerodromes.create);
+router.put('/aerodromes/:id', ctrlAerodromes.update);
 
 module.exports = router;

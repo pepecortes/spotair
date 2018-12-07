@@ -1,3 +1,13 @@
+/**
+ * Aerodromes model
+ * @module /app_api/models/aerodrome
+ * @property {string}	nom 		
+ * @property {string}	lieu 		
+ * @property {number=}	latitude 	- {min:-90, max:90} can be null, but both (lat and long) or neither are required
+ * @property {number=}	longitude	- {min:-180, max:180}
+ * @property {virtual}	text		- "nom, lieu"
+ */
+
 module.exports = function(sequelize, DataTypes) {
 	
 	const Model = sequelize.define("aerodrome", {

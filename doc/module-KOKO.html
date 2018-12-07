@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Module: /app_lib/helpers</title>
+	<title>Documentation Module: KOKO</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="module-_app_api_controllers_aerodromes.html">/app_api/controllers/aerodromes</a></li><li><a href="module-_app_api_controllers_annees.html">/app_api/controllers/annees</a></li><li><a href="module-_app_api_models_aerodrome.html">/app_api/models/aerodrome</a></li><li><a href="module-_app_api_models_annee.html">/app_api/models/annee</a></li><li><a href="module-_app_lib_helpers.html">/app_lib/helpers</a></li>
+					<li><a href="module-_app_api_controllers_aerodrome.html">/app_api/controllers/aerodrome</a></li><li><a href="module-_app_lib_helpers.html">/app_lib/helpers</a></li><li><a href="module-KOKO.html">KOKO</a></li>
 				</ul>
 			</li>
 			
@@ -72,7 +72,7 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Module: /app_lib/helpers</h1>
+	<h1 class="page-title">Module: KOKO</h1>
 <section>
 
 <header>
@@ -84,7 +84,7 @@
     <div class="container-overview">
     
         
-            <div class="description">Common helpers functions</div>
+            <div class="description">"POST" Create an aerodrome</div>
         
 
         
@@ -128,6 +128,12 @@
 
 
         
+            <h3>Example</h3>
+            
+    <pre class="sunlight-highlight-javascript">PUT: http://host:port/api/aerodromes/4 (with form data in the body)</pre>
+
+
+        
     
     </div>
 
@@ -150,7 +156,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id=".pickObject"><span class="type-signature">&lt;static> </span>pickObject(object, arrayOfProperties)</h4>
+    <h4 class="name" id=".update"><span class="type-signature">&lt;static> </span>update()</h4>
     
     
 </dt>
@@ -158,7 +164,7 @@
 
     
     <div class="description">
-        Builds an object out of another by picking only the selected properties
+        Update a single aerodrome
     </div>
     
 
@@ -193,7 +199,31 @@
 
         <tr>
             
-                <td class="name"><code>object</code></td>
+                <td class="name"><code>req.params.id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">aerodrome id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>req.body</code></td>
             
 
             <td class="type">
@@ -210,20 +240,39 @@
 
             
 
-            <td class="description last">The input object</td>
-        </tr>
+            <td class="description last">aerodrome data (any can be missing for un update)
+                <h6 class="method-params-label method-subparams-label">Properties</h6>
+                
 
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
     
 
         <tr>
             
-                <td class="name"><code>arrayOfProperties</code></td>
+                <td class="name"><code>nom</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;string></span>
+<span class="param-type">string</span>
 
 
 
@@ -234,7 +283,86 @@
 
             
 
-            <td class="description last">The array of the properties you want to pick up</td>
+            <td class="description last">nom</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>lieu</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">lieu</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>latitude</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">latitude (-90 to 90)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>longitude-</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">longitude (-180 to 180)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -298,213 +426,18 @@
     
             
 <div class="param-desc">
-    Returns an object containing the selected properties only
+    The aerodrome modified (or NOT_FOUND error)
 </div>
 
 
 
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Object</span>
-
-
-
-    </dd>
-</dl>
-
 
         
 
     
         <h5>Example</h5>
         
-    <pre class="sunlight-highlight-javascript">pickObject({a: 1, b: 2, c: 3}, [&#x27;a&#x27;, &#x27;b&#x27;]) = {a: 1, b: 2}</pre>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id=".sendJSONresponse"><span class="type-signature">&lt;static> </span>sendJSONresponse(res, status, content)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Convenience function for sending JSON response on API calls
-    </div>
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>res</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The object that will be sent back</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>status</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">HTTPStatus</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">See HTTPStatus node module</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>content</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">JSON</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The JSON object</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <h5>Example</h5>
-        
-    <pre class="sunlight-highlight-javascript">sendJSONresponse(res, HTTPStatus.NOT_FOUND, err)</pre>
+    <pre class="sunlight-highlight-javascript">PUT: http://host:port/api/aerodromes/4 (with form data in the body)</pre>
 
 
     
@@ -560,7 +493,7 @@
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
 	
-		on 2018-12-07T13:33:24+00:00
+		on 2018-12-07T12:19:13+00:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

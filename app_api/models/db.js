@@ -25,11 +25,13 @@ sequelize
     console.error('Unable to connect to the database:', err);
   });
 
-sequelize.sync();
-
 // Should I export sequelize? perphaps not: think about it
-module.exports.sequelize = sequelize;
+//module.exports.sequelize = sequelize;
 
 /** Bring in the models that are defined in each file */
 module.exports.Aerodrome = sequelize.import('./aerodrome');
+module.exports.Annee = sequelize.import('./annee');
+module.exports.Theme = sequelize.import('./theme');
+
+sequelize.sync();
 

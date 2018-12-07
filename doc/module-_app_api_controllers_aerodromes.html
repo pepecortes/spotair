@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Module: /app_lib/helpers</title>
+	<title>Documentation Module: /app_api/controllers/aerodromes</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -72,7 +72,7 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Module: /app_lib/helpers</h1>
+	<h1 class="page-title">Module: /app_api/controllers/aerodromes</h1>
 <section>
 
 <header>
@@ -84,7 +84,7 @@
     <div class="container-overview">
     
         
-            <div class="description">Common helpers functions</div>
+            <div class="description">Aerodromes controller</div>
         
 
         
@@ -150,7 +150,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id=".pickObject"><span class="type-signature">&lt;static> </span>pickObject(object, arrayOfProperties)</h4>
+    <h4 class="name" id=".all"><span class="type-signature">&lt;static> </span>all()</h4>
     
     
 </dt>
@@ -158,7 +158,115 @@
 
     
     <div class="description">
-        Builds an object out of another by picking only the selected properties
+        Select all aerodromes
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    All aerodromes in database
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">GET: http://host:port/api/aerodromes</pre>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".byId"><span class="type-signature">&lt;static> </span>byId()</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Select an aerodrome given by its id
     </div>
     
 
@@ -193,13 +301,13 @@
 
         <tr>
             
-                <td class="name"><code>object</code></td>
+                <td class="name"><code>req.param.id</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">number</span>
 
 
 
@@ -210,31 +318,7 @@
 
             
 
-            <td class="description last">The input object</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>arrayOfProperties</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;string></span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The array of the properties you want to pick up</td>
+            <td class="description last">id</td>
         </tr>
 
     
@@ -298,23 +382,10 @@
     
             
 <div class="param-desc">
-    Returns an object containing the selected properties only
+    The aerodrome (or NOT_FOUND error)
 </div>
 
 
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Object</span>
-
-
-
-    </dd>
-</dl>
 
 
         
@@ -322,7 +393,7 @@
     
         <h5>Example</h5>
         
-    <pre class="sunlight-highlight-javascript">pickObject({a: 1, b: 2, c: 3}, [&#x27;a&#x27;, &#x27;b&#x27;]) = {a: 1, b: 2}</pre>
+    <pre class="sunlight-highlight-javascript">GET: http://host:port/api/aerodromes/12</pre>
 
 
     
@@ -332,7 +403,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id=".sendJSONresponse"><span class="type-signature">&lt;static> </span>sendJSONresponse(res, status, content)</h4>
+    <h4 class="name" id=".create"><span class="type-signature">&lt;static> </span>create()</h4>
     
     
 </dt>
@@ -340,7 +411,7 @@
 
     
     <div class="description">
-        Convenience function for sending JSON response on API calls
+        Create an aerodrome
     </div>
     
 
@@ -375,7 +446,7 @@
 
         <tr>
             
-                <td class="name"><code>res</code></td>
+                <td class="name"><code>req.body</code></td>
             
 
             <td class="type">
@@ -392,20 +463,39 @@
 
             
 
-            <td class="description last">The object that will be sent back</td>
-        </tr>
+            <td class="description last">aerodrome data
+                <h6 class="method-params-label method-subparams-label">Properties</h6>
+                
 
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
     
 
         <tr>
             
-                <td class="name"><code>status</code></td>
+                <td class="name"><code>nom</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">HTTPStatus</span>
+<span class="param-type">string</span>
 
 
 
@@ -416,20 +506,20 @@
 
             
 
-            <td class="description last">See HTTPStatus node module</td>
+            <td class="description last">nom</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>content</code></td>
+                <td class="name"><code>lieu</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">JSON</span>
+<span class="param-type">string</span>
 
 
 
@@ -440,7 +530,62 @@
 
             
 
-            <td class="description last">The JSON object</td>
+            <td class="description last">lieu</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>latitude</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">latitude (-90 to 90)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>longitude</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">longitude (-180 to 180)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -500,11 +645,313 @@
     
 
     
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    The new aerodrome (or NOT_FOUND error)
+</div>
+
+
+
+
+        
 
     
         <h5>Example</h5>
         
-    <pre class="sunlight-highlight-javascript">sendJSONresponse(res, HTTPStatus.NOT_FOUND, err)</pre>
+    <pre class="sunlight-highlight-javascript">POST: http://host:port/api/aerodromes/ (with form data in the body)</pre>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".update"><span class="type-signature">&lt;static> </span>update()</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Update a single aerodrome
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>req.params.id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">aerodrome id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>req.body</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">aerodrome data (any can be missing for un update)
+                <h6 class="method-params-label method-subparams-label">Properties</h6>
+                
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>nom</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">nom</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>lieu</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">lieu</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>latitude</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">latitude (-90 to 90)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>longitude</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">longitude (-180 to 180)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    The aerodrome modified (or NOT_FOUND error)
+</div>
+
+
+
+
+        
+
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">PUT: http://host:port/api/aerodromes/4 (with form data in the body)</pre>
 
 
     
@@ -560,7 +1007,7 @@
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
 	
-		on 2018-12-07T13:33:24+00:00
+		on 2018-12-07T13:33:23+00:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

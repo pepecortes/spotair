@@ -1,3 +1,9 @@
+/**
+ * Annee model
+ * @module /app_api/models/annee
+ * @property {string}	annee
+ */
+
 module.exports = function(sequelize, DataTypes) {
 	
 	const Model = sequelize.define("annee", {
@@ -10,7 +16,7 @@ module.exports = function(sequelize, DataTypes) {
     annee: {
 			type: DataTypes.STRING,
 			allowNull: false,
-		}, 
+		},		
     createdAt: {
       type: DataTypes.DATE,
       defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
@@ -21,8 +27,11 @@ module.exports = function(sequelize, DataTypes) {
       defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
 			allowNull: false,
     },
+  }, {
+		indexes: [
+				{type: 'FULLTEXT', name: 'text_search', fields: ['annee']}
+		],
   }
-  
   );
 	
 	return Model;

@@ -1,3 +1,9 @@
+/**
+ * Theme model
+ * @module /app_api/models/theme
+ * @property {string}	theme
+ */
+
 module.exports = function(sequelize, DataTypes) {
 	
 	const Model = sequelize.define("theme", {
@@ -10,7 +16,7 @@ module.exports = function(sequelize, DataTypes) {
     theme: {
 			type: DataTypes.STRING,
 			allowNull: false,
-		}, 
+		},		
     createdAt: {
       type: DataTypes.DATE,
       defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
@@ -23,10 +29,9 @@ module.exports = function(sequelize, DataTypes) {
     },
   }, {
 		indexes: [
-			{type: 'FULLTEXT', name: 'text_search', fields: ['theme']}
+				{type: 'FULLTEXT', name: 'text_search', fields: ['theme']}
 		],
-	}
-  
+  }
   );
 	
 	return Model;

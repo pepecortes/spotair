@@ -8,6 +8,7 @@ services:
     volumes:
       - ./app_api:/app/app_api
       - ./app_client:/app/app_client
+      - ./app_lib:/app/app_lib
       - ./bin:/app/bin
       - ./public:/app/public
       - ./test:/app/test

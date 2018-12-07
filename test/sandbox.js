@@ -2,20 +2,22 @@
 require('dotenv').config({path: '../.env'})
 
 // connect database and models
-const db = require('../app_api/models/db');
+//const db = require('../app_api/models/db');
 
 
-const Aerodrome = db.Aerodrome;
+const object = {a: 1, b: 2, c: 3};
+console.log(object);
+const modified = equis(object, ['a', 'b']);
+console.log(modified);
 
-//Aerodrome.create({nom: "NOMBRE", lieu: "LIEU"}).then(record => {
-	//console.log(record.nom);
-	//console.log(record.lieu);
-	//console.log(record.text);
-//});
 
-Aerodrome.findById(1).then(record => {
-  console.log("record: " + record.nom + record.lieu + record.text);
-});
-
+function equis(object, arrayOfProperties) {
+	var output = {};
+	for (const p of arrayOfProperties) {
+		console.log("p is " + p);
+		output[p] = object[p];
+	}
+	return output;
+}
 
 

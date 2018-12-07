@@ -1,6 +1,12 @@
+/**
+ * Aerodromes controller
+ * @module /app_api/controllers/aerodrome
+ */
+
 const debug = require('debug')('app:api:controllers:aerodromes');
 const HTTPStatus = require('http-status');
 const db = require('../models/db');
+const help = require('../../app_lib/helpers');
 const Aerodrome = db.Aerodrome;
 
 const sendJSONresponse = function(res, status, content) {
@@ -44,66 +50,12 @@ module.exports.create = function(req, res) {
  */
 module.exports.update = function(req, res) {
 	const id = req.params.id;
-	var updatedRecord = {};
-	if (req.body.nom) updatedRecord.nom = req.body.nom;
-	if (req.body.lieu) updatedRecord.lieu = req.body.lieu;
-	if (req.body.latitude) updatedRecord.latitude = req.body.latitude;
-	if (req.body.longitude) updatedRecord.longitude = req.body.longitude;
-	//updatedRecord = buildRecordFromHttpRequest(['nom', 'lieu', 'latitude', 'longitude']);
+	var updatedRecord = help.pickObject(req.body, ['nom', 'lieu', 'latitude', 'longitude']);
   Aerodrome
     .update(updatedRecord, {where: {id: id}})
     .then(() => Aerodrome.findById(id))
     .then(record => sendJSONresponse(res, HTTPStatus.OK, record))
 		.catch(err => sendJSONresponse(res, HTTPStatus.NOT_FOUND, err));
 };
-
-
-//module.exports.lugarByNombre = function(req, res) {
-  //lugar
-    //.findOne({nombre: req.params.nombre})
-    //.populate('pretty')
-    //.exec(function(err, lugares) {
-      //if (!lugares) {
-        //sendJSONresponse(res, HTTPStatus.NOT_FOUND, {
-          //"message": "nothing found"
-        //});
-        //return;
-      //} else if (err) {
-        //sendJSONresponse(res, HTTPStatus.NOT_FOUND, err);
-        //return;
-      //}
-      //sendJSONresponse(res, HTTPStatus.OK, lugares);
-    //});
-//};
-
-
-
-
-//module.exports.editLugar = function(req, res) {
-	///*
-	 //* Edit a lugar
-	 //* input: idLugar and an object: {nombre, nombre_largo, lat, long}
-	 //* output: number affected + idLugar
-	 //*/
-	//var id = req.params.id;
-	//var updatedLugar = {
-		//nombre: req.body.nombre,
-		//nombre_largo: req.body.nombre_largo,
-		//geo: [parseFloat(req.body.long), parseFloat(req.body.lat)]
-	//};
-	//lugar.update(
-			//{_id: id},
-			//updatedLugar,
-			//{},
-			//function(err, numAffected) {
-			//if (err) {
-				//sendJSONresponse(res, HTTPStatus.BAD_REQUEST, err);
-			//} else {
-				//result = numAffected;
-				//result.id = id;
-				//sendJSONresponse(res, HTTPStatus.OK, result);
-			//}}
-		//);
-//}
 
 

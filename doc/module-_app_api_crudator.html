@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Module: KOKO</title>
+	<title>Documentation Module: /app_api/crudator</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="module-_app_api_controllers_aerodrome.html">/app_api/controllers/aerodrome</a></li><li><a href="module-_app_lib_helpers.html">/app_lib/helpers</a></li><li><a href="module-KOKO.html">KOKO</a></li>
+					<li><a href="module-_app_api_controllers_aerodromes.html">/app_api/controllers/aerodromes</a></li><li><a href="module-_app_api_controllers_annees.html">/app_api/controllers/annees</a></li><li><a href="module-_app_api_controllers_galeries.html">/app_api/controllers/galeries</a></li><li><a href="module-_app_api_controllers_themes.html">/app_api/controllers/themes</a></li><li><a href="module-_app_api_crudator.html">/app_api/crudator</a></li><li><a href="module-_app_api_index.html">/app_api/index</a></li><li><a href="module-_app_api_models_aerodrome.html">/app_api/models/aerodrome</a></li><li><a href="module-_app_api_models_annee.html">/app_api/models/annee</a></li><li><a href="module-_app_api_models_galerie.html">/app_api/models/galerie</a></li><li><a href="module-_app_api_models_theme.html">/app_api/models/theme</a></li><li><a href="module-_app_lib_helpers.html">/app_lib/helpers</a></li>
 				</ul>
 			</li>
 			
@@ -72,7 +72,7 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Module: KOKO</h1>
+	<h1 class="page-title">Module: /app_api/crudator</h1>
 <section>
 
 <header>
@@ -84,7 +84,7 @@
     <div class="container-overview">
     
         
-            <div class="description">"POST" Create an aerodrome</div>
+            <div class="description">Common helpers functions</div>
         
 
         
@@ -128,12 +128,6 @@
 
 
         
-            <h3>Example</h3>
-            
-    <pre class="sunlight-highlight-javascript">PUT: http://host:port/api/aerodromes/4 (with form data in the body)</pre>
-
-
-        
     
     </div>
 
@@ -148,226 +142,22 @@
     
 
     
-
-    
-        <h3 class="subsection-title">Methods</h3>
+        <h3 class="subsection-title">Members</h3>
 
         <dl>
             
 <hr>
-<dt>
-    <h4 class="name" id=".update"><span class="type-signature">&lt;static> </span>update()</h4>
-    
+<dt class="name" id="~sendJSON">
+    <h4 id="~sendJSON"><span class="type-signature">&lt;inner, constant> </span>sendJSON<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
-
     
     <div class="description">
-        Update a single aerodrome
+        Convenience function for sending JSON response on API calls
     </div>
     
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>req.params.id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">aerodrome id</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>req.body</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">aerodrome data (any can be missing for un update)
-                <h6 class="method-params-label method-subparams-label">Properties</h6>
-                
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>nom</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">nom</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>lieu</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">lieu</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>latitude</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">latitude (-90 to 90)</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>longitude-</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">longitude (-180 to 180)</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
     
 
@@ -412,38 +202,17 @@
 
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    The aerodrome modified (or NOT_FOUND error)
-</div>
-
-
-
-
-        
-
-    
         <h5>Example</h5>
         
-    <pre class="sunlight-highlight-javascript">PUT: http://host:port/api/aerodromes/4 (with form data in the body)</pre>
+    <pre class="sunlight-highlight-javascript">sendJSONresponse(res, HTTPStatus.NOT_FOUND, err)</pre>
 
 
     
 </dd>
 
         </dl>
+    
+
     
 
     
@@ -493,7 +262,7 @@
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
 	
-		on 2018-12-07T12:19:13+00:00
+		on 2018-12-09T15:11:10+00:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

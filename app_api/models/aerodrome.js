@@ -40,7 +40,7 @@ module.exports = function(sequelize, DataTypes) {
 		
 		text: {
 			type: DataTypes.VIRTUAL,
-			get: function() {return this.get('nom') + ", " + this.get('lieu')}
+			get: function() {return this.nom + ", " + this.lieu}
 		},
 		
     createdAt: {

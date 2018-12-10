@@ -13,7 +13,6 @@ services:
       - ./public:/app/public
       - ./test:/app/test
       - ./doc:/app/doc
-      - ./docco_doc:/app/docco_doc
     depends_on:
       - db
       - adminer

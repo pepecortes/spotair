@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>crudator.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="../../docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>crudator.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre> <span class="hljs-comment">/** Common helpers functions
+ * @module /app_api/crudator
+ */</span>
+<span class="hljs-keyword">const</span> HTTPStatus = <span class="hljs-built_in">require</span>(<span class="hljs-string">'http-status'</span>);
+<span class="hljs-keyword">const</span> help = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../../app_lib/helpers'</span>);
+
+<span class="hljs-comment">/**
+ * Convenience function for sending JSON response on API calls
+ * @param {Object} res 			- The object that will be sent back 
+ * @param {HTTPStatus} status 	- See HTTPStatus node module
+ * @param {JSON} content 		- The JSON object 
+ * @example sendJSONresponse(res, HTTPStatus.NOT_FOUND, err)
+ */</span> 
+<span class="hljs-keyword">const</span> sendJSON = {
+	<span class="hljs-attr">response</span>: <span class="hljs-function">(<span class="hljs-params">res, status, content</span>) =&gt;</span>	res.status(status).json(content),
+	<span class="hljs-attr">ok</span>: <span class="hljs-function">(<span class="hljs-params">res, content</span>) =&gt;</span> res.status(HTTPStatus.OK).json(content),
+	<span class="hljs-attr">notFound</span>: <span class="hljs-function">(<span class="hljs-params">res, err</span>) =&gt;</span> res.status(HTTPStatus.NOT_FOUND).json(err.toString())
+};
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">buildBasicAPI</span>(<span class="hljs-params">Model, fieldsArray, hasForeignKeys</span>) </span>{
+	
+	<span class="hljs-keyword">const</span> includeOption = (hasForeignKeys)? {<span class="hljs-attr">include</span>: [{<span class="hljs-attr">all</span>:<span class="hljs-literal">true</span>, <span class="hljs-attr">nested</span>:<span class="hljs-literal">true</span>}]} : {};
+	
+	<span class="hljs-keyword">return</span> {
+		
+		<span class="hljs-attr">all</span>: <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
+			Model
+				.findAll(includeOption)
+				.then(<span class="hljs-function"><span class="hljs-params">record</span> =&gt;</span> sendJSON.ok(res, record))
+				.catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> sendJSON.notFound(res, err));
+		},
+		
+		<span class="hljs-attr">byId</span>: <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
+			Model
+				.findByPk(req.params.id, includeOption)
+				.then(<span class="hljs-function"><span class="hljs-params">record</span> =&gt;</span> sendJSON.ok(res, record))
+				.catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> sendJSON.notFound(res, err));
+		},
+		
+		<span class="hljs-attr">create</span>: <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
+			<span class="hljs-keyword">const</span> record = help.pickObject(req.body, fieldsArray);
+			Model
+				.create(record)
+				.then(<span class="hljs-function"><span class="hljs-params">record</span> =&gt;</span> Model.findByPk(record.id, includeOption))
+				.then(<span class="hljs-function"><span class="hljs-params">record</span> =&gt;</span> sendJSON.ok(res, record))
+				.catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> {sendJSON.notFound(res, err)});
+		},
+		
+		<span class="hljs-attr">update</span>: <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
+			<span class="hljs-keyword">var</span> updates = help.pickObject(req.body, fieldsArray);
+			Model
+				.findByPk(req.params.id, includeOption)
+				.then(<span class="hljs-function"><span class="hljs-params">record</span> =&gt;</span> {
+					record = <span class="hljs-built_in">Object</span>.assign(record, updates);
+					<span class="hljs-keyword">return</span> record.save();
+				})
+				.then(<span class="hljs-function"><span class="hljs-params">record</span> =&gt;</span> Model.findByPk(record.id, includeOption))
+				.then(<span class="hljs-function"><span class="hljs-params">record</span> =&gt;</span> sendJSON.ok(res, record))
+				.catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> sendJSON.notFound(res, err));
+		},
+		
+		<span class="hljs-attr">delete</span>: <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
+			Model
+				.findByPk(req.params.id, includeOption)
+				.then(<span class="hljs-function"><span class="hljs-params">record</span> =&gt;</span> record.destroy())
+				.then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> sendJSON.ok(res, <span class="hljs-string">"Removed. id: "</span> + req.params.id))
+				.catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> sendJSON.notFound(res, err));
+		},
+				
+	};
+
+}
+
+<span class="hljs-built_in">module</span>.exports.buildBasicAPI = buildBasicAPI;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>/**</p>
+<ul>
+<li>Select all themes</li>
+<li>doc in progress
+*/
+module.exports.all = function(Modele) {
+return function(req, res) {
+Modele
+.findAll()
+.then(record =&gt; sendJSON.ok(res, record))
+.catch(err =&gt; sendJSON.notFound(res, err));
+};
+}</li>
+</ul>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>/**</p>
+<ul>
+<li>Select a theme given by its id</li>
+<li>@param {number} req.param.id - id</li>
+<li>@example</li>
+<li>GET: <a href="http://host:port/api/themes/12">http://host:port/api/themes/12</a></li>
+<li>@returns</li>
+<li>The theme (or NOT_FOUND error)
+*/
+module.exports.byId = function(Model, hasAssociatedModels = false) {
+const includeOption = (hasAssociatedModels)? {include: [{all:true, nested:true}]} : null;
+return function(req, res) {
+Model
+.findByPk(req.params.id, includeOption)
+.then(record =&gt; sendJSON.ok(res, record))
+.catch(err =&gt; sendJSON.notFound(res, err));
+};
+}</li>
+</ul>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>/**</p>
+<ul>
+<li>Create a theme</li>
+<li>@param {Object} req.body - theme data</li>
+<li>@param {string} req.body.theme - theme</li>
+<li>@example</li>
+<li>POST: <a href="http://host:port/api/themes/">http://host:port/api/themes/</a> (with form data in the body)</li>
+<li>@returns</li>
+<li>The new theme (or NOT_FOUND error)
+*/
+module.exports.create = function(Modele, fieldsArray) {
+return function(req, res) {
+var record = help.pickObject(req.body, fieldsArray);
+Modele
+.create(record)
+.then(record =&gt; sendJSON.ok(res, record))
+.catch(err =&gt; sendJSON.notFound(res, record));
+};
+}</li>
+</ul>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>/**</p>
+<ul>
+<li>Update a single theme</li>
+<li>@param {number} req.params.id - theme id</li>
+<li>@param {Object} req.body - theme data</li>
+<li>@param {string} req.body.theme - annee</li>
+<li>@example</li>
+<li>PUT: <a href="http://host:port/api/themes/4">http://host:port/api/themes/4</a> (with form data in the body)</li>
+<li>@returns</li>
+<li>The theme modified (or NOT_FOUND error)
+*/
+module.exports.update = function(Modele, fieldsArray) {
+return function(req, res) {
+const id = req.params.id;
+var record = help.pickObject(req.body, fieldsArray);
+Modele
+.update(record, {where: {id: id}})
+.then(() =&gt; Modele.findByPk(id))
+.then(record =&gt; sendJSON.ok(res, record))
+.catch(err =&gt; sendJSON.notFound(res, err));
+};
+}</li>
+</ul>
+
+            </div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

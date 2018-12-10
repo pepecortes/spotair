@@ -1,6 +1,7 @@
 /** 
 * API routes definition
 * @module /app_api/index
+* @tutorial index
 */
 const debug = require('debug')('app:api:routes');
 var express = require('express');

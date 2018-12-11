@@ -5,6 +5,7 @@
 const debug = require('debug')('app:api:controllers:galeries');
 const db = require('../models/db');
 const crud = require('./crudator');
+const sendJSON = require('../../app_lib/helpers').sendJSON;
 
 const Model = db.Galerie;
 const fieldsArray = ['isSpotair', 'commentaire', 'anneeId', 'themeId', 'aerodromeId'];
@@ -23,7 +24,7 @@ exports.allSpotair =  function(req, res) {
 	Model.scope('isspotair')
 		.findAll({include: [{all:true, nested:true}]})
 		.then(record => sendJSON.ok(res, record))
-		.catch(err => sendJSON.notFound(res, err));
+		.catch(err => sendJSON.serverError(res, err));
 }
 
 module.exports = exports;

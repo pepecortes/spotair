@@ -2,22 +2,9 @@
   * Engine for creating a simple CRUD API given the model
   * @module /app_api/crudator
   */
-const HTTPStatus = require('http-status');
-const help = require('../../app_lib/helpers');
 const debug = require('debug')('app:api:crudator');
-
-/** 
- * @function
- * @desc Convenience function for sending JSON response on API calls
- * @property {function} response(res,status,content)	- returns a general purpose response
- * @property {function} ok(res,content)	- returns a content and OK status
- * @property {function} notFound(res,err)	- returns a NOTFOUND error
- */
-const sendJSON = {
-	response: (res, status, content) =>	res.status(status).json(content),
-	ok: (res, content) => res.status(HTTPStatus.OK).json(content),
-	notFound: (res, err) => res.status(HTTPStatus.NOT_FOUND).json(err.toString())
-};
+const sendJSON = require('../../app_lib/helpers').sendJSON;
+const pickObject = require('../../app_lib/helpers').pickObject;
 
 /**
  * @function
@@ -38,28 +25,31 @@ function buildBasicAPI(Model, fieldsArray, hasForeignKeys) {
 			Model
 				.findAll(includeOption)
 				.then(record => sendJSON.ok(res, record))
-				.catch(err => sendJSON.notFound(res, err));
+				.catch(err => sendJSON.serverError(res, err));
 		},
 		
 		byId: (req, res) => {
+			const id = req.params.id;
 			Model
-				.findByPk(req.params.id, includeOption)
-				.then(record => sendJSON.ok(res, record))
-				.catch(err => sendJSON.notFound(res, err));
+				.findByPk(id, includeOption)
+				.then((record) => {
+					if (record) return sendJSON.ok(res, record);
+					else return sendJSON.notFound(res, "id: " + id + " not found");
+				})
+				.catch(err => sendJSON.serverError(res, err));
 		},
 		
 		create: (req, res) => {
-			const record = help.pickObject(req.body, fieldsArray);
-			debug(record);
+			const record = pickObject(req.body, fieldsArray);
 			Model
 				.create(record)
 				.then(record => Model.findByPk(record.id, includeOption))
 				.then(record => sendJSON.ok(res, record))
-				.catch(err => {sendJSON.notFound(res, err)});
+				.catch(err => {sendJSON.serverError(res, err)});
 		},
 		
 		update: (req, res) => {
-			var updates = help.pickObject(req.body, fieldsArray);
+			var updates = pickObject(req.body, fieldsArray);
 			Model
 				.findByPk(req.params.id, includeOption)
 				.then(record => {
@@ -68,7 +58,7 @@ function buildBasicAPI(Model, fieldsArray, hasForeignKeys) {
 				})
 				.then(record => Model.findByPk(record.id, includeOption))
 				.then(record => sendJSON.ok(res, record))
-				.catch(err => sendJSON.notFound(res, err));
+				.catch(err => sendJSON.serverError(res, err));
 		},
 		
 		delete: (req, res) => {
@@ -76,7 +66,7 @@ function buildBasicAPI(Model, fieldsArray, hasForeignKeys) {
 				.findByPk(req.params.id, includeOption)
 				.then(record => record.destroy())
 				.then(() => sendJSON.ok(res, "Removed. id: " + req.params.id))
-				.catch(err => sendJSON.notFound(res, err));
+				.catch(err => sendJSON.serverError(res, err));
 		},
 				
 	};

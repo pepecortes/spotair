@@ -30,9 +30,9 @@ module.exports = function(sequelize, DataTypes) {
 			},
 			text: {
 				type: DataTypes.VIRTUAL,
-				get: function() {return this.annee.annee
-					+ ", " + this.theme.theme
-					+ ", " + this.aerodrome.text
+				get: function() {return this.getAnnee().annee
+					+ ", " + this.getTheme().theme
+					+ ", " + this.getAerodrome().text//aerodrome.text
 					+ ", isSpotair: " + this.isSpotair
 					+ ", " + this.commentaire}
 			},

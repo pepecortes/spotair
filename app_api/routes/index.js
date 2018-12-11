@@ -18,32 +18,32 @@ var router = express.Router();
 
 // Aerodromes 
 router.get('/aerodromes', ctrlAerodromes.all);
-router.get('/aerodromes/:id', ctrlAerodromes.byId);
+router.get('/aerodromes/:id(\\d+)', ctrlAerodromes.byId);
 router.post('/aerodromes', ctrlAerodromes.create);
-router.put('/aerodromes/:id', ctrlAerodromes.update);
-router.delete('/aerodromes/:id', ctrlAerodromes.delete);
+router.put('/aerodromes/:id(\\d+)', ctrlAerodromes.update);
+router.delete('/aerodromes/:id(\\d+)', ctrlAerodromes.delete);
 
 // Annees
 router.get('/annees', ctrlAnnees.all);
-router.get('/annees/:id', ctrlAnnees.byId);
+router.get('/annees/:id(\\d+)', ctrlAnnees.byId);
 router.post('/annees', ctrlAnnees.create);
-router.put('/annees/:id', ctrlAnnees.update);
-router.delete('/annees/:id', ctrlAnnees.delete);
+router.put('/annees/:id(\\d+)', ctrlAnnees.update);
+router.delete('/annees/:id(\\d+)', ctrlAnnees.delete);
 
 // Themes
 router.get('/themes', ctrlThemes.all);
-router.get('/themes/:id', ctrlThemes.byId);
+router.get('/themes/:id(\\d+)', ctrlThemes.byId);
 router.post('/themes', ctrlThemes.create);
-router.put('/themes/:id', ctrlThemes.update);
-router.delete('/themes/:id', ctrlThemes.delete);
+router.put('/themes/:id(\\d+)', ctrlThemes.update);
+router.delete('/themes/:id(\\d+)', ctrlThemes.delete);
 
 // Galeries
 router.get('/galeries', ctrlGaleries.all);
-router.get('/galeries/:id', ctrlGaleries.byId);
+router.get('/galeries/:id(\\d+)', ctrlGaleries.byId);
 router.post('/galeries', ctrlGaleries.create);
-router.put('/galeries/:id', ctrlGaleries.update);
-router.delete('/galeries/:id', ctrlGaleries.delete);
-router.get('/galeriesSpotair', ctrlGaleries.allSpotair);
+router.put('/galeries/:id(\\d+)', ctrlGaleries.update);
+router.delete('/galeries/:id(\\d+)', ctrlGaleries.delete);
+router.get('/galeries/spotair', ctrlGaleries.allSpotair);
 
 
 module.exports = router;

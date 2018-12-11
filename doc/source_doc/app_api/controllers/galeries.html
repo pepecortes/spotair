@@ -37,14 +37,62 @@
 <span class="hljs-keyword">const</span> debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'app:api:controllers:galeries'</span>);
 <span class="hljs-keyword">const</span> db = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../models/db'</span>);
 <span class="hljs-keyword">const</span> crud = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./crudator'</span>);
+<span class="hljs-keyword">const</span> sendJSON = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../../app_lib/helpers'</span>).sendJSON;
 
 <span class="hljs-keyword">const</span> Model = db.Galerie;
 <span class="hljs-keyword">const</span> fieldsArray = [<span class="hljs-string">'isSpotair'</span>, <span class="hljs-string">'commentaire'</span>, <span class="hljs-string">'anneeId'</span>, <span class="hljs-string">'themeId'</span>, <span class="hljs-string">'aerodromeId'</span>];
 <span class="hljs-keyword">const</span> hasForeignKeys = <span class="hljs-literal">true</span>;
 
-<span class="hljs-keyword">var</span> exports = {};
-<span class="hljs-keyword">const</span> basicAPI = crud.buildBasicAPI(Model, fieldsArray, hasForeignKeys);
-exports = <span class="hljs-built_in">Object</span>.assign(exports, basicAPI);
+<span class="hljs-keyword">var</span> exports = {};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>building the basic CRUD API calls first</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> basicAPI = crud.buildBasicAPI(Model, fieldsArray, hasForeignKeys);
+exports = <span class="hljs-built_in">Object</span>.assign(exports, basicAPI);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>building other API calls…</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>galeries “sorties associatives” only</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>exports.allSpotair =  <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+	Model.scope(<span class="hljs-string">'isspotair'</span>)
+		.findAll({<span class="hljs-attr">include</span>: [{<span class="hljs-attr">all</span>:<span class="hljs-literal">true</span>}]})
+		.then(<span class="hljs-function"><span class="hljs-params">record</span> =&gt;</span> sendJSON.ok(res, record))
+		.catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> sendJSON.serverError(res, err));
+}
 
 <span class="hljs-built_in">module</span>.exports = exports;</pre></div></div>
             

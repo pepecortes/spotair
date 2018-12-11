@@ -13,4 +13,4 @@ Database server will be **mysql** (for the time being will be **version 5.7** to
 
 I will use **mocha** and **chai** as test facilities in `node`
 
-Use the node modules **JSDoc** (for automatic documentation generation) and **debug** for log messages to the console for debugging
+Use the node modules **JSDoc** and **docco** (for automatic documentation generation) and **debug** for log messages to the console for debugging

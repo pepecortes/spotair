@@ -22,6 +22,7 @@ router.get('/aerodromes/:id(\\d+)', ctrlAerodromes.byId);
 router.post('/aerodromes', ctrlAerodromes.create);
 router.put('/aerodromes/:id(\\d+)', ctrlAerodromes.update);
 router.delete('/aerodromes/:id(\\d+)', ctrlAerodromes.delete);
+router.put('/aerodromes/fusion/source/:sourceid(\\d+)/destination/:destinationid(\\d+)', ctrlAerodromes.fusion);
 
 // Annees
 router.get('/annees', ctrlAnnees.all);

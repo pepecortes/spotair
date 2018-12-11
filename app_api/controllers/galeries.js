@@ -22,7 +22,7 @@ exports = Object.assign(exports, basicAPI);
 // galeries "sorties associatives" only
 exports.allSpotair =  function(req, res) {
 	Model.scope('isspotair')
-		.findAll({include: [{all:true, nested:true}]})
+		.findAll({include: [{all:true}]})
 		.then(record => sendJSON.ok(res, record))
 		.catch(err => sendJSON.serverError(res, err));
 }

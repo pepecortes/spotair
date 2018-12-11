@@ -33,9 +33,14 @@
             <div class="content"><div class='highlight'><pre><span class="hljs-comment">/**
  * Galerie model
  * @module /app_api/models/galerie
- * @property {string} DOC IN PROGRESS
+ * @property {boolean}			isSpotAir 		
+ * @property {string=}			commentaire 		
+ * @property {virtual}			text					- (summary of all fields)
+ * @property {foreignKey}		anneeId
+ * @property {foreignKey}  	themeId
+ * @property {foreignKey}		aerodromeId
  */</span>
-
+<span class="hljs-keyword">const</span> debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'app:api:models:galerie'</span>);
 <span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">sequelize, DataTypes</span>) </span>{
 	
 	<span class="hljs-keyword">const</span> Model = sequelize.define(<span class="hljs-string">"galerie"</span>, {
@@ -45,7 +50,7 @@
 				<span class="hljs-attr">autoIncrement</span>: <span class="hljs-literal">true</span>,
 				<span class="hljs-attr">unique</span>: <span class="hljs-literal">true</span>,
 			},
-			<span class="hljs-attr">isSpotAir</span>: {
+			<span class="hljs-attr">isSpotair</span>: {
 				<span class="hljs-attr">type</span>: DataTypes.BOOLEAN,
 				<span class="hljs-attr">allowNull</span>: <span class="hljs-literal">false</span>,
 				<span class="hljs-attr">defaultValue</span>: <span class="hljs-literal">false</span>,
@@ -57,11 +62,13 @@
 			},
 			<span class="hljs-attr">text</span>: {
 				<span class="hljs-attr">type</span>: DataTypes.VIRTUAL,
-				<span class="hljs-attr">get</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{<span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.annee.annee
+				<span class="hljs-attr">get</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+					<span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.annee.annee
 					+ <span class="hljs-string">", "</span> + <span class="hljs-keyword">this</span>.theme.theme
 					+ <span class="hljs-string">", "</span> + <span class="hljs-keyword">this</span>.aerodrome.text
-					+ <span class="hljs-string">", isSpotair: "</span> + <span class="hljs-keyword">this</span>.isSpotAir
-					+ <span class="hljs-string">", "</span> + <span class="hljs-keyword">this</span>.commentaire}
+					+ <span class="hljs-string">", isSpotair: "</span> + <span class="hljs-keyword">this</span>.isSpotair
+					+ <span class="hljs-string">", "</span> + <span class="hljs-keyword">this</span>.commentaire
+				}
 			},
 			<span class="hljs-attr">createdAt</span>: {
 				<span class="hljs-attr">type</span>: DataTypes.DATE,
@@ -74,9 +81,31 @@
 				<span class="hljs-attr">allowNull</span>: <span class="hljs-literal">false</span>,
 			},
 		}, {
+			
 			<span class="hljs-attr">indexes</span>: [
-					{<span class="hljs-attr">type</span>: <span class="hljs-string">'FULLTEXT'</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">'text_search'</span>, <span class="hljs-attr">fields</span>: [<span class="hljs-string">'commentaire'</span>]}
+				{<span class="hljs-attr">type</span>: <span class="hljs-string">'FULLTEXT'</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">'text_search'</span>, <span class="hljs-attr">fields</span>: [<span class="hljs-string">'commentaire'</span>]}
 			],
+			
+			<span class="hljs-attr">scopes</span>: {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>returns only galeries “sorties associatives”</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				isspotair: {
+					<span class="hljs-attr">where</span>: {<span class="hljs-attr">isSpotair</span>: <span class="hljs-literal">true</span>}
+				}
+			},
+			
 		}
   );
 	

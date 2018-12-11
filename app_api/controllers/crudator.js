@@ -17,7 +17,7 @@ const pickObject = require('../../app_lib/helpers').pickObject;
  */ 
 function buildBasicAPI(Model, fieldsArray, hasForeignKeys) {
 	
-	const includeOption = (hasForeignKeys)? {include: [{all:true, nested:true}]} : {};
+	const includeOption = (hasForeignKeys)? {include: [{all:true}]} : {};
 	
 	return {
 		

@@ -97,10 +97,10 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>router.get(<span class="hljs-string">'/aerodromes'</span>, ctrlAerodromes.all);
-router.get(<span class="hljs-string">'/aerodromes/:id'</span>, ctrlAerodromes.byId);
+router.get(<span class="hljs-string">'/aerodromes/:id(\\d+)'</span>, ctrlAerodromes.byId);
 router.post(<span class="hljs-string">'/aerodromes'</span>, ctrlAerodromes.create);
-router.put(<span class="hljs-string">'/aerodromes/:id'</span>, ctrlAerodromes.update);
-router.delete(<span class="hljs-string">'/aerodromes/:id'</span>, ctrlAerodromes.delete);</pre></div></div>
+router.put(<span class="hljs-string">'/aerodromes/:id(\\d+)'</span>, ctrlAerodromes.update);
+router.delete(<span class="hljs-string">'/aerodromes/:id(\\d+)'</span>, ctrlAerodromes.delete);</pre></div></div>
             
         </li>
         
@@ -116,10 +116,10 @@ router.delete(<span class="hljs-string">'/aerodromes/:id'</span>, ctrlAerodromes
             </div>
             
             <div class="content"><div class='highlight'><pre>router.get(<span class="hljs-string">'/annees'</span>, ctrlAnnees.all);
-router.get(<span class="hljs-string">'/annees/:id'</span>, ctrlAnnees.byId);
+router.get(<span class="hljs-string">'/annees/:id(\\d+)'</span>, ctrlAnnees.byId);
 router.post(<span class="hljs-string">'/annees'</span>, ctrlAnnees.create);
-router.put(<span class="hljs-string">'/annees/:id'</span>, ctrlAnnees.update);
-router.delete(<span class="hljs-string">'/annees/:id'</span>, ctrlAnnees.delete);</pre></div></div>
+router.put(<span class="hljs-string">'/annees/:id(\\d+)'</span>, ctrlAnnees.update);
+router.delete(<span class="hljs-string">'/annees/:id(\\d+)'</span>, ctrlAnnees.delete);</pre></div></div>
             
         </li>
         
@@ -135,10 +135,10 @@ router.delete(<span class="hljs-string">'/annees/:id'</span>, ctrlAnnees.delete)
             </div>
             
             <div class="content"><div class='highlight'><pre>router.get(<span class="hljs-string">'/themes'</span>, ctrlThemes.all);
-router.get(<span class="hljs-string">'/themes/:id'</span>, ctrlThemes.byId);
+router.get(<span class="hljs-string">'/themes/:id(\\d+)'</span>, ctrlThemes.byId);
 router.post(<span class="hljs-string">'/themes'</span>, ctrlThemes.create);
-router.put(<span class="hljs-string">'/themes/:id'</span>, ctrlThemes.update);
-router.delete(<span class="hljs-string">'/themes/:id'</span>, ctrlThemes.delete);</pre></div></div>
+router.put(<span class="hljs-string">'/themes/:id(\\d+)'</span>, ctrlThemes.update);
+router.delete(<span class="hljs-string">'/themes/:id(\\d+)'</span>, ctrlThemes.delete);</pre></div></div>
             
         </li>
         
@@ -154,10 +154,11 @@ router.delete(<span class="hljs-string">'/themes/:id'</span>, ctrlThemes.delete)
             </div>
             
             <div class="content"><div class='highlight'><pre>router.get(<span class="hljs-string">'/galeries'</span>, ctrlGaleries.all);
-router.get(<span class="hljs-string">'/galeries/:id'</span>, ctrlGaleries.byId);
+router.get(<span class="hljs-string">'/galeries/:id(\\d+)'</span>, ctrlGaleries.byId);
 router.post(<span class="hljs-string">'/galeries'</span>, ctrlGaleries.create);
-router.put(<span class="hljs-string">'/galeries/:id'</span>, ctrlGaleries.update);
-router.delete(<span class="hljs-string">'/galeries/:id'</span>, ctrlGaleries.delete);
+router.put(<span class="hljs-string">'/galeries/:id(\\d+)'</span>, ctrlGaleries.update);
+router.delete(<span class="hljs-string">'/galeries/:id(\\d+)'</span>, ctrlGaleries.delete);
+router.get(<span class="hljs-string">'/galeries/spotair'</span>, ctrlGaleries.allSpotair);
 
 
 <span class="hljs-built_in">module</span>.exports = router;</pre></div></div>

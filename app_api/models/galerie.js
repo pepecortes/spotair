@@ -8,7 +8,7 @@
  * @property {foreignKey}  	themeId
  * @property {foreignKey}		aerodromeId
  */
-
+const debug = require('debug')('app:api:models:galerie');
 module.exports = function(sequelize, DataTypes) {
 	
 	const Model = sequelize.define("galerie", {
@@ -30,11 +30,13 @@ module.exports = function(sequelize, DataTypes) {
 			},
 			text: {
 				type: DataTypes.VIRTUAL,
-				get: function() {return this.getAnnee().annee
-					+ ", " + this.getTheme().theme
-					+ ", " + this.getAerodrome().text//aerodrome.text
+				get: function() {
+					return this.annee.annee
+					+ ", " + this.theme.theme
+					+ ", " + this.aerodrome.text
 					+ ", isSpotair: " + this.isSpotair
-					+ ", " + this.commentaire}
+					+ ", " + this.commentaire
+				}
 			},
 			createdAt: {
 				type: DataTypes.DATE,

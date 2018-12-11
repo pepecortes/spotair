@@ -8,6 +8,9 @@ dev_database/
 .git/
 .gitignore
 
+# ignore docs
+doc/
+
 # ignore all markdown files (md) beside all README*.md other than README-secret.md
 *.md
 !README*.md

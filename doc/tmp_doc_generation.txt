@@ -1,8 +1,0 @@
-./node_modules/.bin/jsdoc ./*.js ./app_api/ ./app_lib/ -r -d ./doc/api_doc/ -t ./node_modules/ink-docstrap/template/
-
-ejemplo docco
-find app_api/ -name '*.js' -exec ./node_modules/.bin/docco -o ./doc/source_doc/ {}  \;
-
-./node_modules/.bin/docco -o ./doc/source_doc/ ./app_api/routes/index
-
-

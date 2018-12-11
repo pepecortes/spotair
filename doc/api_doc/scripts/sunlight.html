@@ -1,0 +1,1934 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>sunlight.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="../../../source_doc/docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>sunlight.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/**
+ * Sunlight
+ *    Intelligent syntax highlighting
+ *
+ * http://sunlightjs.com/
+ *
+ * by Tommy Montgomery &lt;http://tmont.com&gt;
+ * Licensed under WTFPL &lt;http://sam.zoy.org/wtfpl/&gt;
+ */</span>
+(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">window, document, undefined</span>)</span>{
+
+	<span class="hljs-keyword">var</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p><a href="http://webreflection.blogspot.com/2009/01/32-bytes-to-know-if-your-browser-is-ie.html">http://webreflection.blogspot.com/2009/01/32-bytes-to-know-if-your-browser-is-ie.html</a>
+we have to sniff this because IE requires \r</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		isIe = !+<span class="hljs-string">"\v1"</span>, 
+		EOL = isIe ? <span class="hljs-string">"\r"</span> : <span class="hljs-string">"\n"</span>,
+		EMPTY = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; },
+		HIGHLIGHTED_NODE_COUNT = <span class="hljs-number">0</span>,
+		DEFAULT_LANGUAGE = <span class="hljs-string">"plaintext"</span>,
+		DEFAULT_CLASS_PREFIX = <span class="hljs-string">"sunlight-"</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>global sunlight variables</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		defaultAnalyzer,
+		getComputedStyle,
+		globalOptions = {
+			<span class="hljs-attr">tabWidth</span>: <span class="hljs-number">4</span>,
+			<span class="hljs-attr">classPrefix</span>: DEFAULT_CLASS_PREFIX,
+			<span class="hljs-attr">showWhitespace</span>: <span class="hljs-literal">false</span>,
+			<span class="hljs-attr">maxHeight</span>: <span class="hljs-literal">false</span>
+		},
+		languages = {},
+		languageDefaults = {},
+		events = {
+			<span class="hljs-attr">beforeHighlightNode</span>: [],
+			<span class="hljs-attr">beforeHighlight</span>: [],
+			<span class="hljs-attr">beforeTokenize</span>: [],
+			<span class="hljs-attr">afterTokenize</span>: [],
+			<span class="hljs-attr">beforeAnalyze</span>: [],
+			<span class="hljs-attr">afterAnalyze</span>: [],
+			<span class="hljs-attr">afterHighlight</span>: [],
+			<span class="hljs-attr">afterHighlightNode</span>: []
+		};
+
+	defaultAnalyzer = (<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+		<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">defaultHandleToken</span>(<span class="hljs-params">suffix</span>) </span>{
+			<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">context</span>) </span>{
+				<span class="hljs-keyword">var</span> element = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"span"</span>);
+				element.className = context.options.classPrefix + suffix;
+				element.appendChild(context.createTextNode(context.tokens[context.index]));
+				<span class="hljs-keyword">return</span> context.addNode(element) || <span class="hljs-literal">true</span>;
+			};
+		}
+
+		<span class="hljs-keyword">return</span> {
+			<span class="hljs-attr">handleToken</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">context</span>) </span>{ 
+				<span class="hljs-keyword">return</span> defaultHandleToken(context.tokens[context.index].name)(context); 
+			},</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>just append default content as a text node</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			handle_default: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">context</span>) </span>{ 
+				<span class="hljs-keyword">return</span> context.addNode(context.createTextNode(context.tokens[context.index])); 
+			},</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>this handles the named ident mayhem</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			handle_ident: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">context</span>) </span>{
+				<span class="hljs-keyword">var</span> evaluate = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">rules, createRule</span>) </span>{
+					<span class="hljs-keyword">var</span> i;
+					rules = rules || [];
+					<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; rules.length; i++) {
+						<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span>(rules[i]) === <span class="hljs-string">"function"</span>) {
+							<span class="hljs-keyword">if</span> (rules[i](context)) {
+								<span class="hljs-keyword">return</span> defaultHandleToken(<span class="hljs-string">"named-ident"</span>)(context);
+							}
+						} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (createRule &amp;&amp; createRule(rules[i])(context.tokens)) {
+							<span class="hljs-keyword">return</span> defaultHandleToken(<span class="hljs-string">"named-ident"</span>)(context);
+						}
+					}
+
+					<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+				};
+
+				<span class="hljs-keyword">return</span> evaluate(context.language.namedIdentRules.custom)
+					|| evaluate(context.language.namedIdentRules.follows, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">ruleData</span>) </span>{ <span class="hljs-keyword">return</span> createProceduralRule(context.index - <span class="hljs-number">1</span>, <span class="hljs-number">-1</span>, ruleData, context.language.caseInsensitive); })
+					|| evaluate(context.language.namedIdentRules.precedes, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">ruleData</span>) </span>{ <span class="hljs-keyword">return</span> createProceduralRule(context.index + <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, ruleData, context.language.caseInsensitive); })
+					|| evaluate(context.language.namedIdentRules.between, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">ruleData</span>) </span>{ <span class="hljs-keyword">return</span> createBetweenRule(context.index, ruleData.opener, ruleData.closer, context.language.caseInsensitive); })
+					|| defaultHandleToken(<span class="hljs-string">"ident"</span>)(context);
+			}
+		};
+	}());
+
+	languageDefaults = {
+		<span class="hljs-attr">analyzer</span>: create(defaultAnalyzer),
+		<span class="hljs-attr">customTokens</span>: [],
+		<span class="hljs-attr">namedIdentRules</span>: {},
+		<span class="hljs-attr">punctuation</span>: <span class="hljs-regexp">/[^\w\s]/</span>,
+		<span class="hljs-attr">numberParser</span>: defaultNumberParser,
+		<span class="hljs-attr">caseInsensitive</span>: <span class="hljs-literal">false</span>,
+		<span class="hljs-attr">doNotParse</span>: <span class="hljs-regexp">/\s/</span>,
+		<span class="hljs-attr">contextItems</span>: {},
+		<span class="hljs-attr">embeddedLanguages</span>: {}
+	};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>adapted from <a href="http://blargh.tommymontgomery.com/2010/04/get-computed-style-in-javascript/">http://blargh.tommymontgomery.com/2010/04/get-computed-style-in-javascript/</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	getComputedStyle = (<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+		<span class="hljs-keyword">var</span> func = <span class="hljs-literal">null</span>;
+		<span class="hljs-keyword">if</span> (<span class="hljs-built_in">document</span>.defaultView &amp;&amp; <span class="hljs-built_in">document</span>.defaultView.getComputedStyle) {
+			func = <span class="hljs-built_in">document</span>.defaultView.getComputedStyle;
+		} <span class="hljs-keyword">else</span> {
+			func = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">element, anything</span>) </span>{
+				<span class="hljs-keyword">return</span> element[<span class="hljs-string">"currentStyle"</span>] || {};
+			};
+		}
+
+		<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">element, style</span>) </span>{
+			<span class="hljs-keyword">return</span> func(element, <span class="hljs-literal">null</span>)[style];
+		}
+	}());</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <hr>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <h2 id="functions">FUNCTIONS</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createCodeReader</span>(<span class="hljs-params">text</span>) </span>{
+		<span class="hljs-keyword">var</span> index = <span class="hljs-number">0</span>,
+			line = <span class="hljs-number">1</span>,
+			column = <span class="hljs-number">1</span>,
+			length,
+			EOF = <span class="hljs-literal">undefined</span>,
+			currentChar,
+			nextReadBeginsLine;
+
+		text = text.replace(<span class="hljs-regexp">/\r\n/g</span>, <span class="hljs-string">"\n"</span>).replace(<span class="hljs-regexp">/\r/g</span>, <span class="hljs-string">"\n"</span>); <span class="hljs-comment">//normalize line endings to unix</span>
+
+		length = text.length;
+		currentChar = length &gt; <span class="hljs-number">0</span> ? text.charAt(<span class="hljs-number">0</span>) : EOF;
+
+		<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getCharacters</span>(<span class="hljs-params">count</span>) </span>{
+			<span class="hljs-keyword">var</span> value;
+			<span class="hljs-keyword">if</span> (count === <span class="hljs-number">0</span>) {
+				<span class="hljs-keyword">return</span> <span class="hljs-string">""</span>;
+			}
+
+			count = count || <span class="hljs-number">1</span>;
+
+			value = text.substring(index + <span class="hljs-number">1</span>, index + count + <span class="hljs-number">1</span>);
+			<span class="hljs-keyword">return</span> value === <span class="hljs-string">""</span> ? EOF : value;
+		}
+
+		<span class="hljs-keyword">return</span> {
+			<span class="hljs-attr">toString</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+				<span class="hljs-keyword">return</span> <span class="hljs-string">"length: "</span> + length + <span class="hljs-string">", index: "</span> + index + <span class="hljs-string">", line: "</span> + line + <span class="hljs-string">", column: "</span> + column + <span class="hljs-string">", current: ["</span> + currentChar + <span class="hljs-string">"]"</span>;
+			},
+
+			<span class="hljs-attr">peek</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">count</span>) </span>{
+				<span class="hljs-keyword">return</span> getCharacters(count);
+			},
+
+			<span class="hljs-attr">substring</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+				<span class="hljs-keyword">return</span> text.substring(index);
+			},
+
+			<span class="hljs-attr">peekSubstring</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+				<span class="hljs-keyword">return</span> text.substring(index + <span class="hljs-number">1</span>);
+			},
+
+			<span class="hljs-attr">read</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">count</span>) </span>{
+				<span class="hljs-keyword">var</span> value = getCharacters(count),
+					newlineCount,
+					lastChar;
+
+				<span class="hljs-keyword">if</span> (value === <span class="hljs-string">""</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>this is a result of reading/peeking/doing nothing</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					<span class="hljs-keyword">return</span> value;
+				}
+
+				<span class="hljs-keyword">if</span> (value !== EOF) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>advance index</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					index += value.length;
+					column += value.length;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>update line count</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					<span class="hljs-keyword">if</span> (nextReadBeginsLine) {
+						line++;
+						column = <span class="hljs-number">1</span>;
+						nextReadBeginsLine = <span class="hljs-literal">false</span>;
+					}
+
+					newlineCount = value.substring(<span class="hljs-number">0</span>, value.length - <span class="hljs-number">1</span>).replace(<span class="hljs-regexp">/[^\n]/g</span>, <span class="hljs-string">""</span>).length;
+					<span class="hljs-keyword">if</span> (newlineCount &gt; <span class="hljs-number">0</span>) {
+						line += newlineCount;
+						column = <span class="hljs-number">1</span>;
+					}
+
+					lastChar = last(value);
+					<span class="hljs-keyword">if</span> (lastChar === <span class="hljs-string">"\n"</span>) {
+						nextReadBeginsLine = <span class="hljs-literal">true</span>;
+					}
+
+					currentChar = lastChar;
+				} <span class="hljs-keyword">else</span> {
+					index = length;
+					currentChar = EOF;
+				}
+
+				<span class="hljs-keyword">return</span> value;
+			},
+
+			<span class="hljs-attr">text</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> text; },
+
+			<span class="hljs-attr">getLine</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> line; },
+			<span class="hljs-attr">getColumn</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> column; },
+			<span class="hljs-attr">isEof</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> index &gt;= length; },
+			<span class="hljs-attr">isSol</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> column === <span class="hljs-number">1</span>; },
+			<span class="hljs-attr">isSolWs</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+				<span class="hljs-keyword">var</span> temp = index,
+					c;
+				<span class="hljs-keyword">if</span> (column === <span class="hljs-number">1</span>) {
+					<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+				}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>look backward until we find a newline or a non-whitespace character</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="hljs-keyword">while</span> ((c = text.charAt(--temp)) !== <span class="hljs-string">""</span>) {
+					<span class="hljs-keyword">if</span> (c === <span class="hljs-string">"\n"</span>) {
+						<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+					}
+					<span class="hljs-keyword">if</span> (!<span class="hljs-regexp">/\s/</span>.test(c)) {
+						<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+					}
+				}
+
+				<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+			},
+			<span class="hljs-attr">isEol</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> nextReadBeginsLine; },
+			<span class="hljs-attr">EOF</span>: EOF,
+			<span class="hljs-attr">current</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> currentChar; }
+		};
+	}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p><a href="http://javascript.crockford.com/prototypal.html">http://javascript.crockford.com/prototypal.html</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">create</span>(<span class="hljs-params">o</span>) </span>{
+		<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">F</span>(<span class="hljs-params"></span>) </span>{}
+		F.prototype = o;
+		<span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> F();
+	}
+	
+	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">appendAll</span>(<span class="hljs-params">parent, children</span>) </span>{
+		<span class="hljs-keyword">var</span> i;
+		<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; children.length; i++) {
+			parent.appendChild(children[i]);
+		}
+	}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>gets the last character in a string or the last element in an array</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">last</span>(<span class="hljs-params">thing</span>) </span>{
+		<span class="hljs-keyword">return</span> thing.charAt ? thing.charAt(thing.length - <span class="hljs-number">1</span>) : thing[thing.length - <span class="hljs-number">1</span>];
+	}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>array.contains()</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">contains</span>(<span class="hljs-params">arr, value, caseInsensitive</span>) </span>{
+		<span class="hljs-keyword">var</span> i;
+		<span class="hljs-keyword">if</span> (arr.indexOf &amp;&amp; !caseInsensitive) {
+			<span class="hljs-keyword">return</span> arr.indexOf(value) &gt;= <span class="hljs-number">0</span>;
+		}
+		
+		<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; arr.length; i++) {
+			<span class="hljs-keyword">if</span> (arr[i] === value) {
+				<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+			}
+
+			<span class="hljs-keyword">if</span> (caseInsensitive &amp;&amp; <span class="hljs-keyword">typeof</span>(arr[i]) === <span class="hljs-string">"string"</span> &amp;&amp; <span class="hljs-keyword">typeof</span>(value) === <span class="hljs-string">"string"</span> &amp;&amp; arr[i].toUpperCase() === value.toUpperCase()) {
+				<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+			}
+		}
+
+		<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+	}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>non-recursively merges one object into the other</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">merge</span>(<span class="hljs-params">defaultObject, objectToMerge</span>) </span>{
+		<span class="hljs-keyword">var</span> key;
+		<span class="hljs-keyword">if</span> (!objectToMerge) {
+			<span class="hljs-keyword">return</span> defaultObject;
+		}
+
+		<span class="hljs-keyword">for</span> (key <span class="hljs-keyword">in</span> objectToMerge) {
+			defaultObject[key] = objectToMerge[key];
+		}
+
+		<span class="hljs-keyword">return</span> defaultObject;
+	}
+	
+	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">clone</span>(<span class="hljs-params">object</span>) </span>{
+		<span class="hljs-keyword">return</span> merge({}, object);
+	}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p><a href="http://stackoverflow.com/questions/3561493/is-there-a-regexp-escape-function-in-javascript/3561711#3561711">http://stackoverflow.com/questions/3561493/is-there-a-regexp-escape-function-in-javascript/3561711#3561711</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">regexEscape</span>(<span class="hljs-params">s</span>) </span>{
+		<span class="hljs-keyword">return</span> s.replace(<span class="hljs-regexp">/[-\/\\^$*+?.()|[\]{}]/g</span>, <span class="hljs-string">"\\$&amp;"</span>);
+	}
+
+	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createProceduralRule</span>(<span class="hljs-params">startIndex, direction, tokenRequirements, caseInsensitive</span>) </span>{
+		tokenRequirements = tokenRequirements.slice(<span class="hljs-number">0</span>);
+		<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">tokens</span>) </span>{
+			<span class="hljs-keyword">var</span> tokenIndexStart = startIndex,
+				j,
+				expected,
+				actual;
+				
+			<span class="hljs-keyword">if</span> (direction === <span class="hljs-number">1</span>) {
+				tokenRequirements.reverse();
+			}
+
+			<span class="hljs-keyword">for</span> (j = <span class="hljs-number">0</span>; j &lt; tokenRequirements.length; j++) {
+				actual = tokens[tokenIndexStart + (j * direction)];
+				expected = tokenRequirements[tokenRequirements.length - <span class="hljs-number">1</span> - j];
+
+				<span class="hljs-keyword">if</span> (actual === <span class="hljs-literal">undefined</span>) {
+					<span class="hljs-keyword">if</span> (expected[<span class="hljs-string">"optional"</span>] !== <span class="hljs-literal">undefined</span> &amp;&amp; expected.optional) {
+						tokenIndexStart -= direction;
+					} <span class="hljs-keyword">else</span> {
+						<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+					}
+				} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (actual.name === expected.token &amp;&amp; (expected[<span class="hljs-string">"values"</span>] === <span class="hljs-literal">undefined</span> || contains(expected.values, actual.value, caseInsensitive))) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>derp</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					<span class="hljs-keyword">continue</span>;
+				} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (expected[<span class="hljs-string">"optional"</span>] !== <span class="hljs-literal">undefined</span> &amp;&amp; expected.optional) {
+					tokenIndexStart -= direction; <span class="hljs-comment">//we need to reevaluate against this token again</span>
+				} <span class="hljs-keyword">else</span> {
+					<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+				}
+			}
+
+			<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+		};
+	}
+
+	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createBetweenRule</span>(<span class="hljs-params">startIndex, opener, closer, caseInsensitive</span>) </span>{
+		<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">tokens</span>) </span>{
+			<span class="hljs-keyword">var</span> index = startIndex,
+				token,
+				success = <span class="hljs-literal">false</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>check to the left: if we run into a closer or never run into an opener, fail</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">while</span> ((token = tokens[--index]) !== <span class="hljs-literal">undefined</span>) {
+				<span class="hljs-keyword">if</span> (token.name === closer.token &amp;&amp; contains(closer.values, token.value)) {
+					<span class="hljs-keyword">if</span> (token.name === opener.token &amp;&amp; contains(opener.values, token.value, caseInsensitive)) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>if the closer is the same as the opener that’s okay</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>						success = <span class="hljs-literal">true</span>;
+						<span class="hljs-keyword">break</span>;
+					}
+
+					<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+				}
+
+				<span class="hljs-keyword">if</span> (token.name === opener.token &amp;&amp; contains(opener.values, token.value, caseInsensitive)) {
+					success = <span class="hljs-literal">true</span>;
+					<span class="hljs-keyword">break</span>;
+				}
+			}
+
+			<span class="hljs-keyword">if</span> (!success) {
+				<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+			}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>check to the right for the closer</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			index = startIndex;
+			<span class="hljs-keyword">while</span> ((token = tokens[++index]) !== <span class="hljs-literal">undefined</span>) {
+				<span class="hljs-keyword">if</span> (token.name === opener.token &amp;&amp; contains(opener.values, token.value, caseInsensitive)) {
+					<span class="hljs-keyword">if</span> (token.name === closer.token &amp;&amp; contains(closer.values, token.value, caseInsensitive)) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>if the closer is the same as the opener that’s okay</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>						success = <span class="hljs-literal">true</span>;
+						<span class="hljs-keyword">break</span>;
+					}
+
+					<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+				}
+
+				<span class="hljs-keyword">if</span> (token.name === closer.token &amp;&amp; contains(closer.values, token.value, caseInsensitive)) {
+					success = <span class="hljs-literal">true</span>;
+					<span class="hljs-keyword">break</span>;
+				}
+			}
+
+			<span class="hljs-keyword">return</span> success;
+		};
+	}
+
+	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">matchWord</span>(<span class="hljs-params">context, wordMap, tokenName, doNotRead</span>) </span>{
+		<span class="hljs-keyword">var</span> current = context.reader.current(),
+			i,
+			word,
+			peek,
+			line = context.reader.getLine(),
+			column = context.reader.getColumn();
+			
+		wordMap = wordMap || [];
+		<span class="hljs-keyword">if</span> (context.language.caseInsensitive) {
+			current = current.toUpperCase();
+		}
+
+		<span class="hljs-keyword">if</span> (!wordMap[current]) {
+			<span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+		}
+
+		wordMap = wordMap[current];
+		<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; wordMap.length; i++) {
+			word = wordMap[i].value;
+
+			peek = current + context.reader.peek(word.length);
+			<span class="hljs-keyword">if</span> (word === peek || wordMap[i].regex.test(peek)) {
+				<span class="hljs-keyword">return</span> context.createToken(
+					tokenName,
+					context.reader.current() + context.reader[doNotRead ? <span class="hljs-string">"peek"</span> : <span class="hljs-string">"read"</span>](word.length - <span class="hljs-number">1</span>),
+					line,
+					column
+				);
+			}
+		}
+
+		<span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+	}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>gets the next token in the specified direction while matcher matches the current token</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getNextWhile</span>(<span class="hljs-params">tokens, index, direction, matcher</span>) </span>{
+		<span class="hljs-keyword">var</span> count = <span class="hljs-number">1</span>, 
+			token;
+		
+		direction = direction || <span class="hljs-number">1</span>;
+		<span class="hljs-keyword">while</span> (token = tokens[index + (direction * count++)]) {
+			<span class="hljs-keyword">if</span> (!matcher(token)) {
+				<span class="hljs-keyword">return</span> token;
+			}
+		}
+		
+		<span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>;
+	}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>this is crucial for performance</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createHashMap</span>(<span class="hljs-params">wordMap, boundary, caseInsensitive</span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>creates a hash table where the hash is the first character of the word</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> newMap = { },
+			i,
+			word,
+			firstChar;
+		
+		<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; wordMap.length; i++) {
+			word = caseInsensitive ? wordMap[i].toUpperCase() : wordMap[i];
+			firstChar = word.charAt(<span class="hljs-number">0</span>);
+			<span class="hljs-keyword">if</span> (!newMap[firstChar]) {
+				newMap[firstChar] = [];
+			}
+
+			newMap[firstChar].push({ <span class="hljs-attr">value</span>: word, <span class="hljs-attr">regex</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(<span class="hljs-string">"^"</span> + regexEscape(word) + boundary, caseInsensitive ? <span class="hljs-string">"i"</span> : <span class="hljs-string">""</span>) });
+		}
+
+		<span class="hljs-keyword">return</span> newMap;
+	}
+
+	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">defaultNumberParser</span>(<span class="hljs-params">context</span>) </span>{
+		<span class="hljs-keyword">var</span> current = context.reader.current(), 
+			number, 
+			line = context.reader.getLine(), 
+			column = context.reader.getColumn(),
+			allowDecimal = <span class="hljs-literal">true</span>,
+			peek;
+
+		<span class="hljs-keyword">if</span> (!<span class="hljs-regexp">/\d/</span>.test(current)) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>is it a decimal followed by a number?</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">if</span> (current !== <span class="hljs-string">"."</span> || !<span class="hljs-regexp">/\d/</span>.test(context.reader.peek())) {
+				<span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+			}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>decimal without leading zero</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			number = current + context.reader.read();
+			allowDecimal = <span class="hljs-literal">false</span>;
+		} <span class="hljs-keyword">else</span> {
+			number = current;
+			<span class="hljs-keyword">if</span> (current === <span class="hljs-string">"0"</span> &amp;&amp; context.reader.peek() !== <span class="hljs-string">"."</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>hex or octal</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				allowDecimal = <span class="hljs-literal">false</span>;
+			}
+		}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>easy way out: read until it’s not a number or letter
+this will work for hex (0xef), octal (012), decimal and scientific notation (1e3)
+anything else and you’re on your own</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+		<span class="hljs-keyword">while</span> ((peek = context.reader.peek()) !== context.reader.EOF) {
+			<span class="hljs-keyword">if</span> (!<span class="hljs-regexp">/[A-Za-z0-9]/</span>.test(peek)) {
+				<span class="hljs-keyword">if</span> (peek === <span class="hljs-string">"."</span> &amp;&amp; allowDecimal &amp;&amp; <span class="hljs-regexp">/\d$/</span>.test(context.reader.peek(<span class="hljs-number">2</span>))) {
+					number += context.reader.read();
+					allowDecimal = <span class="hljs-literal">false</span>;
+					<span class="hljs-keyword">continue</span>;
+				}
+				
+				<span class="hljs-keyword">break</span>;
+			}
+
+			number += context.reader.read();
+		}
+
+		<span class="hljs-keyword">return</span> context.createToken(<span class="hljs-string">"number"</span>, number, line, column);
+	}
+
+	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fireEvent</span>(<span class="hljs-params">eventName, highlighter, eventContext</span>) </span>{
+		<span class="hljs-keyword">var</span> delegates = events[eventName] || [],
+			i;
+		
+		<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; delegates.length; i++) {
+			delegates[i].call(highlighter, eventContext);
+		}
+	}
+	
+	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Highlighter</span>(<span class="hljs-params">options</span>) </span>{
+		<span class="hljs-keyword">this</span>.options = merge(clone(globalOptions), options);
+	}
+
+	Highlighter.prototype = (<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+		<span class="hljs-keyword">var</span> parseNextToken = (<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+			<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isIdentMatch</span>(<span class="hljs-params">context</span>) </span>{
+				<span class="hljs-keyword">return</span> context.language.identFirstLetter &amp;&amp; context.language.identFirstLetter.test(context.reader.current());
+			}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>token parsing functions</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parseKeyword</span>(<span class="hljs-params">context</span>) </span>{
+				<span class="hljs-keyword">return</span> matchWord(context, context.language.keywords, <span class="hljs-string">"keyword"</span>);
+			}
+
+			<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parseCustomTokens</span>(<span class="hljs-params">context</span>) </span>{
+				<span class="hljs-keyword">var</span> tokenName,
+					token;
+				<span class="hljs-keyword">if</span> (context.language.customTokens === <span class="hljs-literal">undefined</span>) {
+					<span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+				}
+
+				<span class="hljs-keyword">for</span> (tokenName <span class="hljs-keyword">in</span> context.language.customTokens) {
+					token = matchWord(context, context.language.customTokens[tokenName], tokenName);
+					<span class="hljs-keyword">if</span> (token !== <span class="hljs-literal">null</span>) {
+						<span class="hljs-keyword">return</span> token;
+					}
+				}
+
+				<span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+			}
+
+			<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parseOperator</span>(<span class="hljs-params">context</span>) </span>{
+				<span class="hljs-keyword">return</span> matchWord(context, context.language.operators, <span class="hljs-string">"operator"</span>);
+			}
+
+			<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parsePunctuation</span>(<span class="hljs-params">context</span>) </span>{
+				<span class="hljs-keyword">var</span> current = context.reader.current();
+				<span class="hljs-keyword">if</span> (context.language.punctuation.test(regexEscape(current))) {
+					<span class="hljs-keyword">return</span> context.createToken(<span class="hljs-string">"punctuation"</span>, current, context.reader.getLine(), context.reader.getColumn());
+				}
+
+				<span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+			}
+
+			<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parseIdent</span>(<span class="hljs-params">context</span>) </span>{
+				<span class="hljs-keyword">var</span> ident,
+					peek,
+					line = context.reader.getLine(),
+					column = context.reader.getColumn();
+
+				<span class="hljs-keyword">if</span> (!isIdentMatch(context)) {
+					<span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+				}
+
+				ident = context.reader.current();
+				<span class="hljs-keyword">while</span> ((peek = context.reader.peek()) !== context.reader.EOF) {
+					<span class="hljs-keyword">if</span> (!context.language.identAfterFirstLetter.test(peek)) {
+						<span class="hljs-keyword">break</span>;
+					}
+
+					ident += context.reader.read();
+				}
+
+				<span class="hljs-keyword">return</span> context.createToken(<span class="hljs-string">"ident"</span>, ident, line, column);
+			}
+
+			<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parseDefault</span>(<span class="hljs-params">context</span>) </span>{
+				<span class="hljs-keyword">if</span> (context.defaultData.text === <span class="hljs-string">""</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>new default token</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					context.defaultData.line = context.reader.getLine();
+					context.defaultData.column = context.reader.getColumn();
+				}
+
+				context.defaultData.text += context.reader.current();
+				<span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+			}
+
+			<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parseScopes</span>(<span class="hljs-params">context</span>) </span>{
+				<span class="hljs-keyword">var</span> current = context.reader.current(),
+					tokenName,
+					specificScopes,
+					j,
+					opener,
+					line,
+					column,
+					continuation,
+					value;
+
+				<span class="hljs-keyword">for</span> (tokenName <span class="hljs-keyword">in</span> context.language.scopes) {
+					specificScopes = context.language.scopes[tokenName];
+					<span class="hljs-keyword">for</span> (j = <span class="hljs-number">0</span>; j &lt; specificScopes.length; j++) {
+						opener = specificScopes[j][<span class="hljs-number">0</span>];
+
+						value = current + context.reader.peek(opener.length - <span class="hljs-number">1</span>);
+
+						<span class="hljs-keyword">if</span> (opener !== value &amp;&amp; (!context.language.caseInsensitive || value.toUpperCase() !== opener.toUpperCase())) {
+							<span class="hljs-keyword">continue</span>;
+						}
+
+						line = context.reader.getLine(), column = context.reader.getColumn();
+						context.reader.read(opener.length - <span class="hljs-number">1</span>);
+						continuation = getScopeReaderFunction(specificScopes[j], tokenName);
+						<span class="hljs-keyword">return</span> continuation(context, continuation, value, line, column);
+					}
+				}
+
+				<span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+			}
+
+			<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parseNumber</span>(<span class="hljs-params">context</span>) </span>{
+				<span class="hljs-keyword">return</span> context.language.numberParser(context);
+			}
+
+			<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parseCustomRules</span>(<span class="hljs-params">context</span>) </span>{
+				<span class="hljs-keyword">var</span> customRules = context.language.customParseRules,
+					i,
+					token;
+
+				<span class="hljs-keyword">if</span> (customRules === <span class="hljs-literal">undefined</span>) {
+					<span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+				}
+
+				<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; customRules.length; i++) {
+					token = customRules[i](context);
+					<span class="hljs-keyword">if</span> (token) {
+						<span class="hljs-keyword">return</span> token;
+					}
+				}
+
+				<span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+			}
+
+			<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">context</span>) </span>{
+				<span class="hljs-keyword">if</span> (context.language.doNotParse.test(context.reader.current())) {
+					<span class="hljs-keyword">return</span> parseDefault(context);
+				}
+
+				<span class="hljs-keyword">return</span> parseCustomRules(context)
+					|| parseCustomTokens(context)
+					|| parseKeyword(context)
+					|| parseScopes(context)
+					|| parseIdent(context)
+					|| parseNumber(context)
+					|| parseOperator(context)
+					|| parsePunctuation(context)
+					|| parseDefault(context);
+			}
+		}());
+		
+		<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getScopeReaderFunction</span>(<span class="hljs-params">scope, tokenName</span>) </span>{
+			<span class="hljs-keyword">var</span> escapeSequences = scope[<span class="hljs-number">2</span>] || [],
+				closerLength = scope[<span class="hljs-number">1</span>].length,
+				closer = <span class="hljs-keyword">typeof</span>(scope[<span class="hljs-number">1</span>]) === <span class="hljs-string">"string"</span> ? <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(regexEscape(scope[<span class="hljs-number">1</span>])) : scope[<span class="hljs-number">1</span>].regex,
+				zeroWidth = scope[<span class="hljs-number">3</span>] || <span class="hljs-literal">false</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>processCurrent indicates that this is being called from a continuation
+which means that we need to process the current char, rather than peeking at the next</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">context, continuation, buffer, line, column, processCurrent</span>) </span>{
+				<span class="hljs-keyword">var</span> foundCloser = <span class="hljs-literal">false</span>;
+				buffer = buffer || <span class="hljs-string">""</span>;
+					
+				processCurrent = processCurrent ? <span class="hljs-number">1</span> : <span class="hljs-number">0</span>;
+
+				<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">process</span>(<span class="hljs-params">processCurrent</span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>check for escape sequences</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					<span class="hljs-keyword">var</span> peekValue,
+						current = context.reader.current(),
+						i;
+					
+					<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; escapeSequences.length; i++) {
+						peekValue = (processCurrent ? current : <span class="hljs-string">""</span>) + context.reader.peek(escapeSequences[i].length - processCurrent);
+						<span class="hljs-keyword">if</span> (peekValue === escapeSequences[i]) {
+							buffer += context.reader.read(peekValue.length - processCurrent);
+							<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+						}
+					}
+
+					peekValue = (processCurrent ? current : <span class="hljs-string">""</span>) + context.reader.peek(closerLength - processCurrent);
+					<span class="hljs-keyword">if</span> (closer.test(peekValue)) {
+						foundCloser = <span class="hljs-literal">true</span>;
+						<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+					}
+
+					buffer += processCurrent ? current : context.reader.read();
+					<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+				};
+
+				<span class="hljs-keyword">if</span> (!processCurrent || process(<span class="hljs-literal">true</span>)) {
+					<span class="hljs-keyword">while</span> (context.reader.peek() !== context.reader.EOF &amp;&amp; process(<span class="hljs-literal">false</span>)) { }
+				}
+
+				<span class="hljs-keyword">if</span> (processCurrent) {
+					buffer += context.reader.current();
+					context.reader.read();
+				} <span class="hljs-keyword">else</span> {
+					buffer += zeroWidth || context.reader.peek() === context.reader.EOF ? <span class="hljs-string">""</span> : context.reader.read(closerLength);
+				}
+
+				<span class="hljs-keyword">if</span> (!foundCloser) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>we need to signal to the context that this scope was never properly closed
+this has significance for partial parses (e.g. for nested languages)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					context.continuation = continuation;
+				}
+
+				<span class="hljs-keyword">return</span> context.createToken(tokenName, buffer, line, column);
+			};
+		}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <p>called before processing the current</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">switchToEmbeddedLanguageIfNecessary</span>(<span class="hljs-params">context</span>) </span>{
+			<span class="hljs-keyword">var</span> i,
+				embeddedLanguage;
+			
+			<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; context.language.embeddedLanguages.length; i++) {
+				<span class="hljs-keyword">if</span> (!languages[context.language.embeddedLanguages[i].language]) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <p>unregistered language</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					<span class="hljs-keyword">continue</span>;
+				}
+				
+				embeddedLanguage = clone(context.language.embeddedLanguages[i]);
+				
+				<span class="hljs-keyword">if</span> (embeddedLanguage.switchTo(context)) {
+					embeddedLanguage.oldItems = clone(context.items);
+					context.embeddedLanguageStack.push(embeddedLanguage);
+					context.language = languages[embeddedLanguage.language];
+					context.items = merge(context.items, clone(context.language.contextItems));
+					<span class="hljs-keyword">break</span>;
+				}
+			}
+		}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <p>called after processing the current</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">switchBackFromEmbeddedLanguageIfNecessary</span>(<span class="hljs-params">context</span>) </span>{
+			<span class="hljs-keyword">var</span> current = last(context.embeddedLanguageStack),
+				lang;
+			
+			<span class="hljs-keyword">if</span> (current &amp;&amp; current.switchBack(context)) {
+				context.language = languages[current.parentLanguage];
+				lang = context.embeddedLanguageStack.pop();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-39">&#182;</a>
+              </div>
+              <p>restore old items</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				context.items = clone(lang.oldItems);
+				lang.oldItems = {};
+			}
+		}
+		
+		<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tokenize</span>(<span class="hljs-params">unhighlightedCode, language, partialContext, options</span>) </span>{
+			<span class="hljs-keyword">var</span> tokens = [],
+				context,
+				continuation,
+				token;
+				
+			fireEvent(<span class="hljs-string">"beforeTokenize"</span>, <span class="hljs-keyword">this</span>, { <span class="hljs-attr">code</span>: unhighlightedCode, <span class="hljs-attr">language</span>: language });
+			context = {
+				<span class="hljs-attr">reader</span>: createCodeReader(unhighlightedCode),
+				<span class="hljs-attr">language</span>: language,
+				<span class="hljs-attr">items</span>: clone(language.contextItems),
+				<span class="hljs-attr">token</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">index</span>) </span>{ <span class="hljs-keyword">return</span> tokens[index]; },
+				<span class="hljs-attr">getAllTokens</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> tokens.slice(<span class="hljs-number">0</span>); },
+				<span class="hljs-attr">count</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> tokens.length; },
+				<span class="hljs-attr">options</span>: options,
+				<span class="hljs-attr">embeddedLanguageStack</span>: [],
+				
+				<span class="hljs-attr">defaultData</span>: {
+					<span class="hljs-attr">text</span>: <span class="hljs-string">""</span>,
+					<span class="hljs-attr">line</span>: <span class="hljs-number">1</span>,
+					<span class="hljs-attr">column</span>: <span class="hljs-number">1</span>
+				},
+				<span class="hljs-attr">createToken</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">name, value, line, column</span>) </span>{
+					<span class="hljs-keyword">return</span> {
+						<span class="hljs-attr">name</span>: name,
+						<span class="hljs-attr">line</span>: line,
+						<span class="hljs-attr">value</span>: isIe ? value.replace(<span class="hljs-regexp">/\n/g</span>, <span class="hljs-string">"\r"</span>) : value,
+						<span class="hljs-attr">column</span>: column,
+						<span class="hljs-attr">language</span>: <span class="hljs-keyword">this</span>.language.name
+					};
+				}
+			};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-40">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-40">&#182;</a>
+              </div>
+              <p>if continuation is given, then we need to pick up where we left off from a previous parse
+basically it indicates that a scope was never closed, so we need to continue that scope</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">if</span> (partialContext.continuation) {
+				continuation = partialContext.continuation;
+				partialContext.continuation = <span class="hljs-literal">null</span>;
+				tokens.push(continuation(context, continuation, <span class="hljs-string">""</span>, context.reader.getLine(), context.reader.getColumn(), <span class="hljs-literal">true</span>));
+			}
+
+			<span class="hljs-keyword">while</span> (!context.reader.isEof()) {
+				switchToEmbeddedLanguageIfNecessary(context);
+				token = parseNextToken(context);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-41">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-41">&#182;</a>
+              </div>
+              <p>flush default data if needed (in pretty much all languages this is just whitespace)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="hljs-keyword">if</span> (token !== <span class="hljs-literal">null</span>) {
+					<span class="hljs-keyword">if</span> (context.defaultData.text !== <span class="hljs-string">""</span>) {
+						tokens.push(context.createToken(<span class="hljs-string">"default"</span>, context.defaultData.text, context.defaultData.line, context.defaultData.column));
+						context.defaultData.text = <span class="hljs-string">""</span>;
+					}
+
+					<span class="hljs-keyword">if</span> (token[<span class="hljs-number">0</span>] !== <span class="hljs-literal">undefined</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-42">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-42">&#182;</a>
+              </div>
+              <p>multiple tokens</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>						tokens = tokens.concat(token);
+					} <span class="hljs-keyword">else</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-43">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-43">&#182;</a>
+              </div>
+              <p>single token</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>						tokens.push(token);
+					}
+				}
+
+				switchBackFromEmbeddedLanguageIfNecessary(context);
+				context.reader.read();
+			}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-44">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-44">&#182;</a>
+              </div>
+              <p>append the last default token, if necessary</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">if</span> (context.defaultData.text !== <span class="hljs-string">""</span>) {
+				tokens.push(context.createToken(<span class="hljs-string">"default"</span>, context.defaultData.text, context.defaultData.line, context.defaultData.column));
+			}
+
+			fireEvent(<span class="hljs-string">"afterTokenize"</span>, <span class="hljs-keyword">this</span>, { <span class="hljs-attr">code</span>: unhighlightedCode, <span class="hljs-attr">parserContext</span>: context });
+			<span class="hljs-keyword">return</span> context;
+		}
+
+		<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createAnalyzerContext</span>(<span class="hljs-params">parserContext, partialContext, options</span>) </span>{
+			<span class="hljs-keyword">var</span> nodes = [],
+				prepareText = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+					<span class="hljs-keyword">var</span> nbsp, tab;
+					<span class="hljs-keyword">if</span> (options.showWhitespace) {
+						nbsp = <span class="hljs-built_in">String</span>.fromCharCode(<span class="hljs-number">0xB7</span>);
+						tab = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(options.tabWidth).join(<span class="hljs-built_in">String</span>.fromCharCode(<span class="hljs-number">0x2014</span>)) + <span class="hljs-built_in">String</span>.fromCharCode(<span class="hljs-number">0x2192</span>);
+					} <span class="hljs-keyword">else</span> {
+						nbsp = <span class="hljs-built_in">String</span>.fromCharCode(<span class="hljs-number">0xA0</span>);
+						tab = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(options.tabWidth + <span class="hljs-number">1</span>).join(nbsp);
+					}
+					
+					<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">token</span>) </span>{
+						<span class="hljs-keyword">var</span> value = token.value.split(<span class="hljs-string">" "</span>).join(nbsp),
+							tabIndex,
+							lastNewlineColumn,
+							actualColumn,
+							tabLength;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-45">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-45">&#182;</a>
+              </div>
+              <p>tabstop madness: replace \t with the appropriate number of characters, depending on the tabWidth option and its relative position in the line</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>						<span class="hljs-keyword">while</span> ((tabIndex = value.indexOf(<span class="hljs-string">"\t"</span>)) &gt;= <span class="hljs-number">0</span>) {
+							lastNewlineColumn = value.lastIndexOf(EOL, tabIndex);
+							actualColumn = lastNewlineColumn === <span class="hljs-number">-1</span> ? tabIndex : tabIndex - lastNewlineColumn - <span class="hljs-number">1</span>;
+							tabLength = options.tabWidth - (actualColumn % options.tabWidth); <span class="hljs-comment">//actual length of the TAB character</span>
+							
+							value = value.substring(<span class="hljs-number">0</span>, tabIndex) + tab.substring(options.tabWidth - tabLength) + value.substring(tabIndex + <span class="hljs-number">1</span>);
+						}
+						
+						<span class="hljs-keyword">return</span> value;
+					};
+				}();
+
+			<span class="hljs-keyword">return</span> {
+				<span class="hljs-attr">tokens</span>: (partialContext.tokens || []).concat(parserContext.getAllTokens()),
+				<span class="hljs-attr">index</span>: partialContext.index ? partialContext.index + <span class="hljs-number">1</span> : <span class="hljs-number">0</span>,
+				<span class="hljs-attr">language</span>: <span class="hljs-literal">null</span>,
+				<span class="hljs-attr">getAnalyzer</span>: EMPTY,
+				<span class="hljs-attr">options</span>: options,
+				<span class="hljs-attr">continuation</span>: parserContext.continuation,
+				<span class="hljs-attr">addNode</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">node</span>) </span>{ nodes.push(node); },
+				<span class="hljs-attr">createTextNode</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">token</span>) </span>{ <span class="hljs-keyword">return</span> <span class="hljs-built_in">document</span>.createTextNode(prepareText(token)); },
+				<span class="hljs-attr">getNodes</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> nodes; },
+				<span class="hljs-attr">resetNodes</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ nodes = []; },
+				<span class="hljs-attr">items</span>: parserContext.items
+			};
+		}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-46">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-46">&#182;</a>
+              </div>
+              <p>partialContext allows us to perform a partial parse, and then pick up where we left off at a later time
+this functionality enables nested highlights (language within a language, e.g. PHP within HTML followed by more PHP)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">highlightText</span>(<span class="hljs-params">unhighlightedCode, languageId, partialContext</span>) </span>{
+			<span class="hljs-keyword">var</span> language = languages[languageId],
+				analyzerContext;
+			
+			partialContext = partialContext || { };
+			<span class="hljs-keyword">if</span> (language === <span class="hljs-literal">undefined</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-47">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-47">&#182;</a>
+              </div>
+              <p>use default language if one wasn’t specified or hasn’t been registered</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				language = languages[DEFAULT_LANGUAGE];
+			}
+
+			fireEvent(<span class="hljs-string">"beforeHighlight"</span>, <span class="hljs-keyword">this</span>, { <span class="hljs-attr">code</span>: unhighlightedCode, <span class="hljs-attr">language</span>: language, <span class="hljs-attr">previousContext</span>: partialContext });
+			
+			analyzerContext = createAnalyzerContext(
+				tokenize.call(<span class="hljs-keyword">this</span>, unhighlightedCode, language, partialContext, <span class="hljs-keyword">this</span>.options),
+				partialContext,
+				<span class="hljs-keyword">this</span>.options
+			);
+			
+			analyze.call(<span class="hljs-keyword">this</span>, analyzerContext, partialContext.index ? partialContext.index + <span class="hljs-number">1</span> : <span class="hljs-number">0</span>);
+			
+			fireEvent(<span class="hljs-string">"afterHighlight"</span>, <span class="hljs-keyword">this</span>, { <span class="hljs-attr">analyzerContext</span>: analyzerContext });
+
+			<span class="hljs-keyword">return</span> analyzerContext;
+		}
+		
+		<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createContainer</span>(<span class="hljs-params">ctx</span>) </span>{
+			<span class="hljs-keyword">var</span> container = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"span"</span>);
+			container.className = ctx.options.classPrefix + ctx.language.name;
+			<span class="hljs-keyword">return</span> container;
+		}
+		
+		<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">analyze</span>(<span class="hljs-params">analyzerContext, startIndex</span>) </span>{
+			<span class="hljs-keyword">var</span> nodes,
+				lastIndex,
+				container,
+				i,
+				tokenName,
+				func,
+				language,
+				analyzer;
+			
+			fireEvent(<span class="hljs-string">"beforeAnalyze"</span>, <span class="hljs-keyword">this</span>, { <span class="hljs-attr">analyzerContext</span>: analyzerContext });
+			
+			<span class="hljs-keyword">if</span> (analyzerContext.tokens.length &gt; <span class="hljs-number">0</span>) {
+				analyzerContext.language = languages[analyzerContext.tokens[<span class="hljs-number">0</span>].language] || languages[DEFAULT_LANGUAGE];;
+				nodes = [];
+				lastIndex = <span class="hljs-number">0</span>;
+				container = createContainer(analyzerContext);
+				
+				<span class="hljs-keyword">for</span> (i = startIndex; i &lt; analyzerContext.tokens.length; i++) {
+					language = languages[analyzerContext.tokens[i].language] || languages[DEFAULT_LANGUAGE];
+					<span class="hljs-keyword">if</span> (language.name !== analyzerContext.language.name) {
+						appendAll(container, analyzerContext.getNodes());
+						analyzerContext.resetNodes();
+						
+						nodes.push(container);
+						analyzerContext.language = language;
+						container = createContainer(analyzerContext);
+					}
+					
+					analyzerContext.index = i;
+					tokenName = analyzerContext.tokens[i].name;
+					func = <span class="hljs-string">"handle_"</span> + tokenName;
+
+					analyzer = analyzerContext.getAnalyzer.call(analyzerContext) || analyzerContext.language.analyzer;
+					analyzer[func] ? analyzer[func](analyzerContext) : analyzer.handleToken(analyzerContext);
+				}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-48">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-48">&#182;</a>
+              </div>
+              <p>append the last nodes, and add the final nodes to the context</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				appendAll(container, analyzerContext.getNodes());
+				nodes.push(container);
+				analyzerContext.resetNodes();
+				<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; nodes.length; i++) {
+					analyzerContext.addNode(nodes[i]);
+				}
+			}
+			
+			fireEvent(<span class="hljs-string">"afterAnalyze"</span>, <span class="hljs-keyword">this</span>, { <span class="hljs-attr">analyzerContext</span>: analyzerContext });
+		}
+
+		<span class="hljs-keyword">return</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-49">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-49">&#182;</a>
+              </div>
+              <p>matches the language of the node to highlight</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			matchSunlightNode: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+				<span class="hljs-keyword">var</span> regex;
+				
+				<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">node</span>) </span>{
+					<span class="hljs-keyword">if</span> (!regex) {
+						regex = <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(<span class="hljs-string">"(?:\\s|^)"</span> + <span class="hljs-keyword">this</span>.options.classPrefix + <span class="hljs-string">"highlight-(\\S+)(?:\\s|$)"</span>);
+					}
+					
+					<span class="hljs-keyword">return</span> regex.exec(node.className);
+				};
+			}(),</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-50">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-50">&#182;</a>
+              </div>
+              <p>determines if the node has already been highlighted</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			isAlreadyHighlighted: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+				<span class="hljs-keyword">var</span> regex;
+				<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">node</span>) </span>{
+					<span class="hljs-keyword">if</span> (!regex) {
+						regex = <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(<span class="hljs-string">"(?:\\s|^)"</span> + <span class="hljs-keyword">this</span>.options.classPrefix + <span class="hljs-string">"highlighted(?:\\s|$)"</span>);
+					}
+					
+					<span class="hljs-keyword">return</span> regex.test(node.className);
+				};
+			}(),</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-51">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-51">&#182;</a>
+              </div>
+              <p>highlights a block of text</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			highlight: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">code, languageId</span>) </span>{ <span class="hljs-keyword">return</span> highlightText.call(<span class="hljs-keyword">this</span>, code, languageId); },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-52">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-52">&#182;</a>
+              </div>
+              <p>recursively highlights a DOM node</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			highlightNode: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">highlightRecursive</span>(<span class="hljs-params">node</span>) </span>{
+				<span class="hljs-keyword">var</span> match,
+					languageId,
+					currentNodeCount,
+					j,
+					nodes,
+					k,
+					partialContext,
+					container,
+					codeContainer;
+				
+				<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isAlreadyHighlighted(node) || (match = <span class="hljs-keyword">this</span>.matchSunlightNode(node)) === <span class="hljs-literal">null</span>) {
+					<span class="hljs-keyword">return</span>;
+				}
+
+				languageId = match[<span class="hljs-number">1</span>];
+				currentNodeCount = <span class="hljs-number">0</span>;
+				fireEvent(<span class="hljs-string">"beforeHighlightNode"</span>, <span class="hljs-keyword">this</span>, { <span class="hljs-attr">node</span>: node });
+				<span class="hljs-keyword">for</span> (j = <span class="hljs-number">0</span>; j &lt; node.childNodes.length; j++) {
+					<span class="hljs-keyword">if</span> (node.childNodes[j].nodeType === <span class="hljs-number">3</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-53">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-53">&#182;</a>
+              </div>
+              <p>text nodes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>						partialContext = highlightText.call(<span class="hljs-keyword">this</span>, node.childNodes[j].nodeValue, languageId, partialContext);
+						HIGHLIGHTED_NODE_COUNT++;
+						currentNodeCount = currentNodeCount || HIGHLIGHTED_NODE_COUNT;
+						nodes = partialContext.getNodes();
+
+						node.replaceChild(nodes[<span class="hljs-number">0</span>], node.childNodes[j]);
+						<span class="hljs-keyword">for</span> (k = <span class="hljs-number">1</span>; k &lt; nodes.length; k++) {
+							node.insertBefore(nodes[k], nodes[k - <span class="hljs-number">1</span>].nextSibling);
+						}
+					} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (node.childNodes[j].nodeType === <span class="hljs-number">1</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-54">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-54">&#182;</a>
+              </div>
+              <p>element nodes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>						highlightRecursive.call(<span class="hljs-keyword">this</span>, node.childNodes[j]);
+					}
+				}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-55">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-55">&#182;</a>
+              </div>
+              <p>indicate that this node has been highlighted</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				node.className += <span class="hljs-string">" "</span> + <span class="hljs-keyword">this</span>.options.classPrefix + <span class="hljs-string">"highlighted"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-56">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-56">&#182;</a>
+              </div>
+              <p>if the node is block level, we put it in a container, otherwise we just leave it alone</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="hljs-keyword">if</span> (getComputedStyle(node, <span class="hljs-string">"display"</span>) === <span class="hljs-string">"block"</span>) {
+					container = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"div"</span>);
+					container.className = <span class="hljs-keyword">this</span>.options.classPrefix + <span class="hljs-string">"container"</span>;
+					
+					codeContainer = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"div"</span>);
+					codeContainer.className = <span class="hljs-keyword">this</span>.options.classPrefix + <span class="hljs-string">"code-container"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-57">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-57">&#182;</a>
+              </div>
+              <p>apply max height if specified in options</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.options.maxHeight !== <span class="hljs-literal">false</span>) {
+						codeContainer.style.overflowY = <span class="hljs-string">"auto"</span>;
+						codeContainer.style.maxHeight = <span class="hljs-keyword">this</span>.options.maxHeight + (<span class="hljs-regexp">/^\d+$/</span>.test(<span class="hljs-keyword">this</span>.options.maxHeight) ? <span class="hljs-string">"px"</span> : <span class="hljs-string">""</span>);
+					}
+					
+					container.appendChild(codeContainer);
+					
+					node.parentNode.insertBefore(codeContainer, node);
+					node.parentNode.removeChild(node);
+					codeContainer.appendChild(node);
+					
+					codeContainer.parentNode.insertBefore(container, codeContainer);
+					codeContainer.parentNode.removeChild(codeContainer);
+					container.appendChild(codeContainer);
+				}
+				
+				fireEvent(<span class="hljs-string">"afterHighlightNode"</span>, <span class="hljs-keyword">this</span>, { 
+					<span class="hljs-attr">container</span>: container,
+					<span class="hljs-attr">codeContainer</span>: codeContainer,
+					<span class="hljs-attr">node</span>: node, 
+					<span class="hljs-attr">count</span>: currentNodeCount
+				});
+			}
+		};
+	}());</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-58">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-58">&#182;</a>
+              </div>
+              <p>public facing object</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-built_in">window</span>.Sunlight = {
+		<span class="hljs-attr">version</span>: <span class="hljs-string">"1.18"</span>,
+		<span class="hljs-attr">Highlighter</span>: Highlighter,
+		<span class="hljs-attr">createAnalyzer</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> create(defaultAnalyzer); },
+		<span class="hljs-attr">globalOptions</span>: globalOptions,
+
+		<span class="hljs-attr">highlightAll</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">options</span>) </span>{
+			<span class="hljs-keyword">var</span> highlighter = <span class="hljs-keyword">new</span> Highlighter(options),
+				tags = <span class="hljs-built_in">document</span>.getElementsByTagName(<span class="hljs-string">"*"</span>),
+				i;
+			
+			<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; tags.length; i++) {
+				highlighter.highlightNode(tags[i]);
+			}
+		},
+
+		<span class="hljs-attr">registerLanguage</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">languageId, languageData</span>) </span>{
+			<span class="hljs-keyword">var</span> tokenName,
+				embeddedLanguages,
+				languageName;
+			
+			<span class="hljs-keyword">if</span> (!languageId) {
+				<span class="hljs-keyword">throw</span> <span class="hljs-string">"Languages must be registered with an identifier, e.g. \"php\" for PHP"</span>;
+			}
+
+			languageData = merge(merge({}, languageDefaults), languageData);
+			languageData.name = languageId;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-59">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-59">&#182;</a>
+              </div>
+              <p>transform keywords, operators and custom tokens into a hash map</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			languageData.keywords = createHashMap(languageData.keywords || [], <span class="hljs-string">"\\b"</span>, languageData.caseInsensitive);
+			languageData.operators = createHashMap(languageData.operators || [], <span class="hljs-string">""</span>, languageData.caseInsensitive);
+			<span class="hljs-keyword">for</span> (tokenName <span class="hljs-keyword">in</span> languageData.customTokens) {
+				languageData.customTokens[tokenName] = createHashMap(
+					languageData.customTokens[tokenName].values,
+					languageData.customTokens[tokenName].boundary,
+					languageData.caseInsensitive
+				);
+			}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-60">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-60">&#182;</a>
+              </div>
+              <p>convert the embedded language object to an easier-to-use array</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			embeddedLanguages = [];
+			<span class="hljs-keyword">for</span> (languageName <span class="hljs-keyword">in</span> languageData.embeddedLanguages) {
+				embeddedLanguages.push({
+					<span class="hljs-attr">parentLanguage</span>: languageData.name,
+					<span class="hljs-attr">language</span>: languageName,
+					<span class="hljs-attr">switchTo</span>: languageData.embeddedLanguages[languageName].switchTo,
+					<span class="hljs-attr">switchBack</span>: languageData.embeddedLanguages[languageName].switchBack
+				});
+			}
+			
+			languageData.embeddedLanguages = embeddedLanguages;
+
+			languages[languageData.name] = languageData;
+		},
+		
+		<span class="hljs-attr">isRegistered</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">languageId</span>) </span>{ <span class="hljs-keyword">return</span> languages[languageId] !== <span class="hljs-literal">undefined</span>; },
+		
+		<span class="hljs-attr">bind</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event, callback</span>) </span>{
+			<span class="hljs-keyword">if</span> (!events[event]) {
+				<span class="hljs-keyword">throw</span> <span class="hljs-string">"Unknown event \""</span> + event + <span class="hljs-string">"\""</span>;
+			}
+			
+			events[event].push(callback);
+		},
+
+		<span class="hljs-attr">util</span>: {
+			<span class="hljs-attr">last</span>: last,
+			<span class="hljs-attr">regexEscape</span>: regexEscape,
+			<span class="hljs-attr">eol</span>: EOL,
+			<span class="hljs-attr">clone</span>: clone,
+			<span class="hljs-attr">escapeSequences</span>: [<span class="hljs-string">"\\n"</span>, <span class="hljs-string">"\\t"</span>, <span class="hljs-string">"\\r"</span>, <span class="hljs-string">"\\\\"</span>, <span class="hljs-string">"\\v"</span>, <span class="hljs-string">"\\f"</span>],
+			<span class="hljs-attr">contains</span>: contains,
+			<span class="hljs-attr">matchWord</span>: matchWord,
+			<span class="hljs-attr">createHashMap</span>: createHashMap,
+			<span class="hljs-attr">createBetweenRule</span>: createBetweenRule,
+			<span class="hljs-attr">createProceduralRule</span>: createProceduralRule,
+			<span class="hljs-attr">getNextNonWsToken</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">tokens, index</span>) </span>{ <span class="hljs-keyword">return</span> getNextWhile(tokens, index, <span class="hljs-number">1</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">token</span>) </span>{ <span class="hljs-keyword">return</span> token.name === <span class="hljs-string">"default"</span>; }); },
+			<span class="hljs-attr">getPreviousNonWsToken</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">tokens, index</span>) </span>{ <span class="hljs-keyword">return</span> getNextWhile(tokens, index, <span class="hljs-number">-1</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">token</span>) </span>{ <span class="hljs-keyword">return</span> token.name === <span class="hljs-string">"default"</span>; }); },
+			<span class="hljs-attr">getNextWhile</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">tokens, index, matcher</span>) </span>{ <span class="hljs-keyword">return</span> getNextWhile(tokens, index, <span class="hljs-number">1</span>, matcher); },
+			<span class="hljs-attr">getPreviousWhile</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">tokens, index, matcher</span>) </span>{ <span class="hljs-keyword">return</span> getNextWhile(tokens, index, <span class="hljs-number">-1</span>, matcher); },
+			<span class="hljs-attr">whitespace</span>: { <span class="hljs-attr">token</span>: <span class="hljs-string">"default"</span>, <span class="hljs-attr">optional</span>: <span class="hljs-literal">true</span> },
+			<span class="hljs-attr">getComputedStyle</span>: getComputedStyle
+		}
+	};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-61">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-61">&#182;</a>
+              </div>
+              <p>register the default language</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-built_in">window</span>.Sunlight.registerLanguage(DEFAULT_LANGUAGE, { <span class="hljs-attr">punctuation</span>: <span class="hljs-regexp">/(?!x)x/</span>, <span class="hljs-attr">numberParser</span>: EMPTY });
+
+}(<span class="hljs-keyword">this</span>, <span class="hljs-built_in">document</span>));</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

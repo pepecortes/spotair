@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>toc.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="../../../source_doc/docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>toc.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">$</span>) </span>{
+  <span class="hljs-keyword">var</span> navbarHeight;
+  <span class="hljs-keyword">var</span> initialised = <span class="hljs-literal">false</span>;
+  <span class="hljs-keyword">var</span> navbarOffset;
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">elOffset</span>(<span class="hljs-params">$el</span>) </span>{
+    <span class="hljs-keyword">return</span> $el.offset().top - (navbarHeight + navbarOffset);
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">scrollToHash</span>(<span class="hljs-params">duringPageLoad</span>) </span>{
+    <span class="hljs-keyword">var</span> elScrollToId = location.hash.replace(<span class="hljs-regexp">/^#/</span>, <span class="hljs-string">''</span>);
+    <span class="hljs-keyword">var</span> $el;
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">doScroll</span>(<span class="hljs-params"></span>) </span>{
+      <span class="hljs-keyword">var</span> offsetTop = elOffset($el);
+      <span class="hljs-built_in">window</span>.scrollTo(<span class="hljs-built_in">window</span>.pageXOffset || <span class="hljs-built_in">window</span>.scrollX, offsetTop);
+    }
+
+    <span class="hljs-keyword">if</span> (elScrollToId) {
+      $el = $(<span class="hljs-built_in">document</span>.getElementById(elScrollToId));
+
+      <span class="hljs-keyword">if</span> (!$el.length) {
+        $el = $(<span class="hljs-built_in">document</span>.getElementsByName(elScrollToId));
+      }
+
+      <span class="hljs-keyword">if</span> ($el.length) {
+        <span class="hljs-keyword">if</span> (duringPageLoad) {
+          $(<span class="hljs-built_in">window</span>).one(<span class="hljs-string">'scroll'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+            setTimeout(doScroll, <span class="hljs-number">100</span>);
+          });
+        } <span class="hljs-keyword">else</span> {
+          setTimeout(doScroll, <span class="hljs-number">0</span>);
+        }
+      }
+    }
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">init</span>(<span class="hljs-params">opts</span>) </span>{
+    <span class="hljs-keyword">if</span> (initialised) {
+      <span class="hljs-keyword">return</span>;
+    }
+    initialised = <span class="hljs-literal">true</span>;
+    navbarHeight = $(<span class="hljs-string">'.navbar'</span>).height();
+    navbarOffset = opts.navbarOffset;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>some browsers move the offset after changing location.
+also catch external links coming in</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    $(<span class="hljs-built_in">window</span>).on(<span class="hljs-string">"hashchange"</span>, scrollToHash.bind(<span class="hljs-literal">null</span>, <span class="hljs-literal">false</span>));
+    $(scrollToHash.bind(<span class="hljs-literal">null</span>, <span class="hljs-literal">true</span>));
+  }
+
+  $.catchAnchorLinks = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">options</span>) </span>{
+    <span class="hljs-keyword">var</span> opts = $.extend({}, jQuery.fn.toc.defaults, options);
+    init(opts);
+  };
+
+  $.fn.toc = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">options</span>) </span>{
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+    <span class="hljs-keyword">var</span> opts = $.extend({}, jQuery.fn.toc.defaults, options);
+
+    <span class="hljs-keyword">var</span> container = $(opts.container);
+    <span class="hljs-keyword">var</span> tocs = [];
+    <span class="hljs-keyword">var</span> headings = $(opts.selectors, container);
+    <span class="hljs-keyword">var</span> headingOffsets = [];
+    <span class="hljs-keyword">var</span> activeClassName = <span class="hljs-string">'active'</span>;
+    <span class="hljs-keyword">var</span> ANCHOR_PREFIX = <span class="hljs-string">"__anchor"</span>;
+    <span class="hljs-keyword">var</span> maxScrollTo;
+    <span class="hljs-keyword">var</span> visibleHeight;
+    <span class="hljs-keyword">var</span> headerHeight = <span class="hljs-number">10</span>; <span class="hljs-comment">// so if the header is readable, its counted as shown</span>
+    init();
+
+    <span class="hljs-keyword">var</span> scrollTo = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) </span>{
+      e.preventDefault();
+      <span class="hljs-keyword">var</span> target = $(e.target);
+      <span class="hljs-keyword">if</span> (target.prop(<span class="hljs-string">'tagName'</span>).toLowerCase() !== <span class="hljs-string">"a"</span>) {
+        target = target.parent();
+      }
+      <span class="hljs-keyword">var</span> elScrollToId = target.attr(<span class="hljs-string">'href'</span>).replace(<span class="hljs-regexp">/^#/</span>, <span class="hljs-string">''</span>) + ANCHOR_PREFIX;
+      <span class="hljs-keyword">var</span> $el = $(<span class="hljs-built_in">document</span>.getElementById(elScrollToId));
+
+      <span class="hljs-keyword">var</span> offsetTop = <span class="hljs-built_in">Math</span>.min(maxScrollTo, elOffset($el));
+
+      $(<span class="hljs-string">'body,html'</span>).animate({ <span class="hljs-attr">scrollTop</span>: offsetTop }, <span class="hljs-number">400</span>, <span class="hljs-string">'swing'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        location.hash = <span class="hljs-string">'#'</span> + elScrollToId;
+      });
+
+      $(<span class="hljs-string">'a'</span>, self).removeClass(activeClassName);
+      target.addClass(activeClassName);
+    };
+
+    <span class="hljs-keyword">var</span> calcHadingOffsets = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+      maxScrollTo = $(<span class="hljs-string">"body"</span>).height() - $(<span class="hljs-built_in">window</span>).height();
+      visibleHeight = $(<span class="hljs-built_in">window</span>).height() - navbarHeight;
+      headingOffsets = [];
+      headings.each(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">i, heading</span>) </span>{
+        <span class="hljs-keyword">var</span> anchorSpan = $(heading).prev(<span class="hljs-string">"span"</span>);
+        <span class="hljs-keyword">var</span> top = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">if</span> (anchorSpan.length) {
+          top = elOffset(anchorSpan);
+        }
+        headingOffsets.push(top &gt; <span class="hljs-number">0</span> ? top : <span class="hljs-number">0</span>);
+      });
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>highlight on scroll</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> timeout;
+    <span class="hljs-keyword">var</span> highlightOnScroll = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) </span>{
+      <span class="hljs-keyword">if</span> (!tocs.length) {
+        <span class="hljs-keyword">return</span>;
+      }
+      <span class="hljs-keyword">if</span> (timeout) {
+        clearTimeout(timeout);
+      }
+      timeout = setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> top = $(<span class="hljs-built_in">window</span>).scrollTop(),
+          highlighted;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = headingOffsets.length - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; i--) {
+          <span class="hljs-keyword">var</span> isActive = tocs[i].hasClass(activeClassName);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>at the end of the page, allow any shown header</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span> (isActive &amp;&amp; headingOffsets[i] &gt;= maxScrollTo &amp;&amp; top &gt;= maxScrollTo) {
+            <span class="hljs-keyword">return</span>;
+          }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>if we have got to the first heading or the heading is the first one visible</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span> (i === <span class="hljs-number">0</span> || (headingOffsets[i] + headerHeight &gt;= top &amp;&amp; (headingOffsets[i - <span class="hljs-number">1</span>] + headerHeight &lt;= top))) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>in the case that a heading takes up more than the visible height e.g. we are showing
+only the one above, highlight the one above</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> (i &gt; <span class="hljs-number">0</span> &amp;&amp; headingOffsets[i] - visibleHeight &gt;= top) {
+              i--;
+            }
+            $(<span class="hljs-string">'a'</span>, self).removeClass(activeClassName);
+            <span class="hljs-keyword">if</span> (i &gt;= <span class="hljs-number">0</span>) {
+              highlighted = tocs[i].addClass(activeClassName);
+              opts.onHighlight(highlighted);
+            }
+            <span class="hljs-keyword">break</span>;
+          }
+        }
+      }, <span class="hljs-number">50</span>);
+    };
+    <span class="hljs-keyword">if</span> (opts.highlightOnScroll) {
+      $(<span class="hljs-built_in">window</span>).bind(<span class="hljs-string">'scroll'</span>, highlightOnScroll);
+      $(<span class="hljs-built_in">window</span>).bind(<span class="hljs-string">'load resize'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        calcHadingOffsets();
+        highlightOnScroll();
+      });
+    }
+
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.each(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>build TOC</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> el = $(<span class="hljs-keyword">this</span>);
+      <span class="hljs-keyword">var</span> ul = $(<span class="hljs-string">'&lt;div class="list-group"&gt;'</span>);
+
+      headings.each(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">i, heading</span>) </span>{
+        <span class="hljs-keyword">var</span> $h = $(heading);
+
+        <span class="hljs-keyword">var</span> anchor = $(<span class="hljs-string">'&lt;span/&gt;'</span>).attr(<span class="hljs-string">'id'</span>, opts.anchorName(i, heading, opts.prefix) + ANCHOR_PREFIX).insertBefore($h);
+
+        <span class="hljs-keyword">var</span> span = $(<span class="hljs-string">'&lt;span/&gt;'</span>)
+          .text(opts.headerText(i, heading, $h));</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>build TOC item</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> a = $(<span class="hljs-string">'&lt;a class="list-group-item"/&gt;'</span>)
+          .append(span)
+          .attr(<span class="hljs-string">'href'</span>, <span class="hljs-string">'#'</span> + opts.anchorName(i, heading, opts.prefix))
+          .bind(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) </span>{
+            scrollTo(e);
+            el.trigger(<span class="hljs-string">'selected'</span>, $(<span class="hljs-keyword">this</span>).attr(<span class="hljs-string">'href'</span>));
+          });
+
+        span.addClass(opts.itemClass(i, heading, $h, opts.prefix));
+
+        tocs.push(a);
+
+        ul.append(a);
+      });
+      el.html(ul);
+
+      calcHadingOffsets();
+    });
+};
+
+
+jQuery.fn.toc.defaults = {
+  <span class="hljs-attr">container</span>: <span class="hljs-string">'body'</span>,
+  <span class="hljs-attr">selectors</span>: <span class="hljs-string">'h1,h2,h3'</span>,
+  <span class="hljs-attr">smoothScrolling</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">prefix</span>: <span class="hljs-string">'toc'</span>,
+  <span class="hljs-attr">onHighlight</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{},
+  <span class="hljs-attr">highlightOnScroll</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">navbarOffset</span>: <span class="hljs-number">0</span>,
+  <span class="hljs-attr">anchorName</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">i, heading, prefix</span>) </span>{
+    <span class="hljs-keyword">return</span> prefix+i;
+  },
+  <span class="hljs-attr">headerText</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">i, heading, $heading</span>) </span>{
+    <span class="hljs-keyword">return</span> $heading.text();
+  },
+  <span class="hljs-attr">itemClass</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">i, heading, $heading, prefix</span>) </span>{
+    <span class="hljs-keyword">return</span> prefix + <span class="hljs-string">'-'</span> + $heading[<span class="hljs-number">0</span>].tagName.toLowerCase();
+  }
+
+};
+
+})(jQuery);</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

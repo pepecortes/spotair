@@ -1,4 +1,4 @@
 {
   "verbose": true,
-  "ignore": ["public/*"]
+  "watch": ["./*.js", "./app_api/",  "./app_client", "./app_lib"]
 }

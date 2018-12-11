@@ -1,7 +1,12 @@
 /**
  * Galerie model
  * @module /app_api/models/galerie
- * @property {string} DOC IN PROGRESS
+ * @property {boolean}			isSpotAir 		
+ * @property {string=}			commentaire 		
+ * @property {virtual}			text					- (summary of all fields)
+ * @property {foreignKey}		anneeId
+ * @property {foreignKey}  	themeId
+ * @property {foreignKey}		aerodromeId
  */
 
 module.exports = function(sequelize, DataTypes) {
@@ -13,7 +18,7 @@ module.exports = function(sequelize, DataTypes) {
 				autoIncrement: true,
 				unique: true,
 			},
-			isSpotAir: {
+			isSpotair: {
 				type: DataTypes.BOOLEAN,
 				allowNull: false,
 				defaultValue: false,
@@ -28,7 +33,7 @@ module.exports = function(sequelize, DataTypes) {
 				get: function() {return this.annee.annee
 					+ ", " + this.theme.theme
 					+ ", " + this.aerodrome.text
-					+ ", isSpotair: " + this.isSpotAir
+					+ ", isSpotair: " + this.isSpotair
 					+ ", " + this.commentaire}
 			},
 			createdAt: {
@@ -42,9 +47,18 @@ module.exports = function(sequelize, DataTypes) {
 				allowNull: false,
 			},
 		}, {
+			
 			indexes: [
-					{type: 'FULLTEXT', name: 'text_search', fields: ['commentaire']}
+				{type: 'FULLTEXT', name: 'text_search', fields: ['commentaire']}
 			],
+			
+			scopes: {
+				// returns only galeries "sorties associatives"
+				isspotair: {
+					where: {isSpotair: true}
+				}
+			},
+			
 		}
   );
 	

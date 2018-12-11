@@ -1,7 +1,6 @@
 /** 
 * API routes definition
 * @module /app_api/index
-* @tutorial index
 */
 const debug = require('debug')('app:api:routes');
 var express = require('express');
@@ -14,6 +13,8 @@ var ctrlGaleries = require('../controllers/galeries');
 
 // Start the router
 var router = express.Router();
+
+// Define the routes
 
 // Aerodromes 
 router.get('/aerodromes', ctrlAerodromes.all);
@@ -42,6 +43,7 @@ router.get('/galeries/:id', ctrlGaleries.byId);
 router.post('/galeries', ctrlGaleries.create);
 router.put('/galeries/:id', ctrlGaleries.update);
 router.delete('/galeries/:id', ctrlGaleries.delete);
+router.get('/galeriesSpotair', ctrlGaleries.allSpotair);
 
 
 module.exports = router;

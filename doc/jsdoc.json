@@ -1,0 +1,14 @@
+{
+  "source": {
+    "include": ["../app.js",  "../app_api/", "../app_client/", "../app_lib/"],
+    "exclude": [ /* array of paths to exclude */ ],
+    "includePattern": ".+\\.js(doc|x)?$","excludePattern": "(^|\\/|\\\\)_"
+  },
+  "opts": {
+    "template": "../node_modules/ink-docstrap/template/",
+    "encoding": "utf8",
+    "destination": "./api_doc/",
+    "recurse": true,
+    "tutorials": "./api_doc/tutorials"
+  }
+}

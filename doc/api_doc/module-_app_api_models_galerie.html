@@ -33,14 +33,7 @@
 			<li class="dropdown">
 				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="module-_app_api_controllers_aerodromes.html">/app_api/controllers/aerodromes</a></li><li><a href="module-_app_api_controllers_annees.html">/app_api/controllers/annees</a></li><li><a href="module-_app_api_controllers_galeries.html">/app_api/controllers/galeries</a></li><li><a href="module-_app_api_controllers_themes.html">/app_api/controllers/themes</a></li><li><a href="module-_app_api_crudator.html">/app_api/crudator</a></li><li><a href="module-_app_api_index.html">/app_api/index</a></li><li><a href="module-_app_api_models_aerodrome.html">/app_api/models/aerodrome</a></li><li><a href="module-_app_api_models_annee.html">/app_api/models/annee</a></li><li><a href="module-_app_api_models_galerie.html">/app_api/models/galerie</a></li><li><a href="module-_app_api_models_theme.html">/app_api/models/theme</a></li><li><a href="module-_app_lib_helpers.html">/app_lib/helpers</a></li>
-				</ul>
-			</li>
-			
-			<li class="dropdown">
-				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
-				<ul class="dropdown-menu ">
-					<li><a href="global.html#Aerodrome">Aerodrome</a></li><li><a href="global.html#sequelize">sequelize</a></li>
+					<li><a href="module-_app_api_controllers_aerodromes.html">/app_api/controllers/aerodromes</a></li><li><a href="module-_app_api_controllers_annees.html">/app_api/controllers/annees</a></li><li><a href="module-_app_api_controllers_galeries.html">/app_api/controllers/galeries</a></li><li><a href="module-_app_api_controllers_themes.html">/app_api/controllers/themes</a></li><li><a href="module-_app_api_crudator.html">/app_api/crudator</a></li><li><a href="module-_app_api_index.html">/app_api/index</a></li><li><a href="module-_app_api_models_aerodrome.html">/app_api/models/aerodrome</a></li><li><a href="module-_app_api_models_annee.html">/app_api/models/annee</a></li><li><a href="module-_app_api_models_db.html">/app_api/models/db</a></li><li><a href="module-_app_api_models_galerie.html">/app_api/models/galerie</a></li><li><a href="module-_app_api_models_theme.html">/app_api/models/theme</a></li><li><a href="module-_app_lib_helpers.html">/app_lib/helpers</a></li>
 				</ul>
 			</li>
 			
@@ -105,6 +98,8 @@
         <th>Type</th>
 
         
+        <th>Argument</th>
+        
 
         
 
@@ -117,7 +112,37 @@
 
         <tr>
             
-                <td class="name"><code>DOC</code></td>
+                <td class="name"><code>isSpotAir</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>commentaire</code></td>
             
 
             <td class="type">
@@ -131,10 +156,138 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last">IN PROGRESS</td>
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">virtual</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">(summary of all fields)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>anneeId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">foreignKey</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>themeId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">foreignKey</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>aerodromeId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">foreignKey</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
         </tr>
 
     
@@ -245,7 +398,7 @@
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
 	
-		on 2018-12-10T05:51:07+00:00
+		on 2018-12-10T21:13:29+00:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

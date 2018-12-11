@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>fulltext-search.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="../../../source_doc/docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>fulltext-search.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">window</span>.Searcher = (<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Searcher</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">this</span>._index = lunr(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+            <span class="hljs-keyword">this</span>.field(<span class="hljs-string">'title'</span>, {<span class="hljs-attr">boost</span>: <span class="hljs-number">10</span>})
+            <span class="hljs-keyword">this</span>.field(<span class="hljs-string">'body'</span>)
+            <span class="hljs-keyword">this</span>.ref(<span class="hljs-string">'id'</span>)
+          }) ;
+
+        <span class="hljs-keyword">this</span>._indexContent = <span class="hljs-literal">undefined</span>;
+    }
+
+    Searcher.prototype.init = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+
+        $(<span class="hljs-string">"script[type='text/x-docstrap-searchdb']"</span>).each(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">idx, item</span>)  </span>{
+            self._indexContent = <span class="hljs-built_in">JSON</span>.parse(item.innerHTML);
+
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> entryId <span class="hljs-keyword">in</span> self._indexContent) {
+                self._index.add(self._indexContent[entryId]);
+            }
+        });
+    };
+
+    Searcher.prototype.search = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">searchTerm</span>) </span>{
+        <span class="hljs-keyword">var</span> results = [],
+                searchResults = <span class="hljs-keyword">this</span>._index.search(searchTerm);
+
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> idx = <span class="hljs-number">0</span>; idx &lt; searchResults.length; idx++) {
+            results.push(<span class="hljs-keyword">this</span>._indexContent[searchResults[idx].ref])
+        }
+
+        <span class="hljs-keyword">return</span> results;
+    };
+
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Searcher();
+})();</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

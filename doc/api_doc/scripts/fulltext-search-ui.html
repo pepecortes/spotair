@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>fulltext-search-ui.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="../../../source_doc/docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>fulltext-search-ui.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">window</span>.SearcherDisplay = (<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">$</span>) </span>{
+    <span class="hljs-comment">/**
+     * This class provides support for displaying quick search text results to users.
+     */</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">SearcherDisplay</span>(<span class="hljs-params"></span>) </span>{ }
+
+    SearcherDisplay.prototype.init = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">this</span>._displayQuickSearch();
+    };
+
+    <span class="hljs-comment">/**
+     * This method creates the quick text search entry in navigation menu and wires all required events.
+     */</span>
+    SearcherDisplay.prototype._displayQuickSearch = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+            <span class="hljs-keyword">var</span> quickSearch = $(<span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"iframe"</span>)),
+                   body = $(<span class="hljs-string">"body"</span>),
+                   self = <span class="hljs-keyword">this</span>;
+
+            quickSearch.attr(<span class="hljs-string">"src"</span>, <span class="hljs-string">"quicksearch.html"</span>);
+            quickSearch.css(<span class="hljs-string">"width"</span>, <span class="hljs-string">"0px"</span>);
+            quickSearch.css(<span class="hljs-string">"height"</span>, <span class="hljs-string">"0px"</span>);
+
+            body.append(quickSearch);
+
+            $(<span class="hljs-built_in">window</span>).on(<span class="hljs-string">"message"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">msg</span>) </span>{
+                <span class="hljs-keyword">var</span> msgData = msg.originalEvent.data;
+
+                <span class="hljs-keyword">if</span> (msgData.msgid != <span class="hljs-string">"docstrap.quicksearch.done"</span>) {
+                    <span class="hljs-keyword">return</span>;
+                }
+
+                <span class="hljs-keyword">var</span> results = msgData.results || [];
+
+                self._displaySearchResults(results);
+            });
+
+            <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">startSearch</span>(<span class="hljs-params"></span>) </span>{
+              <span class="hljs-keyword">var</span> searchTerms = $(<span class="hljs-string">'#search-input'</span>).prop(<span class="hljs-string">"value"</span>);
+              <span class="hljs-keyword">if</span> (searchTerms) {
+                quickSearch[<span class="hljs-number">0</span>].contentWindow.postMessage({
+                  <span class="hljs-string">"searchTerms"</span>: searchTerms,
+                  <span class="hljs-string">"msgid"</span>: <span class="hljs-string">"docstrap.quicksearch.start"</span>
+                }, <span class="hljs-string">"*"</span>);
+              }
+            }
+
+            $(<span class="hljs-string">'#search-input'</span>).on(<span class="hljs-string">'keyup'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">evt</span>) </span>{
+              <span class="hljs-keyword">if</span> (evt.keyCode != <span class="hljs-number">13</span>) {
+                <span class="hljs-keyword">return</span>;
+              }
+              startSearch();
+              <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+            });
+            $(<span class="hljs-string">'#search-submit'</span>).on(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+              startSearch();
+              <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+            });
+    };
+
+    <span class="hljs-comment">/**
+     * This method displays the quick text search results in a modal dialog.
+     */</span>
+    SearcherDisplay.prototype._displaySearchResults = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">results</span>) </span>{
+            <span class="hljs-keyword">var</span> resultsHolder = $($(<span class="hljs-string">"#searchResults"</span>).find(<span class="hljs-string">".modal-body"</span>)),
+                  fragment = <span class="hljs-built_in">document</span>.createDocumentFragment(),
+                  resultsList = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"ul"</span>);
+
+            resultsHolder.empty();
+
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> idx = <span class="hljs-number">0</span>; idx &lt; results.length; idx++) {
+                <span class="hljs-keyword">var</span> result = results[idx],
+                       item = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"li"</span>),
+                       link = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"a"</span>);
+
+                link.href = result.id;
+                link.innerHTML = result.title;
+
+                item.appendChild(link)
+                resultsList.appendChild(item);
+            }
+
+            fragment.appendChild(resultsList);
+            resultsHolder.append(fragment);
+
+            $(<span class="hljs-string">"#searchResults"</span>).modal({<span class="hljs-string">"show"</span>: <span class="hljs-literal">true</span>});
+    };
+
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> SearcherDisplay();
+})($);</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

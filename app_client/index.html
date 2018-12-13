@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html>
+<html ng-app="app" class="ng-scope">
   
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -10,8 +10,19 @@
     <base href="/">
   </head>
   
-  <body>
-	  <h1>HOLA</h1>
+  
+  <body ng-view>
+		
+		<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-route.min.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-sanitize.min.js'></script>
+    <script src='/app.js'></script>
+
+    <script src='/home/home.controller.js'></script>  
+    <script src='/lugares/lugares.js'></script>
+    <script src='/common/services/lugar.service.js'></script>
+		
+	  <h1>SPOTAIR</h1>
   </body>
   
 </html>

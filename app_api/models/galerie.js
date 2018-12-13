@@ -9,6 +9,7 @@
  * @property {foreignKey}		aerodromeId
  */
 const debug = require('debug')('app:api:models:galerie');
+const db = require('../models/db');
 module.exports = function(sequelize, DataTypes) {
 	
 	const Model = sequelize.define("galerie", {
@@ -30,12 +31,18 @@ module.exports = function(sequelize, DataTypes) {
 			},
 			text: {
 				type: DataTypes.VIRTUAL,
+				include: {model: db.Theme},
 				get: function() {
-					return this.annee.annee
-					+ ", " + this.theme.theme
-					+ ", " + this.aerodrome.text
-					+ ", isSpotair: " + this.isSpotair
-					+ ", " + this.commentaire
+					// you need to check for null before using the values of the
+					// associated Models because they will not be resolved under
+					// certain circumstances (i.e. when using Model.update())
+					var output = "";
+					if (this.annee) output += ", " + this.annee.annee;
+					if (this.theme) output += ", " + this.theme.theme;
+					if (this.aerodrome) output += ", " + this.aerodrome.text;
+					output += ", isSpotair: " + this.isSpotair;
+					output += ", " + this.commentaire;
+					return output;
 				}
 			},
 			createdAt: {

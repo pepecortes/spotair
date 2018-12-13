@@ -52,4 +52,5 @@ module.exports.Galerie = Galerie;
 module.exports.Theme = Theme;
 
 // synchro with the mysql server
-sequelize.sync(); 
+// disable or enable logs for dev
+sequelize.sync({logging: false}); 

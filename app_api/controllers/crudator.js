@@ -63,7 +63,7 @@ function buildBasicAPI(Model, fieldsArray, hasForeignKeys) {
 		
 		delete: (req, res) => {
 			Model
-				.findByPk(req.params.id, includeOption)
+				.findByPk(req.params.id)
 				.then(record => record.destroy())
 				.then(() => sendJSON.ok(res, "Removed. id: " + req.params.id))
 				.catch(err => sendJSON.serverError(res, err));

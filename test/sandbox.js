@@ -4,53 +4,43 @@ require('dotenv').config({path: '../.env'})
 // connect database and models
 const db = require('../app_api/models/db');
 
-db.Galerie.scope('isspotair').findAll({include: [{all:true, nested:true}]}).then(records => {
-  console.log('\r\n');
-  console.log(records.length);
-  console.log(records[0].text);
-  console.log('\r\n');
-})
 
-//db.Annee.findByPk(1, {include: [{all:true, nested:true}]}).then(record => {
-  //console.log('\r\n');
-  //console.log(JSON.stringify(record));
-  //console.log('\r\n');
-//})
-
-//db.Annee.findByPk(1, {include: [{all:true, nested:true}]})
-	//.then(record => {
-		//console.log('\r\n');
-		//console.log(JSON.stringify(record));
-		//console.log('\r\n');
-		//return record.destroy();
-	//})
-	//.then(() => console.log("DESTROYED"))
-	//.catch(err => console.log(err));
+async function test(req, res) {
 	
-//db.Galerie.findByPk(1, {include: [{all:true, nested:true}]})
-	//.then(record => {
-		//console.log('\r\n');
-		//console.log(JSON.stringify(record));
-		//console.log('\r\n');
-		//return record.destroy();
-	//})
-	//.then(() => console.log("DESTROYED"))
-	//.catch(err => console.log(err));
+	const output = "";
+	const destinationid = 3;
+	//try {
+		await db.Aerodrome.findByPk(destinationid);
+	//} catch (error) {
+		console.log("NO RECORD")
+	//}
+	console.log("CONTINUO")
+	
+	
+	//Model
+		//.findByPk(destinationid)
+		//.then((record) => {
+			//if (!record) {
+				//sendJSON.notFound(res, "destination id: " + destinationid + " not found");
+				//return Promise.reject();
+			//}
+			//else return Galerie.update(
+				//{aerodromeId: destinationid},
+				//{where: {aerodromeId: sourceid}}
+			//)
+		//})
+		//.then(result => {
+			//output.galeries_updated = result[0];
+			//return Model.findByPk(sourceid);
+		//})
+		//.then(result => {
+			//result.destroy();
+			//output.aerodromes_removed = result.id;
+			//sendJSON.ok(res, output);
+		//})
+		//.catch(err => {if(err) sendJSON.serverError(res, err)});
+}
 
+var result = test(null, null);
+console.log("RESULT: " + result);
 
-//const newRecord = {
-    //"isSpotair": "1",
-    //"commentaire": "comentario jocoso segundo",
-    //"anneeId": "1",
-    //"themeId": "1",
-    //"aerodromeId": "1"
-//};
-//const id = 21;
-
-//db.Galerie.update(newRecord, {where: {id: id}, include: [{all:true, nested:true}]})
-	//.then(() => {
-		//console.log('\r\n');
-		////console.log(record.commentaire);
-		//console.log('\r\n');
-	//})
-	//.catch(err => console.log("ERROR: " + err));

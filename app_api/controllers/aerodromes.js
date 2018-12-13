@@ -30,34 +30,29 @@ exports = Object.assign(exports, basicAPI);
 exports.fusion =  function(req, res) {
 	const destinationid = req.params.destinationid;
 	const sourceid = req.params.sourceid;
+	const output = {};
 	Model
 		.findByPk(destinationid)
-		.then(record => {
-			if (!record) return sendJSON.notFound(res, "destination id: " + destinationid + " not found");
-			else return sendJSON.ok(res, "NOT IMPLEMENTED");
-			 Galerie.update(
+		.then((record) => {
+			if (!record) {
+				sendJSON.notFound(res, "destination id: " + destinationid + " not found");
+				return Promise.reject();
+			}
+			else return Galerie.update(
 				{aerodromeId: destinationid},
-				{where: {aerodromeId: sourceid}})
+				{where: {aerodromeId: sourceid}}
+			)
 		})
-		.then()
-		.catch();
-	//Galerie
-		//.update({aerodromeId: destinationid
-		//.then(record => sendJSON.ok(res, record))
-		//.catch(err => sendJSON.serverError(res, err));
+		.then(result => {
+			output.galeries_updated = result[0];
+			return Model.findByPk(sourceid);
+		})
+		.then(result => {
+			result.destroy();
+			output.aerodromes_removed = result.id;
+			sendJSON.ok(res, output);
+		})
+		.catch(err => {if(err) sendJSON.serverError(res, err)});
 }
-
-//function aerodromeFusion($post, $files) {
-	///**
-	 //* Fusion of the origin and destination aerodromes
-	 //* @param 'idOrigin'
-	 //* @param 'idDestination'
-	 //*/
-	//$idOrigin = $post['idOrigin'];
-	//$idDestination = $post['idDestination'];	
-	//$fusion = fusionAerodromes($idOrigin, $idDestination);
-	//if (!$fusion) return ['output' => "", 'error' => CONTACT_ADMIN_MSG];
-	//return ['output' => selectAerodrome($idDestination), 'error' => ""];
-//}
 
 module.exports = exports;

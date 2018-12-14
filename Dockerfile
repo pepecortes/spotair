@@ -14,7 +14,7 @@ COPY ./.env ./
 # Copy both package.json AND package-lock.json
 # COPY package*.json ./
 RUN npm install
-RUN npm install -g nodemon
+RUN npm install -g nodemon@^1.18.8
 # If you are building your code for production
 # RUN npm install --only=production
 

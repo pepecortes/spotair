@@ -33,8 +33,8 @@ function buildBasicAPI(Model, fieldsArray, hasForeignKeys) {
 			Model
 				.findByPk(id, includeOption)
 				.then((record) => {
-					if (record) return sendJSON.ok(res, record);
-					else return sendJSON.notFound(res, "id: " + id + " not found");
+					if (record) sendJSON.ok(res, record);
+					else sendJSON.notFound(res, "id: " + id + " not found");
 				})
 				.catch(err => sendJSON.serverError(res, err));
 		},

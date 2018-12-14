@@ -151,11 +151,12 @@ Galerie.belongsTo(Aerodrome);</pre></div></div>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>synchro with the mysql server</p>
+              <p>synchro with the mysql server
+disable or enable logs for dev</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>sequelize.sync();</pre></div></div>
+            <div class="content"><div class='highlight'><pre>sequelize.sync({<span class="hljs-attr">logging</span>: <span class="hljs-literal">false</span>});</pre></div></div>
             
         </li>
         

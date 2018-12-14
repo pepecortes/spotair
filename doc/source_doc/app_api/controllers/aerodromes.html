@@ -37,14 +37,115 @@
 <span class="hljs-keyword">const</span> debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'app:api:controllers:aerodromes'</span>);
 <span class="hljs-keyword">const</span> db = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../models/db'</span>);
 <span class="hljs-keyword">const</span> crud = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./crudator'</span>);
+<span class="hljs-keyword">const</span> sendJSON = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../../app_lib/helpers'</span>).sendJSON;
 
 <span class="hljs-keyword">const</span> Model = db.Aerodrome;
+<span class="hljs-keyword">const</span> Galerie = db.Galerie;
 <span class="hljs-keyword">const</span> fieldsArray = [<span class="hljs-string">'nom'</span>, <span class="hljs-string">'lieu'</span>, <span class="hljs-string">'latitude'</span>, <span class="hljs-string">'longitude'</span>];
 <span class="hljs-keyword">const</span> hasForeignKeys = <span class="hljs-literal">false</span>;
 
 <span class="hljs-keyword">var</span> exports = {};
 <span class="hljs-keyword">const</span> basicAPI = crud.buildBasicAPI(Model, fieldsArray, hasForeignKeys);
-exports = <span class="hljs-built_in">Object</span>.assign(exports, basicAPI);
+exports = <span class="hljs-built_in">Object</span>.assign(exports, basicAPI);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>building other API calls…</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>fusion of aerodromes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/**
+ * @function fusion
+ * @description delete the aerodrome source: all galeries that
+ * referred to the source now refer to the destination
+ * @param {number} sourceid 			- id of aerodrome source
+ * @param {number} destinationid	- id of aerodrome destination
+ * @return {Object} {galeries_updated, aerodromes_removed} -
+ * number of deleted sources and number of modified galeries
+ */</span>
+exports.fusion =  <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+	<span class="hljs-keyword">const</span> destinationid = req.params.destinationid;
+	<span class="hljs-keyword">const</span> sourceid = req.params.sourceid;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Check first that the query makes sense: source and destination
+must exist and be different</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">try</span> {
+		<span class="hljs-keyword">var</span> error = [];
+		<span class="hljs-keyword">var</span> src, dest
+		[src, dest] = <span class="hljs-keyword">await</span> <span class="hljs-built_in">Promise</span>.all([
+			Model.findByPk(sourceid),
+			Model.findByPk(destinationid)
+		])
+		<span class="hljs-keyword">if</span> (sourceid == destinationid) error.push(<span class="hljs-string">"source and destination are the same"</span>)
+		<span class="hljs-keyword">if</span> (!dest) error.push(<span class="hljs-string">"destination id: "</span> + destinationid + <span class="hljs-string">" not found"</span>)
+		<span class="hljs-keyword">if</span> (!src) error.push(<span class="hljs-string">"source id: "</span> + sourceid + <span class="hljs-string">" not found"</span>)
+		<span class="hljs-keyword">if</span> (error.length &gt;= <span class="hljs-number">1</span>) {
+			sendJSON.notFound(res, error.join(<span class="hljs-string">', '</span>))
+			<span class="hljs-keyword">return</span>
+		}
+	} <span class="hljs-keyword">catch</span>(err) {
+		sendJSON.serverError(res, err)
+		<span class="hljs-keyword">return</span>
+	}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Update galeries to the destination aerodrome and delete the source</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">const</span> output = {};
+	Galerie.update({<span class="hljs-attr">aerodromeId</span>: destinationid},{<span class="hljs-attr">where</span>: {<span class="hljs-attr">aerodromeId</span>: sourceid}})
+	.then(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> {
+		output.galeries_updated = result[<span class="hljs-number">0</span>];
+		<span class="hljs-keyword">return</span> Model.findByPk(sourceid);
+	})
+	.then(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> {
+		result.destroy();
+		output.aerodromes_removed = result.id;
+		sendJSON.ok(res, output);
+	})
+	.catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> {<span class="hljs-keyword">if</span>(err) sendJSON.serverError(res, err)});
+}
 
 <span class="hljs-built_in">module</span>.exports = exports;</pre></div></div>
             

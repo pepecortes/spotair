@@ -100,7 +100,8 @@
 router.get(<span class="hljs-string">'/aerodromes/:id(\\d+)'</span>, ctrlAerodromes.byId);
 router.post(<span class="hljs-string">'/aerodromes'</span>, ctrlAerodromes.create);
 router.put(<span class="hljs-string">'/aerodromes/:id(\\d+)'</span>, ctrlAerodromes.update);
-router.delete(<span class="hljs-string">'/aerodromes/:id(\\d+)'</span>, ctrlAerodromes.delete);</pre></div></div>
+router.delete(<span class="hljs-string">'/aerodromes/:id(\\d+)'</span>, ctrlAerodromes.delete);
+router.put(<span class="hljs-string">'/aerodromes/fusion/source/:sourceid(\\d+)/destination/:destinationid(\\d+)'</span>, ctrlAerodromes.fusion);</pre></div></div>
             
         </li>
         

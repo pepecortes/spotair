@@ -95,7 +95,7 @@
 		
 		<span class="hljs-attr">delete</span>: <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
 			Model
-				.findByPk(req.params.id, includeOption)
+				.findByPk(req.params.id)
 				.then(<span class="hljs-function"><span class="hljs-params">record</span> =&gt;</span> record.destroy())
 				.then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> sendJSON.ok(res, <span class="hljs-string">"Removed. id: "</span> + req.params.id))
 				.catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> sendJSON.serverError(res, err));

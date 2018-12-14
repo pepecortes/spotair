@@ -41,6 +41,7 @@
  * @property {foreignKey}		aerodromeId
  */</span>
 <span class="hljs-keyword">const</span> debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'app:api:models:galerie'</span>);
+<span class="hljs-keyword">const</span> db = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../models/db'</span>);
 <span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">sequelize, DataTypes</span>) </span>{
 	
 	<span class="hljs-keyword">const</span> Model = sequelize.define(<span class="hljs-string">"galerie"</span>, {
@@ -62,12 +63,31 @@
 			},
 			<span class="hljs-attr">text</span>: {
 				<span class="hljs-attr">type</span>: DataTypes.VIRTUAL,
-				<span class="hljs-attr">get</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-					<span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.annee.annee
-					+ <span class="hljs-string">", "</span> + <span class="hljs-keyword">this</span>.theme.theme
-					+ <span class="hljs-string">", "</span> + <span class="hljs-keyword">this</span>.aerodrome.text
-					+ <span class="hljs-string">", isSpotair: "</span> + <span class="hljs-keyword">this</span>.isSpotair
-					+ <span class="hljs-string">", "</span> + <span class="hljs-keyword">this</span>.commentaire
+				<span class="hljs-attr">include</span>: {<span class="hljs-attr">model</span>: db.Theme},
+				<span class="hljs-attr">get</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>you need to check for null before using the values of the
+associated Models because they will not be resolved under
+certain circumstances (i.e. when using Model.update())</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					<span class="hljs-keyword">var</span> output = <span class="hljs-string">""</span>;
+					<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.annee) output += <span class="hljs-string">", "</span> + <span class="hljs-keyword">this</span>.annee.annee;
+					<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.theme) output += <span class="hljs-string">", "</span> + <span class="hljs-keyword">this</span>.theme.theme;
+					<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.aerodrome) output += <span class="hljs-string">", "</span> + <span class="hljs-keyword">this</span>.aerodrome.text;
+					output += <span class="hljs-string">", isSpotair: "</span> + <span class="hljs-keyword">this</span>.isSpotair;
+					output += <span class="hljs-string">", "</span> + <span class="hljs-keyword">this</span>.commentaire;
+					<span class="hljs-keyword">return</span> output;
 				}
 			},
 			<span class="hljs-attr">createdAt</span>: {
@@ -91,11 +111,11 @@
         </li>
         
         
-        <li id="section-2">
+        <li id="section-3">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <p>returns only galeries “sorties associatives”</p>
 

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html>
+  
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>spotair</title></title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <base href="/">
+    
+		<!-- production version, optimized for size and speed -->
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+		
+		<!-- axios: Promise based HTTP client for the browser and node.js -->
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    
+  </head>
+  
+  
+  <body>
+		
+
+		
+	  <h1>SPOTAIR</h1>
+	  
+	  <div id="welcome">
+			{{ message }}
+		</div>		
+		
+		<div id="aerodromes">
+			<ul>
+				<li v-on:click="selectId(aerodrome.id)" v-for="aerodrome in aerodromes">
+					{{ aerodrome.id }}: {{ aerodrome.text }}
+				</li>
+			</ul>
+		</div>
+		
+		<div id="update_aerodrome">
+			<p>aerodrome is: {{ aerodrome.text }}</p>
+			<ul>
+				<li><input v-model="aerodrome.nom" placeholder="nom"></li>
+				<li><input v-model="aerodrome.lieu" placeholder="lieu"></li>
+			</ul>
+			<button v-on:click="updateMe">update</button>
+		</div>
+		
+		<script src="index.js"></script>
+		
+  </body>
+  
+</html>

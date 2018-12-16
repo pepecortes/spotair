@@ -9,11 +9,8 @@
     <link rel="stylesheet" href="/stylesheets/style.css">
     <base href="/">
     
-		<!-- production version, optimized for size and speed -->
+		<!-- vuejs production version, optimized for size and speed -->
 		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
-		
-		<!-- axios: Promise based HTTP client for the browser and node.js -->
-		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     
   </head>
   
@@ -45,7 +42,10 @@
 			<button v-on:click="updateMe">update</button>
 		</div>
 		
-		<script src="index.js"></script>
+		
+		<script src="dist/bundle.js"></script>
+		
+
 		
   </body>
   

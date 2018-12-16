@@ -3,8 +3,8 @@
   * @module /app_api/crudator
   */
 const debug = require('debug')('app:api:crudator');
+const pickObject = require('lodash').pick;
 const sendJSON = require('../../app_lib/helpers').sendJSON;
-const pickObject = require('../../app_lib/helpers').pickObject;
 
 /**
  * @function

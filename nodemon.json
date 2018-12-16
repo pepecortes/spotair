@@ -1,4 +1,5 @@
 {
   "verbose": true,
-  "watch": ["./*.js", "./app_api/",  "./app_client", "./app_lib"]
+  "watch": ["./", "app_api/",  "app_client/", "app_lib/"],
+  "ignore": ["app_client/env.js"]
 }

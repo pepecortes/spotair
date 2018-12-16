@@ -1,13 +1,17 @@
+import Vue from 'vue'; 
+// actually Vue is loaded in the browser and it looks a good idea (is quick and is loaded before displaying the html. perhaps you do not need import here?
 
+import _ from 'lodash';
+import axios from 'axios';
 
-//import dotenv from '../dotenv'
-//console.log("env check: " + process.env.DB_DATABASE)
-console.log(process.env.VUE_APP_SOMEKEY)
+// FOR TESTING
+//import VueSingleSelect from "vue-single-select";
+//Vue.component('vue-single-select', VueSingleSelect);
 
 var welcome = new Vue({ 
     el: '#welcome',
     data: {
-        message: 'Tests API aerodromes'
+        message: _.join(['Tests API', 'aerodromes'], ': ')
     }
 })
 
@@ -23,7 +27,7 @@ var aerodromes = new Vue({
   methods: {
 		getAerodromes: function() {
 			var vm = this;
-			axios.get('http://localhost:3000/api/aerodromes')
+			axios.get(process.env.API_URL + 'aerodromes')
 				.then(function(response){vm.aerodromes = response.data})
 				.catch(function(err) {console.log(err)})
 		},
@@ -51,7 +55,7 @@ var updateAerodrome = new Vue({
 		getAerodrome: function(id) {
 			if (!id) return;
 			var vm = this;
-			axios.get('http://localhost:3000/api/aerodromes/' + id)
+			axios.get(process.env.API_URL + 'aerodromes/' + id)
 				.then(function(response){vm.aerodrome = response.data})
 				.catch(function(err) {console.log(err)})
 		},
@@ -64,7 +68,7 @@ var updateAerodrome = new Vue({
 			var vm = this;
 			if (!vm.aerodrome.id) return
 			const record = {nom: vm.aerodrome.nom, lieu: vm.aerodrome.lieu}
-			axios.put('http://localhost:3000/api/aerodromes/' + vm.aerodrome.id, record)
+			axios.put(process.env.API_URL + 'aerodromes/' + vm.aerodrome.id, record)
 				.then(function(response){vm.aerodrome = response.data})
 				.catch(function(err) {console.log(err)})						
 		},
@@ -72,3 +76,5 @@ var updateAerodrome = new Vue({
 	},
 	
 })
+
+

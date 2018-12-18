@@ -20,3 +20,6 @@ Client side I use **vuejs** as a framework on the browser and **webpack** as the
 (note on `webpack`: 2 ways of build up the bundle: see package.json ("watch" allows to rebundle each time a file is modified, making it suitable for development)
 
 Also for the client, I use **bootstrap-vue.js** that does not depend on jquery. All this client tools are completely unknown to me so lets go experimental for a while
+
+## Vue.js
+For the time being I have decided not to use the vue-cli. I rely on webpack, and we will see later on if we have other needs

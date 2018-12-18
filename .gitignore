@@ -56,10 +56,12 @@ typings/
 
 # dotenv environment variables file
 .env
-app_client/env.js
 
 # next.js build output
 .next
 
 # development related folders (like the persistent database data)
 dev_*/
+
+# app_client distribution folder
+app_client/dist/

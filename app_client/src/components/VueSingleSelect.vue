@@ -71,6 +71,7 @@
 </template>
 <script>
 import pointerScroll from "./pointerScroll";
+
 export default {
   props: {
     value: {

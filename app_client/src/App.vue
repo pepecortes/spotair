@@ -4,9 +4,10 @@
 		<TodoList/>
 		<h2>Test Selectizer</h2>
 		<vue-single-select
-		    v-model="fruit"
-        :options="['apple','banana','cherry','tomato']"
-        :required="true"
+				v-model=aerodrome
+		    v-bind:options=aerodromes
+		    optionLabel='text'
+        :required=true
     ></vue-single-select>
 	</div>
 </template>
@@ -14,13 +15,34 @@
 <script>
 import TodoList from './components/TodoList.vue'
 import VueSingleSelect from './components/VueSingleSelect.vue'
+import axios from 'axios';
 
-export default {
-	components: {
-		TodoList,
-		VueSingleSelect
+export default {	
+	components: { TodoList, VueSingleSelect},
+	
+	data () {
+		return {
+				aerodromes: [],
+				aerodrome: null
+		}
+	},
+
+	created: function() {this.getAerodromes()},
+
+	methods: {
+		getAerodromes: function() {
+			var vm = this;
+			axios.get(process.env.API_URL + 'aerodromes')
+				.then(function(response){vm.aerodromes = response.data})
+				.catch(function(err) {console.log(err)})
+		}
+	},
+	
+	watch: {
+		aerodrome: function(aerodrome) {console.log(JSON.stringify(aerodrome))}
 	}
 }
+
 </script>
 
 <style lang="scss">

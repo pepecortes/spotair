@@ -2,6 +2,12 @@
 	<div id="app">
 		<h1>My Todo App!</h1>
 		<TodoList/>
+		<h2>Test Selectizer</h2>
+		<vue-single-select
+		    v-model="fruit"
+        :options="['apple','banana','cherry','tomato']"
+        :required="true"
+    ></vue-single-select>
 	</div>
 </template>
 
@@ -11,7 +17,8 @@ import VueSingleSelect from './components/VueSingleSelect.vue'
 
 export default {
 	components: {
-		TodoList
+		TodoList,
+		VueSingleSelect
 	}
 }
 </script>

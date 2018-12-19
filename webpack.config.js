@@ -33,7 +33,8 @@ module.exports = {
         use: [ // loaders for style files
 					'vue-style-loader',
 					'css-loader',
-					'sass-loader'
+					'sass-loader',
+					'postcss-loader'
         ],
       },
     ],

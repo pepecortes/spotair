@@ -7,7 +7,7 @@
 
 <script>
 import TodoList from './components/TodoList.vue'
-//import VueSingleSelect from './components/VueSingleSelect.vue'
+import VueSingleSelect from './components/VueSingleSelect.vue'
 
 export default {
 	components: {

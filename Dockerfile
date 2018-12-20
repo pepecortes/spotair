@@ -20,7 +20,6 @@ COPY ./webpack.config.js ./
 # COPY package*.json ./
 RUN npm install
 RUN npm install -g nodemon@^1.18.8
-RUN npm install -g @vue/cli@^3.2.1
 
 # If you are building your code for production
 # RUN npm install --only=production

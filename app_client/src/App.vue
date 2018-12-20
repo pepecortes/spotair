@@ -9,6 +9,13 @@
 		    optionLabel='text'
         :required=true
     ></vue-single-select>
+    
+    <div id="fields" v-if="aerodromeIsSelected">
+			<input v-model="aerodromeX.nom" type="text" placeholder="nom"></input>
+			<input v-model="aerodromeX.lieu" type="text" placeholder="lieu"></input>
+			<button id='reset' v-on:click='reset'>Reset</button>
+			<button>Update</button>
+    </div>
 	</div>
 </template>
 
@@ -18,28 +25,37 @@ import VueSingleSelect from './components/VueSingleSelect.vue'
 import axios from 'axios';
 
 export default {	
-	components: { TodoList, VueSingleSelect},
+	components: {TodoList, VueSingleSelect},
 	
 	data () {
 		return {
-				aerodromes: [],
-				aerodrome: null
+				aerodromes: null,
+				aerodrome: null,
+				aerodromeX: {}
 		}
 	},
+	
+	computed: {
+		aerodromeIsSelected: function() {return (this.aerodrome != null)}
+	}, 
 
 	created: function() {this.getAerodromes()},
 
 	methods: {
+		
 		getAerodromes: function() {
 			var vm = this;
 			axios.get(process.env.API_URL + 'aerodromes')
 				.then(function(response){vm.aerodromes = response.data})
 				.catch(function(err) {console.log(err)})
-		}
+		},
+		
+		reset: function() {this.aerodromeX = JSON.parse(JSON.stringify(this.aerodrome))}
 	},
 	
 	watch: {
-		aerodrome: function(aerodrome) {console.log(JSON.stringify(aerodrome))}
+		//aerodrome: function(aerodrome) {this.aerodromeX = JSON.parse(JSON.stringify(aerodrome))}
+		aerodrome: function() {this.reset()}
 	}
 }
 

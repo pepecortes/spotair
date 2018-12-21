@@ -22,6 +22,7 @@
 
 		<h1>Form</h1>
 		<vue-form-generator
+			tag="div"
       :schema="schema"
       :model="aerodromeX"
     />
@@ -43,7 +44,7 @@ const schema = {
   fields: [{
     type: "input",
     inputType: "text",
-    label: "nom",
+    label: "Nom",
     model: "nom",
     placeholder: "Nom",
     featured: true,
@@ -51,23 +52,24 @@ const schema = {
   }, {
     type: "input",
     inputType: "text",
-    label: "lieu",
+    label: "Lieu",
     model: "lieu",
+    placeholder: "Lieu",
     required: true,
     hint: "Escribe con buena letra",
   }],
   
   groups: [{
-		legend: "buttons",
+		styleClasses: "formButtons",
 		fields: [{
 			type: "submit",
 			label: "reset",
-			styleClasses: "bidoncilloClass",
+			styleClasses: "reset",
 			buttonText: "Reset",
 		}, {
 			type: "submit",
 			label: "update",
-			styleClasses: "otraclase",
+			styleClasses: "submit",
 			buttonText: "Update",
 		}]
 	}]
@@ -133,5 +135,9 @@ export default {
 
 h1 {
 	text-align: center;
+}
+
+.formButtons {
+	display: inline-flex;
 }
 </style>

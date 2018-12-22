@@ -9,6 +9,8 @@
 		    v-bind:options=aerodromes
 		    optionLabel='text'
         :required=true
+        @model-updated="onValidated"
+				@validated="onValidated"
     ></vue-single-select>
     
     <!--
@@ -25,6 +27,7 @@
 			tag="div"
       :schema="schema"
       :model="aerodromeX"
+      :options="formOptions"
     />
     <h1>Result</h1>
     {{aerodromeX}}
@@ -40,7 +43,17 @@ import VueSingleSelect from './components/VueSingleSelect.vue'
 import VueFormGenerator from 'vue-form-generator'
 import 'vue-form-generator/dist/vfg.css'
 
-const schema = {
+const validators = VueFormGenerator.validators
+
+const myformOptions = {
+	validateAfterLoad: false,
+	validateAsync: false,
+	validateAfterChanged: true,
+	validationErrorClass: "error",
+	validationSuccessClass: ""
+}
+
+const myformSchema = {
   fields: [{
     type: "input",
     inputType: "text",
@@ -49,6 +62,7 @@ const schema = {
     placeholder: "Nom",
     featured: true,
     required: true,
+    
   }, {
     type: "input",
     inputType: "text",
@@ -56,8 +70,40 @@ const schema = {
     model: "lieu",
     placeholder: "Lieu",
     required: true,
-    hint: "Escribe con buena letra",
-  }],
+    hint: "At least 3 characters.",
+    min: 3,
+    validator: ["string"]
+  }, {
+		type: "input",
+		inputType: "text",
+		label: "Location",
+		model: "address.geo",
+		buttons: [
+				{
+						classes: "btn-location",
+						label: "Current location",
+						onclick: function(model) {
+							//return this.$parent.sayHello(model)
+								//if (navigator.geolocation) {
+										//navigator.geolocation.getCurrentPosition(function(pos) {
+											//model.address.geo = {
+												//lat: pos.coords.latitude.toFixed(5),
+												//lng: pos.coords.longitude.toFixed(5)
+											//};
+										//});
+								//} else {
+										//alert("Geolocation is not supported by this browser.");
+								//}
+						}
+				},
+				{
+						classes: "btn-clear",
+						label: "Clear",
+						type: "reset",
+						onclick: function(model, field) {console.log("CLICK")}
+				}
+		]
+	}],
   
   groups: [{
 		styleClasses: "formButtons",
@@ -66,6 +112,10 @@ const schema = {
 			label: "reset",
 			styleClasses: "reset",
 			buttonText: "Reset",
+			onSubmit: function(model, e) {
+				console.log('check' + JSON.stringify(model));
+				console.log('check' + JSON.stringify(e));
+			},
 		}, {
 			type: "submit",
 			label: "update",
@@ -87,7 +137,14 @@ export default {
 				aerodromes: null,
 				aerodrome: null,
 				aerodromeX: {},
-				schema,
+				schema: myformSchema,
+				formOptions: {
+					validateAfterLoad: false,
+					validateAsync: false,
+					validateAfterChanged: true,
+					validationErrorClass: "error",
+					validationSuccessClass: ""
+				}
 		}
 	},
 	
@@ -106,7 +163,16 @@ export default {
 				.catch(function(err) {console.log(err)})
 		},
 		
-		reset: function() {this.aerodromeX = JSON.parse(JSON.stringify(this.aerodrome))}
+		reset: function() {this.aerodromeX = JSON.parse(JSON.stringify(this.aerodrome))},
+		
+		sayHello: function(model) {
+			console.log("SAY HELLO");
+		},
+		
+		onValidated: function(res, errors) {
+			console.log("onValidated VFG validated:", arguments, res, errors);
+		},
+		
 	},
 	
 	watch: {

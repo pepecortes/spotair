@@ -12,7 +12,7 @@ const sendJSON = require('../../app_lib/helpers').sendJSON;
  * @param {Object} Model - Model for which we are creating the API calls
  * @param {String[]} fieldsArray - fields that compose the model (excluding virtuals, but including foreingKeys)
  * @param {Boolean} hasForeignKeys - whether or not the Model has foreignKeys (needed for eager loading or related Models) 
- * @return {Object} object made of functions(req, res) (all, byId,
+ * @return {Object} object made of functions(req, res) (all, byId, fresh,
  * create, udpate, delete) ready to be used in API routes
  */ 
 function buildBasicAPI(Model, fieldsArray, hasForeignKeys) {
@@ -37,6 +37,12 @@ function buildBasicAPI(Model, fieldsArray, hasForeignKeys) {
 					else sendJSON.notFound(res, "id: " + id + " not found");
 				})
 				.catch(err => sendJSON.serverError(res, err));
+		},
+		
+		// Returns a fresh instance of the Model (not existing in the db yet)
+		fresh: (req, res) => {
+			var instance = Model.build();
+			sendJSON.ok(res, instance);
 		},
 		
 		create: (req, res) => {

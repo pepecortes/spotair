@@ -20,10 +20,12 @@ module.exports = function(sequelize, DataTypes) {
     nom: {
 			type: DataTypes.STRING,
 			allowNull: false,
+			defaultValue: "",
 		}, 
     lieu: {
 			type: DataTypes.STRING,
 			allowNull: false,
+			defaultValue: "",
 		},
 		latitude: {
 			type: DataTypes.DOUBLE,
@@ -41,6 +43,18 @@ module.exports = function(sequelize, DataTypes) {
 		text: {
 			type: DataTypes.VIRTUAL,
 			get: function() {return this.nom + ", " + this.lieu}
+		},
+		
+		invalid: {
+			type: DataTypes.VIRTUAL,
+			get() {
+				return {
+					nom: 'Requis',
+					lieu: 'Requis',
+					latitude: "Doit être entre -90 et +90",
+					longitude: "Doit être entre -180 et +180",
+				}
+			}
 		},
 		
     createdAt: {

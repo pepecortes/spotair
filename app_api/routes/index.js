@@ -19,6 +19,7 @@ var router = express.Router();
 // Aerodromes 
 router.get('/aerodromes', ctrlAerodromes.all);
 router.get('/aerodromes/:id(\\d+)', ctrlAerodromes.byId);
+router.get('/aerodromes/fresh', ctrlAerodromes.fresh);
 router.post('/aerodromes', ctrlAerodromes.create);
 router.put('/aerodromes/:id(\\d+)', ctrlAerodromes.update);
 router.delete('/aerodromes/:id(\\d+)', ctrlAerodromes.delete);

@@ -48,9 +48,8 @@ function buildBasicAPI(Model, fieldsArray, hasForeignKeys) {
 		create: (req, res) => {
 			const record = pickObject(req.body, fieldsArray);
 			Model
-				.create(record)
-				.then(record => Model.findByPk(record.id, includeOption))
-				.then(record => sendJSON.ok(res, record))
+				.findOrCreate({where: record})
+				.spread((record, created) => sendJSON.ok(res, record))
 				.catch(err => {sendJSON.serverError(res, err)});
 		},
 		

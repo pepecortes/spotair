@@ -4,12 +4,19 @@
 */
 const debug = require('debug')('app:api:routes');
 var express = require('express');
+const sendJSON = require('../../app_lib/helpers').sendJSON;
+
+// Define the NOT FOUND controller
+const ctrlNotFound = function(req, res) {
+	const err = "Error: API call not found"
+	sendJSON.notFound(res, err)
+}
 
 // Import all the controllers 
-var ctrlAerodromes = require('../controllers/aerodromes');
-var ctrlAnnees = require('../controllers/annees');
-var ctrlThemes = require('../controllers/themes');
-var ctrlGaleries = require('../controllers/galeries');
+const ctrlAerodromes = require('../controllers/aerodromes');
+const ctrlAnnees = require('../controllers/annees');
+const ctrlThemes = require('../controllers/themes');
+const ctrlGaleries = require('../controllers/galeries');
 
 // Start the router
 var router = express.Router();
@@ -46,6 +53,9 @@ router.post('/galeries', ctrlGaleries.create);
 router.put('/galeries/:id(\\d+)', ctrlGaleries.update);
 router.delete('/galeries/:id(\\d+)', ctrlGaleries.delete);
 router.get('/galeries/spotair', ctrlGaleries.allSpotair);
+
+// Not found
+router.all('/*', ctrlNotFound);
 
 
 module.exports = router;

@@ -31,13 +31,23 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.DOUBLE,
 			allowNull: true,
 			defaultValue: null,
-			validate: {min:-90, max:90}
+			validate: {min:-90, max:90},
+			set(val) {
+				// set to null if empty value
+				val = ((val === "")? null : val)
+				this.setDataValue('latitude', val)
+			}
 		},
 		longitude: {
 			type: DataTypes.DOUBLE,
 			allowNull: true,
 			defaultValue: null,
-			validate: {min:-180, max:180}
+			validate: {min:-180, max:180},
+			set(val) {
+				// set to null if empty value
+				val = ((val === "")? null : val)
+				this.setDataValue('longitude', val)
+			}
 		},
 		
 		text: {
@@ -51,8 +61,8 @@ module.exports = function(sequelize, DataTypes) {
 				return {
 					nom: 'Requis',
 					lieu: 'Requis',
-					latitude: "Doit être entre -90 et +90",
-					longitude: "Doit être entre -180 et +180",
+					latitude: "Doit être entre -90 et +90. Doit être accompagné de longitude",
+					longitude: "Doit être entre -180 et +180. Doit être accompagné de latitude",
 				}
 			}
 		},

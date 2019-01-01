@@ -27,7 +27,8 @@ module.exports = function(sequelize, DataTypes) {
 			},
 			commentaire: {
 				type: DataTypes.STRING,
-				allowNull: true,				
+				allowNull: true,		
+				defaultValue: null,		
 			},
 			text: {
 				type: DataTypes.VIRTUAL,
@@ -47,13 +48,13 @@ module.exports = function(sequelize, DataTypes) {
 			},
 			createdAt: {
 				type: DataTypes.DATE,
-				defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
 				allowNull: false,
+				defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
 			},
 			updatedAt: {
 				type: DataTypes.DATE,
-				defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
 				allowNull: false,
+				defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
 			},
 		}, {
 			

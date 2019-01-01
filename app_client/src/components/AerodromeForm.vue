@@ -1,9 +1,5 @@
 <template>
-	<div id="app">
-		
-		<h2>Aerodrome form</h2>		
-		
-		<div>
+	<div id="aerodromeForm">
 		
 		  <b-alert
 				:variant="alert.type"
@@ -30,9 +26,7 @@
 				<b-button variant="outline-warning" v-on:click="clearForm">X</b-button>
 				
 				<b-form-group
-					id="fieldsetNom"
-					description="Nom de l'aérodrome"		
-					label="Nom de l'aérodrome :"
+					label="Nom"
 					label-for="nom"
 					:invalid-feedback="aerodrome.invalid.nom"
 					:state="checkValidityState($v.aerodrome.nom)"
@@ -42,14 +36,11 @@
 						v-model.trim="aerodrome.nom"
 						type="text"
 						:state="checkValidityState($v.aerodrome.nom)"
-						placeholder="Nom"
 					/>
 				</b-form-group>
 			
 				<b-form-group
-					id="fieldsetLieu"
-					description="Lieu de l'aérodrome"		
-					label="Lieu de l'aérodrome :"
+					label="Lieu"	
 					label-for="lieu"
 					:invalid-feedback="aerodrome.invalid.lieu"
 					:state="checkValidityState($v.aerodrome.lieu)"
@@ -59,7 +50,36 @@
 						v-model.trim="aerodrome.lieu"
 						type="text"
 						:state="checkValidityState($v.aerodrome.lieu)"
-						placeholder="Lieu"
+					/>
+				</b-form-group>
+				
+				<b-form-group		
+					label="Latitude"
+					label-for="latitude"
+					description="Entre -90 et +90"
+					:invalid-feedback="aerodrome.invalid.latitude"
+					:state="checkValidityState($v.aerodrome.latitude)"
+				>
+					<b-form-input
+						id="latitude"
+						v-model.number="aerodrome.latitude"
+						type="text"
+						:state="checkValidityState($v.aerodrome.latitude)"
+					/>
+				</b-form-group>
+				
+				<b-form-group		
+					label="Longitude"
+					label-for="longitude"
+					description="Entre -180 et +180"
+					:invalid-feedback="aerodrome.invalid.longitude"
+					:state="checkValidityState($v.aerodrome.longitude)"
+				>
+					<b-form-input
+						id="longitude"
+						v-model.number="aerodrome.longitude"
+						type="text"
+						:state="checkValidityState($v.aerodrome.longitude)"
 					/>
 				</b-form-group>
 
@@ -67,35 +87,24 @@
 				<b-button type="button" variant="outline-danger" v-on:click="remove" v-if="!newRecord">Delete</b-button>
 				<b-button type="button" variant="outline-primary" v-on:click="add" v-if="newRecord">Add</b-button>
 				<b-button type="reset" variant="outline-success">Reset</b-button>
-				
-				
-			</b-form>
-		</div>
 
-    
+			</b-form>  
 	</div>
-	
 </template>
 
 <script>
-import Vue from 'vue'
-import BootstrapVue from 'bootstrap-vue'
-import axios from 'axios'
-import { confirmDialog } from './lib/common'
+import { confirmDialog, axiosErrorToString } from '../lib/common'
 import { validationMixin } from 'vuelidate'
-import { required } from "vuelidate/lib/validators"
-import TodoList from './components/TodoList.vue'
+import { required, decimal, between } from "vuelidate/lib/validators"
 import VueSelect from 'vue-select'
 
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-
-Vue.use(BootstrapVue);
+// Check that both latitude and longitud are present or neither
+const bothCoordinates = (value, vm) => 
+	(vm.latitude && vm.longitude) || (!vm.latitude && !vm.longitude);
 
 export default {
 	
 	components: {
-		TodoList,
 		'v-select': VueSelect
 	},
 	
@@ -135,11 +144,12 @@ export default {
       this.initForm(this.aerodromeBak, this.newRecord)
     },
 		
+		// Hide the form, refresh the selector and display it
 		showSelector() {
 			this.getAerodromes()
 			this.toggleForm = false
 		},
-	
+		
 		clearForm() {
 			this.alert = {show: false, text: "", type: "warning"}
 			this.showSelector()
@@ -149,14 +159,14 @@ export default {
 		newForm() {
 			this.aerodrome = {nom: "nom", lieu: "lieu"}
 			var vm = this
-			axios.get(process.env.API_URL + 'aerodromes/fresh')
+			this.axios.get(process.env.API_URL + 'aerodromes/fresh')
 				.then(response => vm.initForm(response.data, true))
 				.catch(err => vm.alert = {show: true, text: JSON.stringify(err), type: "danger"})
 		},
 		
 		getAerodromes() {
 			var vm = this;
-			axios.get(process.env.API_URL + 'aerodromes')
+			this.axios.get(process.env.API_URL + 'aerodromes')
 				.then(function(response){vm.aerodromes = response.data})
 				.catch(err => vm.alert = {show: true, text: err, type: "danger"})
 		},
@@ -170,7 +180,7 @@ export default {
 				return
 			}
 			const url = process.env.API_URL + 'aerodromes/' + vm.aerodrome.id
-			axios.put(url, vm.aerodrome)
+			this.axios.put(url, vm.aerodrome)
 				.then(function(response) {
 					vm.alert = {
 						show: true,
@@ -179,7 +189,7 @@ export default {
 					}
 					vm.showSelector()
 				})
-				.catch(err => vm.alert = {show: true, text: err, type: "danger"})
+				.catch(err => vm.alert = {show: true, text: axiosErrorToString(err), type: "danger"})
     },
     
     remove(evt) {
@@ -188,7 +198,7 @@ export default {
       if (!confirmDialog("confirm removal?")) return
       vm.$v.$touch()
 			const url = process.env.API_URL + 'aerodromes/' + vm.aerodrome.id
-			axios.delete(url)
+			this.axios.delete(url)
 				.then(function(response) {
 					vm.alert = {
 						show: true,
@@ -197,7 +207,7 @@ export default {
 					}
 					vm.showSelector()
 				})
-				.catch(err => vm.alert = {show: true, text: err, type: "danger"})
+				.catch(err => vm.alert = {show: true, text: axiosErrorToString(err), type: "danger"})
 		},
     
     add(evt) {
@@ -208,7 +218,7 @@ export default {
 				return
 			}
 			const url = process.env.API_URL + 'aerodromes/'
-			axios.post(url, vm.aerodrome)
+			this.axios.post(url, vm.aerodrome)
 				.then(function(response) {
 					vm.alert = {
 						show: true,
@@ -217,7 +227,7 @@ export default {
 					}
 					vm.showSelector()
 				})
-				.catch(err => vm.alert = {show: true, text: err, type: "danger"})
+				.catch(err => vm.alert = {show: true, text: axiosErrorToString(err), type: "danger"})
 		},
 		
 	},
@@ -226,12 +236,10 @@ export default {
 	
 	validations: {
 		aerodrome: {
-			nom: {
-				required 
-      },
-			lieu: {
-				required 
-			}
+			nom: {required},
+			lieu: {required},
+			latitude: {decimal, between: between(-90, 90), bothCoordinates},
+			longitude: {decimal, between: between(-180, 180), bothCoordinates},
     }
 	}
 }
@@ -239,25 +247,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import './variables.scss';
-
-*, *::before, *::after {
-	box-sizing: border-box;
-}
-
-#app {
-	max-width: 400px;
-	margin: 0 auto;
-	line-height: 1.4;
-	font-family: 'Avenir', Helvetica, Arial, sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	color: $vue-blue;
-}
-
-h1 {
-	text-align: center;
-}
 
 .formButtons {
 	display: inline-flex;

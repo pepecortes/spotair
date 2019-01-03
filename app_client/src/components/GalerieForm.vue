@@ -1,8 +1,20 @@
-<template>
+<template lang="pug">
 
-<div id="galerieForm">
-	<base-form xx="yy" model-name="aerodromes"></base-form>
-</div>
+div#galerieForm
+	base-form(api="aerodromes")
+		template(slot="inputs", slot-scope="{formData,$v,checkValidityState}")
+			b-form-group(
+				label="Nom",
+				label-for="nom",
+				:invalid-feedback="formData.invalid.nom",
+				:state="checkValidityState($v.formData.nom)"
+			)
+				b-form-input(
+					id="nom",
+					type="text",
+					v-model.trim="formData.nom",
+					:state="checkValidityState($v.formData.nom)"
+				)
 
 </template>
 
@@ -13,6 +25,17 @@ export default {
 	
 	components: {
 		'base-form': BaseForm
+	},
+	
+	data () {
+		return {
+			//aerodromes: [],
+			//aerodrome: null, // the aerodrome being edited
+			//aerodromeBak: null, // the original selection, in case you need to reset
+			//alert: {show: false, text: "", type: "warning"},
+			//toggleForm: false,
+			//newRecord: false,
+		}
 	},
 	
 }

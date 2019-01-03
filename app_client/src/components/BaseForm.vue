@@ -13,6 +13,16 @@ div.baseForm
 		v-select(:options="selectOptions", label="text", @input="initForm")
 			span(slot="no options") Aucun résultat
 		b-button(variant="outline-success", v-on:click="newForm") New
+		
+	b-form(@submit="update", @reset="reset", v-if="toggleForm")
+		b-button(variant="outline-warning" v-on:click="clearForm") X
+		
+		slot(name="inputs", :formData='formData', :$v='$v', :checkValidityState='checkValidityState')
+		
+		b-button(type="submit", variant="outline-warning", v-if="!newRecord") Update
+		b-button(type="button", variant="outline-danger", v-on:click="remove", v-if="!newRecord") Delete
+		b-button(type="button", variant="outline-primary", v-on:click="add", v-if="newRecord") Add
+		b-button(type="reset", variant="outline-success") Reset
 				
 </template>
 
@@ -29,8 +39,11 @@ const bothCoordinates = (value, vm) =>
 export default {
 	
 	props: {
-		xx: String,
-		modelName: String,
+		api: {
+			// path to build the root of API calls (example: "aerodromes")
+			default: "",
+			type: String
+		},
 	},
 	
 	components: {
@@ -39,22 +52,17 @@ export default {
 	
 	data () {
 		return {
-			apiCall: this.modelName,
 			selectOptions: [],
-			aerodrome: null, // the aerodrome being edited
-			aerodromeBak: null, // the original selection, in case you need to reset
+			formData: null, // the data being edited
+			formDataBak: null, // the original selection, in case you need to reset
 			alert: {show: false, text: "", type: "warning"},
 			toggleForm: false,
 			newRecord: false,
+			apiPath: process.env.API_URL + this.api,
 		}
 	},
 
-	created: function() {
-		console.log("xx: " + this.xx)
-		console.log("modelName: " + this.modelName)
-		console.log("apiCall: " + this.apiCall)
-		return
-		this.getSelectOptions()},
+	created () {this.getSelectOptions()},
 
 	methods: {
 		
@@ -67,8 +75,8 @@ export default {
 		// for update/delete or add depending on the boolean newRecord
 		initForm(selection, newRecord = false) {
 			if (!selection) return
-			this.aerodrome = JSON.parse(JSON.stringify(selection))
-			this.aerodromeBak = JSON.parse(JSON.stringify(selection))
+			this.formData = JSON.parse(JSON.stringify(selection))
+			this.formDataBak = JSON.parse(JSON.stringify(selection))
 			this.newRecord = newRecord
 			this.toggleForm = true
 			this.$v.$reset()
@@ -76,7 +84,7 @@ export default {
 		
     // Reset the form values to the initial selection
 		reset(evt) {
-      this.initForm(this.aerodromeBak, this.newRecord)
+      this.initForm(this.formDataBak, this.newRecord)
     },
 		
 		// Hide the form, refresh the selector and display it
@@ -92,7 +100,7 @@ export default {
 		
 		// Create a fresh form ready for adding new data
 		newForm() {
-			this.aerodrome = {nom: "nom", lieu: "lieu"}
+			this.formData = {nom: "nom", lieu: "lieu"}
 			var vm = this
 			this.axios.get(process.env.API_URL + 'aerodromes/fresh')
 				.then(response => vm.initForm(response.data, true))
@@ -102,7 +110,7 @@ export default {
 		getSelectOptions() {
 			var vm = this;
 			//this.axios.get(process.env.API_URL + 'aerodromes')
-			this.axios.get(process.env.API_URL + vm.apiCall)
+			this.axios.get(vm.apiPath)
 				.then(response => vm.selectOptions = response.data)
 				.catch(err => vm.alert = {show: true, text: axiosErrorToString(err), type: "danger"})
 		},
@@ -115,8 +123,8 @@ export default {
       if (vm.$v.$invalid) {
 				return
 			}
-			const url = process.env.API_URL + 'aerodromes/' + vm.aerodrome.id
-			this.axios.put(url, vm.aerodrome)
+			const url = process.env.API_URL + 'aerodromes/' + vm.formData.id
+			this.axios.put(url, vm.formData)
 				.then(function(response) {
 					vm.alert = {
 						show: true,
@@ -133,12 +141,12 @@ export default {
       evt.preventDefault()
       if (!confirmDialog("confirm removal?")) return
       vm.$v.$touch()
-			const url = process.env.API_URL + 'aerodromes/' + vm.aerodrome.id
+			const url = process.env.API_URL + 'aerodromes/' + vm.formData.id
 			this.axios.delete(url)
 				.then(function(response) {
 					vm.alert = {
 						show: true,
-						text: "Removed: " + vm.aerodrome.text,
+						text: "Removed: " + vm.formData.text,
 						type: "success"
 					}
 					vm.showSelector()
@@ -154,7 +162,7 @@ export default {
 				return
 			}
 			const url = process.env.API_URL + 'aerodromes/'
-			this.axios.post(url, vm.aerodrome)
+			this.axios.post(url, vm.formData)
 				.then(function(response) {
 					vm.alert = {
 						show: true,
@@ -171,7 +179,7 @@ export default {
 	mixins: [validationMixin],
 	
 	validations: {
-		aerodrome: {
+		formData: {
 			nom: {required},
 			lieu: {required},
 			latitude: {decimal, between: between(-90, 90), bothCoordinates},

@@ -21,7 +21,7 @@ Vue.use(VueAxios, axios)
 
 // Define or input route components
 import AerodromeForm from './components/AerodromeForm.vue'
-import ThemeForm from './components/BaseForm.vue'
+import ThemeForm from './components/ThemeForm.vue'
 import GalerieForm from './components/GalerieForm.vue'
 
 // Define the routes

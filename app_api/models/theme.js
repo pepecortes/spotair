@@ -27,12 +27,26 @@ module.exports = function(sequelize, DataTypes) {
       defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
 			allowNull: false,
     },
+    
+		text: {
+			type: DataTypes.VIRTUAL,
+			get: function() {return this.theme}
+		},
+		
+		invalid: {
+			type: DataTypes.VIRTUAL,
+			get() {
+				return {
+					theme: 'Requis',
+				}
+			}
+		},
+    
   }, {
 		indexes: [
 				{type: 'FULLTEXT', name: 'text_search', fields: ['theme']}
 		],
-  }
-  );
+  });
 	
 	return Model;
 };

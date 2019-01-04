@@ -1,44 +1,14 @@
 <template lang="pug">
-div.baseForm
-
-	b-alert(
-		:variant="alert.type",
-		dismissible,
-		fade,
-		:show="alert.show",
-		@dismissed="alert.show=false",
-	) {{ alert.text }}
-	
-	div(v-if="!toggleForm")
-		v-select(:options="selectOptions", label="text", @input="initForm")
-			span(slot="no options") Aucun résultat
-		b-button(variant="outline-success", v-on:click="newForm") New
-		
-	b-form(v-if="toggleForm")
-		b-button(variant="outline-warning" v-on:click="clearForm") X
-		
-		slot(name="inputs")
-		
-		b-button(type="button", variant="outline-warning", v-on:click="$emit('update')", v-if="!newRecord") Update
-		b-button(type="button", variant="outline-danger", v-on:click="$emit('remove')", v-if="!newRecord") Delete
-		b-button(type="button", variant="outline-primary", v-on:click="$emit('add')", v-if="newRecord") Add
-		b-button(type="button", variant="outline-success", v-on:click="$emit('reset')") Reset
-				
+	include BaseForm.pug
 </template>
 
 <script>
-import { axiosErrorToString } from '../lib/common'
 import VueSelect from 'vue-select'
+import pluralize from 'pluralize'
+import { validationMixin } from 'vuelidate'
+import { confirmDialog, axiosErrorToString } from '../lib/common'
 
 export default {
-	
-	props: {
-		api: {
-			// path to build the root of API calls (example: "aerodromes")
-			default: "",
-			type: String
-		}
-	},
 	
 	components: {
 		'v-select': VueSelect
@@ -46,26 +16,39 @@ export default {
 	
 	data () {
 		return {
+			formData: null,
 			selectOptions: [],
 			selection: null, // the original selection, in case you need to reset
 			alert: {show: false, text: "", type: "warning"},
 			toggleForm: false,
 			newRecord: false,
-			apiPath: process.env.API_URL + this.api,
+			validations: {}, // overriden by each form validations object
 		}
+	},
+	
+	computed: {
+		models () {return pluralize(this.model)},
+		api () {return this.models},
+		apiURL () {return process.env.API_URL + this.api + "/"}
 	},
 
 	created () {this.getSelectOptions()},
 
 	methods: {
+	
+		// Return the validity state or null if the input is untouched
+		checkValidityState(input) {
+			return (input.$dirty)? !input.$invalid : null
+		},
 				
 		// Init the form with the given selection. Display controls
 		// for update/delete or add depending on the boolean newRecord
 		initForm(selection, newRecord = false) {
 			if (!selection) return
-			this.$emit('selection', selection)
+			this.formData = selection
 			this.selection = JSON.parse(JSON.stringify(selection))
 			this.newRecord = newRecord
+			this.$v.$reset()
 			this.toggleForm = true
 		},
 		
@@ -80,6 +63,7 @@ export default {
 			this.alert = {show: true, text: message, type: type}
 		},
 		
+		// Clear the form and display a fresh selector
 		clearForm() {
 			this.alert = {show: false, text: "", type: "warning"}
 			this.showSelector()
@@ -88,34 +72,97 @@ export default {
 		// Create a fresh form ready for adding new data
 		newForm() {
 			var vm = this
-			this.axios.get(vm.apiPath +'/fresh')
+			this.axios.get(vm.apiURL + 'fresh')
 				.then(response => vm.initForm(response.data, true))
-				.catch(err => vm.alert = {show: true, text: axiosErrorToString(err), type: "danger"})
+				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
 		},
 		
+		// Get all the available options for the SELECT control
 		getSelectOptions() {
 			var vm = this;
-			this.axios.get(vm.apiPath)
+			this.axios.get(vm.apiURL)
 				.then(response => vm.selectOptions = response.data)
-				.catch(err => vm.alert = {show: true, text: axiosErrorToString(err), type: "danger"})
-		},    
+				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+		},  
+    
+    removeButtonClicked() {
+      if (!confirmDialog("confirm removal?")) return
+      this.remove()
+			this.$emit('remove')
+		},
+    
+    addButtonClicked() {
+			this.add()
+			this.$emit('add')
+		},
 		
-		// Reset the form values to the initial selection
+		resetButtonClicked() {
+			this.reset()
+			this.$emit('reset')
+		},
+		
+		updateButtonClicked() {
+      if (!confirmDialog("confirm update?")) return
+      this.update()
+			this.$emit('update')
+		},
+    
+    // Reset the form to the initial selection
 		reset() {
       this.initForm(this.selection, this.newRecord)
-    },
+			this.$v.$reset()
+		},
     
-    remove(formData, apiURL) {
+    // Remove the data given by its id
+    remove() {
 			var vm = this
-			const url = apiURL + formData.id
+      this.$v.$touch()
+			const url = vm.apiURL + vm.formData.id
 			vm.axios.delete(url)
 				.then(function(response) {
-					vm.showAlert("Removed: " + formData.text, "success")
+					vm.showAlert("Removed: " + vm.formData.text, "success")
 					vm.showSelector()
 				})
 				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
 		},
 		
+		// Add the form data to the database
+    add() {
+			var vm = this
+      this.$v.$touch()
+      if (this.$v.$invalid) return
+			vm.axios.post(vm.apiURL, vm.formData)
+				.then(function(response) {
+					vm.showAlert("Created: " + response.data.text, "success")
+					vm.showSelector()
+				})
+				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+		},
+		
+		// Update the form data on the database
+		update(formData, apiURL) {
+			var vm = this
+      this.$v.$touch()
+      if (this.$v.$invalid) return
+			const url = vm.apiURL + vm.formData.id
+			vm.axios.put(url, vm.formData)
+				.then(function(response) {					
+					vm.showAlert("Updated: " + response.data.text, "success")
+					vm.showSelector()
+				})
+				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+    },
+		
+	},
+	
+	// Mixin for validation. It will not have any effect without definition
+	// of a 'validations' object (vuelidate)
+	mixins: [validationMixin],
+	
+	validations() {
+		return {
+			formData: this.validations
+		}
 	}
 }
 

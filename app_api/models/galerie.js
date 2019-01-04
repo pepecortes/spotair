@@ -46,6 +46,20 @@ module.exports = function(sequelize, DataTypes) {
 					return output;
 				}
 			},
+		
+			invalid: {
+				type: DataTypes.VIRTUAL,
+				get() {
+					return {
+						isspotair: 'Requis',
+						commentaire: '',
+						annee: "Requis",
+						theme: "Requis",
+						aerodrome: "Requis",
+					}
+				}
+			},
+		
 			createdAt: {
 				type: DataTypes.DATE,
 				allowNull: false,

@@ -16,7 +16,21 @@ module.exports = function(sequelize, DataTypes) {
     annee: {
 			type: DataTypes.STRING,
 			allowNull: false,
-		},		
+		},
+		text: {
+			type: DataTypes.VIRTUAL,
+			get: function() {return this.annee}
+		},
+		
+		invalid: {
+			type: DataTypes.VIRTUAL,
+			get() {
+				return {
+					annee: 'Requis'
+				}
+			}
+		},
+		
     createdAt: {
       type: DataTypes.DATE,
       defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),

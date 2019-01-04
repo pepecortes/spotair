@@ -35,6 +35,7 @@ router.put('/aerodromes/fusion/source/:sourceid(\\d+)/destination/:destinationid
 // Annees
 router.get('/annees', ctrlAnnees.all);
 router.get('/annees/:id(\\d+)', ctrlAnnees.byId);
+router.get('/annees/fresh', ctrlAnnees.fresh);
 router.post('/annees', ctrlAnnees.create);
 router.put('/annees/:id(\\d+)', ctrlAnnees.update);
 router.delete('/annees/:id(\\d+)', ctrlAnnees.delete);
@@ -42,6 +43,7 @@ router.delete('/annees/:id(\\d+)', ctrlAnnees.delete);
 // Themes
 router.get('/themes', ctrlThemes.all);
 router.get('/themes/:id(\\d+)', ctrlThemes.byId);
+router.get('/themes/fresh', ctrlThemes.fresh);
 router.post('/themes', ctrlThemes.create);
 router.put('/themes/:id(\\d+)', ctrlThemes.update);
 router.delete('/themes/:id(\\d+)', ctrlThemes.delete);
@@ -49,6 +51,7 @@ router.delete('/themes/:id(\\d+)', ctrlThemes.delete);
 // Galeries
 router.get('/galeries', ctrlGaleries.all);
 router.get('/galeries/:id(\\d+)', ctrlGaleries.byId);
+router.get('/galeries/fresh', ctrlGaleries.fresh);
 router.post('/galeries', ctrlGaleries.create);
 router.put('/galeries/:id(\\d+)', ctrlGaleries.update);
 router.delete('/galeries/:id(\\d+)', ctrlGaleries.delete);

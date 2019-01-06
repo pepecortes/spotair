@@ -4,6 +4,7 @@
 		<b-nav fill tabs>
 			<b-nav-item to="/aerodromes">Aérodromes</b-nav-item>
 			<b-nav-item to="/themes">Thèmes</b-nav-item>
+			<b-nav-item to="/annees">Années</b-nav-item>
 			<b-nav-item to="/galeries">Galeries</b-nav-item>
 		</b-nav>
 			

@@ -21,6 +21,7 @@ export default {
 			selection: null, // the original selection, in case you need to reset
 			alert: {show: false, text: "", type: "warning"},
 			toggleForm: false,
+			displayFusionForm: false, // whether or not the user is doing a fusion
 			newRecord: false,
 			validations: {}, // overriden by each form validations object
 		}
@@ -32,7 +33,7 @@ export default {
 		apiURL () {return process.env.API_URL + this.api + "/"}
 	},
 
-	created () {this.getSelectOptions()},
+	mounted () {this.getSelectOptions()},
 
 	methods: {
 	
@@ -69,12 +70,32 @@ export default {
 			this.showSelector()
 		},
 		
+		//TEST
+		newClicked() {
+			this.newForm()
+		},
+		
+		modifyClicked() {
+			this.getSelectOptions()
+		},
+		
+		fusionClicked() {
+			
+		},
+		
 		// Create a fresh form ready for adding new data
 		newForm() {
 			var vm = this
 			this.axios.get(vm.apiURL + 'fresh')
 				.then(response => vm.initForm(response.data, true))
 				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+		},
+		
+		// Open another selector: find a target for fusioning: the selection
+		// will be removed and all the references passed onto the target
+		fusionForm() {
+			var vm = this
+			this.displayFusionForm = true
 		},
 		
 		// Get all the available options for the SELECT control
@@ -140,7 +161,7 @@ export default {
 		},
 		
 		// Update the form data on the database
-		update(formData, apiURL) {
+		update() {
 			var vm = this
       this.$v.$touch()
       if (this.$v.$invalid) return

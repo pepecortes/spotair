@@ -22,12 +22,14 @@ Vue.use(VueAxios, axios)
 // Define or input route components
 import AerodromeForm from './components/AerodromeForm.vue'
 import ThemeForm from './components/ThemeForm.vue'
+import AnneeForm from './components/AnneeForm.vue'
 import GalerieForm from './components/GalerieForm.vue'
 
 // Define the routes
 const routes = [
   { path: '/aerodromes', component: AerodromeForm },
   { path: '/themes', component: ThemeForm },
+  { path: '/annees', component: AnneeForm },
   { path: '/galeries', component: GalerieForm },
 ]
 

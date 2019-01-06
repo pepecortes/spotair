@@ -1,0 +1,33 @@
+div.baseForm
+
+	b-alert(
+		:variant="alert.type",
+		dismissible,
+		fade,
+		:show="alert.show",
+		@dismissed="alert.show=false",
+	) {{ alert.text }}
+	
+	div(v-if="!toggleForm")
+		b-button(variant="outline-success", v-on:click="newForm") Nouveau
+		b-button(variant="outline-warning", v-on:click="newForm") Modifier
+		b-button(variant="outline-danger", v-on:click="fusionForm") Fusioner
+	
+	div(v-if="!toggleForm")
+		v-select(:options="selectOptions", label="text", @input="initForm")
+			span(slot="no options") Aucun résultat
+		
+	b-form(v-if="toggleForm")
+		b-button(variant="outline-warning" v-on:click="clearForm") X
+		
+		block input
+		
+		b-button(type="button", variant="outline-warning", v-on:click="updateButtonClicked", v-if="!newRecord") Update
+		b-button(type="button", variant="outline-danger", v-on:click="removeButtonClicked", v-if="!newRecord") Delete
+		b-button(type="button", variant="outline-primary", v-on:click="addButtonClicked", v-if="newRecord") Add
+		b-button(type="button", variant="outline-success", v-on:click="resetButtonClicked") Reset
+		
+	b-form(v-if="displayFusionForm")
+		b-button(variant="outline-warning" v-on:click="clearForm") X
+		
+		block target-fusion

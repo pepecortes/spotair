@@ -5,6 +5,7 @@
 const debug = require('debug')('app:api:crudator');
 const pickObject = require('lodash').pick;
 const sendJSON = require('../../app_lib/helpers').sendJSON;
+const createInstanceFromQuery = require('../../app_lib/helpers').createInstanceFromQuery;
 
 /**
  * @function
@@ -46,7 +47,7 @@ function buildBasicAPI(Model, fieldsArray, hasForeignKeys) {
 		},
 		
 		create: (req, res) => {
-			const record = pickObject(req.body, fieldsArray);
+			const record = createInstanceFromQuery(req.body, fieldsArray)
 			Model
 				.findOrCreate({where: record})
 				.spread((record, created) => sendJSON.ok(res, record))
@@ -54,7 +55,7 @@ function buildBasicAPI(Model, fieldsArray, hasForeignKeys) {
 		},
 		
 		update: (req, res) => {
-			var updates = pickObject(req.body, fieldsArray);
+			var updates = createInstanceFromQuery(req.body, fieldsArray);
 			Model
 				.findByPk(req.params.id, includeOption)
 				.then(record => {

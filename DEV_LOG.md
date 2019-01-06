@@ -23,3 +23,5 @@ Also for the client, I use **bootstrap-vue.js** that does not depend on jquery. 
 
 ## Vue.js
 For the time being I have decided not to use the vue-cli. I rely on webpack, and we will see later on if we have other needs
+
+I use **bootstrap-vue** for patterns and componentes. I use **vuelidate** for form validation

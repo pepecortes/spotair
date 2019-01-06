@@ -4,15 +4,14 @@
 	block input
 		b-form-group(
 			label="Sortie associative",
-			label-for="isspotair",
+			label-for="isSpotair",
 			:invalid-feedback="formData.invalid.isspotair",
 			:state="checkValidityState($v.formData.isspotair)"
 		)
 			b-form-checkbox(
 				id="isspotair",
-				v-model="formData.isspotair",
+				v-model="formData.isSpotair",
 				:state="checkValidityState($v.formData.isspotair)"
-
 			)
 			
 		b-form-group(
@@ -32,14 +31,14 @@
 			label="Annee",
 			label-for="annee",
 			:invalid-feedback="formData.invalid.annee",
-			:state="checkValidityState($v.formData.anneeid)"
+			:state="checkValidityState($v.formData.annee)"
 		)
 			v-select(
 				id="annee",
 				:options="anneeOptions",
 				label="text",
 				v-model="formData.annee",
-				:state="checkValidityState($v.formData.anneeid)"
+				:state="checkValidityState($v.formData.annee)"
 			)
 				span(slot="no options") Aucun résultat
 				
@@ -47,14 +46,14 @@
 			label="Theme",
 			label-for="theme",
 			:invalid-feedback="formData.invalid.theme",
-			:state="checkValidityState($v.formData.themeid)"
+			:state="checkValidityState($v.formData.theme)"
 		)
 			v-select(
 				id="theme",
 				:options="themeOptions",
 				label="text",
 				v-model="formData.theme",
-				:state="checkValidityState($v.formData.themeid)"
+				:state="checkValidityState($v.formData.theme)"
 			)
 				span(slot="no options") Aucun résultat
 				
@@ -62,14 +61,14 @@
 			label="Aérodrome",
 			label-for="aerodrome",
 			:invalid-feedback="formData.invalid.aerodrome",
-			:state="checkValidityState($v.formData.aerodromeid)"
+			:state="checkValidityState($v.formData.aerodrome)"
 		)
 			v-select(
 				id="aerodrome",
 				:options="aerodromeOptions",
 				label="text",
 				v-model="formData.aerodrome",
-				:state="checkValidityState($v.formData.aerodromeid)"
+				:state="checkValidityState($v.formData.aerodrome)"
 			)
 				span(slot="no options") Aucun résultat
 </template>
@@ -87,13 +86,15 @@ export default {
 		return {
 			model: "galerie",
 			validations: {
-				isspotair: {required},
+				isspotair: {},
 				commentaire: {},
-				anneeid: {required},
-				themeid: {required},
-				aerodromeid: {required},
+				annee: {required},
+				theme: {required},
+				aerodrome: {required},
 			},
 			anneeOptions: null,
+			themeOptions: null,
+			aerodromeOptions: null,
 		}
 	},
 	

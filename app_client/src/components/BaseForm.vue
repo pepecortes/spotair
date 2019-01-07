@@ -20,15 +20,13 @@ export default {
 			selectOptions: [],
 			selection: null, // the original selection, in case you need to reset
 			alert: {show: false, text: "", type: "warning"},
-			toggleForm: false,
-			displayFusionForm: false, // whether or not the user is doing a fusion
 			validations: {}, // overriden by each form validations object
 		}
 	},
 	
 	watch: {
     // monitor changes on selection
-    selection() {this.initForm(this.selection)}
+    selection() {this.initForm()}
   },
 	
 	computed: {
@@ -47,30 +45,15 @@ export default {
 		},
 		
 				
-		// Init the form with the given selection. Display controls
-		initForm(selection) {
-			console.log("in init form")
-			if (!selection) return
-			this.formData = selection
+		// Init the form with the given selection and reset validators
+		initForm() {
+			this.formData = JSON.parse(JSON.stringify(this.selection))
 			this.$v.$reset()
-			this.toggleForm = true
-		},
-		
-		// Hide the form, refresh the selector and display it
-		showSelector() {
-			this.getSelectOptions()
-			this.toggleForm = false
 		},
 		
 		// Displays a form alert/info message 
 		showAlert(message="", type="warning") {
 			this.alert = {show: true, text: message, type: type}
-		},
-		
-		// Clear the form and display a fresh selector
-		clearForm() {
-			this.alert = {show: false, text: "", type: "warning"}
-			this.showSelector()
 		},
 		
 		newClicked() {
@@ -79,12 +62,11 @@ export default {
 		},
 		
 		modifyClicked() {
-			this.selection = null
 			this.getSelectOptions()
 		},
 		
 		fusionClicked() {
-			
+			this.getSelectOptions()
 		},
 		
 		// Create a fresh form ready for adding new data
@@ -95,16 +77,10 @@ export default {
 				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
 		},
 		
-		// Open another selector: find a target for fusioning: the selection
-		// will be removed and all the references passed onto the target
-		fusionForm() {
-			var vm = this
-			this.displayFusionForm = true
-		},
-		
 		// Get all the available options for the SELECT control
 		getSelectOptions() {
 			var vm = this;
+			vm.selection = null
 			this.axios.get(vm.apiURL)
 				.then(response => vm.selectOptions = response.data)
 				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
@@ -113,29 +89,24 @@ export default {
     removeButtonClicked() {
       if (!confirmDialog("confirm removal?")) return
       this.remove()
-			this.$emit('remove')
 		},
     
     addButtonClicked() {
 			this.add()
-			this.$emit('add')
 		},
 		
 		resetButtonClicked() {
 			this.reset()
-			this.$emit('reset')
 		},
 		
 		updateButtonClicked() {
       if (!confirmDialog("confirm update?")) return
       this.update()
-			this.$emit('update')
 		},
     
     // Reset the form to the initial selection
 		reset() {
-      this.initForm(this.selection)
-			this.$v.$reset()
+      this.initForm()
 		},
     
     // Remove the data given by its id
@@ -146,7 +117,7 @@ export default {
 			vm.axios.delete(url)
 				.then(function(response) {
 					vm.showAlert("Removed: " + vm.formData.text, "success")
-					vm.showSelector()
+					vm.getSelectOptions()
 				})
 				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
 		},
@@ -159,7 +130,6 @@ export default {
 			vm.axios.post(vm.apiURL, vm.formData)
 				.then(function(response) {
 					vm.showAlert("Created: " + response.data.text, "success")
-					vm.showSelector()
 				})
 				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
 		},
@@ -173,7 +143,6 @@ export default {
 			vm.axios.put(url, vm.formData)
 				.then(function(response) {					
 					vm.showAlert("Updated: " + response.data.text, "success")
-					vm.showSelector()
 				})
 				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
     },

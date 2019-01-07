@@ -1,6 +1,14 @@
 div.baseForm
 	
 	b-tabs(pills)
+
+		b-alert(
+			:variant="alert.type",
+			dismissible,
+			fade,
+			:show="alert.show",
+			@dismissed="alert.show=false",
+		) {{ alert.text }}
 	
 		b-tab(title="Modifier", v-on:click="modifyClicked")
 			v-select(:options="selectOptions", label="text", @input="initForm", v-model="selection")
@@ -19,11 +27,3 @@ div.baseForm
 		b-tab(title="Fusioner", v-on:click="fusionClicked")
 			v-select(:options="selectOptions", label="text")
 			v-select(:options="selectOptions", label="text")
-
-	b-alert(
-		:variant="alert.type",
-		dismissible,
-		fade,
-		:show="alert.show",
-		@dismissed="alert.show=false",
-	) {{ alert.text }}

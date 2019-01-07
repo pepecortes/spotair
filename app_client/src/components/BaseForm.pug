@@ -3,15 +3,15 @@ div.baseForm
 	b-tabs(pills)
 	
 		b-tab(title="Modifier", v-on:click="modifyClicked")
-			v-select(:options="selectOptions", label="text", @input="initForm")
-			b-form(v-if="formData")
+			v-select(:options="selectOptions", label="text", @input="initForm", v-model="selection")
+			b-form(v-if="selection")
 				block input
 				b-button(type="button", variant="outline-warning", v-on:click="updateButtonClicked") Update
 				b-button(type="button", variant="outline-danger", v-on:click="removeButtonClicked") Delete
 				b-button(type="button", variant="outline-success", v-on:click="resetButtonClicked") Reset
 			
 		b-tab(title="Nouveau", v-on:click="newClicked")
-			b-form(v-if="formData")
+			b-form(v-if="selection")
 				block input
 				b-button(type="button", variant="outline-primary", v-on:click="addButtonClicked") Add
 				b-button(type="button", variant="outline-success", v-on:click="resetButtonClicked") Reset

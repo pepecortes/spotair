@@ -22,10 +22,14 @@ export default {
 			alert: {show: false, text: "", type: "warning"},
 			toggleForm: false,
 			displayFusionForm: false, // whether or not the user is doing a fusion
-			newRecord: false,
 			validations: {}, // overriden by each form validations object
 		}
 	},
+	
+	watch: {
+    // monitor changes on selection
+    selection() {this.initForm(this.selection)}
+  },
 	
 	computed: {
 		models () {return pluralize(this.model)},
@@ -41,14 +45,13 @@ export default {
 		checkValidityState(input) {
 			return (input.$dirty)? !input.$invalid : null
 		},
+		
 				
 		// Init the form with the given selection. Display controls
-		// for update/delete or add depending on the boolean newRecord
-		initForm(selection, newRecord = false) {
+		initForm(selection) {
+			console.log("in init form")
 			if (!selection) return
 			this.formData = selection
-			this.selection = JSON.parse(JSON.stringify(selection))
-			this.newRecord = newRecord
 			this.$v.$reset()
 			this.toggleForm = true
 		},
@@ -70,12 +73,13 @@ export default {
 			this.showSelector()
 		},
 		
-		//TEST
 		newClicked() {
+			this.selection = null
 			this.newForm()
 		},
 		
 		modifyClicked() {
+			this.selection = null
 			this.getSelectOptions()
 		},
 		
@@ -87,7 +91,7 @@ export default {
 		newForm() {
 			var vm = this
 			this.axios.get(vm.apiURL + 'fresh')
-				.then(response => vm.initForm(response.data, true))
+				.then(response => {vm.selection = response.data})
 				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
 		},
 		
@@ -130,7 +134,7 @@ export default {
     
     // Reset the form to the initial selection
 		reset() {
-      this.initForm(this.selection, this.newRecord)
+      this.initForm(this.selection)
 			this.$v.$reset()
 		},
     

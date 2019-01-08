@@ -5,7 +5,7 @@
 const debug = require('debug')('app:api:controllers:aerodromes');
 const crud = require('./crudator');
 const sendJSON = require('../../app_lib/helpers').sendJSON;
-const checkSourceDestination = require('../../app_lib/helpers').checkSourceDestination;
+const dbReplaceReference = require('../../app_lib/helpers').dbReplaceReference;
 const Model = require('../models/db').Aerodrome;
 const Galerie = require('../models/db').Galerie;
 
@@ -31,33 +31,9 @@ exports = Object.assign(exports, basicAPI);
 exports.fusion =  async function(req, res) {
 	const sourceid = req.params.sourceid;
 	const destinationid = req.params.destinationid;
-	
-	// Check first that the query makes sense: source and destination
-	// must exist and be different
-	try {
-		error = await checkSourceDestination(Model, sourceid, destinationid)
-		if (error.length > 0) {sendJSON.notFound(res, error); return}
-	} catch(err) {
-		sendJSON.serverError(res, err)
-		return
-	}
-	
-	sendJSON.ok(res, error);
-	return
-	
-	// Update galeries to the destination aerodrome and delete the source
-	const output = {};
-	Galerie.update({aerodromeId: destinationid},{where: {aerodromeId: sourceid}})
-	.then(result => {
-		output.galeries_updated = result[0];
-		return Model.findByPk(sourceid);
-	})
-	.then(result => {
-		result.destroy();
-		output.aerodromes_removed = result.id;
-		sendJSON.ok(res, output);
-	})
-	.catch(err => {if(err) sendJSON.serverError(res, err)});
+	dbReplaceReference(Galerie, Model, "aerodromeId", sourceid, destinationid)
+		.then(result => sendJSON.ok(res, result))
+		.catch(err => sendJSON.serverError(res, err))
 }
 
 module.exports = exports;

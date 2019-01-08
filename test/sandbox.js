@@ -10,11 +10,24 @@ const helpers = require('../app_lib/helpers')
 const db = require('../app_api/models/db');
 
 console.log("START TEST")
-const Galerie = require('../app_api/models/db').Galerie;
+//const Galerie = require('../app_api/models/db').Galerie;
 const Aerodrome = require('../app_api/models/db').Aerodrome;
 
 
-helpers.dbReplaceReference(Galerie, Aerodrome, 'aerodromeId', 1, 2)
+//helpers.dbReplaceReference(Galerie, Aerodrome, 'aerodromeId', 1, 2)
+
+async function dameAlgo() {
+	console.log("here I am")
+	return Aerodrome.findByPk(33)
+		.then(rec => "OK")
+	//return "ÖK"
+}
+
+console.log("start call")
+dameAlgo().then(res => console.log(JSON.stringify(res)))
+console.log("end call")
+
+
 
 
 

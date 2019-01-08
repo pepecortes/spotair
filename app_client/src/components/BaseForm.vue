@@ -167,10 +167,9 @@ export default {
       this.$v.fusionTarget.$touch()
       if (this.$v.fusionTarget.$invalid) return
 			const url = vm.apiURL + `fusion/source/${vm.formData.id}/destination/${vm.fusionTarget.id}`
-			return
 			vm.axios.put(url)
 				.then(function(response) {
-					vm.showAlert("Fusion OK. Removed: " + vm.formData.text, "success")
+					vm.showAlert(`Fusion OK: updated ${response.data.updated}, removed: ${vm.formData.text}`, "success")
 					vm.getSelectOptions()
 				})
 				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))

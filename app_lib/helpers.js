@@ -88,20 +88,28 @@ exports.checkSourceDestination =  async function(Model, sourceid, destinationid)
  * @param {string} refField - name of the field holding the reference to referenceModel
  * @param {number} sourceid	- reference id to replace and remove
  * @param {number} destinationid	- new reference id
- * @return {Object} An object like {updated: 10, idRemoved: "aerodrome"}
+ * @return {Object} An object like {updated: 10, idRemoved: "aerodrome"} or null if failed
  */
 exports.dbReplaceReference = async function(Model, refModel, refField, sourceid, destinationid) {
+	
+	// Check first that the query makes sense: source and destination
+	// must exist and be different
+	const error = await exports.checkSourceDestination(refModel, sourceid, destinationid)
+	if (error.length > 0) throw "Error: " + error
+	
+	// Update the Model table and remove the refModel afterwards
 	var output = {}
-	Model.update({[refField]: destinationid},{where: {[refField]: sourceid}})
-	.then(result => {
-		output.updated = result[0]
-		return referenceModel.findByPk(sourceid)
-	})
-	.then(result => {
-		result.destroy()
-		output.idRemoved = result.id
-		return output
-	})
+	const promise = Model.update({[refField]: destinationid},{where: {[refField]: sourceid}})
+		.then(result => {
+			output.updated = result[0]
+			return refModel.findByPk(sourceid)
+		})
+		.then(result => result.destroy())
+		.then(result => {
+			output.idRemoved = result.id
+			return output
+		})
+	return promise
 }
 
 

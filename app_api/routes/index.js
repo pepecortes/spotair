@@ -39,6 +39,7 @@ router.get('/annees/fresh', ctrlAnnees.fresh);
 router.post('/annees', ctrlAnnees.create);
 router.put('/annees/:id(\\d+)', ctrlAnnees.update);
 router.delete('/annees/:id(\\d+)', ctrlAnnees.delete);
+router.put('/annees/fusion/source/:sourceid(\\d+)/destination/:destinationid(\\d+)', ctrlAnnees.fusion);
 
 // Themes
 router.get('/themes', ctrlThemes.all);
@@ -47,6 +48,7 @@ router.get('/themes/fresh', ctrlThemes.fresh);
 router.post('/themes', ctrlThemes.create);
 router.put('/themes/:id(\\d+)', ctrlThemes.update);
 router.delete('/themes/:id(\\d+)', ctrlThemes.delete);
+router.put('/themes/fusion/source/:sourceid(\\d+)/destination/:destinationid(\\d+)', ctrlThemes.fusion);
 
 // Galeries
 router.get('/galeries', ctrlGaleries.all);
@@ -56,6 +58,7 @@ router.post('/galeries', ctrlGaleries.create);
 router.put('/galeries/:id(\\d+)', ctrlGaleries.update);
 router.delete('/galeries/:id(\\d+)', ctrlGaleries.delete);
 router.get('/galeries/spotair', ctrlGaleries.allSpotair);
+router.put('/galeries/fusion/source/:sourceid(\\d+)/destination/:destinationid(\\d+)', ctrlGaleries.fusion);
 
 // Not found
 router.all('/*', ctrlNotFound);

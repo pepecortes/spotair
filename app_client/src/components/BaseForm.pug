@@ -23,7 +23,22 @@ div.baseForm
 				block input
 				b-button(type="button", variant="outline-primary", v-on:click="addButtonClicked") Add
 				b-button(type="button", variant="outline-success", v-on:click="resetButtonClicked") Reset
-			
+
 		b-tab(title="Fusioner", v-on:click="fusionClicked")
-			v-select(:options="selectOptions", label="text")
-			v-select(:options="selectOptions", label="text")
+			v-select(:options="selectOptions", label="text", @input="initForm", v-model="selection")
+			b-form(v-if="selection")
+				b-form-group(
+					label="Fusioner avec :",
+					label-for="targetFusion",
+					invalid-feedback="fusion target invalid",
+					:state="checkValidityState($v.fusionTarget)"
+				)
+					v-select(
+						id="targetFusion",
+						:options="selectOptions",
+						label="text",
+						v-model="fusionTarget",
+						:state="checkValidityState($v.fusionTarget)",
+					)
+				b-button(type="button", variant="outline-danger", v-on:click="fusionButtonClicked") Fusion
+				b-button(type="button", variant="outline-success", v-on:click="resetButtonClicked") Reset

@@ -7,6 +7,8 @@ import VueSelect from 'vue-select'
 import pluralize from 'pluralize'
 import { validationMixin } from 'vuelidate'
 import { confirmDialog, axiosErrorToString } from '../lib/common'
+import { required } from "vuelidate/lib/validators"
+
 
 export default {
 	
@@ -20,6 +22,7 @@ export default {
 			selectOptions: [],
 			selection: null, // the original selection, in case you need to reset
 			alert: {show: false, text: "", type: "warning"},
+			fusionTarget: null, // self-explanatory
 			validations: {}, // overriden by each form validations object
 		}
 	},
@@ -48,6 +51,7 @@ export default {
 		// Init the form with the given selection and reset validators
 		initForm() {
 			this.formData = JSON.parse(JSON.stringify(this.selection))
+			this.fusionTarget = null
 			this.$v.$reset()
 		},
 		
@@ -78,16 +82,19 @@ export default {
 		},
 		
 		// Get all the available options for the SELECT control
-		getSelectOptions() {
+		getSelectOptions(preselected) {
 			var vm = this;
-			vm.selection = null
+			//if (!preselected) vm.selection = null
 			this.axios.get(vm.apiURL)
-				.then(response => vm.selectOptions = response.data)
+				.then((response) => {
+					vm.selectOptions = response.data
+					vm.selection = (preselected)? preselected : null
+				})
 				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
 		},  
     
     removeButtonClicked() {
-      if (!confirmDialog("confirm removal?")) return
+      if (!confirmDialog("confirmer élimination ?")) return
       this.remove()
 		},
     
@@ -100,8 +107,13 @@ export default {
 		},
 		
 		updateButtonClicked() {
-      if (!confirmDialog("confirm update?")) return
+      if (!confirmDialog("confirmer modification ?")) return
       this.update()
+		},
+		
+		fusionButtonClicked() {
+      if (!confirmDialog("confirmer fusion ?")) return
+      this.fusion()
 		},
     
     // Reset the form to the initial selection
@@ -112,7 +124,7 @@ export default {
     // Remove the data given by its id
     remove() {
 			var vm = this
-      this.$v.$touch()
+      this.$v.formData.$touch()
 			const url = vm.apiURL + vm.formData.id
 			vm.axios.delete(url)
 				.then(function(response) {
@@ -125,11 +137,12 @@ export default {
 		// Add the form data to the database
     add() {
 			var vm = this
-      this.$v.$touch()
-      if (this.$v.$invalid) return
+      this.$v.formData.$touch()
+      if (this.$v.formData.$invalid) return
 			vm.axios.post(vm.apiURL, vm.formData)
 				.then(function(response) {
 					vm.showAlert("Created: " + response.data.text, "success")
+					vm.newForm()
 				})
 				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
 		},
@@ -137,16 +150,32 @@ export default {
 		// Update the form data on the database
 		update() {
 			var vm = this
-      this.$v.$touch()
-      if (this.$v.$invalid) return
+      this.$v.formData.$touch()
+      if (this.$v.formData.$invalid) return
 			const url = vm.apiURL + vm.formData.id
 			vm.axios.put(url, vm.formData)
 				.then(function(response) {					
 					vm.showAlert("Updated: " + response.data.text, "success")
+					vm.getSelectOptions(response.data)
 				})
 				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
     },
-		
+    
+    // Fusion: all references to the selection will be changed to the targetFusion
+    fusion() {
+			var vm = this
+      this.$v.fusionTarget.$touch()
+      if (this.$v.fusionTarget.$invalid) return
+			const url = vm.apiURL + `fusion/source/${vm.formData.id}/destination/${vm.fusionTarget.id}`
+			return
+			vm.axios.put(url)
+				.then(function(response) {
+					vm.showAlert("Fusion OK. Removed: " + vm.formData.text, "success")
+					vm.getSelectOptions()
+				})
+				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+		},
+    
 	},
 	
 	// Mixin for validation. It will not have any effect without definition
@@ -154,8 +183,12 @@ export default {
 	mixins: [validationMixin],
 	
 	validations() {
+		// Validity checks for the fusion target
+		const differentThanSource = (value, vm) => (vm.selection.id != value.id)
+		
 		return {
-			formData: this.validations
+			formData: this.validations,
+			fusionTarget: { required, differentThanSource }
 		}
 	}
 }

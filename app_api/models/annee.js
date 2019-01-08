@@ -16,6 +16,7 @@ module.exports = function(sequelize, DataTypes) {
     annee: {
 			type: DataTypes.STRING,
 			allowNull: false,
+			defaultValue: "",
 		},
 		text: {
 			type: DataTypes.VIRTUAL,

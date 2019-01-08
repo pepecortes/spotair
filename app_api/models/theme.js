@@ -16,6 +16,7 @@ module.exports = function(sequelize, DataTypes) {
     theme: {
 			type: DataTypes.STRING,
 			allowNull: false,
+			defaultValue: "",
 		},		
     createdAt: {
       type: DataTypes.DATE,

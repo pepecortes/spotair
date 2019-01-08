@@ -59,5 +59,50 @@ exports.createInstanceFromQuery = function(reqBody, fieldsArray) {
 	return pickObject(fullRecord, fieldsArray)
 }
 
+/**
+ * @function checkSourceDestination
+ * @description Checks that source and destination exist and are different
+ * @param {Object} Model	- sequelize model we are working with
+ * @param {number} sourceid	- id of source instance
+ * @param {number} destinationid	- id of destination instance
+ * @return An error message if the check is failed. An empty string otherwise
+ */
+exports.checkSourceDestination =  async function(Model, sourceid, destinationid) {
+		var error = [];
+		var src, dest
+		[src, dest] = await Promise.all([
+			Model.findByPk(sourceid),
+			Model.findByPk(destinationid)
+		])
+		if (sourceid == destinationid) error.push("source and destination are the same")
+		if (!dest) error.push("destination id: " + destinationid + " not found")
+		if (!src) error.push("source id: " + sourceid + " not found")
+		return (error.length >= 1)? error.join(', ') : ""
+}
+
+/**
+ * @function dbReplaceReference
+ * @description On the given model, replace all references to the source by the destination. Remove source if succesful
+ * @param {Object} Model	- sequelize model where the references will be replaced
+ * @param {Object} refModel	- sequelize model holding the reference
+ * @param {string} refField - name of the field holding the reference to referenceModel
+ * @param {number} sourceid	- reference id to replace and remove
+ * @param {number} destinationid	- new reference id
+ * @return {Object} An object like {updated: 10, idRemoved: "aerodrome"}
+ */
+exports.dbReplaceReference = async function(Model, refModel, refField, sourceid, destinationid) {
+	var output = {}
+	Model.update({[refField]: destinationid},{where: {[refField]: sourceid}})
+	.then(result => {
+		output.updated = result[0]
+		return referenceModel.findByPk(sourceid)
+	})
+	.then(result => {
+		result.destroy()
+		output.idRemoved = result.id
+		return output
+	})
+}
+
 
 module.exports = exports;

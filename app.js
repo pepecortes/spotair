@@ -3,14 +3,14 @@
  */ 
 require('dotenv').load();
 const express = require('express');
+const session = require('express-session')
+const RedisStore = require('connect-redis')(session) 
 const path = require('path');
 const favicon = require('serve-favicon');
 const logger = require('morgan');
-const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const HTTPStatus = require('http-status');
-
 
 // start debugging
 const debug = require('debug')('app:main');
@@ -22,11 +22,20 @@ require('./app_api/models/db');
 // start the express application
 var app = express();
 
+const redisOptions = {
+	host:process.env.REDIS_HOST,
+	port:process.env.REDIS_PORT
+}
+
+app.use(session({
+	store: new RedisStore(redisOptions),
+	secret: process.env.COOKIE_SESSION_SECRET,
+	resave: false
+}))
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('combined'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'app_client')));
 

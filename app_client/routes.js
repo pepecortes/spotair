@@ -11,13 +11,20 @@ const sendJSON = require('../app_lib/helpers').sendJSON;
 // Define the NOT FOUND controller
 const ctrlNotFound = function(req, res) {
 	// NOT YET COMPLETED
+	console.log("in ctrlNotFound")
 	const err = "Error: route not found"
 	sendJSON.notFound(res, err)
 }
 
 // TEST
 const ctrlTest = function(req, res) {
-	res.sendFile(path.join(__dirname, 'app_client', 'index.html'))
+	try {
+		console.log("dirname is " + __dirname)
+		const x = __dirname + 'index.html'
+		console.log("x is " + x)
+		console.log("in ctrlTest: " + path.join(__dirname, 'index.html'))
+		res.sendFile(path.join(__dirname, 'app_client', 'index.html'))
+	} catch {err => console.log(JSON.stringify(err))}
 }
 
 module.exports = function(passport) {

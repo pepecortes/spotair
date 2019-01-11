@@ -28,27 +28,15 @@
 			)
 		b-form-group(
 			label="Email",
-			label-for="email",
-			:invalid-feedback="formData.invalid.email",
-			:state="checkValidityState($v.formData.email)"
+			label-for="mail",
+			:invalid-feedback="formData.invalid.mail",
+			:state="checkValidityState($v.formData.mail)"
 		)
 			b-form-input(
-				id="email",
-				type="text",
-				v-model.trim="formData.email",
-				:state="checkValidityState($v.formData.email)"
-			)
-		b-form-group(
-			label="Mot de passe",
-			label-for="password",
-			:invalid-feedback="formData.invalid.password",
-			:state="checkValidityState($v.formData.password)"
-		)
-			b-form-input(
-				id="password",
-				type="text",
-				v-model.trim="formData.password",
-				:state="checkValidityState($v.formData.password)"
+				id="mail",
+				type="email",
+				v-model.trim="formData.mail",
+				:state="checkValidityState($v.formData.mail)"
 			)
 </template>
 
@@ -66,8 +54,7 @@ export default {
 			validations: {
 				nom: {required},
 				prenom: {required},
-				mail: {required},
-				password: {required},
+				mail: {required}
 			},
 		}
 	}

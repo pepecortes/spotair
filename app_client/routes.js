@@ -48,9 +48,10 @@ module.exports = function(passport) {
 	
 	// static routes
 	router.use('/dist', express.static(path.join(__dirname, 'dist')))
+	router.use('/static', express.static(path.join(__dirname, 'static')))
 	
 	// favicon
-	router.use(favicon(path.join(__dirname, 'dist/icons', 'favicon.ico')))
+	router.use(favicon(path.join(__dirname, 'static/icons', 'favicon.ico')))
 	
 	// admin
 	router.all(

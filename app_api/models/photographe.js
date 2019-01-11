@@ -1,6 +1,6 @@
 module.exports = function(sequelize, DataTypes) {
 	
-	const Model = sequelize.define("photographhe", {
+	const Model = sequelize.define("photographe", {
 		id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -36,6 +36,11 @@ module.exports = function(sequelize, DataTypes) {
 					if (val.length < 2) throw new Error("Please choose a longer password")
 				}
 			}
+		},
+		
+		text: {
+			type: DataTypes.VIRTUAL,
+			get() {return this.prenom + ", " + this.nom}
 		},
 		
 		invalid: {

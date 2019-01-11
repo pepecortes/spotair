@@ -38,6 +38,8 @@
 				v-model.trim="formData.mail",
 				:state="checkValidityState($v.formData.mail)"
 			)
+			
+		b-button(type="button", variant="outline-danger", v-on:click="resetPassword") Reset password
 </template>
 
 <script>
@@ -57,6 +59,14 @@ export default {
 				mail: {required}
 			},
 		}
+	},
+	
+	methods: {
+	
+		// Reset the  password: NOT YET IMPLEMENTED
+		resetPassword() {
+			alert("NOT IMPLEMENTED")
+		},
 	}
 	
 }

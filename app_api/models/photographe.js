@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt');
+
 module.exports = function(sequelize, DataTypes) {
 	
 	const Model = sequelize.define("photographe", {
@@ -23,7 +25,11 @@ module.exports = function(sequelize, DataTypes) {
 			defaultValue: "",
 		},
 		
-		password_hash: DataTypes.STRING,
+		passwordHash: {
+			type: DataTypes.STRING,
+			allowNull: true,
+			defaultValue: null
+		},
 		
 		password: {
 			type: DataTypes.VIRTUAL,
@@ -73,7 +79,17 @@ module.exports = function(sequelize, DataTypes) {
 		]
   }
 
-	);
+	)
+	
+	// Class function. Generate a hash out of the given password
+	Model.generateHash = async function(password) {
+		return await bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+	}
+	
+	// Check it the given password is valid
+	Model.prototype.validPassword = async function(password) {
+		return await bcrypt.compareSync(password, this.passwordHash)
+	}
 	
 	return Model;
 };

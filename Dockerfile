@@ -14,6 +14,7 @@ COPY ./app.js ./
 COPY ./*.json ./
 COPY ./.env ./
 COPY ./webpack.config.js ./
+COPY ./passport.config.js ./
 
 # Install dependencies
 # Copy both package.json AND package-lock.json

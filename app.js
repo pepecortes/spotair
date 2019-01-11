@@ -17,6 +17,7 @@ const HTTPStatus = require('http-status');
 // TEST
 var passport = require('passport');
 var flash    = require('connect-flash');
+// require('./passport.config')(passport); // pass passport for configuration
 
 // start debugging
 const debug = require('debug')('app:main');

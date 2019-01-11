@@ -9,7 +9,7 @@ const sendJSON = require('../../app_lib/helpers').sendJSON;
 const dbReplaceReference = require('../../app_lib/helpers').dbReplaceReference;
 
 const Model = db.Photographe;
-const fieldsArray = ['nom', 'prenom', 'mail', 'password'];
+const fieldsArray = ['nom', 'prenom', 'mail', 'passwordHash'];
 const hasForeignKeys = false;
 
 var exports = {};

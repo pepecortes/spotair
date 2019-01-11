@@ -1,12 +1,13 @@
 <template lang="pug">
-	div(id='home')
-	
+	div(id='admin')
 		b-nav(fill, tabs)
-			b-nav-item(href="/admin") Admin
-			b-nav-item(to="/login") Login
-					
+			b-nav-item(href="/") Home
+			b-nav-item(to="/admin/aerodromes") Aérodromes
+			b-nav-item(to="/admin/themes") Thèmes
+			b-nav-item(to="/admin/annees") Années
+			b-nav-item(to="/admin/galeries") Galeries
+			b-nav-item(to="/admin/photographes") Photographes
 		router-view
-		
 </template>
 
 <script>
@@ -20,8 +21,8 @@ export default {}
 	box-sizing: border-box;
 }
 
-#home {
-	max-width: 600px;
+#admin {
+	max-width: 800px;
 	margin: 0 auto;
 	line-height: 1.4;
 	font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -29,4 +30,5 @@ export default {}
 	-moz-osx-font-smoothing: grayscale;
 	color: $vue-blue;
 }
+
 </style>

@@ -17,6 +17,7 @@ const ctrlAerodromes = require('../controllers/aerodromes');
 const ctrlAnnees = require('../controllers/annees');
 const ctrlThemes = require('../controllers/themes');
 const ctrlGaleries = require('../controllers/galeries');
+const ctrlPhotographes = require('../controllers/photographes');
 
 module.exports = function(passport) {
 
@@ -61,6 +62,14 @@ module.exports = function(passport) {
 	router.delete('/galeries/:id(\\d+)', ctrlGaleries.delete);
 	router.get('/galeries/spotair', ctrlGaleries.allSpotair);
 	router.put('/galeries/fusion/source/:sourceid(\\d+)/destination/:destinationid(\\d+)', ctrlGaleries.fusion);
+
+	// Photographes
+	router.get('/photographes', ctrlPhotographes.all);
+	router.get('/photographes/:id(\\d+)', ctrlPhotographes.byId);
+	router.get('/photographes/fresh', ctrlPhotographes.fresh);
+	router.post('/photographes', ctrlPhotographes.create);
+	router.put('/photographes/:id(\\d+)', ctrlPhotographes.update);
+	router.delete('/photographes/:id(\\d+)', ctrlPhotographes.delete);
 
 	// Not found
 	router.all('/*', ctrlNotFound);

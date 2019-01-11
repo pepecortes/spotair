@@ -4,9 +4,11 @@
 * @desc Each of them are single page applications with their routers coded in
 * @module /app_client/routes
 */
-const debug = require('debug')('app:client:routes');
-var express = require('express');
-const sendJSON = require('../app_lib/helpers').sendJSON;
+const path = require('path')
+const favicon = require('serve-favicon');
+const debug = require('debug')('app:client:routes')
+const sendJSON = require('../app_lib/helpers').sendJSON
+var express = require('express')
 
 // Define the NOT FOUND controller
 const ctrlNotFound = function(req, res) {
@@ -16,24 +18,52 @@ const ctrlNotFound = function(req, res) {
 	sendJSON.notFound(res, err)
 }
 
-// TEST
-const ctrlTest = function(req, res) {
-	try {
-		console.log("dirname is " + __dirname)
-		const x = __dirname + 'index.html'
-		console.log("x is " + x)
-		console.log("in ctrlTest: " + path.join(__dirname, 'index.html'))
-		res.sendFile(path.join(__dirname, 'app_client', 'index.html'))
-	} catch {err => console.log(JSON.stringify(err))}
+const ctrlLogin = function(req, res) {
+	// NOT YET COMPLETED
+	console.log("in ctrlLogin")
+	const message = req.flash('loginMessage')
+	sendJSON.notFound(res, message)
+}
+
+// route middleware to make sure a user is logged in
+function isLoggedIn(req, res, next) {
+	
+	return next() //NOT YET COMPLETED. I DO NOT AUTHENTICATE YET
+	
+
+	// if user is authenticated in the session, carry on 
+	if (req.isAuthenticated())
+			return next();
+
+	// if they aren't redirect them to the home page
+	res.redirect('/');
 }
 
 module.exports = function(passport) {
 
 	// Start the router
-	var router = express.Router();
+	var router = express.Router()
 
 	// Define the routes
-	router.all('/admin', ctrlTest)
+	
+	// static routes
+	router.use('/dist', express.static(path.join(__dirname, 'dist')))
+	
+	// favicon
+	router.use(favicon(path.join(__dirname, 'dist/icons', 'favicon.ico')))
+	
+	// admin
+	router.all(
+		'/admin*',
+		isLoggedIn,
+		(req, res) => res.sendFile(path.join(__dirname, 'admin.html'))
+	)
+	
+	// public
+	router.all(
+		'/*',
+		(req, res) => res.sendFile(path.join(__dirname, 'index.html'))
+	)
 	
 	// Not found
 	router.all('/notfound', ctrlNotFound)

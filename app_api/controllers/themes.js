@@ -2,7 +2,7 @@
  * Themes controller
  * @module /app_api/controllers/themes
  */
-const debug = require('debug')('app:api:controllers:annees');
+const debug = require('debug')('app:api:controllers:themes');
 const db = require('../models/db');
 const crud = require('./crudator');
 const sendJSON = require('../../app_lib/helpers').sendJSON;

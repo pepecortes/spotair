@@ -7,12 +7,16 @@ let VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 module.exports = {
   mode: 'development',
-  entry: './app_client/src/index.js',
+  
+  entry: {
+		app: './app_client/src/index.js',
+		adminApp: './app_client/src/admin.js',
+	},
+	
   output: {
-		
     path: path.resolve(__dirname, 'app_client/dist/'),
-    filename: 'bundle.js'
-  },
+    filename: '[name].js',
+   },
   
 	devtool: 'eval-source-map',
 	 

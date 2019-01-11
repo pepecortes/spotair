@@ -33,6 +33,7 @@ const Aerodrome = sequelize.import('./aerodrome');
 const Annee = sequelize.import('./annee');
 const Galerie = sequelize.import('./galerie');
 const Theme = sequelize.import('./theme');
+const Photographe = sequelize.import('./photographe');
 
 // then, build all the relationships between Models
 Annee.hasMany(Galerie, {onDelete: 'RESTRICT'});
@@ -50,6 +51,7 @@ module.exports.Aerodrome = Aerodrome;
 module.exports.Annee = Annee;
 module.exports.Galerie = Galerie;
 module.exports.Theme = Theme;
+module.exports.Photographe = Photographe;
 
 // synchro with the mysql server
 // disable or enable logs for dev

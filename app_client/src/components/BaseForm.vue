@@ -83,8 +83,7 @@ export default {
 		
 		// Get all the available options for the SELECT control
 		getSelectOptions(preselected) {
-			var vm = this;
-			//if (!preselected) vm.selection = null
+			var vm = this
 			this.axios.get(vm.apiURL)
 				.then((response) => {
 					vm.selectOptions = response.data

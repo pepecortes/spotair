@@ -3,8 +3,7 @@ import VueRouter from 'vue-router'
 import BootstrapVue from 'bootstrap-vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import Home from './Home.vue'
-import Login from './components/Login.vue'
+import Admin from './Admin.vue'
 
 // Import bootstrap style
 import 'bootstrap/dist/css/bootstrap.css'
@@ -21,11 +20,19 @@ Vue.use(BootstrapVue)
 Vue.use(VueAxios, axios)
 
 // Define or input route components
-//import AerodromeForm from './components/AerodromeForm.vue'
+import AerodromeForm from './components/AerodromeForm.vue'
+import ThemeForm from './components/ThemeForm.vue'
+import AnneeForm from './components/AnneeForm.vue'
+import GalerieForm from './components/GalerieForm.vue'
+import PhotographeForm from './components/PhotographeForm.vue'
 
 // Define the routes
 const routes = [
-  { path: '/login', component: Login },
+  { path: '/admin/aerodromes', component: AerodromeForm },
+  { path: '/admin/themes', component: ThemeForm },
+  { path: '/admin/annees', component: AnneeForm },
+  { path: '/admin/galeries', component: GalerieForm },
+  { path: '/admin/photographes', component: PhotographeForm },
 ]
 
 // Create the router
@@ -36,9 +43,9 @@ const router = new VueRouter({
 
 // Start the Vue Root instance
 const app = new Vue({
-  el: '#home',
-  components: { Home },
-  template: '<Home/>',
+  el: '#admin',
+  components: { Admin },
+  template: '<Admin/>',
   router,
 })
 

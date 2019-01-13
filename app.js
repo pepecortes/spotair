@@ -8,16 +8,15 @@ const morgan       = require('morgan');
 const cookieParser = require('cookie-parser');
 const RedisStore = require('connect-redis')(session) 
 const path = require('path');
-//const favicon = require('serve-favicon');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const HTTPStatus = require('http-status');
 
 // TEST
-var passport = require('passport');
-var flash    = require('connect-flash');
-// require('./passport.config')(passport); // pass passport for configuration
+var passport = require('passport')
+var flash    = require('connect-flash')
+require('./config/passport.config')(passport)
 
 // start debugging
 const debug = require('debug')('app:main');
@@ -37,15 +36,15 @@ const redisOptions = {
 app.use(session({
 	store: new RedisStore(redisOptions),
 	secret: process.env.COOKIE_SESSION_SECRET,
-	resave: false
+	resave: false,
+	saveUninitialized: false
 }))
-app.use(logger('combined'));
+app.use(logger('tiny'));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }))
 
 // required for passport
-app.use(session({ secret: 'icannotkeepasecretsekret' })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session

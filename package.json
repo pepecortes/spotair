@@ -5,8 +5,8 @@
   "scripts": {
     "start": "NODE_PATH=. node ./bin/www",
     "test": "./node_modules/.bin/mocha --reporter spec",
-    "build": "webpack",
-    "watch": "webpack --watch"
+    "build": "webpack --config ./app_client/webpack.config.js",
+    "watch": "webpack --config ./app_client/webpack.config.js --watch"
   },
   "dependencies": {
     "axios": "^0.18.0",  

@@ -27,6 +27,7 @@ const ctrlLogin = function(req, res) {
 
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
+	debug("authenticating...")
 	
 	return next() //NOT YET COMPLETED. I DO NOT AUTHENTICATE YET
 	
@@ -36,6 +37,7 @@ function isLoggedIn(req, res, next) {
 			return next();
 
 	// if they aren't redirect them to the home page
+	debug("sorry;  not authenticated")
 	res.redirect('/');
 }
 
@@ -52,6 +54,18 @@ module.exports = function(passport) {
 	
 	// favicon
 	router.use(favicon(path.join(__dirname, 'static/icons', 'favicon.ico')))
+	
+	// TEST AUTHENTICATION
+	router.get(
+		'/login*',
+		(req, res) => res.sendFile(path.join(__dirname, 'login.html'))
+	)
+	
+	router.post('/login*',
+		passport.authenticate('local', { session: false, failureRedirect: '/login', failureFlash: true }),
+		//passport.authenticate('local', { failureRedirect: '/login' }),
+		function(req, res) {console.log("function gets called"); sendJSON.ok(res, req.user)}
+	)
 	
 	// admin
 	router.all(

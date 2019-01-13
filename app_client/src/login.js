@@ -1,10 +1,8 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router'
+//import VueRouter from 'vue-router'
 import BootstrapVue from 'bootstrap-vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import Home from './Home.vue'
-import Login from './components/Login.vue'
 
 // Import bootstrap style
 import 'bootstrap/dist/css/bootstrap.css'
@@ -16,30 +14,30 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 Vue.config.productionTip = false
 
-Vue.use(VueRouter)
+//Vue.use(VueRouter)
 Vue.use(BootstrapVue)
 Vue.use(VueAxios, axios)
 
 // Define or input route components
-//import AerodromeForm from './components/AerodromeForm.vue'
+import Login from './components/Login.vue'
 
-// Define the routes
-const routes = [
-  //{ path: '/login', component: Login },
-]
+//// Define the routes
+//const routes = [
+  ////{ path: '/login', component: Login },
+//]
 
-// Create the router
-const router = new VueRouter({
-	mode: 'history',
-  routes: routes
-})
+//// Create the router
+//const router = new VueRouter({
+	//mode: 'history',
+  //routes: routes
+//})
 
 // Start the Vue Root instance
 const app = new Vue({
-  el: '#home',
-  components: { Home },
-  template: '<Home/>',
-  router,
+  el: '#login',
+  components: { Login },
+  template: '<Login/>',
+  //router,
 })
 
 

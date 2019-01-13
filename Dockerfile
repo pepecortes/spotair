@@ -13,18 +13,17 @@ RUN ["apt-get", "install", "-y", "nano"]
 COPY ./app.js ./
 COPY ./*.json ./
 COPY ./.env ./
-COPY ./webpack.config.js ./
-COPY ./passport.config.js ./
 
 # Install dependencies
 # Copy both package.json AND package-lock.json
 # COPY package*.json ./
-RUN npm install
-RUN npm install -g nodemon@^1.18.8
+RUN ["npm", "install"]
+RUN ["npm", "install", "-g", "nodemon@^1.18.8"]
 
 # If you are building your code for production
 # RUN npm install --only=production
 
 EXPOSE $PORT
+
 #CMD [ "npm", "start" ]
 CMD ["nodemon"]

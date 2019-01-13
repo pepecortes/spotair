@@ -3,7 +3,7 @@
 	
 		b-nav(fill, tabs)
 			b-nav-item(href="/admin") Admin
-			b-nav-item(to="/login") Login
+			b-nav-item(href="/login") Login
 					
 		router-view
 		

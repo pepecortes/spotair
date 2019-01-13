@@ -70,6 +70,7 @@ module.exports = function(passport) {
 	router.post('/photographes', ctrlPhotographes.create);
 	router.put('/photographes/:id(\\d+)', ctrlPhotographes.update);
 	router.delete('/photographes/:id(\\d+)', ctrlPhotographes.delete);
+	router.get('/photographes/byLogin/:username', ctrlPhotographes.byLogin)
 
 	// Not found
 	router.all('/*', ctrlNotFound);

@@ -18,22 +18,18 @@ exports = Object.assign(exports, basicAPI);
 
 // building other API calls...
 
-//// fusion
-///**
- //* @function fusion
- //* @description delete the theme source: all galeries that
- //* referred to the source now refer to the destination
- //* @param {number} sourceid
- //* @param {number} destinationid
- //* @return {Object} {updated, removed}: 
- //* number of deleted sources and number of modified galeries
- //*/
-//exports.fusion =  async function(req, res) {
-	//const sourceid = req.params.sourceid;
-	//const destinationid = req.params.destinationid;
-	//dbReplaceReference(Galerie, Model, "themeId", sourceid, destinationid)
-		//.then(result => sendJSON.ok(res, result))
-		//.catch(err => sendJSON.serverError(res, err))
-//}
+// get user by login name
+/**
+ * @function byLogin
+ * @description Returns the photographe that has the given username
+ * @param {string} username
+ * @return {Object} The given photographe, or null if not exists
+ */
+exports.byLogin =  async function(req, res) {
+	const username = req.params.username
+	Model.findOne({where: {mail: username}})
+		.then(result => sendJSON.ok(res, result))
+		.catch(err => sendJSON.serverError(res, err))
+}
 
 module.exports = exports;

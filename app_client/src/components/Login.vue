@@ -1,37 +1,45 @@
 <template lang="pug">
 	div(id="login")
 		h1 Login
-		input(type="text", name="username", v-model="input.username", placeholder="Username")
-		input(type="password", name="password", v-model="input.password", placeholder="Password")
-		button(type="button" v-on:click="login()") Login
+			input(type="text", name="username", v-model="input.username", placeholder="Username")
+			input(type="password", name="password", v-model="input.password", placeholder="Password")
+			button(type="button" v-on:click="login()") Login
 </template>
 
 <script>
+
+	// TEST TO BE COMPLETED
+	const XXX = "http://localhost:3000/login"
+
 	export default {
 		name: 'Login',
+		
 		data() {
-				return {
-						input: {
-								username: "",
-								password: ""
-						}
+			return {
+				input: {
+					username: "",
+					password: ""
 				}
+			}
 		},
+		
 		methods: {
-				login() {
-						if(this.input.username != "" && this.input.password != "") {
-								if(this.input.username == this.$parent.mockAccount.username && this.input.password == this.$parent.mockAccount.password) {
-										this.$emit("authenticated", true);
-										this.$router.replace({ name: "secure" });
-								} else {
-										console.log("The username and / or password is incorrect");
-								}
-						} else {
-								console.log("A username and password must be present");
-						}
-				}
+			
+			login() {
+				console.log("IN LOGIN")
+				var vm = this
+				try {
+					vm.axios.post(XXX, vm.input)
+						.then((response) => {
+							console.log("response " + JSON.stringify(reponse.data))
+						})
+						.catch(err => {console.log("IN ERROR"); vm.showAlert(axiosErrorToString(err), "danger")})
+					} catch(e) {console.log("error : " + e)}
+			},
+			
 		}
 	}
+	
 </script>
 
 <style scoped>

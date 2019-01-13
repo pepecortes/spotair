@@ -9,12 +9,14 @@ module.exports = {
   mode: 'development',
   
   entry: {
-		app: './app_client/src/index.js',
-		adminApp: './app_client/src/admin.js',
+		app: './src/index.js',
+		app: path.resolve(__dirname, 'src/index.js'),
+		loginApp: path.resolve(__dirname, 'src/login.js'),
+		adminApp: path.resolve(__dirname, 'src/admin.js'),
 	},
 	
   output: {
-    path: path.resolve(__dirname, 'app_client/dist/'),
+    path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
    },
   

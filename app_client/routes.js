@@ -62,9 +62,13 @@ module.exports = function(passport) {
 	)
 	
 	router.post('/login*',
-		passport.authenticate('local', { session: false, failureRedirect: '/login', failureFlash: true }),
-		//passport.authenticate('local', { failureRedirect: '/login' }),
-		function(req, res) {console.log("function gets called"); sendJSON.ok(res, req.user)}
+		passport.authenticate('local', {
+			session: false,
+			successRedirect: '/admin',
+			failureRedirect: '/login',
+			failureFlash: true
+		}),
+		function(req, res) {console.log("function gets called")}
 	)
 	
 	// admin

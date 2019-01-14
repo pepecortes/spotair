@@ -52,21 +52,7 @@ module.exports = function(passport) {
 						////if (!user.validPassword(password)) return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata(null, false, req.flash('loginMessage', 'No user found.'))
 						return done(null, user)
 					})
-					.catch(err => done(err)) 
-				
-				
-				
-				//User.findOne({where: {mail: username}})
-					//.then((user) => {
-						//debug("in then")
-						//if (!user) return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
-						////if (!user.validPassword(password)) return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
-						//return done(null, user);
-					//})
-					//.catch(err => {debug("in catch"); done(err)})
-					
-					
-					
+					.catch(err => done(err))
 				} catch (e) {
 					debug("error: " + e)
 				}

@@ -1,15 +1,13 @@
 <template lang="pug">
 	div(id="login")
 		h1 Login
-			input(type="text", name="username", v-model="input.username", placeholder="Username")
-			input(type="password", name="password", v-model="input.password", placeholder="Password")
-			button(type="button" v-on:click="login()") Login
+			b-form(@submit="submit", method="post")
+				b-form-input(type="text", name="username", v-model="input.username", placeholder="Username")
+				b-form-input(type="password", name="password", v-model="input.password", placeholder="Password")
+				b-button(type="submit") Login
 </template>
 
 <script>
-
-	// TEST TO BE COMPLETED
-	const XXX = "http://localhost:3000/login"
 
 	export default {
 		name: 'Login',
@@ -17,36 +15,29 @@
 		data() {
 			return {
 				input: {
-					username: "",
-					password: ""
+					username: "koko@gmail.com",
+					password: "membres"
 				}
 			}
 		},
 		
 		methods: {
 			
-			login() {
-				console.log("IN LOGIN")
-				var vm = this
-				try {
-					vm.axios.post(XXX, vm.input)
-						.then((response) => {
-							console.log("response " + JSON.stringify(reponse.data))
-						})
-						.catch(err => {console.log("IN ERROR"); vm.showAlert(axiosErrorToString(err), "danger")})
-					} catch(e) {console.log("error : " + e)}
-			},
-			
-		}
+			submit(evt) {
+				// note how the "POST" method id the form is needed
+				// to accommodate 'passport' API
+				this.axios.post("/login", this.input)			
+			}
+		}	
 	}
 	
 </script>
 
 <style scoped>
     #login {
-        width: 500px;
+        width: 400px;
         border: 1px solid #CCCCCC;
-        background-color: #FFFFFF;
+        background-color: #AFFFFF;
         margin: auto;
         margin-top: 50px;
         padding: 20px;

@@ -8,23 +8,21 @@ module.exports = function(passport) {
     // passport needs ability to serialize and unserialize users out of session
 
     // used to serialize the user for the session
-    passport.serializeUser(function(user, done) {
-        done(null, 2)
-    });
+    passport.serializeUser((user, done) => done(null, user.id));
     
     // used to deserialize the user
     passport.deserializeUser(function(id, done) {
-			done(err, {user: "donpepe"})
-        //User.findById(id, function(err, user) {
-            //done(err, user);
-        //});
-    });
-
-    // =========================================================================
-    // LOCAL LOGIN =============================================================
-    // =========================================================================
-    // we are using named strategies since we have one for login and one for signup
-    // by default, if there was no name, it would just be called 'local'
+			try {
+				const url = process.env.API_URL + 'photographes/' + id
+				axios.get(url)
+					.then(response => {
+						const user = response.data
+						if(!user) done(null, false, req.flash('loginMessage', 'No user found.'))
+						done(null, user)
+					})
+					.catch(err => done(err))
+			} catch(e) { debug(e) }
+    })
 
     passport.use(new LocalStrategy(
 			{
@@ -34,12 +32,6 @@ module.exports = function(passport) {
         //passReqToCallback : true // allows us to pass back the entire request to the callback
 			},
     function(username, password, done) { // callback with email and password from our form
-			
-			debug("antes de done: " + arguments.length)
-			//return done("I have a error")
-			//return done(null, false)
-			//return done(null, false, req.flash('loginMessage', 'No user found.'))
-			//return done(null, { message: 'ca marche' }) 
 
 			// find a user whose email is the same as the forms email
 			// we are checking to see if the user trying to login already exists

@@ -1,0 +1,17 @@
+ENV=development
+PORT=3000
+PORT_DB_ADMIN=3001
+
+DB_HOST=db
+DB_USER=root
+DB_PASSWORD=example
+DB_DATABASE=spotair
+
+DEBUG=www,app.*
+DEBUG_COLORS=true
+
+REDIS_HOST=redis
+REDIS_PORT=6379
+COOKIE_SESSION_SECRET=noseguardarunsecreto
+
+API_URL=http://localhost:3000/api/

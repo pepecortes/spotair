@@ -18,35 +18,28 @@ const ctrlNotFound = function(req, res) {
 	sendJSON.notFound(res, err)
 }
 
-const ctrlLogin = function(req, res) {
-	// NOT YET COMPLETED
-	console.log("in ctrlLogin")
-	const message = req.flash('loginMessage')
-	sendJSON.notFound(res, message)
+// authentication middleware functions
+
+// the route requires authenticated user
+function requireLogin(req, res, next) {
+	if (req.isAuthenticated()) return next()
+	// TO BE COMPLETED: give feedback to user
+	debug("sorry:  not authenticated")
+	res.redirect('/login');
 }
 
-// route middleware to make sure a user is logged in
-function isLoggedIn(req, res, next) {
-	debug("authenticating...")
-	
-	return next() //NOT YET COMPLETED. I DO NOT AUTHENTICATE YET
-	
-
-	// if user is authenticated in the session, carry on 
-	if (req.isAuthenticated())
-			return next();
-
-	// if they aren't redirect them to the home page
-	debug("sorry;  not authenticated")
-	res.redirect('/');
+// the route requires an admin user
+function requireAdmin(req, res, next) {
+	if (req.user.isAdmin) return next()
+	// TO BE COMPLETED: give feedback to user
+	debug("sorry:  not admin")
+	res.redirect('/login');
 }
 
 module.exports = function(passport) {
 
 	// Start the router
 	var router = express.Router()
-
-	// Define the routes
 	
 	// static routes
 	router.use('/dist', express.static(path.join(__dirname, 'dist')))
@@ -55,32 +48,29 @@ module.exports = function(passport) {
 	// favicon
 	router.use(favicon(path.join(__dirname, 'static/icons', 'favicon.ico')))
 	
-	// TEST AUTHENTICATION
-	router.get(
-		'/login*',
+	// login pages
+	router.get('/login*',
 		(req, res) => res.sendFile(path.join(__dirname, 'login.html'))
 	)
 	
 	router.post('/login*',
 		passport.authenticate('local', {
-			session: false,
+			session: true,
 			successRedirect: '/admin',
 			failureRedirect: '/login',
 			failureFlash: true
-		}),
-		function(req, res) {console.log("function gets called")}
+		})
 	)
 	
-	// admin
-	router.all(
-		'/admin*',
-		isLoggedIn,
+	// admin pages
+	router.all('/admin*',
+		requireLogin,
+		requireAdmin,
 		(req, res) => res.sendFile(path.join(__dirname, 'admin.html'))
 	)
 	
-	// public
-	router.all(
-		'/*',
+	// public pages
+	router.all('/*',
 		(req, res) => res.sendFile(path.join(__dirname, 'index.html'))
 	)
 	

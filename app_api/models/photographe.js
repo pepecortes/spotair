@@ -1,5 +1,15 @@
 const bcrypt = require('bcrypt');
 
+/**
+ * Photographe / user model
+ * @module /app_api/models/photographe
+ * @param {string}		nom
+ * @param {string}		prenom
+ * @param {email}		mail
+ * @param {boolean}	isAdmin
+ * @param {string}		passwordHash
+ * @param {virtual}			text					- (summary of all fields)
+ */
 module.exports = function(sequelize, DataTypes) {
 	
 	const Model = sequelize.define("photographe", {
@@ -25,7 +35,11 @@ module.exports = function(sequelize, DataTypes) {
 			defaultValue: "",
       unique: true,
 		},
-		
+		isAdmin: {
+			type: DataTypes.BOOLEAN,
+			allowNull: false,
+			defaultValue: false,
+		},
 		passwordHash: {
 			type: DataTypes.STRING,
 			allowNull: true,
@@ -47,7 +61,7 @@ module.exports = function(sequelize, DataTypes) {
 		
 		text: {
 			type: DataTypes.VIRTUAL,
-			get() {return this.prenom + ", " + this.nom}
+			get() {return this.prenom + " " + this.nom}
 		},
 		
 		invalid: {

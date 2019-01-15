@@ -13,9 +13,8 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const HTTPStatus = require('http-status');
 
-// TEST
-var passport = require('passport')
-var flash    = require('connect-flash')
+const passport = require('passport')
+const flash    = require('connect-flash')
 require('./config/passport.config')(passport)
 
 // start debugging
@@ -30,7 +29,8 @@ var app = express();
 
 const redisOptions = {
 	host:process.env.REDIS_HOST,
-	port:process.env.REDIS_PORT
+	port:process.env.REDIS_PORT,
+	logErrors:true
 }
 
 app.use(session({
@@ -39,6 +39,7 @@ app.use(session({
 	resave: false,
 	saveUninitialized: false
 }))
+
 app.use(logger('tiny'));
 app.use(cookieParser());
 app.use(bodyParser.json());

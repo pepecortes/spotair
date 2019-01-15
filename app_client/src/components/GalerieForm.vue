@@ -4,7 +4,7 @@
 	block input
 		b-form-group(
 			label="Sortie associative",
-			label-for="isSpotair",
+			label-for="isspotair",
 			:invalid-feedback="formData.invalid.isspotair",
 			:state="checkValidityState($v.formData.isspotair)"
 		)

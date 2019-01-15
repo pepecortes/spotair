@@ -38,6 +38,14 @@
 				v-model.trim="formData.mail",
 				:state="checkValidityState($v.formData.mail)"
 			)
+		b-form-group(
+			label="Admin",
+			label-for="isAdmin"
+		)
+			b-form-checkbox(
+				id="isAdmin",
+				v-model="formData.isAdmin"
+			)
 			
 		b-button(type="button", variant="outline-danger", v-on:click="resetPassword") Reset password
 </template>

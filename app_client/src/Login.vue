@@ -39,7 +39,6 @@
 
 <script>
 import { validationMixin } from 'vuelidate'
-import { confirmDialog, axiosErrorToString } from '../lib/common'
 import { required, email } from "vuelidate/lib/validators"
 
 export default {

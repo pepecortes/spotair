@@ -4,7 +4,6 @@ import BootstrapVue from 'bootstrap-vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import Home from './Home.vue'
-import Login from './components/Login.vue'
 
 // Import bootstrap style
 import 'bootstrap/dist/css/bootstrap.css'

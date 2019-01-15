@@ -19,7 +19,7 @@ Vue.use(BootstrapVue)
 Vue.use(VueAxios, axios)
 
 // Define or input route components
-import Login from './components/Login.vue'
+import Login from './Login.vue'
 
 //// Define the routes
 //const routes = [

@@ -53,11 +53,21 @@ export default {
 		}
 	},
 	
+	beforeCreate: function() {
+		console.log("ESTOY EN BEFORE CREATE")
+		const out = this.$session.getAll()
+		//this.$session.set('pepe', 'putoamo')
+		//const out = this.$session.get('pepe')
+		console.log("SESSION TEST " + JSON.stringify(out))
+	},
+	
 	methods: {
 		submit(evt) {
 			// note how the "POST" method id the form is needed
 			// to accommodate 'passport' API
-			this.axios.post("/login", this.input)			
+			this.axios.post("/login", this.input)
+				.then(response => console.log(response.data))
+				.catch(err => console.log(err))
 		}
 	}, 
 	

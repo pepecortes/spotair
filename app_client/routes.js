@@ -49,9 +49,17 @@ module.exports = function(passport) {
 	router.use(favicon(path.join(__dirname, 'static/icons', 'favicon.ico')))
 	
 	// login pages
+	router.get('/login/failed',
+		(req, res) => sendJSON.ok(res,{pepe: "failed"})
+	)
+	
+	router.get('/login/ok',
+		requireLogin,
+		(req, res) => sendJSON.ok(res,{pepe: "success"})
+	)
+	
 	router.get('/login*',
 		(req, res) => {
-			// TEST
 			debug("EN GET LOGIN " + req.flash('loginMessage'))
 			res.sendFile(path.join(__dirname, 'login.html'))
 		}
@@ -60,8 +68,8 @@ module.exports = function(passport) {
 	router.post('/login*',
 		passport.authenticate('local', {
 			session: true,
-			successRedirect: '/admin',
-			failureRedirect: '/login',
+			successRedirect: '/login/ok',
+			failureRedirect: '/login/failed',
 			failureFlash: true
 		})
 	)
@@ -70,7 +78,7 @@ module.exports = function(passport) {
 	router.all('/admin*',
 		requireLogin,
 		requireAdmin,
-		(req, res) => res.sendFile(path.join(__dirname, 'admin.html'))
+		(req, res) => {debug("logged user is: " + req.user.mail);res.sendFile(path.join(__dirname, 'admin.html'))}
 	)
 	
 	// public pages

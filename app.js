@@ -4,8 +4,7 @@
 require('dotenv').load();
 const express = require('express');
 const session = require('express-session')
-const morgan       = require('morgan');
-const cookieParser = require('cookie-parser');
+const morgan       = require('morgan')
 const RedisStore = require('connect-redis')(session) 
 const path = require('path');
 const logger = require('morgan');
@@ -40,9 +39,8 @@ app.use(session({
 	saveUninitialized: false
 }))
 
-app.use(logger('tiny'));
-app.use(cookieParser());
-app.use(bodyParser.json());
+app.use(logger('tiny'))
+app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
 // required for passport

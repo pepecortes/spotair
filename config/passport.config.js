@@ -52,7 +52,7 @@ module.exports = function(passport) {
 			// find a user whose email is the same as the forms email
 			// we are checking to see if the user trying to login already exists
 			try {
-				const url = process.env.API_URL + 'photographex/byLogin/' + username
+				const url = process.env.API_URL + 'photographes/byLogin/' + username
 				axios.get(url)
 					.then(response => {
 						//debug("..." + JSON.stringify(response))

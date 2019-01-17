@@ -19,7 +19,8 @@ exports.sendJSON = {
 	response: (res, status, content) =>	res.status(status).json(content),
 	ok: (res, content) => res.status(HTTPStatus.OK).json(content),
 	notFound: (res, err) => res.status(HTTPStatus.NOT_FOUND).json(err.toString()),
-	serverError: (res, err) => res.status(HTTPStatus.INTERNAL_SERVER_ERROR).json(err.toString())
+	serverError: (res, err) => res.status(HTTPStatus.INTERNAL_SERVER_ERROR).json(err.toString()),
+	unauthorized: (res, err) => res.status(HTTPStatus.UNAUTHORIZED).json(err.toString())
 }
 
 /**

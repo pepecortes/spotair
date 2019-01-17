@@ -23,8 +23,9 @@ debug("starting application");
 // connect database and models
 require('./app_api/models/db');
 
-// start the express application
+// start the express application + renderer (pug)
 var app = express();
+app.set("view engine", "pug")
 
 const redisOptions = {
 	host:process.env.REDIS_HOST,

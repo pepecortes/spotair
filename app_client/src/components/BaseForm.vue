@@ -8,6 +8,7 @@ import pluralize from 'pluralize'
 import { validationMixin } from 'vuelidate'
 import { confirmDialog, axiosErrorToString } from '../lib/common'
 import { required } from "vuelidate/lib/validators"
+import { alertMixin } from './AlertMixin'
 
 
 export default {
@@ -21,7 +22,6 @@ export default {
 			formData: null,
 			selectOptions: [],
 			selection: null, // the original selection, in case you need to reset
-			alert: {show: false, text: "", type: "warning"},
 			fusionTarget: null, // self-explanatory
 			validations: {}, // overriden by each form validations object
 		}
@@ -46,18 +46,12 @@ export default {
 		checkValidityState(input) {
 			return (input.$dirty)? !input.$invalid : null
 		},
-		
 				
 		// Init the form with the given selection and reset validators
 		initForm() {
 			this.formData = JSON.parse(JSON.stringify(this.selection))
 			this.fusionTarget = null
 			this.$v.$reset()
-		},
-		
-		// Displays a form alert/info message 
-		showAlert(message="", type="warning") {
-			this.alert = {show: true, text: message, type: type}
 		},
 		
 		newClicked() {
@@ -178,7 +172,8 @@ export default {
 	
 	// Mixin for validation. It will not have any effect without definition
 	// of a 'validations' object (vuelidate)
-	mixins: [validationMixin],
+	// Mixin for the alert messages
+	mixins: [validationMixin, alertMixin],
 	
 	validations() {
 		// Validity checks for the fusion target

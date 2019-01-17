@@ -18,7 +18,7 @@ export function confirmDialog(msg) {
 export function axiosErrorToString(error) {
 	var output = ""
 	if (error.response) {
-		// The request was made and the server responded with a status code that falls out of the range of 2xx
+		// The request was made and the server responded with a status code that falls out of the range of 2xx		
 		output = error.response.data
   } else if (error.request) {
 		// The request was made but no response was received

@@ -10,29 +10,25 @@ const debug = require('debug')('app:client:routes')
 const sendJSON = require('../app_lib/helpers').sendJSON
 var express = require('express')
 
-// Define the NOT FOUND controller
-const ctrlNotFound = function(req, res) {
-	// NOT YET COMPLETED
-	console.log("in ctrlNotFound")
-	const err = "Error: route not found"
-	sendJSON.notFound(res, err)
-}
-
 // authentication middleware functions
+
+// sets the url to be redirected after succesful authentication
+// uses req.session
+function setRedirect(req, res, next) {
+	req.session.redirect = req.originalUrl
+	return next()
+}
 
 // the route requires authenticated user
 function requireLogin(req, res, next) {
 	if (req.isAuthenticated()) return next()
-	// TO BE COMPLETED: give feedback to user
-	debug("sorry:  not authenticated")
 	res.redirect('/login');
 }
 
 // the route requires an admin user
 function requireAdmin(req, res, next) {
 	if (req.user.isAdmin) return next()
-	// TO BE COMPLETED: give feedback to user
-	debug("sorry:  not admin")
+	req.flash('loginMessage', 'admin requis')
 	res.redirect('/login');
 }
 
@@ -49,45 +45,42 @@ module.exports = function(passport) {
 	router.use(favicon(path.join(__dirname, 'static/icons', 'favicon.ico')))
 	
 	// login pages
-	router.get('/login/failed',
-		(req, res) => sendJSON.ok(res,{pepe: "failed"})
-	)
-	
-	router.get('/login/ok',
-		requireLogin,
-		(req, res) => sendJSON.ok(res,{pepe: "success"})
-	)
-	
 	router.get('/login*',
-		(req, res) => {
-			debug("EN GET LOGIN " + req.flash('loginMessage'))
-			res.sendFile(path.join(__dirname, 'login.html'))
-		}
+		(req, res) => res.render(path.join(__dirname, 'Login'), {message: req.flash('loginMessage')})
+	)
+	
+	router.get('/logout*',
+		(req, res) => {req.logout(); res.redirect('/')}
 	)
 	
 	router.post('/login*',
 		passport.authenticate('local', {
 			session: true,
-			successRedirect: '/login/ok',
-			failureRedirect: '/login/failed',
+			failureRedirect: '/login',
 			failureFlash: true
-		})
+		}),
+		(req, res) => res.redirect(req.session.redirect)
 	)
 	
 	// admin pages
 	router.all('/admin*',
+		setRedirect,
 		requireLogin,
 		requireAdmin,
-		(req, res) => {debug("logged user is: " + req.user.mail);res.sendFile(path.join(__dirname, 'admin.html'))}
+		(req, res) => res.sendFile(path.join(__dirname, 'admin.html'))
+	)
+	
+	// membres pages
+	router.all('/pictadd*',
+		setRedirect,
+		requireLogin,
+		(req, res) => res.sendFile(path.join(__dirname, 'pictadd.html'))
 	)
 	
 	// public pages
 	router.all('/*',
 		(req, res) => res.sendFile(path.join(__dirname, 'index.html'))
 	)
-	
-	// Not found
-	router.all('/notfound', ctrlNotFound)
 	
 	return router
 }

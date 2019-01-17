@@ -1,0 +1,16 @@
+html
+
+	head
+		title spotair_login
+	
+	body
+		div
+			h3 #{message}
+			form(action="/login", method="POST")
+				p username:
+				input(type="email", name="username")
+				p password:
+				input(type="password", name="password")
+				br
+				br
+				button(type="submit") Login

@@ -9,10 +9,9 @@ module.exports = {
   mode: 'development',
   
   entry: {
-		app: './src/index.js',
 		app: path.resolve(__dirname, 'src/index.js'),
-		loginApp: path.resolve(__dirname, 'src/login.js'),
 		adminApp: path.resolve(__dirname, 'src/admin.js'),
+		pictaddApp: path.resolve(__dirname, 'src/pictadd.js'),
 	},
 	
   output: {

@@ -62,6 +62,13 @@ module.exports = function(passport) {
 		(req, res) => res.redirect(req.session.redirect)
 	)
 	
+	// returns the currently logged user
+	router.get('/profile',
+		requireLogin,
+		(req, res) => res.sendFile(path.join(__dirname, 'admin.html'))
+		//(req, res) => res.sendJSON.ok({it: "works"})
+	)
+	
 	// admin pages
 	router.all('/admin*',
 		setRedirect,

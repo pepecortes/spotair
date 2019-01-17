@@ -1,25 +1,35 @@
 <template lang="pug">
-	div(id="pictadd")
-		h3 pictadd
-
+	div(id='pictadd')
+		b-nav(fill, tabs)
+			b-nav-item(href="/") Home
+			b-nav-item(to="/pictadd/profile") Profile
+			
+		router-view
 </template>
 
 <script>
 
 export default {
 	name: 'Pictadd',
-
 }
 	
 </script>
 
-<style>
-	#login {
-		max-width: 300px;
-		margin: 0 auto;
-		line-height: 1.4;
-		font-family: 'Avenir', Helvetica, Arial, sans-serif;
-		-webkit-font-smoothing: antialiased;
-		-moz-osx-font-smoothing: grayscale;;
-	}
+<style lang="scss">
+@import './variables.scss';
+
+*, *::before, *::after {
+	box-sizing: border-box;
+}
+
+#pictadd {
+	max-width: 800px;
+	margin: 0 auto;
+	line-height: 1.4;
+	font-family: 'Avenir', Helvetica, Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	color: $vue-blue;
+}
+
 </style>

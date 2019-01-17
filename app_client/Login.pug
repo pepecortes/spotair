@@ -8,9 +8,9 @@ html
 			h3 #{message}
 			form(action="/login", method="POST")
 				p username:
-				input(type="email", name="username")
-				p password:
-				input(type="password", name="password")
+				input(type="email", name="username", placeholder="email")
+				p password (required):
+				input(type="password", name="password", placeholder="password")
 				br
 				br
 				button(type="submit") Login

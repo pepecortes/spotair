@@ -32,20 +32,25 @@ exports.byLogin =  async function(req, res) {
 		.catch(err => sendJSON.serverError(res, err))
 }
 
+/**
+ * @function setPassword
+ * @description Sets the password of the user given by its id
+ * @param {string} req.param.id
+ * @param {string} req.body.password
+ * @return {Object} The given photographe, or null if fails
+ */
 exports.setPassword = async function(req, res) {
 	const id = req.params.id
-	var photographe = createInstanceFromQuery(req.body, ["password"])
-	debug(JSON.stringify(photographe))
-	return
-	//Model
-		//.findByPk(req.params.id, includeOption)
-		//.then(record => {
-			//record = Object.assign(record, updates);
-			//return record.save();
-		//})
-		//.then(record => Model.findByPk(record.id, includeOption))
-		//.then(record => sendJSON.ok(res, record))
-		//.catch(err => sendJSON.serverError(res, err));
+	const password = req.body.password	
+	Model.findByPk(id)
+		.then(record =>  {
+			record.password = password
+			debug(JSON.stringify(record))
+			return record.save()
+		})
+		.then(record => Model.findByPk(id))
+		.then(record => sendJSON.ok(res, record))
+		.catch(err => sendJSON.serverError(res, err))
 }
 
 module.exports = exports;

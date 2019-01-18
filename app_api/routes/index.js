@@ -69,6 +69,7 @@ module.exports = function(passport) {
 	router.get('/photographes/fresh', ctrlPhotographes.fresh);
 	router.post('/photographes', ctrlPhotographes.create);
 	router.put('/photographes/:id(\\d+)', ctrlPhotographes.update);
+	router.put('/photographes/setPassword/:id(\\d+)', ctrlPhotographes.setPassword)
 	router.delete('/photographes/:id(\\d+)', ctrlPhotographes.delete);
 	router.get('/photographes/byLogin/:username', ctrlPhotographes.byLogin)
 

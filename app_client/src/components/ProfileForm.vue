@@ -19,7 +19,7 @@
 			b-form-group(
 				label="Nouveu mot de passe",
 				label-for="password",
-				invalid-feedback="Requis",
+				invalid-feedback="Requis. Plus de 8 charactères",
 				:state="checkValidityState($v.password)"
 			)
 				b-form-input(
@@ -49,7 +49,7 @@
 import { alertMixin } from './AlertMixin'
 import { validationMixin } from 'vuelidate'
 import { confirmDialog, axiosErrorToString } from '../lib/common'
-import { required } from "vuelidate/lib/validators"
+import { required, minLength } from "vuelidate/lib/validators"
 
 export default {
 	
@@ -84,8 +84,19 @@ export default {
 		modifyPasswordClicked() {
       if (!confirmDialog("confirmer ?")) return
 			this.$v.$touch()
-      //this.updatePasword()
+      this.updatePassword()
 		},
+		
+		updatePassword() {
+			var vm = this
+			console.log(process.env.API_URL + "/setPassword/" + vm.user.id)
+			vm.axios.put(process.env.API_URL + "photographes/setPassword/" + vm.user.id, {password: vm.password})
+				.then(function(response) {
+					vm.showAlert("Mot de passe modifié", "success")
+				})
+				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+		},
+		
 	},
 	
 	validations() {
@@ -93,7 +104,7 @@ export default {
 		const confirmPassword = (value, vm) => (value == vm.password)
 		
 		return {
-			password: {required},
+			password: {required, minLength: minLength(8)},
 			passwordConfirm: {confirmPassword}
 		}
 	}

@@ -15,16 +15,19 @@ console.log("START TEST")
 const Photographe = require('../app_api/models/db').Photographe;
 
 const id = 1
-const password = "membres"
+const password = "membrexx"
 
 Photographe.findByPk(id)
 	.then(record =>  {
-		console.log(JSON.stringify(record))
 		record.password = password
-		console.log(JSON.stringify(record))
+		return record.save()
 	})
+	.then(record => Photographe.findByPk(record.id))
+	.then(record => console.log(JSON.stringify(record)))//dsendJSON.ok(res, record))
+	.catch(err => console.log(err.toString()))//sendJSON.serverError(res, err));
+	
 	//.then((valid) => console.log("VALID IS " + valid))
-	.catch(e => console.log(e.toString()))
+	//.catch(e => console.log(e.toString()))
 
 
 //var photographe = createInstanceFromQuery(req.body, ["password"])

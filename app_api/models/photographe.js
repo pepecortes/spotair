@@ -56,7 +56,7 @@ module.exports = function(sequelize, DataTypes) {
 				this.setDataValue('passwordHash', hash)
 			},			
 			validate: {
-				isLongEnough: (val) => {
+				isLongEnough: val => {
 					if (val.length < 8) throw new Error("Le mot de passe doit avoir plus de 8 charactères")
 				}
 			}

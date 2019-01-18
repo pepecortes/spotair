@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const debug = require('debug')('app:api:model:photographe');
 
 /**
  * Photographe / user model
@@ -48,13 +49,15 @@ module.exports = function(sequelize, DataTypes) {
 		
 		password: {
 			type: DataTypes.VIRTUAL,
-			set: (val) => {
+			set(val) {
 				this.setDataValue('password', val)
-				this.setDataValue('password_hash', this.salt + val)
-			},
+				const salt = bcrypt.genSaltSync(10)
+				const hash = bcrypt.hashSync(val, salt)
+				this.setDataValue('passwordHash', hash)
+			},			
 			validate: {
 				isLongEnough: (val) => {
-					if (val.length < 2) throw new Error("Please choose a longer password")
+					if (val.length < 8) throw new Error("Le mot de passe doit avoir plus de 8 charactères")
 				}
 			}
 		},

@@ -20,25 +20,25 @@
 				label="Nouveu mot de passe",
 				label-for="password",
 				invalid-feedback="Requis",
-				:state="!$v.password.$invalid"
+				:state="checkValidityState($v.password)"
 			)
 				b-form-input(
 					id="password",
 					type="password",
 					v-model="password",
-					:state="!$v.password.$invalid"
+					:state="checkValidityState($v.password)"
 				)
 			b-form-group(
 				label="Confirmer mot de passe",
 				label-for="passwordConfirm",
 				invalid-feedback="Mots de passe différents",
-				:state="$v.passwordConfirm.$invalid"
+				:state="checkValidityState($v.passwordConfirm)"
 			)
 				b-form-input(
 					id="passwordConfirm",
 					type="password",
 					v-model="passwordConfirm",
-					:state="$v.passwordConfirm.$invalid"
+					:state="checkValidityState($v.passwordConfirm)"
 				)
 				
 			b-button(type="button", variant="outline-danger", v-on:click="modifyPasswordClicked") Changer mot de passe
@@ -65,32 +65,32 @@ export default {
 		}
 	},
 	
-	mounted () {this.getCurrentUser()},
+	mounted () {this.$v.$reset(); this.getCurrentUser()},
 	
 	methods: {
 		
 		checkValidityState(input) {
-			console.log("in check validity: " + JSON.stringify(input))
 			return (input.$dirty)? !input.$invalid : null
 		},
 		
 		// gets the current logged user by requesting the session data
 		getCurrentUser() {
 			var vm = this
-			this.axios.get('/profile')
+			vm.axios.get('/profile')
 				.then(response => vm.user = response.data)
 				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
 		},
 		
 		modifyPasswordClicked() {
       if (!confirmDialog("confirmer ?")) return
-      //this.remove()
+			this.$v.$touch()
+      //this.updatePasword()
 		},
 	},
 	
 	validations() {
 				
-		const confirmPassword = (value, vm) => (value != vm.password)
+		const confirmPassword = (value, vm) => (value == vm.password)
 		
 		return {
 			password: {required},

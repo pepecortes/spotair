@@ -32,4 +32,20 @@ exports.byLogin =  async function(req, res) {
 		.catch(err => sendJSON.serverError(res, err))
 }
 
+exports.setPassword = async function(req, res) {
+	const id = req.params.id
+	var photographe = createInstanceFromQuery(req.body, ["password"])
+	debug(JSON.stringify(photographe))
+	return
+	//Model
+		//.findByPk(req.params.id, includeOption)
+		//.then(record => {
+			//record = Object.assign(record, updates);
+			//return record.save();
+		//})
+		//.then(record => Model.findByPk(record.id, includeOption))
+		//.then(record => sendJSON.ok(res, record))
+		//.catch(err => sendJSON.serverError(res, err));
+}
+
 module.exports = exports;

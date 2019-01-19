@@ -7,6 +7,7 @@
 			b-nav-item(to="/admin/annees") Années
 			b-nav-item(to="/admin/galeries") Galeries
 			b-nav-item(to="/admin/photographes") Photographes
+			b-nav-item(href="/doc") Documentation
 		router-view
 </template>
 

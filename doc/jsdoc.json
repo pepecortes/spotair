@@ -9,6 +9,6 @@
     "encoding": "utf8",
     "destination": "./api_doc/",
     "recurse": true,
-    "tutorials": "./api_doc/tutorials"
+    "tutorials": "./tutorials"
   }
 }

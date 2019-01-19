@@ -35,8 +35,9 @@
   * @module /app_api/crudator
   */</span>
 <span class="hljs-keyword">const</span> debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'app:api:crudator'</span>);
+<span class="hljs-keyword">const</span> pickObject = <span class="hljs-built_in">require</span>(<span class="hljs-string">'lodash'</span>).pick;
 <span class="hljs-keyword">const</span> sendJSON = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../../app_lib/helpers'</span>).sendJSON;
-<span class="hljs-keyword">const</span> pickObject = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../../app_lib/helpers'</span>).pickObject;
+<span class="hljs-keyword">const</span> createInstanceFromQuery = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../../app_lib/helpers'</span>).createInstanceFromQuery;
 
 <span class="hljs-comment">/**
  * @function
@@ -44,7 +45,7 @@
  * @param {Object} Model - Model for which we are creating the API calls
  * @param {String[]} fieldsArray - fields that compose the model (excluding virtuals, but including foreingKeys)
  * @param {Boolean} hasForeignKeys - whether or not the Model has foreignKeys (needed for eager loading or related Models) 
- * @return {Object} object made of functions(req, res) (all, byId,
+ * @return {Object} object made of functions(req, res) (all, byId, fresh,
  * create, udpate, delete) ready to be used in API routes
  */</span> 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">buildBasicAPI</span>(<span class="hljs-params">Model, fieldsArray, hasForeignKeys</span>) </span>{
@@ -65,23 +66,40 @@
 			Model
 				.findByPk(id, includeOption)
 				.then(<span class="hljs-function">(<span class="hljs-params">record</span>) =&gt;</span> {
-					<span class="hljs-keyword">if</span> (record) <span class="hljs-keyword">return</span> sendJSON.ok(res, record);
-					<span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> sendJSON.notFound(res, <span class="hljs-string">"id: "</span> + id + <span class="hljs-string">" not found"</span>);
+					<span class="hljs-keyword">if</span> (record) sendJSON.ok(res, record);
+					<span class="hljs-keyword">else</span> sendJSON.notFound(res, <span class="hljs-string">"id: "</span> + id + <span class="hljs-string">" not found"</span>);
 				})
 				.catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> sendJSON.serverError(res, err));
+		},</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Returns a fresh instance of the Model (not existing in the db yet)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		fresh: <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
+			<span class="hljs-keyword">var</span> instance = Model.build();
+			sendJSON.ok(res, instance);
 		},
 		
 		<span class="hljs-attr">create</span>: <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
-			<span class="hljs-keyword">const</span> record = pickObject(req.body, fieldsArray);
+			<span class="hljs-keyword">const</span> record = createInstanceFromQuery(req.body, fieldsArray)
 			Model
-				.create(record)
-				.then(<span class="hljs-function"><span class="hljs-params">record</span> =&gt;</span> Model.findByPk(record.id, includeOption))
-				.then(<span class="hljs-function"><span class="hljs-params">record</span> =&gt;</span> sendJSON.ok(res, record))
+				.findOrCreate({<span class="hljs-attr">where</span>: record})
+				.spread(<span class="hljs-function">(<span class="hljs-params">record, created</span>) =&gt;</span> sendJSON.ok(res, record))
 				.catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> {sendJSON.serverError(res, err)});
 		},
 		
 		<span class="hljs-attr">update</span>: <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
-			<span class="hljs-keyword">var</span> updates = pickObject(req.body, fieldsArray);
+			<span class="hljs-keyword">var</span> updates = createInstanceFromQuery(req.body, fieldsArray);
 			Model
 				.findByPk(req.params.id, includeOption)
 				.then(<span class="hljs-function"><span class="hljs-params">record</span> =&gt;</span> {

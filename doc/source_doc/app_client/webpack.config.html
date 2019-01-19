@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>webpack.config.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="../docco/docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>webpack.config.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/**
+ * Webpack configuration file xxx
+ */</span>
+<span class="hljs-keyword">let</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>);
+<span class="hljs-keyword">let</span> Dotenv = <span class="hljs-built_in">require</span>(<span class="hljs-string">'dotenv-webpack'</span>);
+<span class="hljs-keyword">let</span> VueLoaderPlugin = <span class="hljs-built_in">require</span>(<span class="hljs-string">'vue-loader/lib/plugin'</span>);
+
+<span class="hljs-built_in">module</span>.exports = {
+  <span class="hljs-attr">mode</span>: <span class="hljs-string">'development'</span>,
+  
+  <span class="hljs-attr">entry</span>: {
+		<span class="hljs-attr">app</span>: path.resolve(__dirname, <span class="hljs-string">'src/index.js'</span>),
+		<span class="hljs-attr">adminApp</span>: path.resolve(__dirname, <span class="hljs-string">'src/admin.js'</span>),
+		<span class="hljs-attr">pictaddApp</span>: path.resolve(__dirname, <span class="hljs-string">'src/pictadd.js'</span>),
+	},
+	
+  <span class="hljs-attr">output</span>: {
+    <span class="hljs-attr">path</span>: path.resolve(__dirname, <span class="hljs-string">'dist'</span>),
+    <span class="hljs-attr">filename</span>: <span class="hljs-string">'[name].js'</span>,
+   },
+  
+	<span class="hljs-attr">devtool</span>: <span class="hljs-string">'eval-source-map'</span>,
+	 
+	<span class="hljs-attr">resolve</span>: {
+    <span class="hljs-attr">alias</span>: {
+      <span class="hljs-string">'vue$'</span>: <span class="hljs-string">'vue/dist/vue.esm.js'</span> <span class="hljs-comment">// 'full vue + compiler for development: consider runtime only for production</span>
+    }
+  },
+  
+  <span class="hljs-attr">module</span>: {
+    <span class="hljs-attr">rules</span>: [
+      {
+        <span class="hljs-attr">test</span>: <span class="hljs-regexp">/\.vue$/</span>,
+        <span class="hljs-attr">loader</span>: <span class="hljs-string">'vue-loader'</span>
+      },
+      {
+        <span class="hljs-attr">test</span>: <span class="hljs-regexp">/\.pug$/</span>,
+        <span class="hljs-attr">use</span>: [<span class="hljs-string">'pug-plain-loader'</span>]
+      },      
+      {
+        <span class="hljs-attr">test</span>: <span class="hljs-regexp">/\.scss|.css$/</span>,
+        <span class="hljs-attr">use</span>: [ <span class="hljs-comment">// loaders for style files</span>
+					<span class="hljs-string">'vue-style-loader'</span>,
+					<span class="hljs-string">'css-loader'</span>,
+					<span class="hljs-string">'sass-loader'</span>
+        ],
+      },
+    ],
+  },
+  
+  <span class="hljs-attr">plugins</span>: [
+    <span class="hljs-keyword">new</span> Dotenv(),
+    <span class="hljs-keyword">new</span> VueLoaderPlugin()
+  ]
+};</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

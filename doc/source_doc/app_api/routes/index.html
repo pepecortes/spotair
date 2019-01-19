@@ -35,7 +35,8 @@
 * @module /app_api/index
 */</span>
 <span class="hljs-keyword">const</span> debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'app:api:routes'</span>);
-<span class="hljs-keyword">var</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>);</pre></div></div>
+<span class="hljs-keyword">var</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>);
+<span class="hljs-keyword">const</span> sendJSON = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../../app_lib/helpers'</span>).sendJSON;</pre></div></div>
             
         </li>
         
@@ -46,14 +47,14 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>Import all the controllers </p>
+              <p>Define the NOT FOUND controller</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> ctrlAerodromes = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../controllers/aerodromes'</span>);
-<span class="hljs-keyword">var</span> ctrlAnnees = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../controllers/annees'</span>);
-<span class="hljs-keyword">var</span> ctrlThemes = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../controllers/themes'</span>);
-<span class="hljs-keyword">var</span> ctrlGaleries = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../controllers/galeries'</span>);</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> ctrlNotFound = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+	<span class="hljs-keyword">const</span> err = <span class="hljs-string">"Error: API call not found"</span>
+	sendJSON.notFound(res, err)
+}</pre></div></div>
             
         </li>
         
@@ -64,11 +65,17 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>Start the router</p>
+              <p>Import all the controllers </p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> router = express.Router();</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> ctrlAerodromes = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../controllers/aerodromes'</span>);
+<span class="hljs-keyword">const</span> ctrlAnnees = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../controllers/annees'</span>);
+<span class="hljs-keyword">const</span> ctrlThemes = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../controllers/themes'</span>);
+<span class="hljs-keyword">const</span> ctrlGaleries = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../controllers/galeries'</span>);
+<span class="hljs-keyword">const</span> ctrlPhotographes = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../controllers/photographes'</span>);
+
+<span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">passport</span>) </span>{</pre></div></div>
             
         </li>
         
@@ -79,9 +86,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>Define the routes</p>
+              <p>Start the router</p>
 
             </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> router = express.Router();</pre></div></div>
             
         </li>
         
@@ -92,16 +101,9 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>Aerodromes </p>
+              <p>Define the routes</p>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>router.get(<span class="hljs-string">'/aerodromes'</span>, ctrlAerodromes.all);
-router.get(<span class="hljs-string">'/aerodromes/:id(\\d+)'</span>, ctrlAerodromes.byId);
-router.post(<span class="hljs-string">'/aerodromes'</span>, ctrlAerodromes.create);
-router.put(<span class="hljs-string">'/aerodromes/:id(\\d+)'</span>, ctrlAerodromes.update);
-router.delete(<span class="hljs-string">'/aerodromes/:id(\\d+)'</span>, ctrlAerodromes.delete);
-router.put(<span class="hljs-string">'/aerodromes/fusion/source/:sourceid(\\d+)/destination/:destinationid(\\d+)'</span>, ctrlAerodromes.fusion);</pre></div></div>
             
         </li>
         
@@ -112,15 +114,17 @@ router.put(<span class="hljs-string">'/aerodromes/fusion/source/:sourceid(\\d+)/
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>Annees</p>
+              <p>Aerodromes </p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>router.get(<span class="hljs-string">'/annees'</span>, ctrlAnnees.all);
-router.get(<span class="hljs-string">'/annees/:id(\\d+)'</span>, ctrlAnnees.byId);
-router.post(<span class="hljs-string">'/annees'</span>, ctrlAnnees.create);
-router.put(<span class="hljs-string">'/annees/:id(\\d+)'</span>, ctrlAnnees.update);
-router.delete(<span class="hljs-string">'/annees/:id(\\d+)'</span>, ctrlAnnees.delete);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	router.get(<span class="hljs-string">'/aerodromes'</span>, ctrlAerodromes.all);
+	router.get(<span class="hljs-string">'/aerodromes/:id(\\d+)'</span>, ctrlAerodromes.byId);
+	router.get(<span class="hljs-string">'/aerodromes/fresh'</span>, ctrlAerodromes.fresh);
+	router.post(<span class="hljs-string">'/aerodromes'</span>, ctrlAerodromes.create);
+	router.put(<span class="hljs-string">'/aerodromes/:id(\\d+)'</span>, ctrlAerodromes.update);
+	router.delete(<span class="hljs-string">'/aerodromes/:id(\\d+)'</span>, ctrlAerodromes.delete);
+	router.put(<span class="hljs-string">'/aerodromes/fusion/source/:sourceid(\\d+)/destination/:destinationid(\\d+)'</span>, ctrlAerodromes.fusion);</pre></div></div>
             
         </li>
         
@@ -131,15 +135,17 @@ router.delete(<span class="hljs-string">'/annees/:id(\\d+)'</span>, ctrlAnnees.d
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>Themes</p>
+              <p>Annees</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>router.get(<span class="hljs-string">'/themes'</span>, ctrlThemes.all);
-router.get(<span class="hljs-string">'/themes/:id(\\d+)'</span>, ctrlThemes.byId);
-router.post(<span class="hljs-string">'/themes'</span>, ctrlThemes.create);
-router.put(<span class="hljs-string">'/themes/:id(\\d+)'</span>, ctrlThemes.update);
-router.delete(<span class="hljs-string">'/themes/:id(\\d+)'</span>, ctrlThemes.delete);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	router.get(<span class="hljs-string">'/annees'</span>, ctrlAnnees.all);
+	router.get(<span class="hljs-string">'/annees/:id(\\d+)'</span>, ctrlAnnees.byId);
+	router.get(<span class="hljs-string">'/annees/fresh'</span>, ctrlAnnees.fresh);
+	router.post(<span class="hljs-string">'/annees'</span>, ctrlAnnees.create);
+	router.put(<span class="hljs-string">'/annees/:id(\\d+)'</span>, ctrlAnnees.update);
+	router.delete(<span class="hljs-string">'/annees/:id(\\d+)'</span>, ctrlAnnees.delete);
+	router.put(<span class="hljs-string">'/annees/fusion/source/:sourceid(\\d+)/destination/:destinationid(\\d+)'</span>, ctrlAnnees.fusion);</pre></div></div>
             
         </li>
         
@@ -150,19 +156,79 @@ router.delete(<span class="hljs-string">'/themes/:id(\\d+)'</span>, ctrlThemes.d
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
+              <p>Themes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	router.get(<span class="hljs-string">'/themes'</span>, ctrlThemes.all);
+	router.get(<span class="hljs-string">'/themes/:id(\\d+)'</span>, ctrlThemes.byId);
+	router.get(<span class="hljs-string">'/themes/fresh'</span>, ctrlThemes.fresh);
+	router.post(<span class="hljs-string">'/themes'</span>, ctrlThemes.create);
+	router.put(<span class="hljs-string">'/themes/:id(\\d+)'</span>, ctrlThemes.update);
+	router.delete(<span class="hljs-string">'/themes/:id(\\d+)'</span>, ctrlThemes.delete);
+	router.put(<span class="hljs-string">'/themes/fusion/source/:sourceid(\\d+)/destination/:destinationid(\\d+)'</span>, ctrlThemes.fusion);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
               <p>Galeries</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>router.get(<span class="hljs-string">'/galeries'</span>, ctrlGaleries.all);
-router.get(<span class="hljs-string">'/galeries/:id(\\d+)'</span>, ctrlGaleries.byId);
-router.post(<span class="hljs-string">'/galeries'</span>, ctrlGaleries.create);
-router.put(<span class="hljs-string">'/galeries/:id(\\d+)'</span>, ctrlGaleries.update);
-router.delete(<span class="hljs-string">'/galeries/:id(\\d+)'</span>, ctrlGaleries.delete);
-router.get(<span class="hljs-string">'/galeries/spotair'</span>, ctrlGaleries.allSpotair);
+            <div class="content"><div class='highlight'><pre>	router.get(<span class="hljs-string">'/galeries'</span>, ctrlGaleries.all);
+	router.get(<span class="hljs-string">'/galeries/:id(\\d+)'</span>, ctrlGaleries.byId);
+	router.get(<span class="hljs-string">'/galeries/fresh'</span>, ctrlGaleries.fresh);
+	router.post(<span class="hljs-string">'/galeries'</span>, ctrlGaleries.create);
+	router.put(<span class="hljs-string">'/galeries/:id(\\d+)'</span>, ctrlGaleries.update);
+	router.delete(<span class="hljs-string">'/galeries/:id(\\d+)'</span>, ctrlGaleries.delete);
+	router.get(<span class="hljs-string">'/galeries/spotair'</span>, ctrlGaleries.allSpotair);
+	router.put(<span class="hljs-string">'/galeries/fusion/source/:sourceid(\\d+)/destination/:destinationid(\\d+)'</span>, ctrlGaleries.fusion);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Photographes</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	router.get(<span class="hljs-string">'/photographes'</span>, ctrlPhotographes.all);
+	router.get(<span class="hljs-string">'/photographes/:id(\\d+)'</span>, ctrlPhotographes.byId);
+	router.get(<span class="hljs-string">'/photographes/fresh'</span>, ctrlPhotographes.fresh);
+	router.post(<span class="hljs-string">'/photographes'</span>, ctrlPhotographes.create);
+	router.put(<span class="hljs-string">'/photographes/:id(\\d+)'</span>, ctrlPhotographes.update);
+	router.put(<span class="hljs-string">'/photographes/setPassword/:id(\\d+)'</span>, ctrlPhotographes.setPassword)
+	router.delete(<span class="hljs-string">'/photographes/:id(\\d+)'</span>, ctrlPhotographes.delete);
+	router.get(<span class="hljs-string">'/photographes/byLogin/:username'</span>, ctrlPhotographes.byLogin)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Not found</p>
 
-<span class="hljs-built_in">module</span>.exports = router;</pre></div></div>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	router.all(<span class="hljs-string">'/*'</span>, ctrlNotFound);
+	
+	<span class="hljs-keyword">return</span> router
+}</pre></div></div>
             
         </li>
         

@@ -28,6 +28,7 @@
     "pug": "^2.0.3",
     "sequelize": "^4.41.2",
     "serve-favicon": "^2.5.0",
+    "serve-index": "^1.9.1",
     "vue": "^2.5.17",
     "vue-axios": "^2.1.4",
     "vue-loader": "^15.4.2",

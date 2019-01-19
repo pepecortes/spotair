@@ -36,25 +36,9 @@
  */</span> 
 <span class="hljs-keyword">const</span> debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'app:lib:helpers'</span>);
 <span class="hljs-keyword">const</span> HTTPStatus = <span class="hljs-built_in">require</span>(<span class="hljs-string">'http-status'</span>);
+<span class="hljs-keyword">const</span> pickObject = <span class="hljs-built_in">require</span>(<span class="hljs-string">'lodash'</span>).pick;
 
 <span class="hljs-keyword">var</span> exports = {};
-
-<span class="hljs-comment">/**
- * @function
- * @desc Builds an object out of another by picking only the selected properties 
- * @param {Object} object - The input object
- * @param {string[]} arrayOfProperties - The array of the properties you want to pick up
- * @returns {Object} Returns an object containing the selected properties only
- * @example
- * pickObject({a: 1, b: 2, c: 3}, ['a', 'b']) = {a: 1, b: 2}
- */</span>
-exports.pickObject = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">pickObject</span>(<span class="hljs-params">object, arrayOfProperties</span>) </span>{
-	<span class="hljs-keyword">var</span> output = {};
-	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> p <span class="hljs-keyword">of</span> arrayOfProperties) {
-		<span class="hljs-keyword">if</span> (object[p]) output[p] = object[p];
-	}
-	<span class="hljs-keyword">return</span> output;
-}
 
 <span class="hljs-comment">/** 
  * @function
@@ -67,8 +51,123 @@ exports.sendJSON = {
 	<span class="hljs-attr">response</span>: <span class="hljs-function">(<span class="hljs-params">res, status, content</span>) =&gt;</span>	res.status(status).json(content),
 	<span class="hljs-attr">ok</span>: <span class="hljs-function">(<span class="hljs-params">res, content</span>) =&gt;</span> res.status(HTTPStatus.OK).json(content),
 	<span class="hljs-attr">notFound</span>: <span class="hljs-function">(<span class="hljs-params">res, err</span>) =&gt;</span> res.status(HTTPStatus.NOT_FOUND).json(err.toString()),
-	<span class="hljs-attr">serverError</span>: <span class="hljs-function">(<span class="hljs-params">res, err</span>) =&gt;</span> res.status(HTTPStatus.INTERNAL_SERVER_ERROR).json(err.toString())
-};
+	<span class="hljs-attr">serverError</span>: <span class="hljs-function">(<span class="hljs-params">res, err</span>) =&gt;</span> res.status(HTTPStatus.INTERNAL_SERVER_ERROR).json(err.toString()),
+	<span class="hljs-attr">unauthorized</span>: <span class="hljs-function">(<span class="hljs-params">res, err</span>) =&gt;</span> res.status(HTTPStatus.UNAUTHORIZED).json(err.toString())
+}
+
+<span class="hljs-comment">/**
+ * @function
+ * @desc Returns the same instance with the associated models IDs completed
+ * @param {Object} Instance - Instance of a given model, perhaps with associations
+ * @return {Object} Instance - Instance with the IDs of the associated models completed
+ * @example {id:3, "theme":{"id":2,"theme":"foo", ...}, ...} -&gt; {id:3, themeId:2, "theme":{"id":2,"theme":"foo", ...}, ...}
+ */</span>
+exports.resolveAssociations = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">instance</span>) </span>{
+	
+	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">extractId</span>(<span class="hljs-params">key, value</span>) </span>{
+		<span class="hljs-keyword">if</span> ((value == <span class="hljs-literal">null</span>) || (<span class="hljs-keyword">typeof</span> value !== <span class="hljs-string">'object'</span>) || !(<span class="hljs-string">'id'</span> <span class="hljs-keyword">in</span> value)) <span class="hljs-keyword">return</span> [<span class="hljs-literal">false</span>, <span class="hljs-literal">false</span>]
+		<span class="hljs-keyword">var</span> keyId = key + <span class="hljs-string">"Id"</span>
+		<span class="hljs-keyword">return</span> [keyId, value.id]
+	}
+	
+	<span class="hljs-keyword">var</span> output = <span class="hljs-built_in">JSON</span>.parse(<span class="hljs-built_in">JSON</span>.stringify(instance));
+	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> key <span class="hljs-keyword">in</span> instance) {
+		<span class="hljs-keyword">var</span> [keyId, value] = extractId(key, instance[key])
+		<span class="hljs-keyword">if</span> (keyId) output[keyId] = value
+	}
+	<span class="hljs-keyword">return</span> output
+	
+}
+
+<span class="hljs-comment">/**
+ * @function
+ * @desc Returns an instance (suitable for database entry) from the given JSON req.body
+ * @desc Attention: models having associated models have to resolve the associated models id: this function will take care of that
+ * @param {Object} reqBody - Body of the http request (x-www-form-urlencoded)
+ * @param {String[]} fieldsArray - The only fields that will be extracted from the request
+ * @return {Object} Instance - Object enclosing the given arrays and with resolved associated models
+ */</span>
+exports.createInstanceFromQuery = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">reqBody, fieldsArray</span>) </span>{
+	<span class="hljs-keyword">const</span> fullRecord = exports.resolveAssociations(reqBody)
+	<span class="hljs-keyword">return</span> pickObject(fullRecord, fieldsArray)
+}
+
+<span class="hljs-comment">/**
+ * @function checkSourceDestination
+ * @description Checks that source and destination exist and are different
+ * @param {Object} Model	- sequelize model we are working with
+ * @param {number} sourceid	- id of source instance
+ * @param {number} destinationid	- id of destination instance
+ * @return An error message if the check is failed. An empty string otherwise
+ */</span>
+exports.checkSourceDestination =  <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">Model, sourceid, destinationid</span>) </span>{
+		<span class="hljs-keyword">var</span> error = [];
+		<span class="hljs-keyword">var</span> src, dest
+		[src, dest] = <span class="hljs-keyword">await</span> <span class="hljs-built_in">Promise</span>.all([
+			Model.findByPk(sourceid),
+			Model.findByPk(destinationid)
+		])
+		<span class="hljs-keyword">if</span> (sourceid == destinationid) error.push(<span class="hljs-string">"source and destination are the same"</span>)
+		<span class="hljs-keyword">if</span> (!dest) error.push(<span class="hljs-string">"destination id: "</span> + destinationid + <span class="hljs-string">" not found"</span>)
+		<span class="hljs-keyword">if</span> (!src) error.push(<span class="hljs-string">"source id: "</span> + sourceid + <span class="hljs-string">" not found"</span>)
+		<span class="hljs-keyword">return</span> (error.length &gt;= <span class="hljs-number">1</span>)? error.join(<span class="hljs-string">', '</span>) : <span class="hljs-string">""</span>
+}
+
+<span class="hljs-comment">/**
+ * @function dbReplaceReference
+ * @description On the given model, replace all references to the source by the destination. Remove source if succesful
+ * @param {Object} Model	- sequelize model where the references will be replaced
+ * @param {Object} refModel	- sequelize model holding the reference
+ * @param {string} refField - name of the field holding the reference to referenceModel
+ * @param {number} sourceid	- reference id to replace and remove
+ * @param {number} destinationid	- new reference id
+ * @return {Object} An object like {updated: 10, idRemoved: "aerodrome"} or null if failed
+ */</span>
+exports.dbReplaceReference = <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">Model, refModel, refField, sourceid, destinationid</span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Check first that the query makes sense: source and destination
+must exist and be different</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">const</span> error = <span class="hljs-keyword">await</span> exports.checkSourceDestination(refModel, sourceid, destinationid)
+	<span class="hljs-keyword">if</span> (error.length &gt; <span class="hljs-number">0</span>) <span class="hljs-keyword">throw</span> <span class="hljs-string">"Error: "</span> + error</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Update the Model table and remove the refModel afterwards</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> output = {}
+	<span class="hljs-keyword">const</span> promise = Model.update({[refField]: destinationid},{<span class="hljs-attr">where</span>: {[refField]: sourceid}})
+		.then(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> {
+			output.updated = result[<span class="hljs-number">0</span>]
+			<span class="hljs-keyword">return</span> refModel.findByPk(sourceid)
+		})
+		.then(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> result.destroy())
+		.then(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> {
+			output.idRemoved = result.id
+			<span class="hljs-keyword">return</span> output
+		})
+	<span class="hljs-keyword">return</span> promise
+}
 
 
 <span class="hljs-built_in">module</span>.exports = exports;</pre></div></div>

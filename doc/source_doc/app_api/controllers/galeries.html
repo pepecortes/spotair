@@ -38,6 +38,7 @@
 <span class="hljs-keyword">const</span> db = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../models/db'</span>);
 <span class="hljs-keyword">const</span> crud = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./crudator'</span>);
 <span class="hljs-keyword">const</span> sendJSON = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../../app_lib/helpers'</span>).sendJSON;
+<span class="hljs-keyword">const</span> dbReplaceReference = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../../app_lib/helpers'</span>).dbReplaceReference;
 
 <span class="hljs-keyword">const</span> Model = db.Galerie;
 <span class="hljs-keyword">const</span> fieldsArray = [<span class="hljs-string">'isSpotair'</span>, <span class="hljs-string">'commentaire'</span>, <span class="hljs-string">'anneeId'</span>, <span class="hljs-string">'themeId'</span>, <span class="hljs-string">'aerodromeId'</span>];
@@ -92,7 +93,50 @@ exports = <span class="hljs-built_in">Object</span>.assign(exports, basicAPI);</
 		.findAll({<span class="hljs-attr">include</span>: [{<span class="hljs-attr">all</span>:<span class="hljs-literal">true</span>}]})
 		.then(<span class="hljs-function"><span class="hljs-params">record</span> =&gt;</span> sendJSON.ok(res, record))
 		.catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> sendJSON.serverError(res, err));
-}
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>fusion</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/**
+ * @function fusion
+ * @description NOT YET IMPLEMENTED
+ * @param {number} sourceid
+ * @param {number} destinationid
+ * @return {Object} {updated, removed}: 
+ * number of deleted sources and number of modified galeries
+ */</span>
+exports.fusion =  <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+	<span class="hljs-keyword">const</span> sourceid = req.params.sourceid;
+	<span class="hljs-keyword">const</span> destinationid = req.params.destinationid;
+	sendJSON.serverError(res, <span class="hljs-string">"METHOD NOT YET IMPLEMENTED"</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>dbReplaceReference(Galerie, Model, “anneeId”, sourceid, destinationid)
+.then(result =&gt; sendJSON.ok(res, result))
+.catch(err =&gt; sendJSON.serverError(res, err))</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>}
 
 <span class="hljs-built_in">module</span>.exports = exports;</pre></div></div>
             

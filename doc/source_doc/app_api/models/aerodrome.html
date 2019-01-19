@@ -52,27 +52,77 @@
     <span class="hljs-attr">nom</span>: {
 			<span class="hljs-attr">type</span>: DataTypes.STRING,
 			<span class="hljs-attr">allowNull</span>: <span class="hljs-literal">false</span>,
+			<span class="hljs-attr">defaultValue</span>: <span class="hljs-string">""</span>,
 		}, 
     <span class="hljs-attr">lieu</span>: {
 			<span class="hljs-attr">type</span>: DataTypes.STRING,
 			<span class="hljs-attr">allowNull</span>: <span class="hljs-literal">false</span>,
+			<span class="hljs-attr">defaultValue</span>: <span class="hljs-string">""</span>,
 		},
 		<span class="hljs-attr">latitude</span>: {
 			<span class="hljs-attr">type</span>: DataTypes.DOUBLE,
 			<span class="hljs-attr">allowNull</span>: <span class="hljs-literal">true</span>,
 			<span class="hljs-attr">defaultValue</span>: <span class="hljs-literal">null</span>,
-			<span class="hljs-attr">validate</span>: {<span class="hljs-attr">min</span>:<span class="hljs-number">-90</span>, <span class="hljs-attr">max</span>:<span class="hljs-number">90</span>}
+			<span class="hljs-attr">validate</span>: {<span class="hljs-attr">min</span>:<span class="hljs-number">-90</span>, <span class="hljs-attr">max</span>:<span class="hljs-number">90</span>},
+			set(val) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>set to null if empty value</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				val = ((val === <span class="hljs-string">""</span>)? <span class="hljs-literal">null</span> : val)
+				<span class="hljs-keyword">this</span>.setDataValue(<span class="hljs-string">'latitude'</span>, val)
+			}
 		},
 		<span class="hljs-attr">longitude</span>: {
 			<span class="hljs-attr">type</span>: DataTypes.DOUBLE,
 			<span class="hljs-attr">allowNull</span>: <span class="hljs-literal">true</span>,
 			<span class="hljs-attr">defaultValue</span>: <span class="hljs-literal">null</span>,
-			<span class="hljs-attr">validate</span>: {<span class="hljs-attr">min</span>:<span class="hljs-number">-180</span>, <span class="hljs-attr">max</span>:<span class="hljs-number">180</span>}
+			<span class="hljs-attr">validate</span>: {<span class="hljs-attr">min</span>:<span class="hljs-number">-180</span>, <span class="hljs-attr">max</span>:<span class="hljs-number">180</span>},
+			set(val) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>set to null if empty value</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				val = ((val === <span class="hljs-string">""</span>)? <span class="hljs-literal">null</span> : val)
+				<span class="hljs-keyword">this</span>.setDataValue(<span class="hljs-string">'longitude'</span>, val)
+			}
 		},
 		
 		<span class="hljs-attr">text</span>: {
 			<span class="hljs-attr">type</span>: DataTypes.VIRTUAL,
 			<span class="hljs-attr">get</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{<span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.nom + <span class="hljs-string">", "</span> + <span class="hljs-keyword">this</span>.lieu}
+		},
+		
+		<span class="hljs-attr">invalid</span>: {
+			<span class="hljs-attr">type</span>: DataTypes.VIRTUAL,
+			get() {
+				<span class="hljs-keyword">return</span> {
+					<span class="hljs-attr">nom</span>: <span class="hljs-string">'Requis'</span>,
+					<span class="hljs-attr">lieu</span>: <span class="hljs-string">'Requis'</span>,
+					<span class="hljs-attr">latitude</span>: <span class="hljs-string">"Doit être entre -90 et +90. Doit être accompagné de longitude"</span>,
+					<span class="hljs-attr">longitude</span>: <span class="hljs-string">"Doit être entre -180 et +180. Doit être accompagné de latitude"</span>,
+				}
+			}
 		},
 		
     <span class="hljs-attr">createdAt</span>: {

@@ -99,7 +99,8 @@ console.error(‘Unable to connect to the database:’, err);
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> Aerodrome = sequelize.import(<span class="hljs-string">'./aerodrome'</span>);
 <span class="hljs-keyword">const</span> Annee = sequelize.import(<span class="hljs-string">'./annee'</span>);
 <span class="hljs-keyword">const</span> Galerie = sequelize.import(<span class="hljs-string">'./galerie'</span>);
-<span class="hljs-keyword">const</span> Theme = sequelize.import(<span class="hljs-string">'./theme'</span>);</pre></div></div>
+<span class="hljs-keyword">const</span> Theme = sequelize.import(<span class="hljs-string">'./theme'</span>);
+<span class="hljs-keyword">const</span> Photographe = sequelize.import(<span class="hljs-string">'./photographe'</span>);</pre></div></div>
             
         </li>
         
@@ -140,7 +141,8 @@ Galerie.belongsTo(Aerodrome);</pre></div></div>
 <span class="hljs-built_in">module</span>.exports.Aerodrome = Aerodrome;
 <span class="hljs-built_in">module</span>.exports.Annee = Annee;
 <span class="hljs-built_in">module</span>.exports.Galerie = Galerie;
-<span class="hljs-built_in">module</span>.exports.Theme = Theme;</pre></div></div>
+<span class="hljs-built_in">module</span>.exports.Theme = Theme;
+<span class="hljs-built_in">module</span>.exports.Photographe = Photographe;</pre></div></div>
             
         </li>
         

@@ -59,7 +59,8 @@
 			},
 			<span class="hljs-attr">commentaire</span>: {
 				<span class="hljs-attr">type</span>: DataTypes.STRING,
-				<span class="hljs-attr">allowNull</span>: <span class="hljs-literal">true</span>,				
+				<span class="hljs-attr">allowNull</span>: <span class="hljs-literal">true</span>,		
+				<span class="hljs-attr">defaultValue</span>: <span class="hljs-literal">null</span>,		
 			},
 			<span class="hljs-attr">text</span>: {
 				<span class="hljs-attr">type</span>: DataTypes.VIRTUAL,
@@ -90,15 +91,29 @@ certain circumstances (i.e. when using Model.update())</p>
 					<span class="hljs-keyword">return</span> output;
 				}
 			},
+		
+			<span class="hljs-attr">invalid</span>: {
+				<span class="hljs-attr">type</span>: DataTypes.VIRTUAL,
+				get() {
+					<span class="hljs-keyword">return</span> {
+						<span class="hljs-attr">isspotair</span>: <span class="hljs-string">'Requis'</span>,
+						<span class="hljs-attr">commentaire</span>: <span class="hljs-string">''</span>,
+						<span class="hljs-attr">annee</span>: <span class="hljs-string">"Requis"</span>,
+						<span class="hljs-attr">theme</span>: <span class="hljs-string">"Requis"</span>,
+						<span class="hljs-attr">aerodrome</span>: <span class="hljs-string">"Requis"</span>,
+					}
+				}
+			},
+		
 			<span class="hljs-attr">createdAt</span>: {
 				<span class="hljs-attr">type</span>: DataTypes.DATE,
-				<span class="hljs-attr">defaultValue</span>: sequelize.literal(<span class="hljs-string">'CURRENT_TIMESTAMP'</span>),
 				<span class="hljs-attr">allowNull</span>: <span class="hljs-literal">false</span>,
+				<span class="hljs-attr">defaultValue</span>: sequelize.literal(<span class="hljs-string">'CURRENT_TIMESTAMP'</span>),
 			},
 			<span class="hljs-attr">updatedAt</span>: {
 				<span class="hljs-attr">type</span>: DataTypes.DATE,
-				<span class="hljs-attr">defaultValue</span>: sequelize.literal(<span class="hljs-string">'CURRENT_TIMESTAMP'</span>),
 				<span class="hljs-attr">allowNull</span>: <span class="hljs-literal">false</span>,
+				<span class="hljs-attr">defaultValue</span>: sequelize.literal(<span class="hljs-string">'CURRENT_TIMESTAMP'</span>),
 			},
 		}, {
 			

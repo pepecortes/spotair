@@ -50,12 +50,16 @@ app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
 // load the api routes
-const routesApi = require('./app_api/routes/index')(passport);
-app.use('/api', routesApi)
+const routesApi = require('./app_api/routes/index')
+app.use('/api', routesApi(passport))
+
+// load the documentation routes
+const routesDoc = require('./doc/routes')
+app.use('/doc', routesDoc(passport))
 
 // routes for the client pages
-const routesClient = require('./app_client/routes')(passport)
-app.use('/', routesClient)
+const routesClient = require('./app_client/routes')
+app.use('/', routesClient(passport))
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>common.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="../../../docco/docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>common.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/**
+ * @function
+ * @desc Replace the javascript confirm() function by your own dialog box.
+ * (notice that, for the time being, we just use the javascript confirm function
+ * @param {string} msg - The message to display in the dialog
+ * @returns {boolean} True if the user pressed OK. False otherwise 
+ */</span>
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">confirmDialog</span>(<span class="hljs-params">msg</span>) </span>{
+	<span class="hljs-keyword">return</span> confirm(msg)
+};
+
+<span class="hljs-comment">/**
+ * @function
+ * @desc Axios error handling: returns the message that has to be presented to the client after an unsuccesful axios http call (see https://github.com/axios/axios)
+ * @param {object} error - The error object catched by during an axios call
+ * @returns {string} The message ready to be presented to the client
+ */</span>
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">axiosErrorToString</span>(<span class="hljs-params">error</span>) </span>{
+	<span class="hljs-keyword">var</span> output = <span class="hljs-string">""</span>
+	<span class="hljs-keyword">if</span> (error.response) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>The request was made and the server responded with a status code that falls out of the range of 2xx        </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		output = error.response.data
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (error.request) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>The request was made but no response was received
+<code>error.request</code> is an instance of XMLHttpRequest in the browser and an instance of http.ClientRequest in node.js</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    output = error.request
+	} <span class="hljs-keyword">else</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Something happened in setting up the request that triggered an Error</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		output = error.message
+	}
+	<span class="hljs-keyword">return</span> <span class="hljs-built_in">JSON</span>.stringify(output)
+}</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

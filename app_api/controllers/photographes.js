@@ -45,7 +45,6 @@ exports.setPassword = async function(req, res) {
 	Model.findByPk(id)
 		.then(record =>  {
 			record.password = password
-			debug(JSON.stringify(record))
 			return record.save()
 		})
 		.then(record => Model.findByPk(id))

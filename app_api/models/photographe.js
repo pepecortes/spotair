@@ -1,6 +1,12 @@
 const bcrypt = require('bcrypt');
 const debug = require('debug')('app:api:model:photographe');
 
+// Generate a hash out of the given password
+function generateHash(password) {
+	const salt = bcrypt.genSaltSync(8)
+	return bcrypt.hashSync(password, salt)
+}
+
 /**
  * Photographe / user model
  * @module /app_api/models/photographe
@@ -44,17 +50,15 @@ module.exports = function(sequelize, DataTypes) {
 		passwordHash: {
 			type: DataTypes.STRING,
 			allowNull: true,
-			defaultValue: null
+			defaultValue: generateHash(process.env.MEMBRES_DEFAULT_PASSWORD)
 		},
 		
 		password: {
 			type: DataTypes.VIRTUAL,
 			set(val) {
 				this.setDataValue('password', val)
-				const salt = bcrypt.genSaltSync(10)
-				const hash = bcrypt.hashSync(val, salt)
-				this.setDataValue('passwordHash', hash)
-			},			
+				this.setDataValue('passwordHash', Model.generateHash(val))
+			},	
 			validate: {
 				isLongEnough: val => {
 					if (val.length < 8) throw new Error("Le mot de passe doit avoir plus de 8 charactères")
@@ -100,13 +104,16 @@ module.exports = function(sequelize, DataTypes) {
 	)
 	
 	// Class function. Generate a hash out of the given password
-	Model.generateHash = async function(password) {
-		return await bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+	Model.generateHash = function(password) {
+		const salt = bcrypt.genSaltSync(8)
+		return bcrypt.hashSync(password, salt)
 	}
 	
 	// Check it the given password is valid
-	Model.prototype.validPassword = async function(password) {
-		return await bcrypt.compareSync(password, this.passwordHash)
+	//Model.prototype.validPassword = async function(password) {
+	Model.prototype.validPassword = function(password) {
+		return bcrypt.compareSync(password, this.passwordHash)
+		//return await bcrypt.compareSync(password, this.passwordHash)
 	}
 	
 	return Model;

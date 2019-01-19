@@ -16,3 +16,5 @@ REDIS_PORT=6379
 COOKIE_SESSION_SECRET=noseguardarunsecreto
 
 API_URL=http://localhost:3000/api/
+
+MEMBRES_DEFAULT_PASSWORD="membres!"

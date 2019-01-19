@@ -30,3 +30,5 @@ I use **bootstrap-vue** for patterns and componentes. I use **vuelidate** for fo
 The application will manage **sessions** through **express-session**. The sessions are stored on a **redis** server using **connect-reddis**
 
 I use **passport.js** as authentication middleware for `express`. I still do not know which authentication strategy I will use
+
+

@@ -18,12 +18,12 @@ const id = 1
 const password = "membrexx"
 
 Photographe.findByPk(id)
-	.then(record =>  {
-		record.password = password
-		return record.save()
+	.then(user =>  {
+		console.log("user : " + user.text)
+		console.log("hashme : " + Photographe.generateHash("koko"))
+		console.log("check pass : " + user.validPassword("membrexx"))
+		
 	})
-	.then(record => Photographe.findByPk(record.id))
-	.then(record => console.log(JSON.stringify(record)))//dsendJSON.ok(res, record))
 	.catch(err => console.log(err.toString()))//sendJSON.serverError(res, err));
 	
 	//.then((valid) => console.log("VALID IS " + valid))

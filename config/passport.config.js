@@ -1,6 +1,6 @@
-const axios = require('axios')
 const LocalStrategy   = require('passport-local').Strategy;
 const debug = require('debug')('app:config:passport')
+const Photographe = require('../app_api/models/db').Photographe
 
 function errorToString(error) {
 	var output = ""
@@ -26,10 +26,8 @@ module.exports = function(passport) {
     
     passport.deserializeUser(function(id, done) {
 			try {
-				const url = process.env.API_URL + 'photographes/' + id
-				axios.get(url)
-					.then(response => {
-						const user = response.data
+				Photographe.findByPk(id)					
+					.then(user => {
 						if(!user) done(null, false, req.flash('loginMessage', 'No user found'))
 						done(null, user)
 					})
@@ -44,12 +42,10 @@ module.exports = function(passport) {
 				// find a user whose email is the same as the forms email
 				// we are checking to see if the user trying to login already exists
 				try {
-					const url = process.env.API_URL + 'photographes/byLogin/' + username
-					axios.get(url)
-						.then(response => {
-							const user = response.data
+					Photographe.findOne({where: {mail: username}})
+						.then(user => {
 							if (!user) return done(null, false, req.flash('loginMessage', 'No user found'))
-							////if (!user.validPassword(password)) return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata(null, false, req.flash('loginMessage', 'No user found.'))
+							if (!user.validPassword(password)) return done(null, false, req.flash('loginMessage', 'Mot de passe incorrect'))
 							return done(null, user)
 						})
 						.catch(err => done(null, false, req.flash('loginMessage', err.toString())))

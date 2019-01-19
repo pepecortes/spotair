@@ -89,7 +89,6 @@ export default {
 		
 		updatePassword() {
 			var vm = this
-			console.log(process.env.API_URL + "/setPassword/" + vm.user.id)
 			vm.axios.put(process.env.API_URL + "photographes/setPassword/" + vm.user.id, {password: vm.password})
 				.then(function(response) {
 					vm.showAlert("Mot de passe modifié", "success")

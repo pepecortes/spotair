@@ -42,7 +42,7 @@ app.use(session({
 
 app.use(logger('tiny'))
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({extended: true}))
 
 // required for passport
 app.use(passport.initialize());
@@ -50,7 +50,7 @@ app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
 // load the api routes
-const routesApi = require('./app_api/routes/index')
+const routesApi = require('./app_api/routes')
 app.use('/api', routesApi(passport))
 
 // load the documentation routes

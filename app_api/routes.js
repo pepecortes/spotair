@@ -4,7 +4,7 @@
 */
 const debug = require('debug')('app:api:routes');
 var express = require('express');
-const sendJSON = require('../../app_lib/helpers').sendJSON;
+const sendJSON = require('../app_lib/helpers').sendJSON;
 
 // Define the NOT FOUND controller
 const ctrlNotFound = function(req, res) {
@@ -13,24 +13,38 @@ const ctrlNotFound = function(req, res) {
 }
 
 // Import all the controllers 
-const ctrlAerodromes = require('../controllers/aerodromes');
-const ctrlAnnees = require('../controllers/annees');
-const ctrlThemes = require('../controllers/themes');
-const ctrlGaleries = require('../controllers/galeries');
-const ctrlPhotographes = require('../controllers/photographes');
+const ctrlAerodromes = require('./controllers/aerodromes');
+const ctrlAnnees = require('./controllers/annees');
+const ctrlThemes = require('./controllers/themes');
+const ctrlGaleries = require('./controllers/galeries');
+const ctrlPhotographes = require('./controllers/photographes');
 
 module.exports = function(passport) {
 
 	// Start the router
-	var router = express.Router();
-
-	// Define the routes
+	var router = express.Router()
+	
+	
+	// All routes protected by API key
+	function testmiddle(req, res, next) {
+		debug("IN THE MIDDLE")
+		//const x = passport.authenticate('token', {})
+		const x = passport.authenticate('token', {
+			failureRedirect: '/login',
+			successRedirect: '/admin'
+		},
+			(req, res) => {debug("HELLO DOLLY")}
+		)
+		return x
+	}
+	
+	router.use(testmiddle)
 	
 	// Aerodromes 
-	router.get('/aerodromes', ctrlAerodromes.all);
+	router.get('/aerodromes',	ctrlAerodromes.all)
 	router.get('/aerodromes/:id(\\d+)', ctrlAerodromes.byId);
-	router.get('/aerodromes/fresh', ctrlAerodromes.fresh);
-	router.post('/aerodromes', ctrlAerodromes.create);
+	router.get('/aerodromes/fresh', ctrlAerodromes.fresh)	
+	router.post('/aerodromes', ctrlAerodromes.create)
 	router.put('/aerodromes/:id(\\d+)', ctrlAerodromes.update);
 	router.delete('/aerodromes/:id(\\d+)', ctrlAerodromes.delete);
 	router.put('/aerodromes/fusion/source/:sourceid(\\d+)/destination/:destinationid(\\d+)', ctrlAerodromes.fusion);

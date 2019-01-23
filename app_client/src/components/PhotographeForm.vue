@@ -71,11 +71,18 @@ export default {
 	
 	methods: {
 	
-		// Reset the  password: NOT YET IMPLEMENTED
+		// Reset the  password to the DEFAULT one
 		resetPassword() {
-			alert("NOT IMPLEMENTED")
+			var vm = this
+			const id = vm.formData.id
+			const password = process.env.MEMBRES_DEFAULT_PASSWORD
+			vm.axios.put("photographes/setPassword/" + id, {password: password})
+				.then(function(response) {
+					vm.showAlert("Mot de passe réinitialisé", "success")
+				})
+				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+			},
 		},
 	}
 	
-}
 </script>

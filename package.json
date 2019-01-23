@@ -5,7 +5,7 @@
   "scripts": {
     "start": "NODE_PATH=. node ./bin/www",
     "test": "./node_modules/.bin/mocha --reporter spec",
-    "build": "webpack --config ./app_client/webpack.config.js",
+    "buildWeb": "webpack --config ./app_client/webpack.config.js",
     "watch": "webpack --config ./app_client/webpack.config.js --watch"
   },
   "dependencies": {

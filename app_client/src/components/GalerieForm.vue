@@ -106,34 +106,23 @@ export default {
 	
 	methods: {
 		
-		//getOptions(boundVariable, api) {
-			//var vm = this;
-			//var url = process.env.API_URL + api
-			//this.axios.get(url)
-				//.then(response => boundVariable = response.data)
-				//.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))			
-		//},
-		
 		getAnneeOptions() {
-			var vm = this;
-			var url = process.env.API_URL + "annees"
-			this.axios.get(url)
+			var vm = this
+			vm.axios.get('annees/')
 				.then(response => vm.anneeOptions = response.data)
 				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
 		},
 		
 		getThemeOptions() {
-			var vm = this;
-			var url = process.env.API_URL + "themes"
-			this.axios.get(url)
+			var vm = this
+			vm.axios.get('themes/')
 				.then(response => vm.themeOptions = response.data)
 				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
 		},
 		
 		getAerodromeOptions() {
-			var vm = this;
-			var url = process.env.API_URL + "aerodromes"
-			this.axios.get(url)
+			var vm = this
+			vm.axios.get('aerodromes/')
 				.then(response => vm.aerodromeOptions = response.data)
 				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
 		},

@@ -1,30 +1,64 @@
-const LocalStrategy  = require('passport-local').Strategy
-const JwtStrategy = require('passport-jwt').Strategy
-const ExtractJwt = require('passport-jwt').ExtractJwt
 const debug = require('debug')('app:config:passport')
+const CustomStrategy  = require('passport-custom').Strategy
+const LocalStrategy  = require('passport-local').Strategy
+const JWTStrategy = require("passport-jwt").Strategy
+const ExtractJwt = require("passport-jwt").ExtractJwt
+
 const Photographe = require('../app_api/models/db').Photographe
 
-function errorToString(error) {
-	var output = ""
-	if (error.response) {
-		// The request was made and the server responded with a status code that falls out of the range of 2xx
-		output = error.response.data
-  } else if (error.request) {
-		// The request was made but no response was received
-		// `error.request` is an instance of XMLHttpRequest in the browser and an instance of http.ClientRequest in node.js
-    output = error.request
-	} else {
-		// Something happened in setting up the request that triggered an Error
-		output = error.message
+const jwtStrategy = new JWTStrategy(
+	{
+		passReqToCallback: true,
+		secretOrKey: process.env.JWT_SECRET,
+		jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
+	},
+	function(req, payload, done) {
+		debug("authenticating with token strategy: " + JSON.stringify(payload))
+		try {
+			if (payload.user != process.env.API_USER) {
+				debug("returning not authorized" + payload.user + " != " + process.env.API_USER)
+				return done(null, false)
+			}
+			return done(null, {})
+		} catch (e) {debug("error: " + e)}
 	}
-	return JSON.stringify(output)
-}
+)
+
+const localStrategy = new LocalStrategy(
+	{passReqToCallback: true},
+	function(req, username, password, done) {
+		debug("authenticating with local strategy: " + username)
+		try {
+			Photographe.findOne({where: {mail: username}})
+				.then(user => {
+					if (!user) return done(null, false, req.flash('loginMessage', 'No user found'))
+					if (!user.validPassword(password)) return done(null, false, req.flash('loginMessage', 'Mot de passe incorrect'))
+					return done(null, user)
+				})
+				.catch(err => done(null, false, req.flash('loginMessage', err.toString())))
+			} catch (e) {debug("error: " + e)}
+	}
+)
+
+const apiStrategy = new CustomStrategy(
+  function(req, done) {
+		debug("authenticating with api strategy: " + req.hostname)
+		try {
+			if (req.hostname == "localhost") return done(null, {})
+			return done(null, false)
+		} catch(e) {debug("error: " + e)}
+			
+  }
+)
 
 module.exports = function(passport) {
 	
 	  // required for persistent login sessions
     // passport needs ability to serialize and unserialize users out of session
-    passport.serializeUser((user, done) => done(null, user.id));
+    passport.serializeUser((user, done) => {
+			if (user.id) return done(null, user.id)
+			return done("passport error: user.id not found", false)
+		})
     
     passport.deserializeUser(function(id, done) {
 			try {
@@ -36,74 +70,10 @@ module.exports = function(passport) {
 					.catch(err => done(err))
 			} catch(e) { debug(e) }
     })
+    
+    passport.use('jwt', jwtStrategy)
+    passport.use('local', localStrategy)
+    passport.use('api', apiStrategy)
 		
-    passport.use('token', new LocalStrategy(
-			{},
-			function(username, password, done) { // callback with email and password from our form
-				debug("authenticating with token strategy: " + username)
-				// find a user whose email is the same as the forms email
-				// we are checking to see if the user trying to login already exists
-				try {
-					//return done(null, {user: "apiUser"})
-					return done(null, false)
-					//Photographe.findOne({where: {mail: username}})
-						//.then(user => {
-							//if (!user) return done(null, false, req.flash('loginMessage', 'No user found'))
-							//if (!user.validPassword(password)) return done(null, false, req.flash('loginMessage', 'Mot de passe incorrect'))
-							//return done(null, user)
-						//})
-						//.catch(err => done(null, false, req.flash('loginMessage', err.toString())))
-					} catch (e) {
-						debug("error: " + e)
-					}
-		}))
-
-    passport.use('local', new LocalStrategy(
-			{passReqToCallback : true}, // allows us to pass back the entire request to the callback
-			function(req, username, password, done) { // callback with email and password from our form
-				debug("authenticating with local strategy: " + username)
-				// find a user whose email is the same as the forms email
-				// we are checking to see if the user trying to login already exists
-				try {
-					Photographe.findOne({where: {mail: username}})
-						.then(user => {
-							if (!user) return done(null, false, req.flash('loginMessage', 'No user found'))
-							if (!user.validPassword(password)) return done(null, false, req.flash('loginMessage', 'Mot de passe incorrect'))
-							return done(null, user)
-						})
-						.catch(err => done(null, false, req.flash('loginMessage', err.toString())))
-					} catch (e) {
-						debug("error: " + e)
-					}
-		}))
-		
-		var jwtOptions = {}
-		jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-		jwtOptions.secretOrKey = 'tasmanianDevil';
-		//jwtOptions.issuer = 'accounts.examplesoft.com';
-		//jwtOptions.audience = 'yoursite.net';
-		
-		//passport.use('apiKey', function(req, res, next) {
-			//console.log('APIKEY TEST')
-			//next()
-		//}) 
-		
-		passport.use('apiKey', new JwtStrategy(
-			jwtOptions,
-			function(jwt_payload, done) {
-				debug("authenticating with apiKey strategy: " + jwt_payload)
-				return done(null, {user: "apiUser"})
-				//User.findOne({id: jwt_payload.sub}, function(err, user) {
-						//if (err) {
-								//return done(err, false);
-						//}
-						//if (user) {
-								//return done(null, user);
-						//} else {
-								//return done(null, false);
-								//// or you could create a new account
-						//}
-				//});
-		}))
     
 }

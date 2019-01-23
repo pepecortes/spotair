@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import BootstrapVue from 'bootstrap-vue'
-import axios from 'axios'
+import Axios from 'axios'
 import VueAxios from 'vue-axios'
 import Admin from './Admin.vue'
 
@@ -14,6 +14,10 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 // on each module
 
 Vue.config.productionTip = false
+
+// Create an axios instance and set some defaults for authorization...
+var axios = Axios.create()
+axios.defaults.baseURL = process.env.API_URL
 
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)

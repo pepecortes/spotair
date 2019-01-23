@@ -8,6 +8,7 @@ const path = require('path')
 const favicon = require('serve-favicon');
 const debug = require('debug')('app:client:routes')
 const sendJSON = require('../app_lib/helpers').sendJSON
+const jwt = require("jwt-simple")
 var express = require('express')
 
 // authentication middleware functions
@@ -67,6 +68,20 @@ module.exports = function(passport) {
 		setRedirect,
 		requireLogin,
 		(req, res) => sendJSON.ok(res, req.user)
+	)
+	
+	// returns a token than can be used to authorize the API calls
+	router.get("/APItoken",
+		setRedirect,
+		requireLogin,
+		requireAdmin,
+		function(req, res) {
+			var payload = {user: process.env.APIuser}
+			try {
+				var token = jwt.encode(payload, process.env.JWT_SECRET)
+				sendJSON.ok(res, token)
+			} catch(e) {sendJSON.serverError(res, e.toString())}
+		}
 	)
 	
 	// admin pages

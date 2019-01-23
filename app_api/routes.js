@@ -2,9 +2,9 @@
 * API routes definition
 * @module /app_api/index
 */
-const debug = require('debug')('app:api:routes');
-var express = require('express');
-const sendJSON = require('../app_lib/helpers').sendJSON;
+const debug = require('debug')('app:api:routes')
+var express = require('express')
+const sendJSON = require('../app_lib/helpers').sendJSON
 
 // Define the NOT FOUND controller
 const ctrlNotFound = function(req, res) {
@@ -24,21 +24,8 @@ module.exports = function(passport) {
 	// Start the router
 	var router = express.Router()
 	
-	
-	// All routes protected by API key
-	function testmiddle(req, res, next) {
-		debug("IN THE MIDDLE")
-		//const x = passport.authenticate('token', {})
-		const x = passport.authenticate('token', {
-			failureRedirect: '/login',
-			successRedirect: '/admin'
-		},
-			(req, res) => {debug("HELLO DOLLY")}
-		)
-		return x
-	}
-	
-	router.use(testmiddle)
+	// allow localhost or token (Authorization: Bearer eyJ0... in http headers)
+	router.use(passport.authenticate(['api', 'jwt'], {session: false}))
 	
 	// Aerodromes 
 	router.get('/aerodromes',	ctrlAerodromes.all)

@@ -14,8 +14,14 @@ DEBUG_COLORS=true
 REDIS_HOST=redis
 REDIS_PORT=6379
 COOKIE_SESSION_SECRET=noseguardarunsecreto
-JWT_SECRET=jenesaispasgarderunsecret
+JWT_SECRET=yeeh3ahXai?l0iov
+	// needed for generating and verifying the JWT_API_KEY
+JWT_API_KEY=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiQVBJdXNlciJ9.xucOcCfKrgteeQtq7tHVGScUJuvEaccUUw8QRNgsuPE 
+	// how to create one? visit: /APItoken (admin required)
+API_USER=APIuser 
+	// payload transmitted in the JWT_API_KEY
 
+WEB_URL=http://localhost:3000/
 API_URL=http://localhost:3000/api/
 
 MEMBRES_DEFAULT_PASSWORD="membres!"

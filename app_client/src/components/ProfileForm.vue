@@ -76,7 +76,8 @@ export default {
 		// gets the current logged user by requesting the session data
 		getCurrentUser() {
 			var vm = this
-			vm.axios.get('/profile')
+			vm.axios.get(process.env.WEB_URL + 'profile') 
+				// note that the call is NOT an API call
 				.then(response => vm.user = response.data)
 				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
 		},
@@ -89,7 +90,7 @@ export default {
 		
 		updatePassword() {
 			var vm = this
-			vm.axios.put(process.env.API_URL + "photographes/setPassword/" + vm.user.id, {password: vm.password})
+			vm.axios.put("photographes/setPassword/" + vm.user.id, {password: vm.password})
 				.then(function(response) {
 					vm.showAlert("Mot de passe modifié", "success")
 				})

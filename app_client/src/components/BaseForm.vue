@@ -10,7 +10,6 @@ import { confirmDialog, axiosErrorToString } from '../lib/common'
 import { required } from "vuelidate/lib/validators"
 import { alertMixin } from './AlertMixin'
 
-
 export default {
 	
 	components: {
@@ -34,8 +33,7 @@ export default {
 	
 	computed: {
 		models () {return pluralize(this.model)},
-		api () {return this.models},
-		apiURL () {return process.env.API_URL + this.api + "/"}
+		apiURL () {return this.models + "/"}
 	},
 
 	mounted () {this.getSelectOptions()},
@@ -83,7 +81,7 @@ export default {
 					vm.selectOptions = response.data
 					vm.selection = (preselected)? preselected : null
 				})
-				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+				.catch(err => {console.log(JSON.stringify(err)), vm.showAlert(axiosErrorToString(err), "danger")})
 		},  
     
     removeButtonClicked() {

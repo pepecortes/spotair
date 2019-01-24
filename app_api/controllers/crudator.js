@@ -11,14 +11,12 @@ const createInstanceFromQuery = require('../../app_lib/helpers').createInstanceF
  * @function
  * @desc Call this function to create the basic API calls
  * @param {Object} Model - Model for which we are creating the API calls
- * @param {String[]} fieldsArray - fields that compose the model (excluding virtuals, but including foreingKeys)
- * @param {Boolean} hasForeignKeys - whether or not the Model has foreignKeys (needed for eager loading or related Models) 
  * @return {Object} object made of functions(req, res) (all, byId, fresh,
  * create, udpate, delete) ready to be used in API routes
  */ 
-function buildBasicAPI(Model, fieldsArray, hasForeignKeys) {
+function buildBasicAPI(Model) {
 	
-	const includeOption = (hasForeignKeys)? {include: [{all:true}]} : {};
+	const includeOption = (Model.metadata.hasForeignKeys)? {include: [{all:true}]} : {};
 	
 	return {
 		
@@ -47,7 +45,7 @@ function buildBasicAPI(Model, fieldsArray, hasForeignKeys) {
 		},
 		
 		create: (req, res) => {
-			const record = createInstanceFromQuery(req.body, fieldsArray)
+			const record = createInstanceFromQuery(req.body, Model.metadata.fieldNames)
 			Model
 				.findOrCreate({where: record})
 				.spread((record, created) => sendJSON.ok(res, record))
@@ -55,7 +53,11 @@ function buildBasicAPI(Model, fieldsArray, hasForeignKeys) {
 		},
 		
 		update: (req, res) => {
-			var updates = createInstanceFromQuery(req.body, fieldsArray);
+			debug("updating record")
+			debug("fieldnames " + Model.metadata.fieldNames)
+			debug("req.body " + req.body.nom)
+			var updates = createInstanceFromQuery(req.body, Model.metadata.fieldNames);
+			debug("updates: " + JSON.stringify(updates))
 			Model
 				.findByPk(req.params.id, includeOption)
 				.then(record => {

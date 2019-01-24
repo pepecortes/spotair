@@ -85,6 +85,12 @@ module.exports = function(sequelize, DataTypes) {
 			
 		}
   );
+  
+	Model.metadata = {
+		name: "Galerie",
+		hasForeignKeys: true,
+		fieldNames: ['isSpotair', 'commentaire', 'anneeId', 'themeId', 'aerodromeId'],
+	}
 	
 	return Model;
 };

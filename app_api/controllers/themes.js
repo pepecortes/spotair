@@ -2,19 +2,17 @@
  * Themes controller
  * @module /app_api/controllers/themes
  */
-const debug = require('debug')('app:api:controllers:themes');
-const db = require('../models/db');
-const crud = require('./crudator');
-const sendJSON = require('../../app_lib/helpers').sendJSON;
-const dbReplaceReference = require('../../app_lib/helpers').dbReplaceReference;
+const debug = require('debug')('app:api:controllers:themes')
+const db = require('../models/db')
+const crud = require('./crudator')
+const sendJSON = require('../../app_lib/helpers').sendJSON
+const dbReplaceReference = require('../../app_lib/helpers').dbReplaceReference
 
-const Galerie = require('../models/db').Galerie;
-const Model = db.Theme;
-const fieldsArray = ['theme'];
-const hasForeignKeys = false;
+const Model = db.Theme
+const Galerie = db.Galerie
 
 var exports = {};
-const basicAPI = crud.buildBasicAPI(Model, fieldsArray, hasForeignKeys);
+const basicAPI = crud.buildBasicAPI(Model);
 exports = Object.assign(exports, basicAPI);
 
 // building other API calls...

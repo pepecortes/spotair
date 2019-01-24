@@ -90,6 +90,12 @@ module.exports = function(sequelize, DataTypes) {
 		}
   }
   );
+  
+	Model.metadata = {
+		name: "Aerodrome",
+		hasForeignKeys: false,
+		fieldNames: ['nom', 'lieu', 'latitude', 'longitude'],
+	}
 	
 	return Model;
 };

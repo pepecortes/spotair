@@ -3,18 +3,17 @@
  * @module /app_api/controllers/compagnies
  */
 const debug = require('debug')('app:api:controllers:compagnies')
+const db = require('../models/db')
 const crud = require('./crudator')
-//const sendJSON = require('../../app_lib/helpers').sendJSON
-//const dbReplaceReference = require('../../app_lib/helpers').dbReplaceReference
-const Model = require('../models/db').Compagnie
+const sendJSON = require('../../app_lib/helpers').sendJSON
+const dbReplaceReference = require('../../app_lib/helpers').dbReplaceReference
 
-//const fieldsArray = ['nom', 'flotille']
-const fieldsArray = Model.metadata.fieldNames
-const hasForeignKeys = false;
+const Model = db.Compagnie
 
-var exports = {};
-const basicAPI = crud.buildBasicAPI(Model, fieldsArray, hasForeignKeys);
-exports = Object.assign(exports, basicAPI);
+var exports = {}
+
+const basicAPI = crud.buildBasicAPI(Model)
+exports = Object.assign(exports, basicAPI)
 
 // building other API calls...
 

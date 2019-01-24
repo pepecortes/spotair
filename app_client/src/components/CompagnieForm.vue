@@ -42,6 +42,7 @@ export default {
 			model: "compagnie",
 			validations: {
 				nom: {required},
+				flotille: {}
 			},
 		}
 	},

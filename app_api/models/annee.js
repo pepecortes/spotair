@@ -48,6 +48,12 @@ module.exports = function(sequelize, DataTypes) {
 		],
   }
   );
+  
+	Model.metadata = {
+		name: "Annee",
+		hasForeignKeys: false,
+		fieldNames: ['annee'],
+	}
 	
 	return Model;
 };

@@ -5,12 +5,22 @@ const _ = require('lodash');
 const fs = require('fs');
 const pickObject = require('lodash').pick;
 const helpers = require('../app_lib/helpers')
-//const createInstanceFromQuery = require('../../app_lib/helpers').createInstanceFromQuery;
 
 // connect database and models
 const db = require('../app_api/models/db');
+const Model = db.Photographe
 
 console.log("START TEST")
+
+console.log("metadata " + JSON.stringify(Model.generateHash))
+console.log("metadata " + JSON.stringify(Model.metadata))
+
+const id = 1
+var record = null
+
+Model.findByPk(id)
+	.then(record => console.log("record: " + record))
+	.catch(e => console.log(e.toString()))
 
 
 

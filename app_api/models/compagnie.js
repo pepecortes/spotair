@@ -30,7 +30,7 @@ module.exports = function(sequelize, DataTypes) {
 		
 		text: {
 			type: DataTypes.VIRTUAL,
-			get: function() {return [this.nom, this.flotille].join(', ')}
+			get: function() {return [this.nom, this.flotille].filter(Boolean).join(', ')}
 		},
 		
 		invalid: {
@@ -38,6 +38,7 @@ module.exports = function(sequelize, DataTypes) {
 			get() {
 				return {
 					nom: 'Requis',
+					flotille: "",
 				}
 			}
 		},
@@ -63,8 +64,8 @@ module.exports = function(sequelize, DataTypes) {
   
 	Model.metadata = {
 		name: "Compagnie",
-		fieldNames: ['nom', 'flotille'],
 		hasForeignKeys: false,
+		fieldNames: ['nom', 'flotille'],
 	}
 	
 	return Model;

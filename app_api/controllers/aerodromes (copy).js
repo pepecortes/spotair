@@ -1,14 +1,14 @@
 /**
- * Annees controller
- * @module /app_api/controllers/annees
+ * Aerodromes controller
+ * @module /app_api/controllers/aerodromes
  */
-const debug = require('debug')('app:api:controllers:annees')
+const debug = require('debug')('app:api:controllers:aerodromes')
 const db = require('../models/db')
 const crud = require('./crudator')
 const sendJSON = require('../../app_lib/helpers').sendJSON
 const dbReplaceReference = require('../../app_lib/helpers').dbReplaceReference
 
-const Model = db.Annee
+const Model = db.Aerodrome
 const Galerie = db.Galerie
 
 var exports = {};
@@ -17,24 +17,22 @@ exports = Object.assign(exports, basicAPI);
 
 // building other API calls...
 
-// fusion
+// fusion of aerodromes
 /**
  * @function fusion
- * @description delete the annee source: all galeries that
+ * @description delete the aerodrome source: all galeries that
  * referred to the source now refer to the destination
- * @param {number} sourceid
- * @param {number} destinationid
- * @return {Object} {updated, removed}: 
+ * @param {number} sourceid 			- id of aerodrome source
+ * @param {number} destinationid	- id of aerodrome destination
+ * @return {Object} {galeries_updated, aerodromes_removed}: 
  * number of deleted sources and number of modified galeries
  */
 exports.fusion =  async function(req, res) {
 	const sourceid = req.params.sourceid;
 	const destinationid = req.params.destinationid;
-	dbReplaceReference(Galerie, Model, "anneeId", sourceid, destinationid)
+	dbReplaceReference(Galerie, Model, "aerodromeId", sourceid, destinationid)
 		.then(result => sendJSON.ok(res, result))
 		.catch(err => sendJSON.serverError(res, err))
 }
 
 module.exports = exports;
-
-

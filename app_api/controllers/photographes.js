@@ -2,18 +2,16 @@
  * Photographes controller
  * @module /app_api/controllers/photographe
  */
-const debug = require('debug')('app:api:controllers:photographe');
-const db = require('../models/db');
-const crud = require('./crudator');
-const sendJSON = require('../../app_lib/helpers').sendJSON;
-const dbReplaceReference = require('../../app_lib/helpers').dbReplaceReference;
+const debug = require('debug')('app:api:controllers:photographes')
+const db = require('../models/db')
+const crud = require('./crudator')
+const sendJSON = require('../../app_lib/helpers').sendJSON
+const dbReplaceReference = require('../../app_lib/helpers').dbReplaceReference
 
-const Model = db.Photographe;
-const fieldsArray = ['nom', 'prenom', 'mail', 'isAdmin', 'passwordHash'];
-const hasForeignKeys = false;
+const Model = db.Photographe
 
 var exports = {};
-const basicAPI = crud.buildBasicAPI(Model, fieldsArray, hasForeignKeys);
+const basicAPI = crud.buildBasicAPI(Model);
 exports = Object.assign(exports, basicAPI);
 
 // building other API calls...

@@ -48,6 +48,12 @@ module.exports = function(sequelize, DataTypes) {
 				{type: 'FULLTEXT', name: 'text_search', fields: ['theme']}
 		],
   });
+  
+	Model.metadata = {
+		name: "Theme",
+		hasForeignKeys: false,
+		fieldNames: ['theme'],
+	}
 	
 	return Model;
 };

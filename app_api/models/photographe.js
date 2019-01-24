@@ -102,6 +102,12 @@ module.exports = function(sequelize, DataTypes) {
   }
 
 	)
+  
+	Model.metadata = {
+		name: "Photographe",
+		hasForeignKeys: false,
+		fieldNames: ['nom', 'prenom', 'mail', 'isAdmin', 'passwordHash'],
+	}
 	
 	// Class function. Generate a hash out of the given password
 	Model.generateHash = function(password) {
@@ -110,10 +116,8 @@ module.exports = function(sequelize, DataTypes) {
 	}
 	
 	// Check it the given password is valid
-	//Model.prototype.validPassword = async function(password) {
 	Model.prototype.validPassword = function(password) {
 		return bcrypt.compareSync(password, this.passwordHash)
-		//return await bcrypt.compareSync(password, this.passwordHash)
 	}
 	
 	return Model;

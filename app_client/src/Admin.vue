@@ -6,6 +6,7 @@
 			b-nav-item(to="/admin/themes") Thèmes
 			b-nav-item(to="/admin/annees") Années
 			b-nav-item(to="/admin/galeries") Galeries
+			b-nav-item(to="/admin/compagnies") Compagnies
 			b-nav-item(to="/admin/photographes") Photographes
 			b-nav-item(href="/doc") Documentation
 		router-view
@@ -23,7 +24,7 @@ export default {}
 }
 
 #admin {
-	max-width: 800px;
+	max-width: 1000px;
 	margin: 0 auto;
 	line-height: 1.4;
 	font-family: 'Avenir', Helvetica, Arial, sans-serif;

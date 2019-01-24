@@ -13,11 +13,12 @@ const ctrlNotFound = function(req, res) {
 }
 
 // Import all the controllers 
-const ctrlAerodromes = require('./controllers/aerodromes');
-const ctrlAnnees = require('./controllers/annees');
-const ctrlThemes = require('./controllers/themes');
-const ctrlGaleries = require('./controllers/galeries');
-const ctrlPhotographes = require('./controllers/photographes');
+const ctrlAerodromes = require('./controllers/aerodromes')
+const ctrlAnnees = require('./controllers/annees')
+const ctrlThemes = require('./controllers/themes')
+const ctrlCompagnies = require('./controllers/compagnies')
+const ctrlGaleries = require('./controllers/galeries')
+const ctrlPhotographes = require('./controllers/photographes')
 
 module.exports = function(passport) {
 
@@ -53,6 +54,15 @@ module.exports = function(passport) {
 	router.put('/themes/:id(\\d+)', ctrlThemes.update);
 	router.delete('/themes/:id(\\d+)', ctrlThemes.delete);
 	router.put('/themes/fusion/source/:sourceid(\\d+)/destination/:destinationid(\\d+)', ctrlThemes.fusion);
+
+	// Compagnies
+	router.get('/compagnies', ctrlCompagnies.all);
+	router.get('/compagnies/:id(\\d+)', ctrlCompagnies.byId);
+	router.get('/compagnies/fresh', ctrlCompagnies.fresh);
+	router.post('/compagnies', ctrlCompagnies.create);
+	router.put('/compagnies/:id(\\d+)', ctrlCompagnies.update);
+	router.delete('/compagnies/:id(\\d+)', ctrlCompagnies.delete);
+	//router.put('/compagnies/fusion/source/:sourceid(\\d+)/destination/:destinationid(\\d+)', ctrlCompagnies.fusion);
 
 	// Galeries
 	router.get('/galeries', ctrlGaleries.all);

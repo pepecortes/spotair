@@ -28,6 +28,7 @@ import AerodromeForm from './components/AerodromeForm.vue'
 import ThemeForm from './components/ThemeForm.vue'
 import AnneeForm from './components/AnneeForm.vue'
 import GalerieForm from './components/GalerieForm.vue'
+import CompagnieForm from './components/CompagnieForm.vue'
 import PhotographeForm from './components/PhotographeForm.vue'
 
 // Define the routes
@@ -36,6 +37,7 @@ const routes = [
   { path: '/admin/themes', component: ThemeForm },
   { path: '/admin/annees', component: AnneeForm },
   { path: '/admin/galeries', component: GalerieForm },
+  { path: '/admin/compagnies', component: CompagnieForm },
   { path: '/admin/photographes', component: PhotographeForm },
 ]
 

@@ -59,7 +59,13 @@ module.exports = function(sequelize, DataTypes) {
 		indexes: [{type: 'FULLTEXT', name: 'text_search', fields: ['nom', 'flotille']}],
   }
   
-  );
+  )
+  
+	Model.metadata = {
+		name: "Compagnie",
+		fieldNames: ['nom', 'flotille'],
+		hasForeignKeys: false,
+	}
 	
 	return Model;
 };

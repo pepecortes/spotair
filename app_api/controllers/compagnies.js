@@ -6,9 +6,10 @@ const debug = require('debug')('app:api:controllers:compagnies')
 const crud = require('./crudator')
 //const sendJSON = require('../../app_lib/helpers').sendJSON
 //const dbReplaceReference = require('../../app_lib/helpers').dbReplaceReference
-const Model = require('../models/db').Compganie
+const Model = require('../models/db').Compagnie
 
-const fieldsArray = ['nom', 'flotille']
+//const fieldsArray = ['nom', 'flotille']
+const fieldsArray = Model.metadata.fieldNames
 const hasForeignKeys = false;
 
 var exports = {};

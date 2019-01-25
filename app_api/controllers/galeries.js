@@ -4,23 +4,16 @@
  */
 const debug = require('debug')('app:api:controllers:galeries')
 const db = require('../models/db')
-const crud = require('./crudator')
 const sendJSON = require('../../app_lib/helpers').sendJSON
-const dbReplaceReference = require('../../app_lib/helpers').dbReplaceReference
+const ModelController = require('./modelController')
 
-const Model = db.Galerie
-
-var exports = {};
-
-// building the basic CRUD API calls first
-const basicAPI = crud.buildBasicAPI(Model);
-exports = Object.assign(exports, basicAPI);
+var controller = new ModelController(db.Galerie)
 
 // building other API calls...
 
 // galeries "sorties associatives" only
-exports.allSpotair =  function(req, res) {
-	Model.scope('isspotair')
+controller.allSpotair =  function(req, res) {
+	db.Galerie.scope('isspotair')
 		.findAll({include: [{all:true}]})
 		.then(record => sendJSON.ok(res, record))
 		.catch(err => sendJSON.serverError(res, err));
@@ -30,20 +23,13 @@ exports.allSpotair =  function(req, res) {
 /**
  * @function fusion
  * @description NOT YET IMPLEMENTED
- * @param {number} sourceid
- * @param {number} destinationid
- * @return {Object} {updated, removed}: 
- * number of deleted sources and number of modified galeries
  */
-exports.fusion =  async function(req, res) {
+controller.fusion =  async function(req, res) {
 	const sourceid = req.params.sourceid;
 	const destinationid = req.params.destinationid;
 	sendJSON.serverError(res, "METHOD NOT YET IMPLEMENTED")
-	//dbReplaceReference(Galerie, Model, "anneeId", sourceid, destinationid)
-		//.then(result => sendJSON.ok(res, result))
-		//.catch(err => sendJSON.serverError(res, err))
 }
 
-module.exports = exports;
+module.exports = controller
 
 

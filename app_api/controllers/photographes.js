@@ -4,15 +4,10 @@
  */
 const debug = require('debug')('app:api:controllers:photographes')
 const db = require('../models/db')
-const crud = require('./crudator')
 const sendJSON = require('../../app_lib/helpers').sendJSON
-const dbReplaceReference = require('../../app_lib/helpers').dbReplaceReference
+const ModelController = require('./modelController')
 
-const Model = db.Photographe
-
-var exports = {};
-const basicAPI = crud.buildBasicAPI(Model);
-exports = Object.assign(exports, basicAPI);
+var controller = new ModelController(db.Photographe)
 
 // building other API calls...
 
@@ -23,9 +18,9 @@ exports = Object.assign(exports, basicAPI);
  * @param {string} username
  * @return {Object} The given photographe, or null if not exists
  */
-exports.byLogin =  async function(req, res) {
+controller.byLogin =  async function(req, res) {
 	const username = req.params.username
-	Model.findOne({where: {mail: username}})
+	db.Photographe.findOne({where: {mail: username}})
 		.then(result => sendJSON.ok(res, result))
 		.catch(err => sendJSON.serverError(res, err))
 }
@@ -37,17 +32,17 @@ exports.byLogin =  async function(req, res) {
  * @param {string} req.body.password
  * @return {Object} The given photographe, or null if fails
  */
-exports.setPassword = async function(req, res) {
+controller.setPassword = async function(req, res) {
 	const id = req.params.id
 	const password = req.body.password	
-	Model.findByPk(id)
+	db.Photographe.findByPk(id)
 		.then(record =>  {
 			record.password = password
 			return record.save()
 		})
-		.then(record => Model.findByPk(id))
+		.then(record => db.Photographe.findByPk(id))
 		.then(record => sendJSON.ok(res, record))
 		.catch(err => sendJSON.serverError(res, err))
 }
 
-module.exports = exports;
+module.exports = controller

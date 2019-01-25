@@ -4,35 +4,12 @@
  */
 const debug = require('debug')('app:api:controllers:compagnies')
 const db = require('../models/db')
-const crud = require('./crudator')
-const sendJSON = require('../../app_lib/helpers').sendJSON
-const dbReplaceReference = require('../../app_lib/helpers').dbReplaceReference
+const ModelController = require('./modelController')
 
-const Model = db.Compagnie
-
-var exports = {}
-
-const basicAPI = crud.buildBasicAPI(Model)
-exports = Object.assign(exports, basicAPI)
+var controller = new ModelController(db.Compagnie)
 
 // building other API calls...
 
-//// fusion of compagnies
-///**
- //* @function fusion
- //* @description delete the aerodrome source: all galeries that
- //* referred to the source now refer to the destination
- //* @param {number} sourceid 			- id of aerodrome source
- //* @param {number} destinationid	- id of aerodrome destination
- //* @return {Object} {galeries_updated, aerodromes_removed}: 
- //* number of deleted sources and number of modified galeries
- //*/
-//exports.fusion =  async function(req, res) {
-	//const sourceid = req.params.sourceid;
-	//const destinationid = req.params.destinationid;
-	//dbReplaceReference(Galerie, Model, "aerodromeId", sourceid, destinationid)
-		//.then(result => sendJSON.ok(res, result))
-		//.catch(err => sendJSON.serverError(res, err))
-//}
+// FUSION NOT YET COMPLETED
 
-module.exports = exports;
+module.exports = controller;

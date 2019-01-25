@@ -4,14 +4,21 @@
  */
 const debug = require('debug')('app:api:controllers:aerodromes')
 const db = require('../models/db')
-const ModelController = require('./modelControler')
+const ModelController = require('./modelController')
 //const sendJSON = require('../../app_lib/helpers').sendJSON
 //const dbReplaceReference = require('../../app_lib/helpers').dbReplaceReference
 
 //const Model = db.Aerodrome
 //const Galerie = db.Galerie
 
-var controllers = new ModelController(db.Aerodrome)
+//var controllers = new ModelController(db.Aerodrome)
+
+function AerodromeController() {
+    ModelController.call(this, db.Aerodrome)
+}
+
+AerodromeController.prototype = Object.create(ModelController.prototype)
+AerodromeController.prototype.constructor = AerodromeController
 
 //var exports = {};
 //const basicAPI = crud.buildBasicAPI(Model);
@@ -37,4 +44,4 @@ var controllers = new ModelController(db.Aerodrome)
 		//.catch(err => sendJSON.serverError(res, err))
 //}
 
-module.exports = controllers
+module.exports = AerodromeController

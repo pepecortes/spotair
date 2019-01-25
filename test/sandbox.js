@@ -7,27 +7,13 @@ const pickObject = require('lodash').pick;
 const helpers = require('../app_lib/helpers')
 
 // connect database and models
-const db = require('../app_api/models/db');
-const Model = db.Photographe
-
 console.log("START TEST")
 
-console.log("metadata " + JSON.stringify(Model.generateHash))
-console.log("metadata " + JSON.stringify(Model.metadata))
+const db = require('../app_api/models/db')
+const ModelController = require('../app_api/controllers/modelControler')
 
-const id = 1
-var record = null
+var controllers = new ModelController(db.Aerodrome)
+console.log("controllers: " + controllers.includeOption)
 
-Model.findByPk(id)
-	.then(record => console.log("record: " + record))
-	.catch(e => console.log(e.toString()))
-
-
-
-
-
-
-	
-
-
-
+const ctrlAerodromes = require('../app_api/controllers/aerodromes')
+console.log("ctrlAerodromes: " + ctrlAerodromes.includeOption)

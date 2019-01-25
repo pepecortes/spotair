@@ -17,6 +17,7 @@ const ctrlAerodromes = require('./controllers/aerodromes')
 const ctrlAnnees = require('./controllers/annees')
 const ctrlThemes = require('./controllers/themes')
 const ctrlCompagnies = require('./controllers/compagnies')
+const ctrlConstructeurs = require('./controllers/constructeurs')
 const ctrlGaleries = require('./controllers/galeries')
 const ctrlPhotographes = require('./controllers/photographes')
 
@@ -28,14 +29,24 @@ module.exports = function(passport) {
 	// allow localhost or token (Authorization: Bearer eyJ0... in http headers)
 	router.use(passport.authenticate(['api', 'jwt'], {session: false}))
 	
-	// Aerodromes 
-	router.get('/aerodromes',	(req, res) => ctrlAerodromes.all(req, res))
-	router.get('/aerodromes/:id(\\d+)', (req, res) => ctrlAerodromes.byId(req, res));
-	router.get('/aerodromes/fresh', (req, res) => ctrlAerodromes.fresh(req, res))	
-	router.post('/aerodromes', (req, res) => ctrlAerodromes.create(req, res))
-	router.put('/aerodromes/:id(\\d+)', (req, res) => ctrlAerodromes.update(req, res));
-	router.delete('/aerodromes/:id(\\d+)', (req, res) => ctrlAerodromes.delete(req, res));
-	router.put('/aerodromes/fusion/source/:sourceid(\\d+)/destination/:destinationid(\\d+)', (req, res) => ctrlAerodromes.fusion(req, res));
+	/**
+	 * @desc: DRY: most of the routes look the same. This function creates
+	 * them by just passing certain parameters
+	 * @param {string} urlString 			- root for the url API call (example '/aerodromes')
+	 * @param {function} controller		- controller managing the routes
+	 */
+	function standardRouteFactory(urlString, controller) {
+		const url = '/' + urlString
+		router.get(url,	(req, res) => controller.all(req, res))
+		router.get(url + '/:id(\\d+)', (req, res) => controller.byId(req, res))
+		router.get(url + '/fresh', (req, res) => controller.fresh(req, res))	
+		router.post(url, (req, res) => controller.create(req, res))
+		router.put(url + '/:id(\\d+)', (req, res) => controller.update(req, res))
+		router.delete(url + '/:id(\\d+)', (req, res) => controller.delete(req, res))
+		router.put(url + '/fusion/source/:sourceid(\\d+)/destination/:destinationid(\\d+)', (req, res) => controller.fusion(req, res))
+	}
+	
+	standardRouteFactory('aerodromes', ctrlAerodromes)
 
 	// Annees
 	router.get('/annees', (req, res) => ctrlAnnees.all(req, res))
@@ -63,6 +74,15 @@ module.exports = function(passport) {
 	router.put('/compagnies/:id(\\d+)', (req, res) => ctrlCompagnies.update(req, res))
 	router.delete('/compagnies/:id(\\d+)', (req, res) => ctrlCompagnies.delete(req, res))
 	router.put('/compagnies/fusion/source/:sourceid(\\d+)/destination/:destinationid(\\d+)', (req, res) => ctrlCompagnies.fusion(req, res))
+
+	// Constructeurs
+	router.get('/constructeurs', (req, res) => ctrlConstructeurs.all(req, res))
+	router.get('/constructeurs/:id(\\d+)', (req, res) => ctrlConstructeurs.byId(req, res))
+	router.get('/constructeurs/fresh', (req, res) => ctrlConstructeurs.fresh(req, res))
+	router.post('/constructeurs', (req, res) => ctrlConstructeurs.create(req, res))
+	router.put('/constructeurs/:id(\\d+)', (req, res) => ctrlConstructeurs.update(req, res))
+	router.delete('/constructeurs/:id(\\d+)', (req, res) => ctrlConstructeurs.delete(req, res))
+	router.put('/constructeurs/fusion/source/:sourceid(\\d+)/destination/:destinationid(\\d+)', (req, res) => ctrlConstructeurs.fusion(req, res))
 
 	// Galeries
 	router.get('/galeries', (req, res) => ctrlGaleries.all(req, res))

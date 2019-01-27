@@ -12,15 +12,7 @@ var controller = new ModelController(db.Avion)
 // building other API calls...
 
 // fusion
-/**
- * @function fusion
- * @description NOT YET IMPLEMENTED
- */
-controller.fusion =  async function(req, res) {
-	const sourceid = req.params.sourceid;
-	const destinationid = req.params.destinationid;
-	sendJSON.serverError(res, "METHOD NOT YET IMPLEMENTED")
-}
+controller.fusion = ModelController.buildFusionController('avionId', db.Avion, db.Appareil)
 
 module.exports = controller
 

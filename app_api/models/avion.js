@@ -18,7 +18,7 @@ module.exports = function(sequelize, DataTypes) {
 				unique: true,
 		},
 			
-		nom: {
+		version: {
 			type: DataTypes.STRING,
 			allowNull: false,
 			defaultValue: "",
@@ -28,7 +28,7 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.VIRTUAL,
 			get: function() {
 				const modele = (this.modele)? this.modele.text : null
-				return [modele, this.nom].filter(Boolean).join(', ')
+				return [modele, this.version].filter(Boolean).join(', ')
 			}
 		},
 		
@@ -36,7 +36,7 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.VIRTUAL,
 			get() {
 				return {
-					nom: 'Requis',
+					version: 'Requis',
 					modele: "Requis",
 				}
 			}
@@ -57,7 +57,7 @@ module.exports = function(sequelize, DataTypes) {
 	}, {
 			
 		indexes: [
-			{type: 'FULLTEXT', name: 'text_search', fields: ['nom']}
+			{type: 'FULLTEXT', name: 'text_search', fields: ['version']}
 		],
 			
 		}
@@ -66,7 +66,7 @@ module.exports = function(sequelize, DataTypes) {
 	Model.metadata = {
 		name: "Avion",
 		hasForeignKeys: true,
-		fieldNames: ['nom', 'modeleId'],
+		fieldNames: ['version', 'modeleId'],
 	}
 	
 	return Model;

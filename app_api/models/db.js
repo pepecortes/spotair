@@ -38,6 +38,8 @@ const Compagnie = sequelize.import('./compagnie')
 const Constructeur = sequelize.import('./constructeur')
 const Modele = sequelize.import('./modele')
 const Avion = sequelize.import('./avion')
+const Appareil = sequelize.import('./appareil')
+const Photo = sequelize.import('./photo')
 
 // then, build all the relationships between Models
 Galerie.belongsTo(Annee, {onDelete: 'RESTRICT'})
@@ -45,6 +47,12 @@ Galerie.belongsTo(Theme, {onDelete: 'RESTRICT'})
 Galerie.belongsTo(Aerodrome, {onDelete: 'RESTRICT'})
 Modele.belongsTo(Constructeur, {onDelete: 'RESTRICT'})
 Avion.belongsTo(Modele, {onDelete: 'RESTRICT'})
+Appareil.belongsTo(Avion, {onDelete: 'RESTRICT'})
+Photo.belongsTo(Photographe, {onDelete: 'RESTRICT'})
+Photo.belongsTo(Compagnie, {onDelete: 'RESTRICT'})
+Photo.belongsTo(Aerodrome, {onDelete: 'RESTRICT'})
+Photo.belongsTo(Appareil, {onDelete: 'RESTRICT'})
+Photo.belongsTo(Galerie, {onDelete: 'RESTRICT'})
 
 // export sequelize object (a handler to the db) and the Models
 module.exports.sequelize = sequelize
@@ -57,6 +65,8 @@ module.exports.Compagnie = Compagnie
 module.exports.Constructeur = Constructeur
 module.exports.Modele = Modele
 module.exports.Avion = Avion
+module.exports.Appareil = Appareil
+module.exports.Photo = Photo
 
 // synchro with the mysql server
 // disable or enable logs for dev

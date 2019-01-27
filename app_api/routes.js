@@ -20,8 +20,10 @@ const ctrlCompagnies = require('./controllers/compagnies')
 const ctrlConstructeurs = require('./controllers/constructeurs')
 const ctrlModeles = require('./controllers/modeles')
 const ctrlAvions = require('./controllers/avions')
+const ctrlAppareils = require('./controllers/appareils')
 const ctrlGaleries = require('./controllers/galeries')
 const ctrlPhotographes = require('./controllers/photographes')
+const ctrlPhotos = require('./controllers/photos')
 
 module.exports = function(passport) {
 
@@ -56,8 +58,10 @@ module.exports = function(passport) {
 	standardRouteFactory('constructeurs', ctrlConstructeurs)
 	standardRouteFactory('modeles', ctrlModeles)
 	standardRouteFactory('avions', ctrlAvions)
+	standardRouteFactory('appareils', ctrlAppareils)
 	standardRouteFactory('galeries', ctrlGaleries)
 	standardRouteFactory('photographes', ctrlPhotographes)
+	standardRouteFactory('photos', ctrlPhotos)
 	
 	// Create additional routes
 	router.get('/galeries/spotair', (req, res) => ctrlGaleries.allSpotair(req, res))

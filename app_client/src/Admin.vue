@@ -11,6 +11,7 @@
 			b-nav-item(to="/admin/constructeurs") Constructeurs
 			b-nav-item(to="/admin/modeles") Modèles
 			b-nav-item(to="/admin/avions") Avions
+			b-nav-item(to="/admin/appareils") Appareils
 			b-nav-item(href="/doc") Documentation
 		router-view
 </template>

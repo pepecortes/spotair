@@ -19,16 +19,16 @@
 				span(slot="no options") Aucun résultat
 				
 		b-form-group(
-			label="Nom",
-			label-for="nom",
-			:invalid-feedback="formData.invalid.nom",
-			:state="checkValidityState($v.formData.nom)"
+			label="Version",
+			label-for="version",
+			:invalid-feedback="formData.invalid.version",
+			:state="checkValidityState($v.formData.version)"
 		)
 			b-form-input(
-				id="nom",
+				id="version",
 				type="text",
-				v-model.trim="formData.nom",
-				:state="checkValidityState($v.formData.nom)"
+				v-model.trim="formData.version",
+				:state="checkValidityState($v.formData.version)"
 			)
 				
 </template>
@@ -46,7 +46,7 @@ export default {
 		return {
 			model: "avion",
 			validations: {
-				nom: {required},
+				version: {required},
 				modele: {required},
 			},
 			modeleOptions: null,

@@ -15,7 +15,7 @@ const dbReplaceReference = helpers.dbReplaceReference
  */ 
 function ModelController(Model) {
 	this.Model = Model
-	this.includeOption = (Model.metadata.hasForeignKeys)? {include: [{all:true}]} : {};
+	this.includeOption = (Model.metadata.hasForeignKeys)? {include: [{all:true, nested:true}]} : {}
 }
 
 /**

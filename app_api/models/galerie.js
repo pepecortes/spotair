@@ -32,18 +32,15 @@ module.exports = function(sequelize, DataTypes) {
 			},
 			text: {
 				type: DataTypes.VIRTUAL,
-				include: {model: db.Theme},
 				get: function() {
 					// you need to check for null before using the values of the
 					// associated Models because they will not be resolved under
-					// certain circumstances (i.e. when using Model.update())
-					var output = "";
-					if (this.annee) output += ", " + this.annee.annee;
-					if (this.theme) output += ", " + this.theme.theme;
-					if (this.aerodrome) output += ", " + this.aerodrome.text;
-					output += ", isSpotair: " + this.isSpotair;
-					output += ", " + this.commentaire;
-					return output;
+					// certain circumstances (i.e. when using requesting a fresh model)
+					const annee = (this.annee)? this.annee.text : null
+					const theme = (this.theme)? this.theme.text : null
+					const aerodrome = (this.aerodrome)? this.aerodrome.text : null
+					const isspotair = (this.isSpotair)? "associative" : null
+					return [annee, theme, aerodrome, isspotair, this.commentaire].filter(Boolean).join(', ')
 				}
 			},
 		

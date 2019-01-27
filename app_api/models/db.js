@@ -36,16 +36,15 @@ const Theme = sequelize.import('./theme')
 const Photographe = sequelize.import('./photographe')
 const Compagnie = sequelize.import('./compagnie')
 const Constructeur = sequelize.import('./constructeur')
+const Modele = sequelize.import('./modele')
+const Avion = sequelize.import('./avion')
 
 // then, build all the relationships between Models
-Annee.hasMany(Galerie, {onDelete: 'RESTRICT'})
-Galerie.belongsTo(Annee);
-
-Theme.hasMany(Galerie, {onDelete: 'RESTRICT'})
-Galerie.belongsTo(Theme);
-
-Aerodrome.hasMany(Galerie, {onDelete: 'RESTRICT'})
-Galerie.belongsTo(Aerodrome)
+Galerie.belongsTo(Annee, {onDelete: 'RESTRICT'})
+Galerie.belongsTo(Theme, {onDelete: 'RESTRICT'})
+Galerie.belongsTo(Aerodrome, {onDelete: 'RESTRICT'})
+Modele.belongsTo(Constructeur, {onDelete: 'RESTRICT'})
+Avion.belongsTo(Modele, {onDelete: 'RESTRICT'})
 
 // export sequelize object (a handler to the db) and the Models
 module.exports.sequelize = sequelize
@@ -56,7 +55,9 @@ module.exports.Theme = Theme
 module.exports.Photographe = Photographe
 module.exports.Compagnie = Compagnie
 module.exports.Constructeur = Constructeur
+module.exports.Modele = Modele
+module.exports.Avion = Avion
 
 // synchro with the mysql server
 // disable or enable logs for dev
-sequelize.sync({logging: false}); 
+sequelize.sync({logging: false})

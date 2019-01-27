@@ -8,6 +8,9 @@
 			b-nav-item(to="/admin/galeries") Galeries
 			b-nav-item(to="/admin/compagnies") Compagnies
 			b-nav-item(to="/admin/photographes") Photographes
+			b-nav-item(to="/admin/constructeurs") Constructeurs
+			b-nav-item(to="/admin/modeles") Modèles
+			b-nav-item(to="/admin/avions") Avions
 			b-nav-item(href="/doc") Documentation
 		router-view
 </template>

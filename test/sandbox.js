@@ -10,10 +10,12 @@ const helpers = require('../app_lib/helpers')
 console.log("START TEST")
 
 const db = require('../app_api/models/db')
-const ModelController = require('../app_api/controllers/modelControler')
+var hasForeignKeys = true
+const includeOption = (hasForeignKeys)? {include: [{all:true, nested: true}]} : {};
 
-var controllers = new ModelController(db.Aerodrome)
-console.log("controllers: " + controllers.includeOption)
-
-const ctrlAerodromes = require('../app_api/controllers/aerodromes')
-console.log("ctrlAerodromes: " + ctrlAerodromes.includeOption)
+	
+db.Modele
+	.findAll(includeOption)
+	//.findAll()
+	.then(record => console.log(JSON.stringify(record)))
+	.catch(err => console.log("error " + err))

@@ -20,15 +20,7 @@ controller.allSpotair =  function(req, res) {
 }
 
 // fusion
-/**
- * @function fusion
- * @description NOT YET IMPLEMENTED
- */
-controller.fusion =  async function(req, res) {
-	const sourceid = req.params.sourceid;
-	const destinationid = req.params.destinationid;
-	sendJSON.serverError(res, "METHOD NOT YET IMPLEMENTED")
-}
+controller.fusion = ModelController.buildFusionController('galerieId', db.Galerie, db.Photo)
 
 module.exports = controller
 

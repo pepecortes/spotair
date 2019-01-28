@@ -10,12 +10,7 @@ const helpers = require('../app_lib/helpers')
 console.log("START TEST")
 
 const db = require('../app_api/models/db')
-var hasForeignKeys = true
-const includeOption = (hasForeignKeys)? {include: [{all:true, nested: true}]} : {};
-
 	
-db.Modele
-	.findAll(includeOption)
-	//.findAll()
-	.then(record => console.log(JSON.stringify(record)))
-	.catch(err => console.log("error " + err))
+Model = db.Photo
+var instance = Model.build();
+console.log("photo " + JSON.stringify(instance))

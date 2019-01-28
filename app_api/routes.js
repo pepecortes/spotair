@@ -23,6 +23,7 @@ const ctrlAvions = require('./controllers/avions')
 const ctrlAppareils = require('./controllers/appareils')
 const ctrlGaleries = require('./controllers/galeries')
 const ctrlPhotographes = require('./controllers/photographes')
+const ctrlUsers = require('./controllers/users')
 const ctrlPhotos = require('./controllers/photos')
 
 module.exports = function(passport) {
@@ -61,12 +62,16 @@ module.exports = function(passport) {
 	standardRouteFactory('appareils', ctrlAppareils)
 	standardRouteFactory('galeries', ctrlGaleries)
 	standardRouteFactory('photographes', ctrlPhotographes)
+	standardRouteFactory('users', ctrlUsers)
 	standardRouteFactory('photos', ctrlPhotos)
 	
 	// Create additional routes
 	router.get('/galeries/spotair', (req, res) => ctrlGaleries.allSpotair(req, res))
+	//TEST
 	router.put('/photographes/setPassword/:id(\\d+)', (req, res) => ctrlPhotographes.setPassword(req, res))
 	router.get('/photographes/byLogin/:username', (req, res) => ctrlPhotographes.byLogin(req, res))
+	router.put('/users/setPassword/:id(\\d+)', (req, res) => ctrlUsers.setPassword(req, res))
+	router.get('/users/byLogin/:username', (req, res) => ctrlUsers.byLogin(req, res))
 
 	// Not found
 	router.all('/*', ctrlNotFound);

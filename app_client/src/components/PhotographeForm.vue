@@ -26,28 +26,7 @@
 				v-model.trim="formData.nom",
 				:state="checkValidityState($v.formData.nom)"
 			)
-		b-form-group(
-			label="Email",
-			label-for="mail",
-			:invalid-feedback="formData.invalid.mail",
-			:state="checkValidityState($v.formData.mail)"
-		)
-			b-form-input(
-				id="mail",
-				type="email",
-				v-model.trim="formData.mail",
-				:state="checkValidityState($v.formData.mail)"
-			)
-		b-form-group(
-			label="Admin",
-			label-for="isAdmin"
-		)
-			b-form-checkbox(
-				id="isAdmin",
-				v-model="formData.isAdmin"
-			)
 			
-		b-button(type="button", variant="outline-danger", v-on:click="resetPassword") Reset password
 </template>
 
 <script>
@@ -64,25 +43,10 @@ export default {
 			validations: {
 				nom: {required},
 				prenom: {required},
-				mail: {required}
 			},
 		}
 	},
 	
-	methods: {
-	
-		// Reset the  password to the DEFAULT one
-		resetPassword() {
-			var vm = this
-			const id = vm.formData.id
-			const password = process.env.MEMBRES_DEFAULT_PASSWORD
-			vm.axios.put("photographes/setPassword/" + id, {password: password})
-				.then(function(response) {
-					vm.showAlert("Mot de passe réinitialisé", "success")
-				})
-				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
-			},
-		},
 	}
 	
 </script>

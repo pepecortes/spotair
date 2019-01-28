@@ -10,6 +10,7 @@ var controller = new ModelController(db.Compagnie)
 
 // building other API calls...
 
-// FUSION NOT YET COMPLETED
+// fusion
+controller.fusion = ModelController.buildFusionController('compagnieId', db.Compagnie, db.Photo)
 
 module.exports = controller;

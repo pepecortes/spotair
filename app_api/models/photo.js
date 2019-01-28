@@ -9,7 +9,6 @@
  * @property {virtual}			text					- (summary of all fields)
  * @property {foreignKey}		photographeId
  * @property {foreignKey}		compagnieId
- * @property {foreignKey}		aerodromeId
  * @property {foreignKey}		appareilId
  * @property {foreignKey}		galerieId
  */
@@ -29,7 +28,10 @@ module.exports = function(sequelize, DataTypes) {
 		dateUpload: {
 			type: DataTypes.DATE,
 			allowNull: true,
-			defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+			set(val) {
+				try {this.setDataValue('dateUpload', val)}
+				catch (e) {this.setDataValue('dateUpload', null)}
+			},
 		},
 		
 		messageUpload: {
@@ -47,7 +49,10 @@ module.exports = function(sequelize, DataTypes) {
 		dateValidation: {
 			type: DataTypes.DATE,
 			allowNull: true,
-			defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+			set(val) {
+				try {this.setDataValue('dateUpload', val)}
+				catch (e) {this.setDataValue('dateUpload', null)}
+			},
 		},
 		
 		commentaire: {
@@ -62,13 +67,12 @@ module.exports = function(sequelize, DataTypes) {
 				const validation = (this.validation)? "publiée" : null
 				const photographe = (this.photographe)? this.photographe.text : null
 				const compagnie = (this.compagnie)? this.compagnie.text : null
-				const aerodrome = (this.aerodrome)? this.aerodrome.text : null
 				const appareil = (this.appareil)? this.appareil.text : null
 				const galerie = (this.galerie)? this.galerie.text : null
 				return [
 					validation,
-					photographe, compagnie, aerodrome, appareil, galerie,
-					commentaire
+					photographe, compagnie, appareil, galerie,
+					this.commentaire
 				].filter(Boolean).join(', ')
 			}
 		},
@@ -80,7 +84,6 @@ module.exports = function(sequelize, DataTypes) {
 					validation: '',
 					photographe: 'Requis',
 					compagnie: 'Requis',
-					aerodrome: 'Requis',
 					appareil: 'Requis',
 					galerie: 'Requis',
 					commentaire: '',
@@ -113,7 +116,7 @@ module.exports = function(sequelize, DataTypes) {
 		name: "Photo",
 		hasForeignKeys: true,
 		fieldNames: ['dateUpload', 'messageUpload', 'validation', 'dateValidation',
-		 'commentaire', 'photographeId', 'compagnieId', 'aerodromeId',
+		 'commentaire', 'photographeId', 'compagnieId',
 		 'appareilId', 'galerieId'],
 	}
 	

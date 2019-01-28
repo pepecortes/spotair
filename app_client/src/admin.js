@@ -30,10 +30,12 @@ import AnneeForm from './components/AnneeForm.vue'
 import GalerieForm from './components/GalerieForm.vue'
 import CompagnieForm from './components/CompagnieForm.vue'
 import PhotographeForm from './components/PhotographeForm.vue'
+import UserForm from './components/UserForm.vue'
 import ConstructeurForm from './components/ConstructeurForm.vue'
 import ModeleForm from './components/ModeleForm.vue'
 import AvionForm from './components/AvionForm.vue'
 import AppareilForm from './components/AppareilForm.vue'
+import PhotoForm from './components/PhotoForm.vue'
 
 // Define the routes
 const routes = [
@@ -47,6 +49,8 @@ const routes = [
   { path: '/admin/modeles', component: ModeleForm },
   { path: '/admin/avions', component: AvionForm },
   { path: '/admin/appareils', component: AppareilForm },
+  { path: '/admin/photos', component: PhotoForm },
+  { path: '/admin/users', component: UserForm },
 ]
 
 // Create the router

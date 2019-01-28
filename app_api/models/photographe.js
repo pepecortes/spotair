@@ -1,20 +1,10 @@
-const bcrypt = require('bcrypt');
 const debug = require('debug')('app:api:model:photographe');
-
-// Generate a hash out of the given password
-function generateHash(password) {
-	const salt = bcrypt.genSaltSync(8)
-	return bcrypt.hashSync(password, salt)
-}
 
 /**
  * Photographe / user model
  * @module /app_api/models/photographe
  * @param {string}		nom
  * @param {string}		prenom
- * @param {email}		mail
- * @param {boolean}	isAdmin
- * @param {string}		passwordHash
  * @param {virtual}			text					- (summary of all fields)
  */
 module.exports = function(sequelize, DataTypes) {
@@ -26,44 +16,17 @@ module.exports = function(sequelize, DataTypes) {
       autoIncrement: true,
       unique: true,
     },
+    
     nom: {
 			type: DataTypes.STRING,
 			allowNull: false,
 			defaultValue: "",
-		}, 
+		},
+		 
     prenom: {
 			type: DataTypes.STRING,
 			allowNull: false,
 			defaultValue: "",
-		},
-    mail: {
-			type: DataTypes.STRING,
-			allowNull: false,
-			defaultValue: "",
-      unique: true,
-		},
-		isAdmin: {
-			type: DataTypes.BOOLEAN,
-			allowNull: false,
-			defaultValue: false,
-		},
-		passwordHash: {
-			type: DataTypes.STRING,
-			allowNull: true,
-			defaultValue: generateHash(process.env.MEMBRES_DEFAULT_PASSWORD)
-		},
-		
-		password: {
-			type: DataTypes.VIRTUAL,
-			set(val) {
-				this.setDataValue('password', val)
-				this.setDataValue('passwordHash', Model.generateHash(val))
-			},	
-			validate: {
-				isLongEnough: val => {
-					if (val.length < 8) throw new Error("Le mot de passe doit avoir plus de 8 charactères")
-				}
-			}
 		},
 		
 		text: {
@@ -77,8 +40,6 @@ module.exports = function(sequelize, DataTypes) {
 				return {
 					nom: 'Requis',
 					prenom: 'Requis',
-					email: 'Adresse mail. Requis',
-					password: 'Minimum 8 charactères',
 				}
 			}
 		},
@@ -88,6 +49,7 @@ module.exports = function(sequelize, DataTypes) {
       defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
 			allowNull: false,
     },
+    
     updatedAt: {
       type: DataTypes.DATE,
       defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
@@ -97,7 +59,7 @@ module.exports = function(sequelize, DataTypes) {
   
   {
 		indexes: [
-				{type: 'FULLTEXT', name: 'text_search', fields: ['nom', 'prenom', 'mail']}
+				{type: 'FULLTEXT', name: 'text_search', fields: ['nom', 'prenom']}
 		]
   }
 
@@ -106,18 +68,7 @@ module.exports = function(sequelize, DataTypes) {
 	Model.metadata = {
 		name: "Photographe",
 		hasForeignKeys: false,
-		fieldNames: ['nom', 'prenom', 'mail', 'isAdmin', 'passwordHash'],
-	}
-	
-	// Class function. Generate a hash out of the given password
-	Model.generateHash = function(password) {
-		const salt = bcrypt.genSaltSync(8)
-		return bcrypt.hashSync(password, salt)
-	}
-	
-	// Check it the given password is valid
-	Model.prototype.validPassword = function(password) {
-		return bcrypt.compareSync(password, this.passwordHash)
+		fieldNames: ['nom', 'prenom'],
 	}
 	
 	return Model;

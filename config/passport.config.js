@@ -4,7 +4,7 @@ const LocalStrategy  = require('passport-local').Strategy
 const JWTStrategy = require("passport-jwt").Strategy
 const ExtractJwt = require("passport-jwt").ExtractJwt
 
-const Photographe = require('../app_api/models/db').Photographe
+const User = require('../app_api/models/db').User
 
 const jwtStrategy = new JWTStrategy(
 	{
@@ -29,7 +29,7 @@ const localStrategy = new LocalStrategy(
 	function(req, username, password, done) {
 		debug("authenticating with local strategy: " + username)
 		try {
-			Photographe.findOne({where: {mail: username}})
+			User.findOne({where: {mail: username}})
 				.then(user => {
 					if (!user) return done(null, false, req.flash('loginMessage', 'No user found'))
 					if (!user.validPassword(password)) return done(null, false, req.flash('loginMessage', 'Mot de passe incorrect'))
@@ -62,7 +62,7 @@ module.exports = function(passport) {
     
     passport.deserializeUser(function(id, done) {
 			try {
-				Photographe.findByPk(id)					
+				User.findByPk(id)					
 					.then(user => {
 						if(!user) done(null, false, req.flash('loginMessage', 'No user found'))
 						done(null, user)

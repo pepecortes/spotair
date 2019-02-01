@@ -67,8 +67,8 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.VIRTUAL,
 			get() {
 				return {
-					email: 'Adresse mail. Requis',
-					password: 'Minimum 8 charactères',
+					mail: 'Adresse mail. Requis',
+					photographe: 'Requis',
 				}
 			}
 		},
@@ -97,7 +97,7 @@ module.exports = function(sequelize, DataTypes) {
 	Model.metadata = {
 		name: "User",
 		hasForeignKeys: true,
-		fieldNames: ['mail', 'isAdmin', 'passwordHash', 'idPhotographe'],
+		fieldNames: ['mail', 'isAdmin', 'passwordHash', 'photographeId'],
 	}
 	
 	// Class function. Generate a hash out of the given password

@@ -44,7 +44,7 @@
 
 <script>
 import BaseForm from './BaseForm.vue'
-import { required } from "vuelidate/lib/validators"
+import { required, email } from "vuelidate/lib/validators"
 
 export default {
 	
@@ -55,7 +55,7 @@ export default {
 			model: "user",
 			validations: {
 				photographe: {required},
-				mail: {required}
+				mail: {required, email}
 			},
 			photographeOptions: null,
 		}
@@ -79,7 +79,7 @@ export default {
 			var vm = this
 			const id = vm.formData.id
 			const password = process.env.MEMBRES_DEFAULT_PASSWORD
-			vm.axios.put("photographes/setPassword/" + id, {password: password})
+			vm.axios.put("users/setPassword/" + id, {password: password})
 				.then(function(response) {
 					vm.showAlert("Mot de passe réinitialisé", "success")
 				})

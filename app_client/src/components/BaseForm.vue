@@ -128,8 +128,8 @@ export default {
 		// Add the form data to the database
     add() {
 			var vm = this
-      this.$v.formData.$touch()
-      if (this.$v.formData.$invalid) return
+      vm.$v.formData.$touch()
+      if (vm.$v.formData.$invalid) return
 			vm.axios.post(vm.apiURL, vm.formData)
 				.then(function(response) {
 					vm.showAlert("Created: " + response.data.text, "success")

@@ -39,7 +39,9 @@
 				v-model="formData.isAdmin"
 			)
 			
+	block additionalModifyActions
 		b-button(type="button", variant="outline-danger", v-on:click="resetPassword") Reset password
+			
 </template>
 
 <script>

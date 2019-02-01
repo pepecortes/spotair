@@ -14,6 +14,7 @@ div.baseForm
 			v-select(:options="selectOptions", label="text", @input="initForm", v-model="selection")
 			b-form(v-if="selection")
 				block input
+				block additionalModifyActions
 				b-button(type="button", variant="outline-warning", v-on:click="updateButtonClicked") Update
 				b-button(type="button", variant="outline-danger", v-on:click="removeButtonClicked") Delete
 				b-button(type="button", variant="outline-success", v-on:click="resetButtonClicked") Reset

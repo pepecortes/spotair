@@ -90,7 +90,7 @@ export default {
 		
 		updatePassword() {
 			var vm = this
-			vm.axios.put("photographes/setPassword/" + vm.user.id, {password: vm.password})
+			vm.axios.put("users/setPassword/" + vm.user.id, {password: vm.password})
 				.then(function(response) {
 					vm.showAlert("Mot de passe modifié", "success")
 				})

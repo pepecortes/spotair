@@ -26,6 +26,13 @@ module.exports = function(sequelize, DataTypes) {
       unique: true,
     },
     
+    // In general there is no need to define the foreign key for an
+    // 'belongsTo' association. However, I need this one to be UNIQUE
+    photographeId: {
+			type: DataTypes.INTEGER,
+			unique: true,
+		},
+    
     mail: {
 			type: DataTypes.STRING,
 			allowNull: false,

@@ -11,4 +11,7 @@ var controller = new ModelController(db.Photographe)
 
 // building other API calls...
 
+// fusion
+controller.fusion = ModelController.buildFusionController('photographeId', db.Photographe, db.Photo)
+
 module.exports = controller

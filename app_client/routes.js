@@ -65,7 +65,6 @@ module.exports = function(passport) {
 	
 	// returns the currently logged user
 	router.get('/profile',
-		setRedirect,
 		requireLogin,
 		(req, res) => sendJSON.ok(res, req.user)
 	)

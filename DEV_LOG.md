@@ -31,4 +31,7 @@ The application will manage **sessions** through **express-session**. The sessio
 
 I use **passport.js** as authentication middleware for `express`. I still do not know which authentication strategy I will use
 
+#### February 2019
+I will use **SCSS** for styles. **Airbus B612** as main font
+
 

@@ -67,9 +67,6 @@ module.exports = function(passport) {
 	
 	// Create additional routes
 	router.get('/galeries/spotair', (req, res) => ctrlGaleries.allSpotair(req, res))
-	//TEST
-	router.put('/photographes/setPassword/:id(\\d+)', (req, res) => ctrlPhotographes.setPassword(req, res))
-	router.get('/photographes/byLogin/:username', (req, res) => ctrlPhotographes.byLogin(req, res))
 	router.put('/users/setPassword/:id(\\d+)', (req, res) => ctrlUsers.setPassword(req, res))
 	router.get('/users/byLogin/:username', (req, res) => ctrlUsers.byLogin(req, res))
 

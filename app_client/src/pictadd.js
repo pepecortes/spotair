@@ -11,6 +11,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 // Create an axios instance and set some defaults for authorization...
 var axios = Axios.create()
 axios.defaults.baseURL = process.env.API_URL
+axios.defaults.timeout = 10000 // wait 10 seconds before giving out
 
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)

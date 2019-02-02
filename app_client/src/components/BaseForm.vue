@@ -81,7 +81,7 @@ export default {
 					vm.selectOptions = response.data
 					vm.selection = (preselected)? preselected : null
 				})
-				.catch(err => {console.log(JSON.stringify(err)), vm.showAlert(axiosErrorToString(err), "danger")})
+				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
 		},  
     
     removeButtonClicked() {

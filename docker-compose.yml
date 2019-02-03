@@ -35,5 +35,3 @@ services:
     restart: always
     ports:
       - "$PORT_DB_ADMIN:8080"
-
-      

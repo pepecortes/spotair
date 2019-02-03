@@ -25,4 +25,12 @@ controller.fusion = async function(req, res) {
 		.catch(err => sendJSON.serverError(res, err))
 }
 
+// only active members
+controller.onlyActives =  function(req, res) {
+	db.Photographe.scope('actifs')
+		.findAll()
+		.then(record => sendJSON.ok(res, record))
+		.catch(err => sendJSON.serverError(res, err));
+}
+
 module.exports = controller

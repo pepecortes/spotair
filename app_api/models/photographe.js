@@ -28,6 +28,12 @@ module.exports = function(sequelize, DataTypes) {
 			allowNull: false,
 			defaultValue: "",
 		},
+
+		actif: {
+			type: DataTypes.BOOLEAN,
+			allowNull: false,
+			defaultValue: true,
+		},
 		
 		text: {
 			type: DataTypes.VIRTUAL,
@@ -60,7 +66,14 @@ module.exports = function(sequelize, DataTypes) {
   {
 		indexes: [
 				{type: 'FULLTEXT', name: 'text_search', fields: ['nom', 'prenom']}
-		]
+		],
+			
+		scopes: {
+			// returns only active members
+			actifs: {
+				where: {actif: true}
+			}
+		},
   }
 
 	)
@@ -68,7 +81,7 @@ module.exports = function(sequelize, DataTypes) {
 	Model.metadata = {
 		name: "Photographe",
 		hasForeignKeys: false,
-		fieldNames: ['nom', 'prenom'],
+		fieldNames: ['nom', 'prenom', 'actif'],
 	}
 	
 	return Model;

@@ -29,7 +29,7 @@ const localStrategy = new LocalStrategy(
 	function(req, username, password, done) {
 		debug("authenticating with local strategy: " + username)
 		try {
-			User.findOne({where: {mail: username}})
+			User.findOne({ where: {mail: username} })
 				.then(user => {
 					if (!user) return done(null, false, req.flash('loginMessage', 'No user found'))
 					if (!user.validPassword(password)) return done(null, false, req.flash('loginMessage', 'Mot de passe incorrect'))
@@ -62,7 +62,7 @@ module.exports = function(passport) {
     
     passport.deserializeUser(function(id, done) {
 			try {
-				User.findByPk(id)					
+				User.findByPk(id, { include: [{ all: true }] })					
 					.then(user => {
 						if(!user) done(null, false, req.flash('loginMessage', 'No user found'))
 						done(null, user)

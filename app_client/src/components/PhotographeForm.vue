@@ -3,6 +3,14 @@
 	
 	block input
 		b-form-group(
+			label="Membre actif",
+			label-for="actif",
+		)
+			b-form-checkbox(
+				id="isspotair",
+				v-model="formData.actif",
+			)
+		b-form-group(
 			label="Prénom",
 			label-for="prenom",
 			:invalid-feedback="formData.invalid.prenom",

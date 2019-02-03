@@ -20,9 +20,10 @@ function setRedirect(req, res, next) {
 	return next()
 }
 
-// the route requires authenticated user
+// the route requires authenticated user and an active member
 function requireLogin(req, res, next) {
-	if (req.isAuthenticated()) return next()
+	if (req.isAuthenticated() && req.user.photographe.actif) return next()
+	req.flash('loginMessage', 'membre actif requis')
 	res.redirect('/login');
 }
 

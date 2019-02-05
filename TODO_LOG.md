@@ -25,12 +25,7 @@ domain = default
 test rclone: rclone lsd remote:
 
 https://hub.docker.com/r/morrisjobke/docker-swift-onlyon
+https://www.npmjs.com/package/node-ovh-storage
+https://www.npmjs.com/package/node-ovh-storage
 
-
-
-  swift:
-    image: "morrisjobke/docker-swift-onlyone"
-    ports:
-      12345:
-      ...
 

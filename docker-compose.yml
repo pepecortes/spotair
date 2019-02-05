@@ -17,6 +17,7 @@ services:
       - db
       - adminer
       - redis
+      - swift
   
   redis:
     image: "redis:alpine"
@@ -35,3 +36,9 @@ services:
     restart: always
     ports:
       - "$PORT_DB_ADMIN:8080"
+  
+  swift:
+    image: morrisjobke/docker-swift-onlyone
+    restart: always
+    volumes:
+      - ./dev_container:/srv

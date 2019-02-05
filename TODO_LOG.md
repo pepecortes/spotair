@@ -2,7 +2,6 @@ Explore https://www.npmjs.com/package/vue-picture-swipe
 https://www.npmjs.com/package/pkgcloud
 
 Verificar http://static.spotair.org
-Verificar http://storage.gra5.cloud.ovh.net/v1/AUTH_204701acb74a4804903a0a7699535282/static/
 (doc https://docs.ovh.com/fr/storage/)
 
 rclone install: curl https://rclone.org/install.sh | sudo bash
@@ -26,6 +25,12 @@ test rclone: rclone lsd remote:
 
 https://hub.docker.com/r/morrisjobke/docker-swift-onlyon
 https://www.npmjs.com/package/node-ovh-storage
-https://www.npmjs.com/package/node-ovh-storage
+https://www.npmjs.com/package/openstack-swift-client
 
+local container: 
+	docker-swift-onlyon as container server
+	openstack-swift-client as npm client (see test.js)
+	rclone to sync server content and be able to serve it by express
+	
+finish local setting and try remote settings
 

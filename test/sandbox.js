@@ -45,10 +45,27 @@ let client = new SwiftClient(authenticator);
     //console.log("Done!");
 //});
 
-client.create("static", true)
-	.then(res => console.log("resultado: " + res))	
-	.catch(err => console.log("error: " + err))
+//client.create("static", true)
+	//.then(res => console.log("resultado: " + res))	
+	//.catch(err => console.log("error: " + err))
 
 client.list()
-	.then(res => console.log("resultado: " + res))	
+	.then(res => console.log("resultado: " + JSON.stringify(res)))	
 	.catch(err => console.log("error: " + err))
+	
+let container = client.container('static')
+container.list()
+	.then(res => console.log("resultado: " + JSON.stringify(res)))	
+	.catch(err => console.log("error: " + err))
+ 
+let stream = fs.createReadStream('./koko.txt');
+container.create('mykoko.txt', stream, {author: 'pepe'})
+	.then(res => console.log("resultado: " + JSON.stringify(res)))	
+	.catch(err => console.log("error: " + err))
+	
+container.list()
+	.then(res => console.log("resultado: " + JSON.stringify(res)))	
+	.catch(err => console.log("error: " + err))
+
+
+

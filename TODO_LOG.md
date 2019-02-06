@@ -28,9 +28,10 @@ https://www.npmjs.com/package/node-ovh-storage
 https://www.npmjs.com/package/openstack-swift-client
 
 local container: 
-	docker-swift-onlyon as container server
+	docker-swift-only as container server
 	openstack-swift-client as npm client (see test.js)
 	rclone to sync server content and be able to serve it by express
 	
 finish local setting and try remote settings
+why the dev_* folders change their owner when starting the container?
 

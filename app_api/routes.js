@@ -12,7 +12,7 @@ const ctrlNotFound = function(req, res) {
 	sendJSON.notFound(res, err)
 }
 
-// Import all the controllers 
+// Import the model controllers 
 const ctrlAerodromes = require('./controllers/aerodromes')
 const ctrlAnnees = require('./controllers/annees')
 const ctrlThemes = require('./controllers/themes')
@@ -25,6 +25,9 @@ const ctrlGaleries = require('./controllers/galeries')
 const ctrlPhotographes = require('./controllers/photographes')
 const ctrlUsers = require('./controllers/users')
 const ctrlPhotos = require('./controllers/photos')
+
+// Import the storage controllers
+const ctrlStorage = require('./controllers/storage')
 
 module.exports = function(passport) {
 
@@ -70,6 +73,9 @@ module.exports = function(passport) {
 	router.get('/photographes/actifs', (req, res) => ctrlPhotographes.onlyActives(req, res))
 	router.put('/users/setPassword/:id(\\d+)', (req, res) => ctrlUsers.setPassword(req, res))
 	router.get('/users/byLogin/:username', (req, res) => ctrlUsers.byLogin(req, res))
+	
+	// Routes for object storage
+	router.get('/storage/getFile', (req, res) => ctrlStorage.getFile(req, res))
 
 	// Not found
 	router.all('/*', ctrlNotFound);

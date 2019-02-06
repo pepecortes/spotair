@@ -43,4 +43,4 @@ services:
     volumes:
       - ./dev_container:/srv
     ports:
-      - "$PORT_CONTAINER:8080"
+      - "$LOCAL_CONTAINER_PORT:8080"

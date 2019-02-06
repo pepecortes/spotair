@@ -75,7 +75,7 @@ module.exports = function(passport) {
 	router.get('/users/byLogin/:username', (req, res) => ctrlUsers.byLogin(req, res))
 	
 	// Routes for object storage
-	router.get('/storage/getFile', (req, res) => ctrlStorage.getFile(req, res))
+	router.get('/storage/putFile', (req, res) => ctrlStorage.putFile(req, res))
 
 	// Not found
 	router.all('/*', ctrlNotFound);

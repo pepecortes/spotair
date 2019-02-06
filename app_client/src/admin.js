@@ -37,6 +37,9 @@ import ModeleForm from './components/ModeleForm.vue'
 import AvionForm from './components/AvionForm.vue'
 import AppareilForm from './components/AppareilForm.vue'
 import PhotoForm from './components/PhotoForm.vue'
+//TEST
+import FileUploadForm from './components/FileUpload.vue'
+
 
 // Define the routes
 const routes = [
@@ -52,6 +55,8 @@ const routes = [
   { path: '/admin/appareils', component: AppareilForm },
   { path: '/admin/photos', component: PhotoForm },
   { path: '/admin/users', component: UserForm },
+  //TEST
+  { path: '/admin/fileUpload', component: FileUploadForm },
 ]
 
 // Create the router

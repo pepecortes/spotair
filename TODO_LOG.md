@@ -35,3 +35,8 @@ local container:
 finish local setting and try remote settings
 why the dev_* folders change their owner when starting the container?
 
+file uploads:
+	https://scotch.io/tutorials/how-to-handle-file-uploads-in-vue-2
+	https://flaviocopes.com/express-forms-files/
+	https://www.npmjs.com/package/express-formidable
+

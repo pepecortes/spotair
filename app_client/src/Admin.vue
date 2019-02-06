@@ -14,6 +14,7 @@
 			b-nav-item(to="/admin/appareils") Appareils
 			b-nav-item(to="/admin/photos") Photos
 			b-nav-item(to="/admin/users") Users
+			b-nav-item(to="/admin/fileUpload") FileUpload
 			b-nav-item(href="/doc") Documentation
 		router-view
 </template>

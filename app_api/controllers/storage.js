@@ -18,7 +18,7 @@ const authenticator = new SwiftClient.SwiftAuthenticator(authURL, username, pass
  
 var storageController = {}
 
-storageController.getFile = function(req, res) {
+storageController.putFile = function(req, res) {
 	try {
 		const TESTNAME = "hola.pepe"
 		const client = new SwiftClient(authenticator)

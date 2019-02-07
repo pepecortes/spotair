@@ -2,6 +2,7 @@
 	div(id='pictadd')
 		b-nav(fill, tabs)
 			b-nav-item(href="/") Home
+			b-nav-item(to="/pictadd/fileUpload") FileUpload
 			b-nav-item(to="/pictadd/profile") Profile
 			
 		router-view

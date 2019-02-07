@@ -18,14 +18,15 @@ const authenticator = new SwiftClient.SwiftAuthenticator(authURL, username, pass
  
 var storageController = {}
 
-storageController.putFile = function(req, res) {
+storageController.postFile = function(req, res) {
 	try {
-		const TESTNAME = "hola.pepe"
-		const client = new SwiftClient(authenticator)
-		const container = client.container(process.env.CONTAINER_NAME)
-		container.get(TESTNAME, stream)
-			.then(output => sendJSON.ok(res, output))	
-			.catch(err => sendJSON.serverError(res, err))
+		sendJSON.ok(res, {ok: true, files: req.body.files.length})
+		//const TESTNAME = "hola.pepe"
+		//const client = new SwiftClient(authenticator)
+		//const container = client.container(process.env.CONTAINER_NAME)
+		//container.get(TESTNAME, stream)
+			//.then(output => sendJSON.ok(res, output))	
+			//.catch(err => sendJSON.serverError(res, err))
 			
 	} catch {err => sendJSON.serverError(res, err)}
 }

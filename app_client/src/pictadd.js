@@ -19,10 +19,14 @@ Vue.use(VueAxios, axios)
 
 // Define or input route components
 import ProfileForm from './components/ProfileForm.vue'
+//TEST
+import FileUploadForm from './components/FileUpload.vue'
 
 // Define the routes
 const routes = [
   { path: '/pictadd/profile', component: ProfileForm },
+  //TEST
+  { path: '/pictadd/fileUpload', component: FileUploadForm },
 ]
 
 // Create the router

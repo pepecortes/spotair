@@ -1,43 +1,38 @@
-<template>
-    <div class="container">
-      <form enctype="multipart/form-data" novalidate v-if="isInitial || isSaving">
-        <h1>Upload images: https://scotch.io/tutorials/how-to-handle-file-uploads-in-vue-2</h1>
-        <div class="dropbox">
-          <input type="file" 
-						multiple 
-						:name="uploadFieldName" 
-						:disabled="isSaving" 
-						@change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length"
-            accept="image/*" class="input-file">
-            
-            <p v-if="isInitial">
-              Drag your file(s) here to begin<br> or click to browse
-            </p>
-            <p v-if="isSaving">
-              Uploading {{ fileCount }} files...
-            </p>
-        </div>
-      </form>
-  </div>
+<template lang="pug">
+
+	div(id="fileUpload")
+		b-form-file(
+			multiple,
+			ref="fileinput",
+			v-model="formData.files",
+			:state="Boolean(formData.files)",
+			placeholder="Choose a file...",
+			accept="image/*"
+		)
+		div(class="mt-3") Selected files:  {{formData.files && formData.files.length}}
+		div(class="mt-3") Status:  {{currentStatus}}
+		b-button(type="button", variant="outline-danger", v-on:click="uploadButtonClicked") Upload
+		b-button(type="button", variant="outline-success", v-on:click="resetButtonClicked") Reset
+		
 </template>
 
 <script>
-	
-//import { upload } from './file-upload.service'
 const STATUS_INITIAL = 0, STATUS_SAVING = 1, STATUS_SUCCESS = 2, STATUS_FAILED = 3
 
 export default {
 		
 	data() {
 		return {
-			uploadedFiles: [],
+			formData: {files: []},
+			//files: [],
 			uploadError: null,
 			currentStatus: null,
-			uploadFieldName: 'photos'
+			//uploadFieldName: 'photos'
 		}
 	},
 	
 	computed: {
+		apiURL () {return "storage/"},
 		isInitial() {
 			return this.currentStatus === STATUS_INITIAL;
 		},
@@ -52,19 +47,41 @@ export default {
 		}
 	},
 	
+	mounted() {
+		this.reset()
+	},
+	
 	methods: {
 		
-		reset() {
-			// reset form to initial state
-			this.currentStatus = STATUS_INITIAL;
-			this.uploadedFiles = [];
-			this.uploadError = null;
+		resetButtonClicked () {
+			this.reset()
+		},
+    
+		uploadButtonClicked() {
+			this.upload()
 		},
 		
-		save(formData) {
-			// upload data to the server
-			this.currentStatus = STATUS_SAVING;
-			console.log("I SHOULD BE UPLOADING...")
+    reset() {
+      this.$refs.fileinput.reset()
+			this.currentStatus = STATUS_INITIAL
+			this.uploadError = null
+    },
+		
+		upload() {
+			var vm = this
+			vm.currentStatus = STATUS_SAVING
+      //this.$v.formData.$touch()
+			const url = vm.apiURL + "putFile"
+			vm.axios.post(url, vm.formData)
+				.then(output => {
+					vm.currentStatus = STATUS_SUCCESS
+					console.log("success " + JSON.stringify(output.data))
+				})
+				.catch(err => {
+					this.currentStatus = STATUS_FAILED;
+					console.log("error: " + err)
+				})
+			
 
 			//upload(formData)
 				//.then(x => {
@@ -77,26 +94,6 @@ export default {
 				//});
 		},
 		
-		filesChange(fieldName, fileList) {
-			// handle file changes
-			const formData = new FormData();
-
-			if (!fileList.length) return;
-
-			// append the files to FormData
-			Array
-				.from(Array(fileList.length).keys())
-				.map(x => {
-					formData.append(fieldName, fileList[x], fileList[x].name);
-				});
-
-			// save it
-			this.save(formData);
-		}
-	},
-	
-	mounted() {
-		this.reset()
 	},
 
 }
@@ -104,34 +101,9 @@ export default {
 
 </script>
 
-
 <style lang="scss">
-  .dropbox {
-    outline: 2px dashed grey; /* the dash box */
-    outline-offset: -10px;
-    background: lightcyan;
-    color: dimgray;
-    padding: 10px 10px;
-    min-height: 200px; /* minimum height */
-    position: relative;
-    cursor: pointer;
-  }
 
-  .input-file {
-    opacity: 0; /* invisible but it's there! */
-    width: 100%;
-    height: 200px;
-    position: absolute;
-    cursor: pointer;
-  }
-
-  .dropbox:hover {
-    background: lightblue; /* when mouse over to the drop zone, change color */
-  }
-
-  .dropbox p {
-    font-size: 1.2em;
-    text-align: center;
-    padding: 50px 0;
-  }
+.formButtons {
+	display: inline-flex;
+}
 </style>

@@ -2,14 +2,12 @@
 
 	div(id="fileUpload")
 		b-form-file(
-			multiple,
 			ref="fileinput",
-			v-model="formData.files",
-			:state="Boolean(formData.files)",
-			placeholder="Choose a file...",
-			accept="image/*"
+			v-model="formData.file",
+			:state="Boolean(formData.file)",
+			placeholder="Choose a file..."
 		)
-		div(class="mt-3") Selected files:  {{formData.files && formData.files.length}}
+		div(class="mt-3") Selected files:  {{formData.file && formData.file.name}}
 		div(class="mt-3") Status:  {{currentStatus}}
 		b-button(type="button", variant="outline-danger", v-on:click="uploadButtonClicked") Upload
 		b-button(type="button", variant="outline-success", v-on:click="resetButtonClicked") Reset
@@ -23,11 +21,10 @@ export default {
 		
 	data() {
 		return {
-			formData: {files: []},
-			//files: [],
+			//file: null,
+			formData: {file: null},
 			uploadError: null,
 			currentStatus: null,
-			//uploadFieldName: 'photos'
 		}
 	},
 	
@@ -72,7 +69,13 @@ export default {
 			vm.currentStatus = STATUS_SAVING
       //this.$v.formData.$touch()
 			const url = vm.apiURL + "putFile"
-			vm.axios.post(url, vm.formData)
+			
+			var FormData = require('form-data')
+			var myform = new FormData()
+			myform.append('alfa', 'ḱoko')
+			myform.append('myfile', vm.formData.file)
+			
+			vm.axios.post(url, myform, {headers: {'Content-Type': 'multipart/form-data'}})
 				.then(output => {
 					vm.currentStatus = STATUS_SUCCESS
 					console.log("success " + JSON.stringify(output.data))
@@ -82,16 +85,6 @@ export default {
 					console.log("error: " + err)
 				})
 			
-
-			//upload(formData)
-				//.then(x => {
-					//this.uploadedFiles = [].concat(x);
-					//this.currentStatus = STATUS_SUCCESS;
-				//})
-				//.catch(err => {
-					//this.uploadError = err.response;
-					//this.currentStatus = STATUS_FAILED;
-				//});
 		},
 		
 	},

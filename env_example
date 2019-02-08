@@ -21,7 +21,7 @@ JWT_API_KEY=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiQVBJdXNlciJ9.xucOcC
 API_USER=APIuser 
 	// payload transmitted in the JWT_API_KEY
 
-LOCAL_STORAGE=true
+STORAGE=LOCAL
 	// use a local container (use for development only)
 LOCAL_CONTAINER_PORT=3002
 CONTAINER_NAME=spotair

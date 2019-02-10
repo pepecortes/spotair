@@ -13,6 +13,7 @@ services:
       - ./config:/app/config
       - ./doc:/app/doc
       - ./test:/app/test
+      - ./dev_container_rclone:/app/local_container_rclone
     depends_on:
       - db
       - adminer

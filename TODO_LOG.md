@@ -39,4 +39,7 @@ file uploads:
 	https://scotch.io/tutorials/how-to-handle-file-uploads-in-vue-2
 	https://flaviocopes.com/express-forms-files/
 	https://www.npmjs.com/package/express-formidable
+	
+Ensure that the adequate container exists in the localStorage: otherwise the upload will fail
+
 

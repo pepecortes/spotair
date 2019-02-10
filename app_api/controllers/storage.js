@@ -29,6 +29,7 @@ var configOVH = {
  * @return {Promise} Promise that resolves or error
  */
 function storeToContainer(file) {
+	debug("IN STORE TO CONTAINER")
 	var stream = fs.createReadStream(file.path)
 	const container = getContainer()
 	if (LOCAL_STORAGE) return container.create(file.name, stream)

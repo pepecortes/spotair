@@ -50,6 +50,11 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
+// serve static pages (i.e pictures)
+if (process.env.STORAGE === "LOCAL") {
+	app.use('/static', express.static(path.join(__dirname, process.env.LOCAL_STORAGE_LOCATION)))
+}
+
 // load the api routes
 const routesApi = require('./app_api/routes')
 app.use('/api', routesApi(passport))

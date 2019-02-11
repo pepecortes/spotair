@@ -9,7 +9,7 @@ https://www.npmjs.com/package/node-ovh-storage
 
 local container: 
 	filesystem
-	serve by express
+	static pages server: how to do it. how to manage NOT FOUND errors
 	document in README
 	
 try remote settings

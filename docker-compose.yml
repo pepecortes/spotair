@@ -13,12 +13,10 @@ services:
       - ./config:/app/config
       - ./doc:/app/doc
       - ./test:/app/test
-      - ./dev_container_rclone:/app/local_container_rclone
     depends_on:
       - db
       - adminer
       - redis
-      - swift
   
   redis:
     image: "redis:alpine"
@@ -37,11 +35,3 @@ services:
     restart: always
     ports:
       - "$PORT_DB_ADMIN:8080"
-  
-  swift:
-    image: morrisjobke/docker-swift-onlyone
-    restart: always
-    volumes:
-      - ./dev_container:/srv
-    ports:
-      - "$LOCAL_CONTAINER_PORT:8080"

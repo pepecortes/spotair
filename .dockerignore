@@ -1,8 +1,10 @@
 node_modules
 npm-debug.log
 
-# ignore the development database
-dev_database/
+# ignore the development folders
+dev_*
+
+
 
 # ignore the git files
 .git/

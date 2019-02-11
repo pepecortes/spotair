@@ -15,49 +15,48 @@ console.log("START TEST")
 //var instance = Model.build();
 //console.log("photo " + JSON.stringify(instance))
 
-var OVHStorage = require('node-ovh-storage');
+//var OVHStorage = require('node-ovh-storage');
 
-var config = {
-	username: 'sJm6rkJbMD8h',
-	password: '3478wfekYQEwWQNN5TaWEpRx6sHsYBqw',
-	authURL: 'https://auth.cloud.ovh.net/v2.0/',
-  tenantId: '204701acb74a4804903a0a7699535282',
-  region:   'GRA5'
-};
+//var config = {
+	//username: 'sJm6rkJbMD8h',
+	//password: '3478wfekYQEwWQNN5TaWEpRx6sHsYBqw',
+	//authURL: 'https://auth.cloud.ovh.net/v2.0/',
+  //tenantId: '204701acb74a4804903a0a7699535282',
+  //region:   'GRA5'
+//};
 
-var storage = new OVHStorage(config)
-storage.getToken(
-	function(err) {
-		console.log("CONNECTED: err: " + err)
-    //storage.putFile('./tmp/hola.pepe', '/static/hola.pepe', (err, res) => {console.log(err), console.log(res)})
-    storage.getFileList('/', (err, res) => {console.log(err), console.log(res)})
-	}
-)
+//var storage = new OVHStorage(config)
+//storage.getToken(
+	//function(err) {
+		//console.log("CONNECTED: err: " + err)
+    ////storage.putFile('./tmp/hola.pepe', '/static/hola.pepe', (err, res) => {console.log(err), console.log(res)})
+    //storage.getFileList('/', (err, res) => {console.log(err), console.log(res)})
+	//}
+//)
 
-//const SwiftClient = require('openstack-swift-client')
-//const authURL = "http://swift:8080/auth/v1.0"
-//const username = "test:tester"
-//const password =  "testing"
-//const authenticator = new SwiftClient.SwiftAuthenticator(authURL, username, password)
- 
-//let client = new SwiftClient(authenticator);
-//client.list()
-	//.then(res => console.log("resultado: " + JSON.stringify(res)))	
-	//.catch(err => console.log("error: " + err))
-	
-//let container = client.container('static')
-//container.list()
-	//.then(res => console.log("resultado: " + JSON.stringify(res)))	
-	//.catch(err => console.log("error: " + err))
- 
-//let stream = fs.createReadStream('./koko.txt');
-//container.create('mykoko.txt', stream, {author: 'pepe'})
-	//.then(res => console.log("resultado: " + JSON.stringify(res)))	
-	//.catch(err => console.log("error: " + err))
-	
-//container.list()
-	//.then(res => console.log("resultado: " + JSON.stringify(res)))	
-	//.catch(err => console.log("error: " + err))
+const source = "./hola.pepe"
+const target = "./bak/hola.pepe"
+
+//function copyFile(source, target) {
+  //var rd = fs.createReadStream(source);
+  //var wr = fs.createWriteStream(target);
+  //return new Promise(function(resolve, reject) {
+    //rd.on('error', reject);
+    //wr.on('error', reject);
+    //wr.on('finish', resolve);
+    //rd.pipe(wr);
+  //}).catch(function(error) {
+    //rd.destroy();
+    //wr.end();
+    //throw error;
+  //});
+//}
+
+helpers.copyFile(source, target)
+	.then(out => console.log("success: " + out))
+	.catch(err => console.log("error: " + err))
+
+
 
 
 

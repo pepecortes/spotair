@@ -7,7 +7,6 @@ WORKDIR /app
 # install and editor just in case
 RUN ["apt-get", "update"]
 RUN ["apt-get", "install", "-y", "nano"]
-RUN ["apt-get", "install", "-y", "rclone"]
 
 # copy some app starting files
 # (app sources will be bound for development)

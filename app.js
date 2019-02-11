@@ -1,16 +1,16 @@
 /**
  * Main entry for the application
  */ 
-require('dotenv').load();
-const express = require('express');
+require('dotenv').load()
+const express = require('express')
 const session = require('express-session')
 const morgan       = require('morgan')
-const RedisStore = require('connect-redis')(session) 
-const path = require('path');
-const logger = require('morgan');
-const bodyParser = require('body-parser');
-const fs = require('fs');
-const HTTPStatus = require('http-status');
+const RedisStore = require('connect-redis')(session)
+const path = require('path')
+const logger = require('morgan')
+const bodyParser = require('body-parser')
+const fs = require('fs')
+const HTTPStatus = require('http-status')
 const { exec } = require('child_process')
 
 const passport = require('passport')
@@ -20,18 +20,6 @@ require('./config/passport.config')(passport)
 // start debugging
 const debug = require('debug')('app:main');
 debug("starting application");
-
-// if using a local storage, sync files with rclone so that they
-// can be served by express
-const rcloneConfig = "./config/rclone.config"
-const source = "localStorage:" + process.env.CONTAINER_NAME
-const destination = "./local_container_rclone"
-const command = `rclone --config ${rcloneConfig} sync ${source} ${destination}`
-debug("ISSUING SYNC COMMAND : " + command)
-exec(command, (err, stdout, stderr) => {
-  if (err) debug(`rclone sync error: ${err}`)
-	else debug(`rclone sync OK: ${stdout}`)
-})
 
 // connect database and models
 require('./app_api/models/db');

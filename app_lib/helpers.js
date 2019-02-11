@@ -2,9 +2,10 @@
  * Common helpers functions
  * @module /app_lib/helpers
  */ 
-const debug = require('debug')('app:lib:helpers');
-const HTTPStatus = require('http-status');
-const pickObject = require('lodash').pick;
+const debug = require('debug')('app:lib:helpers')
+const HTTPStatus = require('http-status')
+const fs = require('fs')
+const pickObject = require('lodash').pick
 
 var exports = {};
 
@@ -111,6 +112,29 @@ exports.dbReplaceReference = async function(Model, refModel, refField, sourceid,
 			return output
 		})
 	return promise
+}
+
+
+/**
+ * @function copyFile
+ * @description Copy source file to target file
+ * @param {string} source	- path to the source file
+ * @param {string} target - path to the target (including its file name)
+ * @return {Promise} An (empty) promise
+ */
+exports.copyFile = function(source, target) {
+  var rd = fs.createReadStream(source)
+  var wr = fs.createWriteStream(target)
+  return new Promise(function(resolve, reject) {
+    rd.on('error', reject)
+    wr.on('error', reject)
+    wr.on('finish', resolve)
+    rd.pipe(wr)
+  }).catch(function(error) {
+    rd.destroy()
+    wr.end()
+    throw error
+  })
 }
 
 

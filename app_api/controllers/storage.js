@@ -2,6 +2,7 @@ const debug = require('debug')('app:api:storage')
 const helpers = require('../../app_lib/helpers')
 const sendJSON = helpers.sendJSON
 const fs = require('fs')
+const path = require('path')
 const formidable = require('formidable')
 
 const LOCAL_STORAGE = (process.env.STORAGE === "LOCAL") 
@@ -29,12 +30,16 @@ var configOVH = {
  * @return {Promise} Promise that resolves or error
  */
 function storeToContainer(file) {
-	debug("IN STORE TO CONTAINER")
-	var stream = fs.createReadStream(file.path)
-	const container = getContainer()
-	if (LOCAL_STORAGE) return container.create(file.name, stream)
+	if (LOCAL_STORAGE) {
+		const source = file.path
+		const target = path.join(__dirname, process.env.LOCAL_STORAGE_LOCATION , file.name)
+		debug(`local copy from: ${source} to ${target}`)
+		return helpers.copyFile(source, target)
+	}
 	// if OVH remote storage...
 	function putFilePromise() {
+		const container = new OVHStorage(configOVH)
+		var stream = fs.createReadStream(file.path)
 		const path = "/" + process.env.CONTAINER_NAME + "/" + file.name
 		return new Promise((resolve, reject) =>
 			container.putStream(stream, path, (err, data) => {
@@ -57,15 +62,6 @@ function listContainer() {
 			}))
 	}
 	return getOVHToken(container).then(() => getListPromise())
-}
-
-/**
- * @function
- * @desc Returns a container, whether local or remote depends in the environment variables
- */
-function getContainer() {
-	if (LOCAL_STORAGE) return new SwiftClient(authenticator).container(process.env.CONTAINER_NAME)
-	else return new OVHStorage(configOVH)
 }
 
 /** @function

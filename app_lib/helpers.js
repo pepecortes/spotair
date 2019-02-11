@@ -137,5 +137,20 @@ exports.copyFile = function(source, target) {
   })
 }
 
+/**
+ * @function readDir
+ * @description List the folder contents
+ * @param {string} dir	- path to the folder
+ * @return {Promise} An (empty) promise
+ */
+exports.readDir = function(dir) {
+  return new Promise((resolve, reject) => {
+		fs.readdir(dir, (err, files) => {
+			if (err !== null) reject(err)
+			else resolve(files)
+		})
+  }).catch(err => {throw err})
+}
+
 
 module.exports = exports;

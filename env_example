@@ -24,7 +24,13 @@ API_USER=APIuser
 STORAGE=LOCAL
 	// use a local storage (use for development only)
 LOCAL_STORAGE_LOCATION=dev_localstorage/
-CONTAINER_NAME=spotair
+CONTAINER_NAME=static
+
+OVH_USERNAME=sJm6rkJbMD8h
+OVH_PASSWORD=3478wfekYQEwWQNN5TaWEpRx6sHsYBqw
+OVH_AUTH_URL=https://auth.cloud.ovh.net/v2.0/
+OVH_TENTANT_ID=204701acb74a4804903a0a7699535282
+OVH_REGION=GRA5
 
 WEB_URL=http://localhost:3000/
 API_URL=http://localhost:3000/api/

@@ -7,20 +7,15 @@ const formidable = require('formidable')
 
 const LOCAL_STORAGE = (process.env.STORAGE === "LOCAL") 
 
-const SwiftClient = require('openstack-swift-client')
-const authURL = "http://swift:8080/auth/v1.0"
-const username = "test:tester"
-const password =  "testing"
-const authenticator = new SwiftClient.SwiftAuthenticator(authURL, username, password)
-
 var OVHStorage = require('node-ovh-storage')
 var configOVH = {
-	username: 'sJm6rkJbMD8h',
-	password: '3478wfekYQEwWQNN5TaWEpRx6sHsYBqw',
-	authURL: 'https://auth.cloud.ovh.net/v2.0/',
-  tenantId: '204701acb74a4804903a0a7699535282',
-  region:   'GRA5'
+	username:	process.env.OVH_USERNAME,
+	password:	process.env.OVH_PASSWORD,
+	authURL:	process.env.OVH_AUTH_URL,
+  tenantId: process.env.OVH_TENTANT_ID,
+  region: 	process.env.OVH_REGION
 }
+const containerOVH = new OVHStorage(configOVH)
 
 /**
  * @function
@@ -31,37 +26,40 @@ var configOVH = {
  */
 function storeToContainer(file) {
 	if (LOCAL_STORAGE) {
-		const source = file.path
-		const target = path.join(__dirname, process.env.LOCAL_STORAGE_LOCATION , file.name)
-		debug(`local copy from: ${source} to ${target}`)
+		const source = path.resolve(file.path)
+		const target = path.resolve('./', process.env.LOCAL_STORAGE_LOCATION, file.name)
+		debug(`local file copy from: ${source} to ${target}`)
 		return helpers.copyFile(source, target)
 	}
 	// if OVH remote storage...
 	function putFilePromise() {
-		const container = new OVHStorage(configOVH)
 		var stream = fs.createReadStream(file.path)
 		const path = "/" + process.env.CONTAINER_NAME + "/" + file.name
+		debug(`OVH file copy from: ${file.path} to ${path}`)
 		return new Promise((resolve, reject) =>
-			container.putStream(stream, path, (err, data) => {
+			containerOVH.putStream(stream, path, (err, data) => {
 				if (err !== null) reject(err)
 				else resolve(data)
 			}))
 	}
-	return getOVHToken(container).then(() => putFilePromise())
+	return getOVHToken(containerOVH).then(() => putFilePromise())
 }
 
 function listContainer() {
-	const container = getContainer()
-	if (LOCAL_STORAGE) return container.list()
+	if (LOCAL_STORAGE) {
+		const dir = path.resolve('./', process.env.LOCAL_STORAGE_LOCATION)
+		debug(`reading folder contents from: ${dir}`)
+		return helpers.readDir(dir)
+	}
 	// if OVH remote storage...
 	function getListPromise() {
 		return new Promise((resolve, reject) =>
-			container.getFileList("/" + process.env.CONTAINER_NAME, (err, data) => {
+			containerOVH.getFileList("/" + process.env.CONTAINER_NAME, (err, data) => {
 				if (err !== null) reject(err)
 				else resolve(data)
 			}))
 	}
-	return getOVHToken(container).then(() => getListPromise())
+	return getOVHToken(containerOVH).then(() => getListPromise())
 }
 
 /** @function
@@ -82,7 +80,6 @@ function getOVHToken(container) {
  * @desc DOC IN PROGRESS
  * @param DOC IN PROGRESS
  */
- 
 var storageController = {}
 
 storageController.postFile = function(req, res) {

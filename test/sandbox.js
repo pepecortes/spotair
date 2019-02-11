@@ -34,29 +34,34 @@ console.log("START TEST")
 	//}
 //)
 
-const source = "./hola.pepe"
-const target = "./bak/hola.pepe"
 
-//function copyFile(source, target) {
-  //var rd = fs.createReadStream(source);
-  //var wr = fs.createWriteStream(target);
-  //return new Promise(function(resolve, reject) {
-    //rd.on('error', reject);
-    //wr.on('error', reject);
-    //wr.on('finish', resolve);
-    //rd.pipe(wr);
-  //}).catch(function(error) {
-    //rd.destroy();
-    //wr.end();
-    //throw error;
-  //});
-//}
+function getOVHToken(container) {
+	return new Promise((resolve, reject) => container.getToken((err, data) => {
+		if (err !== null) {debug("token error: " + err);reject(err)}
+		else resolve(data)
+	}))
+}
 
-helpers.copyFile(source, target)
-	.then(out => console.log("success: " + out))
-	.catch(err => console.log("error: " + err))
+var OVHStorage = require('node-ovh-storage')
+var configOVH = {
+	username:	process.env.OVH_USERNAME,
+	password:	process.env.OVH_PASSWORD,
+	authURL:	process.env.OVH_AUTH_URL,
+  tenantId: process.env.OVH_TENTANT_ID,
+  region: 	process.env.OVH_REGION
+}
+console.log(JSON.stringify(configOVH))
+const containerOVH = new OVHStorage(configOVH)
 
-
+OVHStorage.getToken(function(err) {
+	if (err) console.log("ERROR " + err)
+	else {
+		storage.getFiles('/static', function(err, files) {
+					// done
+				});
+	}
+  
+});
 
 
 

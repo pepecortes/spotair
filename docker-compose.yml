@@ -13,6 +13,7 @@ services:
       - ./config:/app/config
       - ./doc:/app/doc
       - ./test:/app/test
+      - ./$LOCAL_STORAGE_LOCATION:/app/$LOCAL_STORAGE_LOCATION
     depends_on:
       - db
       - adminer

@@ -21,7 +21,6 @@ export default {
 		
 	data() {
 		return {
-			//file: null,
 			formData: {file: null},
 			uploadError: null,
 			currentStatus: null,
@@ -72,13 +71,14 @@ export default {
 			
 			var FormData = require('form-data')
 			var myform = new FormData()
-			myform.append('alfa', 'ḱoko')
 			myform.append('myfile', vm.formData.file)
 			
 			vm.axios.post(url, myform, {headers: {'Content-Type': 'multipart/form-data'}})
 				.then(output => {
 					vm.currentStatus = STATUS_SUCCESS
-					console.log("success " + JSON.stringify(output.data))
+					const url = process.env.STORAGE_URL + vm.formData.file.name
+					console.log("URL: " + url)
+					//window.location.href = url
 				})
 				.catch(err => {
 					this.currentStatus = STATUS_FAILED;

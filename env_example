@@ -34,5 +34,7 @@ OVH_REGION=GRA5
 
 WEB_URL=http://localhost:3000/
 API_URL=http://localhost:3000/api/
+STORAGE_URL=http://localhost:3000/localStorage/
+	// remote alternate: STORAGE_URL=http://static.spotair.org/
 
 MEMBRES_DEFAULT_PASSWORD="membres!"

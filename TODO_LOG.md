@@ -6,10 +6,9 @@ http://static.spotair.org
 
 
 https://www.npmjs.com/package/node-ovh-storage
+	document in README
 
-local container: 
-	filesystem
-	static pages server: how to do it. how to manage NOT FOUND errors
+local container:
 	document in README
 	
 try remote settings
@@ -19,6 +18,6 @@ file uploads:
 	https://flaviocopes.com/express-forms-files/
 	https://www.npmjs.com/package/express-formidable
 	
-
+put a link to portainer in the docs
 
 

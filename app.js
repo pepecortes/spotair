@@ -11,6 +11,7 @@ const logger = require('morgan')
 const bodyParser = require('body-parser')
 const fs = require('fs')
 const HTTPStatus = require('http-status')
+const sendJSON = require('./app_lib/helpers').sendJSON
 const { exec } = require('child_process')
 
 const passport = require('passport')
@@ -52,7 +53,8 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 
 // serve static pages (i.e pictures)
 if (process.env.STORAGE === "LOCAL") {
-	app.use('/static', express.static(path.join(__dirname, process.env.LOCAL_STORAGE_LOCATION)))
+	app.use('/localStorage', express.static(path.join(__dirname, process.env.LOCAL_STORAGE_LOCATION)))
+	app.use('/localStorage/*', (req, res) => {sendJSON.notFound(res, "Asset not found")})
 }
 
 // load the api routes

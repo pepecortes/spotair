@@ -25,11 +25,11 @@ Vue.use(BootstrapVue)
 Vue.use(VueAxios, axios)
 
 // Define or input route components
-//import AerodromeForm from './components/AerodromeForm.vue'
+import Accueil from './components/Accueil.vue'
 
 // Define the routes
 const routes = [
-  //{ path: '/login', component: Login },
+  { path: '/cover', component: Accueil },
 ]
 
 // Create the router

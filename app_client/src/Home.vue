@@ -2,6 +2,7 @@
 	div(id='home')
 	
 		b-nav(fill, tabs)
+			b-nav-item(href="/cover") Accueil
 			b-nav-item(href="/admin") Admin
 			b-nav-item(href="/pictadd") Pictadd
 			b-nav-item(href="/login") Login
@@ -24,7 +25,7 @@ export default {}
 }
 
 #home {
-	max-width: 600px;
+	max-width: 1200px;
 	margin: 0 auto;
 	line-height: 1.4;
 	-webkit-font-smoothing: antialiased;

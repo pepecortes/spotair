@@ -1,4 +1,5 @@
 Explore https://www.npmjs.com/package/vue-picture-swipe
+https://cloudinary.com
 
 http://static.spotair.org
 	document

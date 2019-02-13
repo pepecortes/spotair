@@ -2,6 +2,7 @@ const debug = require('debug')('app:api:storage')
 const helpers = require('../../app_lib/helpers')
 const sendJSON = helpers.sendJSON
 const fs = require('fs')
+const fsp = require('fs').promises
 const path = require('path')
 const formidable = require('formidable')
 
@@ -29,7 +30,7 @@ function storeToContainer(file) {
 		const source = path.resolve(file.path)
 		const target = path.resolve('./', process.env.LOCAL_STORAGE_LOCATION, file.name)
 		debug(`local file copy from: ${source} to ${target}`)
-		return helpers.copyFile(source, target)
+		return fsp.copyFile(source, target)
 	}
 	// if OVH remote storage...
 	function putFilePromise() {
@@ -49,7 +50,7 @@ function listContainer() {
 	if (LOCAL_STORAGE) {
 		const dir = path.resolve('./', process.env.LOCAL_STORAGE_LOCATION)
 		debug(`reading folder contents from: ${dir}`)
-		return helpers.readDir(dir)
+		return fsp.readdir(dir)
 	}
 	// if OVH remote storage...
 	function getListPromise() {

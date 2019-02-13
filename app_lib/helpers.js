@@ -116,51 +116,13 @@ exports.dbReplaceReference = async function(Model, refModel, refField, sourceid,
 	return promise
 }
 
-
-/**
- * @function copyFile
- * @description Copy source file to target file
- * @param {string} source	- path to the source file
- * @param {string} target - path to the target (including its file name)
- * @return {Promise} An (empty) promise
- */
-exports.copyFile = function(source, target) {
-  var rd = fs.createReadStream(source)
-  var wr = fs.createWriteStream(target)
-  return new Promise(function(resolve, reject) {
-    rd.on('error', reject)
-    wr.on('error', reject)
-    wr.on('finish', resolve)
-    rd.pipe(wr)
-  }).catch(function(error) {
-    rd.destroy()
-    wr.end()
-    throw error
-  })
-}
-
-/**
- * @function readDir
- * @description List the folder contents
- * @param {string} dir	- path to the folder
- * @return {Promise} An (empty) promise
- */
-exports.readDir = function(dir) {
-  return new Promise((resolve, reject) => {
-		fs.readdir(dir, (err, files) => {
-			if (err !== null) reject(err)
-			else resolve(files)
-		})
-  }).catch(err => {throw err})
-}
-
 /**
  * @function jpegMetadat
- * @desc Obtain EXIF + image size by reading the first 65 Kb of the jpg
+ * @desc Obtain EXIF + image size by reading the first 65 KB of the jpg
  * @param {string} url	- jpeg url
  * @return {Promise<Object>} {height, width, exiftags...}
  */
-exports.jpegMetadata = async function(url) {
+async function jpegMetadata(url) {
 	const buffer = Buffer.alloc(65535)
 	return fsp.open(url)
 		.then(fd => fd.read(buffer, 0, 65535, 0))
@@ -169,6 +131,22 @@ exports.jpegMetadata = async function(url) {
 			var result = parser.parse()
 			return Object.assign(result.getImageSize(), result.tags)
 		})
+}
+exports.jpegMetadata = jpegMetadata
+
+/**
+ * @function jpegMetadataSync
+ * @desc synchronous method to obtain the image metadata by reading only 65 KB
+ * @param {string} url	- jpeg url
+ * @return {Object} {height, width, exiftags}
+ */
+exports.jpegMetadataSync = function(url) {
+	const buffer = Buffer.alloc(65535)
+	var fd = fs.openSync(url)
+	fs.readSync(fd, buffer, 0, 65535, 0)
+	var parser = exifParser.create(buffer)
+	var result = parser.parse()
+	return Object.assign(result.getImageSize(), result.tags)
 }
 
 

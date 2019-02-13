@@ -5,7 +5,9 @@
 const debug = require('debug')('app:lib:helpers')
 const HTTPStatus = require('http-status')
 const fs = require('fs')
+const fsp = require('fs').promises
 const pickObject = require('lodash').pick
+const exifParser = require('exif-parser')
 
 var exports = {};
 
@@ -150,6 +152,23 @@ exports.readDir = function(dir) {
 			else resolve(files)
 		})
   }).catch(err => {throw err})
+}
+
+/**
+ * @function jpegMetadat
+ * @desc Obtain EXIF + image size by reading the first 65 Kb of the jpg
+ * @param {string} url	- jpeg url
+ * @return {Promise<Object>} {height, width, exiftags...}
+ */
+exports.jpegMetadata = async function(url) {
+	const buffer = Buffer.alloc(65535)
+	return fsp.open(url)
+		.then(fd => fd.read(buffer, 0, 65535, 0))
+		.then(reading => {
+			var parser = exifParser.create(reading.buffer)
+			var result = parser.parse()
+			return Object.assign(result.getImageSize(), result.tags)
+		})
 }
 
 

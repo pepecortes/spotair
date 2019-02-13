@@ -73,6 +73,7 @@ module.exports = function(passport) {
 	router.get('/photographes/actifs', (req, res) => ctrlPhotographes.onlyActives(req, res))
 	router.put('/users/setPassword/:id(\\d+)', (req, res) => ctrlUsers.setPassword(req, res))
 	router.get('/users/byLogin/:username', (req, res) => ctrlUsers.byLogin(req, res))
+	router.get('/photos/recent', (req, res) => ctrlPhotos.recent(req, res))
 	
 	// Routes for object storage
 	router.post('/storage/putFile', (req, res) => ctrlStorage.postFile(req, res))

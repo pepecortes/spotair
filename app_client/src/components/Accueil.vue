@@ -1,5 +1,12 @@
 <template lang="pug">
 	div(id='cover')
+		b-alert(
+			:variant="alert.type",
+			dismissible,
+			fade,
+			:show="alert.show",
+			@dismissed="alert.show=false"
+			) {{ alert.text }}
 		h1 This is the cover page
 		vue-picture-swipe(:items="items")
 </template>
@@ -7,12 +14,18 @@
 <script>
 
 import VuePictureSwipe from 'vue-picture-swipe'
+import { axiosErrorToString } from '../lib/common'
+import { alertMixin } from './AlertMixin'
 
 export default {
 	
 	components: {
 		'vue-picture-swipe': VuePictureSwipe
 	},
+	
+	mixins: [alertMixin],
+
+	mounted () {this.getLatestPhotos()},
 	
 	data() {
 		return {
@@ -22,21 +35,37 @@ export default {
 				w: 600,
 				h: 400,
 				alt: 'some numbers on a grey background' // optional alt attribute for thumbnail image
-			},
-			{
-				src: 'http://via.placeholder.com/1200x900',
-				thumbnail: 'http://via.placeholder.com/64x64',
-				w: 1200,
-				h: 900
-			}
-		]};
-	}
-}
-
+			}],
+		}
+	},
 	
-	//components: {
-		//'v-select': VueSelect
-	//},
+	methods: {
+		
+		getLatestPhotos() {
+			var vm = this
+			this.axios.get('/photos/recent')
+				.then(response => {console.dir(response.data)})
+				.catch(err => {console.error(err.toString());vm.showAlert(axiosErrorToString(err), "danger")})
+			
+			
+			//vm.items = [{
+				//src: 'http://via.placeholder.com/600x400',
+				//thumbnail: 'http://via.placeholder.com/64x64',
+				//w: 600,
+				//h: 400,
+				//alt: 'some numbers on a grey background' // optional alt attribute for thumbnail image
+			//},
+			//{
+				//src: 'http://via.placeholder.com/1200x900',
+				//thumbnail: 'http://via.placeholder.com/64x64',
+				//w: 1200,
+				//h: 900
+			//}]
+		},
+		
+	},
+	
+}
 	
 	//data () {
 		//return {

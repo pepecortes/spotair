@@ -18,6 +18,17 @@ controller.fusion =  async function(req, res) {
 	sendJSON.serverError(res, "METHOD NOT YET IMPLEMENTED")
 }
 
+// recent photos
+controller.recent = async function(req, res) {
+	db.Photo.findAll({
+										limit: 50,
+										order:[['dateValidation', 'DESC']],
+										include: [{all:true, nested:true}]
+										})
+		.then(record => sendJSON.ok(res, record))
+		.catch(err => sendJSON.serverError(res, err))
+}
+
 module.exports = controller
 
 

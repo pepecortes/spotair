@@ -119,12 +119,12 @@ exports.dbReplaceReference = async function(Model, refModel, refField, sourceid,
 /**
  * @function jpegMetadat
  * @desc Obtain EXIF + image size by reading the first 65 KB of the jpg
- * @param {string} url	- jpeg url
+ * @param {string} path	- jpeg path
  * @return {Promise<Object>} {height, width, exiftags...}
  */
-async function jpegMetadata(url) {
+async function jpegMetadata(path) {
 	const buffer = Buffer.alloc(65535)
-	return fsp.open(url)
+	return fsp.open(path)
 		.then(fd => fd.read(buffer, 0, 65535, 0))
 		.then(reading => {
 			var parser = exifParser.create(reading.buffer)
@@ -137,12 +137,12 @@ exports.jpegMetadata = jpegMetadata
 /**
  * @function jpegMetadataSync
  * @desc synchronous method to obtain the image metadata by reading only 65 KB
- * @param {string} url	- jpeg url
+ * @param {string} path	- jpeg path
  * @return {Object} {height, width, exiftags}
  */
-exports.jpegMetadataSync = function(url) {
+exports.jpegMetadataSync = function(path) {
 	const buffer = Buffer.alloc(65535)
-	var fd = fs.openSync(url)
+	var fd = fs.openSync(path)
 	fs.readSync(fd, buffer, 0, 65535, 0)
 	var parser = exifParser.create(buffer)
 	var result = parser.parse()

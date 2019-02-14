@@ -7,7 +7,7 @@ const fsp = require('fs').promises
 const pickObject = require('lodash').pick;
 const helpers = require('../app_lib/helpers')
 const Sharp = require('sharp')
-const db = require('../app_api/models/db')
+//const db = require('../app_api/models/db')
 
 // connect database and models
 console.log("START TEST")
@@ -35,6 +35,16 @@ console.log("START TEST")
 	//.then(buffer => new Sharp(buffer).resize(100).toFile(pathThumb))
 	//.catch(err => {console.log("ERROR: " + err)})
 
+
+const fetch = require('node-fetch')
+
+fetch('http://localhost:3000/api/photos/recent')
+    .then(res => res.json())
+    .then(json => console.log(json))
+    //.then(json => json.entry.forEach(item => console.log("ITEM: " + item)))
+    .catch(err => console.error(err))
+
+return
 
 var probe = require('probe-image-size')
 const url = "https://img.over-blog-kiwi.com/0/93/85/50/20140510/ob_4165d8_sid-vicious-04.jpg"

@@ -14,17 +14,8 @@
 <script>
 
 import VuePictureSwipe from 'vue-picture-swipe'
-import { axiosErrorToString } from '../lib/common'
+import { axiosErrorToString, photoToImgData } from '../lib/common'
 import { alertMixin } from './AlertMixin'
-
-function photoToImgData(photo) {
-	var imgData = {}
-	imgData.src = `http://localhost:3000/localStorage/pictures/${photo.id}.jpg`
-	imgData.w = photo.width
-	imgData.h = photo.height
-	imgData.thumbnail = `http://localhost:3000/localStorage/thumbnails/${photo.id}.jpg`
-	return imgData
-}
 
 export default {
 	
@@ -53,7 +44,10 @@ export default {
 		getLatestPhotos() {
 			var vm = this
 			this.axios.get('/photos/recent')
-				.then(response => {console.dir(response.data)})
+				.then(response => {
+					const data = response.data.map(photoToImgData)
+					console.dir(data)
+				})
 				.catch(err => {console.error(err.toString());vm.showAlert(axiosErrorToString(err), "danger")})
 			
 			

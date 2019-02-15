@@ -40,17 +40,26 @@ const fetch = require('node-fetch')
 
 fetch('http://localhost:3000/api/photos/recent')
     .then(res => res.json())
-    .then(json => console.log(json))
-    //.then(json => json.entry.forEach(item => console.log("ITEM: " + item)))
+    .then(json => console.log(json.map(photoToImgData)))
+    
     .catch(err => console.error(err))
 
-return
+function photoToImgData(photo) {
+	var imgData = {}
+	imgData.src = `http://localhost:3000/localStorage/pictures/${photo.id}.jpg`
+	imgData.w = photo.width
+	imgData.h = photo.height
+	imgData.thumbnail = `http://localhost:3000/localStorage/thumbnails/${photo.id}.jpg`
+	return imgData
+}
 
-var probe = require('probe-image-size')
-const url = "https://img.over-blog-kiwi.com/0/93/85/50/20140510/ob_4165d8_sid-vicious-04.jpg"
-probe(url).then(result => {
-  console.log(result)
- })
+//return
+
+//var probe = require('probe-image-size')
+//const url = "https://img.over-blog-kiwi.com/0/93/85/50/20140510/ob_4165d8_sid-vicious-04.jpg"
+//probe(url).then(result => {
+  //console.log(result)
+ //})
 
 //db.Photo.findAll({
 									//limit: 50,

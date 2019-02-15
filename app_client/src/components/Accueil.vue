@@ -17,6 +17,15 @@ import VuePictureSwipe from 'vue-picture-swipe'
 import { axiosErrorToString } from '../lib/common'
 import { alertMixin } from './AlertMixin'
 
+function photoToImgData(photo) {
+	var imgData = {}
+	imgData.src = `http://localhost:3000/localStorage/pictures/${photo.id}.jpg`
+	imgData.w = photo.width
+	imgData.h = photo.height
+	imgData.thumbnail = `http://localhost:3000/localStorage/thumbnails/${photo.id}.jpg`
+	return imgData
+}
+
 export default {
 	
 	components: {

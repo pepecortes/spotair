@@ -1,3 +1,5 @@
+Check again if bootstrap-vue requires @babel/runtime dependecy. It should not, and I do not understand why
+
 Explore https://www.npmjs.com/package/vue-picture-swipe
 https://cloudinary.com
 

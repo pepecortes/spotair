@@ -1,6 +1,8 @@
 /**
  * Photo model
  * @module /app_api/models/photo
+ * @property {integer}			width
+ * @property {integer}			height
  * @property {date=}				dateUpload
  * @property {string=}			messageUpload
  * @property {boolean}			validation
@@ -23,6 +25,18 @@ module.exports = function(sequelize, DataTypes) {
 				primaryKey: true,
 				autoIncrement: true,
 				unique: true,
+		},
+		
+		width: {
+				type: DataTypes.SMALLINT,
+				allowNull: false,
+				defaultValue: 200,
+		},
+		
+		height: {
+				type: DataTypes.SMALLINT,
+				allowNull: false,
+				defaultValue: 200,
 		},
 		
 		dateUpload: {

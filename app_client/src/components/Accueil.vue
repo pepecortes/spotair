@@ -29,13 +29,7 @@ export default {
 	
 	data() {
 		return {
-			items: [{
-				src: 'http://via.placeholder.com/600x400',
-				thumbnail: 'http://via.placeholder.com/64x64',
-				w: 600,
-				h: 400,
-				alt: 'some numbers on a grey background' // optional alt attribute for thumbnail image
-			}],
+			items: [],
 		}
 	},
 	
@@ -44,26 +38,8 @@ export default {
 		getLatestPhotos() {
 			var vm = this
 			this.axios.get('/photos/recent')
-				.then(response => {
-					const data = response.data.map(photoToImgData)
-					console.dir(data)
-				})
+				.then(response =>  vm.items = response.data.map(photoToImgData))
 				.catch(err => {console.error(err.toString());vm.showAlert(axiosErrorToString(err), "danger")})
-			
-			
-			//vm.items = [{
-				//src: 'http://via.placeholder.com/600x400',
-				//thumbnail: 'http://via.placeholder.com/64x64',
-				//w: 600,
-				//h: 400,
-				//alt: 'some numbers on a grey background' // optional alt attribute for thumbnail image
-			//},
-			//{
-				//src: 'http://via.placeholder.com/1200x900',
-				//thumbnail: 'http://via.placeholder.com/64x64',
-				//w: 1200,
-				//h: 900
-			//}]
 		},
 		
 	},

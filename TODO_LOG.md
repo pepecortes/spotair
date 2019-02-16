@@ -23,4 +23,6 @@ file uploads:
 	
 put a link to portainer in the docs
 
+admin:add photo is broken
+
 

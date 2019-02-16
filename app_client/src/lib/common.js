@@ -56,8 +56,8 @@ export function photoToImgData(photo) {
  */
 export function pictureURLs(photo) {
 	var urls = {}
-	url.picture = `${process.env.STORAGE_URL}pictures/${photo.id}.jpg`
-	url.thumbnail = `${process.env.STORAGE_URL}thumbnails/${photo.id}.jpg`
+	urls.picture = `${process.env.STORAGE_URL}pictures/${photo.id}.jpg`
+	urls.thumbnail = `${process.env.STORAGE_URL}thumbnails/${photo.id}.jpg`
 	return urls
 }
  

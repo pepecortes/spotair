@@ -48,6 +48,13 @@ module.exports = function(sequelize, DataTypes) {
 			},
 		},
 		
+		views: {
+			// how many times this photo has been seen?
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			defaultValue: 0,
+		},
+		
 		messageUpload: {
 			type: DataTypes.STRING,
 			allowNull: true,		
@@ -118,6 +125,20 @@ module.exports = function(sequelize, DataTypes) {
 		},
 			
 	}, {
+		
+		getterMethods: {
+				viewYear: function() {
+					// TO BE COMPLETED return the number of views per year 
+					return this.getDataValue('views') / 2
+				},
+		},
+		
+		setterMethods: {
+				addView: function() {
+					// increment the view count of this photo
+					this.setDataValue('views', this.getDataValue('views') + 1)
+				}
+		},
 			
 		indexes: [
 			{type: 'FULLTEXT', name: 'text_search', fields: ['commentaire']}
@@ -129,9 +150,12 @@ module.exports = function(sequelize, DataTypes) {
 	Model.metadata = {
 		name: "Photo",
 		hasForeignKeys: true,
-		fieldNames: ['dateUpload', 'messageUpload', 'validation', 'dateValidation',
-		 'commentaire', 'photographeId', 'compagnieId',
-		 'appareilId', 'galerieId'],
+		fieldNames: [
+									'width', 'height', 'dateUpload', 'views',
+									'messageUpload', 'validation', 'dateValidation',
+									'commentaire', 'photographeId', 'compagnieId',
+									'appareilId', 'galerieId'
+								],
 	}
 	
 	return Model;

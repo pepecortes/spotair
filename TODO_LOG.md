@@ -1,4 +1,4 @@
-Check again if bootstrap-vue requires @babel/runtime dependecy. It should not, and I do not understand why
+Check again if bootstrap-vue requires @babel/runtime dependency. It should not, and I do not understand why
 
 Explore https://www.npmjs.com/package/vue-picture-swipe
 https://cloudinary.com
@@ -23,6 +23,9 @@ file uploads:
 	
 put a link to portainer in the docs
 
-admin:add photo is broken
+check this for multistep forms
+	https://binarcode.github.io/vue-form-wizard/#/
+	
+Pictadd profile: nom premon do not appear
 
 

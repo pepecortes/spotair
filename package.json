@@ -42,6 +42,7 @@
     "sharp": "^0.21.3",
     "vue": "^2.5.17",
     "vue-axios": "^2.1.4",
+    "vue-form-wizard": "^0.8.4",
     "vue-loader": "^15.4.2",
     "vue-picture-swipe": "^1.0.0",
     "vue-router": "^3.0.2",

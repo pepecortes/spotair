@@ -3,22 +3,20 @@
 	div(id="fileUpload")
 	
 		form-wizard(title="", subtitle="")
-			tab-content(title="upload")
+			tab-content(title="upload", :beforeChange="imageAvailable")
 				b-form-file(
 					ref="fileinput",
+					@change="onFileChange",
 					v-model="formData.file",
 					:state="Boolean(formData.file)",
 					placeholder="Choose a file..."
 				)
-				div(class="mt-3") Selected files:  {{formData.file && formData.file.name}}
-				div(class="mt-3") Status:  {{currentStatus}}
-				b-button(type="button", variant="outline-danger", v-on:click="uploadButtonClicked") Upload
 				b-button(type="button", variant="outline-success", v-on:click="resetButtonClicked") Reset
 			tab-content(title="second")
 				h1 Second Tab
+				b-button(type="button", variant="outline-danger", v-on:click="uploadButtonClicked") Upload
 				
-		img(src="http://localhost:3000/localStorage/pictures/7.jpg",
-				style="display: block; width: 500px;")
+		img(:src="tmpFileURL", style="display: block; width: 500px;")
 		
 </template>
 
@@ -40,6 +38,7 @@ export default {
 			formData: {file: null},
 			uploadError: null,
 			currentStatus: null,
+			tmpFileURL: "",
 		}
 	},
 	
@@ -65,6 +64,16 @@ export default {
 	
 	methods: {
 		
+		imageAvailable() {
+			return (this.tmpFileURL != "")
+		},
+		
+		onFileChange(e) {
+			const file = e.target.files[0]
+			if (!file.type.match('image.*')) {this.reset()}
+      this.tmpFileURL = URL.createObjectURL(file)
+		},
+		
 		resetButtonClicked () {
 			this.reset()
 		},
@@ -77,19 +86,17 @@ export default {
       this.$refs.fileinput.reset()
 			this.currentStatus = STATUS_INITIAL
 			this.uploadError = null
+      this.tmpFileURL = ""
     },
 		
 		upload() {
 			var vm = this
 			vm.currentStatus = STATUS_SAVING
-      //this.$v.formData.$touch()
 			const url = vm.apiURL + "putFile"
 			
 			var FormData = require('form-data')
 			var myform = new FormData()
 			myform.append('myfile', vm.formData.file)
-			
-			console.dir(vm.formData.file)
 			
 			//vm.axios.post(url, myform, {headers: {'Content-Type': 'multipart/form-data'}})
 				//.then(output => {

@@ -2,13 +2,8 @@
  * PhotoUpload model
  * @module /app_api/models/photoupload
  * @property {date=}				dateUpload
- * @property {string=}			message
- * @property {string=}			commentaire	
- * @property {virtual}			text					- (summary of all fields)
  * @property {foreignKey}		photographeId
- * @property {foreignKey}		compagnieId
- * @property {foreignKey}		appareilId
- * @property {foreignKey}		galerieId
+ * @property {string=}		jsonData
  */
 const debug = require('debug')('app:api:models:photoUpload');
 const db = require('../models/db');
@@ -32,48 +27,20 @@ module.exports = function(sequelize, DataTypes) {
 			},
 		},
 		
-		message: {
-			type: DataTypes.STRING,
-			allowNull: true,		
-			defaultValue: null,		
-		},
-		
-		commentaire: {
-			type: DataTypes.STRING,
-			allowNull: true,		
-			defaultValue: null,		
-		},
+    jsonData: {
+			type: DataTypes.JSON,
+			allowNull: true,
+		}, 
 		
 		text: {
 			type: DataTypes.VIRTUAL,
 			get: function() {
-				return "NOT COMPLETED"
-				//const validation = (this.validation)? "publiée" : null
-				//const photographe = (this.photographe)? this.photographe.text : null
-				//const compagnie = (this.compagnie)? this.compagnie.text : null
-				//const appareil = (this.appareil)? this.appareil.text : null
-				//const galerie = (this.galerie)? this.galerie.text : null
-				//return [
-					//validation,
-					//photographe, compagnie, appareil, galerie,
-					//this.commentaire
-				//].filter(Boolean).join(', ')
+				const id = this.id
+				const photographe = (this.photographe)? this.photographe.text : null
+				const date = (this.dateUpload)? this.dateUpload : null
+				return [id, photographe, date].filter(Boolean).join(', ')
 			}
 		},
-		
-		//invalid: {
-			//type: DataTypes.VIRTUAL,
-			//get() {
-				//return {
-					//validation: '',
-					//photographe: 'Requis',
-					//compagnie: 'Requis',
-					//appareil: 'Requis',
-					//galerie: 'Requis',
-					//commentaire: '',
-				//}
-			//}
-		//},
 		
 		createdAt: {
 			type: DataTypes.DATE,
@@ -87,25 +54,16 @@ module.exports = function(sequelize, DataTypes) {
 			defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
 		},
 			
-	}, {
-		
-
-			
-		indexes: [
-			{type: 'FULLTEXT', name: 'text_search', fields: ['commentaire', 'message']}
-		],
-			
-		}
+	},
+	
+	{}
+	
   );
   
 	Model.metadata = {
 		name: "PhotoUpload",
 		hasForeignKeys: true,
-		fieldNames: [
-									'dateUpload', 'message', 'commentaire',
-									'photographeId', 'compagnieId', 'appareilId',
-									'galerieId'
-								],
+		fieldNames: ['dateUpload', 'photographeId', 'jsonData'],
 	}
 	
 	return Model;

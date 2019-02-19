@@ -3,6 +3,7 @@
 	div(id="fileUpload")
 	
 		form-wizard(title="", subtitle="")
+		
 			tab-content(title="upload", :beforeChange="imageAvailable")
 				b-form-file(
 					ref="fileinput",
@@ -12,6 +13,26 @@
 					placeholder="Choose a file..."
 				)
 				b-button(type="button", variant="outline-success", v-on:click="resetButtonClicked") Reset
+				
+			tab-content(title="galerie", :beforeChange="imageAvailable")
+			
+				b-button(v-b-toggle="'collapse2'" class="m-1") Je ne la trouve pas !
+			
+				b-collapse(id="collapse2")
+					p Je ne la trouve pas !
+			 
+				b-collapse(visible id="collapse2")
+					b-form-group(
+						label="Galerie",
+						label-for="galerie"
+					)
+						v-select(
+							id="galerie",
+							:options="galerieOptions",
+							label="text",
+						)
+							span(slot="no options") Aucun résultat				
+				
 			tab-content(title="second")
 				h1 Second Tab
 				b-button(type="button", variant="outline-danger", v-on:click="uploadButtonClicked") Upload
@@ -21,6 +42,7 @@
 </template>
 
 <script>
+import VueSelect from 'vue-select'
 import {FormWizard, TabContent} from 'vue-form-wizard'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'
 
@@ -31,6 +53,7 @@ export default {
 	components: {
 		'form-wizard': FormWizard,
 		'tab-content': TabContent,
+		'v-select': VueSelect,
 	},		
 	
 	data() {
@@ -39,6 +62,7 @@ export default {
 			uploadError: null,
 			currentStatus: null,
 			tmpFileURL: "",
+			galerieOptions: [],
 		}
 	},
 	
@@ -60,6 +84,7 @@ export default {
 	
 	mounted() {
 		this.reset()
+		this.getGalerieOptions()
 	},
 	
 	methods: {
@@ -110,6 +135,13 @@ export default {
 					//console.log("error: " + err)
 				//})
 			
+		},
+		
+		getGalerieOptions() {
+			var vm = this
+			vm.axios.get('galeries/')
+				.then(response => vm.galerieOptions = response.data)
+				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
 		},
 		
 	},

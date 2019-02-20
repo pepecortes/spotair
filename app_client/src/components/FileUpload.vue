@@ -4,6 +4,27 @@
 	
 		form-wizard(title="", subtitle="")
 		
+			tab-content(title="test0")
+				head-or-tail(ref='koko', head-button-text='Je ne la trouve pas !', tail-button-text='Retour vers sélection')
+					template(v-slot:head-slot)
+						input(type='text', v-model="alfa")
+					template(v-slot:tail-slot)
+						input(type='text', v-model="beta")
+				b-button(type="button", v-on:click="submitAlfaBeta") SUBMIT
+						
+			tab-content(title="galerie")
+				head-or-tail(head-button-text='Je ne la trouve pas !', tail-button-text='Retour vers sélection')
+					template(v-slot:head-slot)
+						v-select(
+							id="galerie",
+							:options="galerieOptions",
+							label="text",
+							v-model="x"
+						)
+							span(slot="no options") Aucun résultat
+					template(v-slot:tail-slot)
+						input(type='text', v-model="y")
+			
 			tab-content(title="upload", :beforeChange="imageAvailable")
 				b-form-file(
 					ref="fileinput",
@@ -12,26 +33,7 @@
 					:state="Boolean(formData.file)",
 					placeholder="Choose a file..."
 				)
-				b-button(type="button", variant="outline-success", v-on:click="resetButtonClicked") Reset
-				
-			tab-content(title="galerie", :beforeChange="imageAvailable")
-			
-				b-button(v-b-toggle="'collapse2'" class="m-1") Je ne la trouve pas !
-			
-				b-collapse(id="collapse2")
-					p Je ne la trouve pas !
-			 
-				b-collapse(visible id="collapse2")
-					b-form-group(
-						label="Galerie",
-						label-for="galerie"
-					)
-						v-select(
-							id="galerie",
-							:options="galerieOptions",
-							label="text",
-						)
-							span(slot="no options") Aucun résultat				
+				b-button(type="button", variant="outline-success", v-on:click="resetButtonClicked") Reset			
 				
 			tab-content(title="second")
 				h1 Second Tab
@@ -44,6 +46,7 @@
 <script>
 import VueSelect from 'vue-select'
 import {FormWizard, TabContent} from 'vue-form-wizard'
+import HeadOrTail from './HeadOrTail.vue'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'
 
 const STATUS_INITIAL = 0, STATUS_SAVING = 1, STATUS_SUCCESS = 2, STATUS_FAILED = 3
@@ -54,6 +57,7 @@ export default {
 		'form-wizard': FormWizard,
 		'tab-content': TabContent,
 		'v-select': VueSelect,
+		'head-or-tail': HeadOrTail,
 	},		
 	
 	data() {
@@ -63,6 +67,12 @@ export default {
 			currentStatus: null,
 			tmpFileURL: "",
 			galerieOptions: [],
+			x: null,
+			y: null,
+			alfa: null,
+			beta: null,
+			alfavisible: false,
+			alfabeta: {nada: "denada"},
 		}
 	},
 	
@@ -88,6 +98,12 @@ export default {
 	},
 	
 	methods: {
+		
+		submitAlfaBeta() {
+			const isHead = this.$refs.koko.onHead
+			this.alfabeta = (isHead)? this.alfa : this.beta
+			console.log("AFTER SUBMIT " + JSON.stringify(this.alfabeta))
+		},
 		
 		imageAvailable() {
 			return (this.tmpFileURL != "")

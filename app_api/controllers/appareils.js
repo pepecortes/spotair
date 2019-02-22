@@ -14,6 +14,18 @@ var controller = new ModelController(db.Appareil)
 // fusion
 controller.fusion = ModelController.buildFusionController('appareilId', db.Appareil, db.Photo)
 
+// filter by avion id
+controller.byAvion = function(req, res) {
+	const id = req.params.id;
+	db.Appareil
+		.findAll({where: {avionId: id}, include: [{all:true, nested:true}]})
+		.then((record) => {
+			if (record) sendJSON.ok(res, record);
+			else sendJSON.notFound(res, "Not found");
+		})
+		.catch(err => sendJSON.serverError(res, err));
+}
+
 module.exports = controller
 
 

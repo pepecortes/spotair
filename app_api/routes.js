@@ -69,6 +69,7 @@ module.exports = function(passport) {
 	standardRouteFactory('photos', ctrlPhotos)
 	
 	// Create additional routes
+	router.get('/appareils/byAvion/:id(\\d+)', (req, res) => ctrlAppareils.byAvion(req, res))
 	router.get('/galeries/spotair', (req, res) => ctrlGaleries.allSpotair(req, res))
 	router.get('/photographes/actifs', (req, res) => ctrlPhotographes.onlyActives(req, res))
 	router.put('/users/setPassword/:id(\\d+)', (req, res) => ctrlUsers.setPassword(req, res))

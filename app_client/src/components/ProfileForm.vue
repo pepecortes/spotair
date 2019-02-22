@@ -11,8 +11,8 @@
 		b-list-group
 			b-list-group-item(variant="primary") {{ user.text }}
 			b-list-group-item(variant="danger", v-if="user.isAdmin") Administrateur
-			b-list-group-item Prénom: {{ user.prenom }}
-			b-list-group-item Nom: {{ user.nom }}
+			b-list-group-item Prénom: {{ user.photographe.prenom }}
+			b-list-group-item Nom: {{ user.photographe.nom }}
 			b-list-group-item Mail: {{ user.mail }}
 			
 		b-form
@@ -59,7 +59,7 @@ export default {
 	
 	data () {
 		return {
-			user: {},
+			user: {photographe: {}},
 			password: "",
 			passwordConfirm: null
 		}

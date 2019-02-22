@@ -3,16 +3,6 @@
 	div(id="fileUpload")
 	
 		form-wizard(title="", subtitle="", stepSize="xs")
-			
-			tab-content(title="photo", :beforeChange="imageAvailable")
-				b-form-file(
-					ref="fileinput",
-					@change="onFileChange",
-					v-model="formData.file",
-					:state="Boolean(formData.file)",
-					placeholder="Choose a file..."
-				)
-				b-button(type="button", variant="outline-success", v-on:click="resetButtonClicked") Reset		
 		
 			tab-content(title="avion", :beforeChange="leavingAvion")
 				head-or-tail(ref='avion')
@@ -26,6 +16,24 @@
 						)
 					template(v-slot:tail-slot)
 						input(type='text', v-model="avion.tail")
+		
+			tab-content(title="review")
+				b-list-group
+					b-list-group-item(variant="primary") Photographe: {{ currentUser.photographe.text }}
+					<!--b-list-group-item(v-if="review.avion" ) Avion: {{ review.avion }}-->
+					
+				b-button(type="button", v-on:click="submit") SUBMIT	
+			
+			tab-content(title="photo", :beforeChange="imageAvailable")
+				b-form-file(
+					ref="fileinput",
+					@change="onFileChange",
+					v-model="formData.file",
+					:state="Boolean(formData.file)",
+					placeholder="Choose a file..."
+				)
+				b-button(type="button", variant="outline-success", v-on:click="resetButtonClicked") Reset		
+		
 						
 			tab-content(title="immat" :beforeChange="leavingAppareil")
 				head-or-tail(ref='appareil')
@@ -76,6 +84,10 @@
 						input(type='text', v-model="aerodrome.tail")
 						
 			tab-content(title="review")
+				b-list-group
+					b-list-group-item(variant="primary") Photographe: 
+					b-list-group-item Avion: kokoloko 1
+					
 				b-button(type="button", v-on:click="submit") SUBMIT	
 				
 
@@ -112,7 +124,8 @@ export default {
 			appareil: {options: [], head: null, tail: null},
 			compagnie: {options: [], head: null, tail: null},
 			aerodrome: {options: [], head: null, tail: null},
-			currentUser: {},
+			currentUser: {photographe: {}},
+			review: {},
 		}
 	},
 	

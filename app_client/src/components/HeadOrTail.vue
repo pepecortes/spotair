@@ -11,13 +11,35 @@
 <script>
 export default {
 	
-	props: {buttonHead: {default: "Je ne trouve pas !"}, buttonTail: {default: "Retour vers sélection..."}},
+	model: {
+		prop: 'headSelected',
+    event: 'toggle'
+	},
 	
-	data () {
+	props: {
+		headSelected: {default: true, type: Boolean},
+		buttonHead: {default: "Je ne trouve pas !"},
+		buttonTail: {default: "Retour vers sélection..."},
+	},
+	
+	data() {
 		return {
-			onHead: true,
-			onTail: false
+			onHead: this.headSelected,
+			onTail: !this.headSelected,
 		}
+	},
+	
+	watch: {
+
+		onHead: function() {
+			this.$emit('toggle', this.onHead)
+		},
+		
+		headSelected: function(v) {
+			this.onHead = v
+			this.onTail = !v
+		}
+
 	},
 
 	methods: {
@@ -27,15 +49,10 @@ export default {
 			this.onTail = !this.onTail
 		},
 		
-		goToHead() {
-			this.onHead = true
-			this.onTail = false
+		setHead(onHead=true) {
+			this.onHead = onHead
+			this.onTail = !onHead
 		},
-		
-		goToTail() {
-			this.onHead = false
-			this.onTail = true
-		}
 		
 	},
 	

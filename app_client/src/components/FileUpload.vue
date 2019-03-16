@@ -3,9 +3,6 @@
 
 // is this the adequate way or having the user profile?
 
-// colors of the file validation status do not look correct
-// furthermore, check that the uploaded image is correct
-
 <template lang="pug">
 
 	div(id="fileUpload")
@@ -16,8 +13,8 @@
 				b-form-file(
 					ref="fileinput",
 					@change="onFileChange",
-					v-model="formData.file",
-					:state="Boolean(formData.file)",
+					v-model="filex",
+					:state="acceptableImage",
 					placeholder="Choose a file..."
 				)
 				b-button(type="button", variant="outline-success", v-on:click="resetFile") Reset
@@ -114,13 +111,15 @@ export default {
 	
 	data() {
 		return {
+			filex: null,
+			acceptableImage: null,
+			tmpFileURL: "",
 			photographe: {},
 			avion: {options: [], headSelected: true, head: null, tail: null},
 			appareil: {options: [], headSelected: true, head: null, tail: null},
 			compagnie: {options: [], headSelected: true, head: null, tail: null},
 			aerodrome: {options: [], headSelected: true, head: null, tail: null},
 			galerie: {options: [], headSelected: true, head: null, tail: null},
-			tmpFileURL: "",
 		}
 	},
 	
@@ -208,9 +207,15 @@ export default {
 		
 		imageAvailable() {return (this.tmpFileURL != "")},
 		
-		onFileChange(e) {
+		onFileChange: function(e) {
+			this.acceptableImage = null
 			const file = e.target.files[0]
-			if (!file.type.match('image.*')) {this.resetFile()}
+			if (!file.type.match('image.*')) {
+				this.acceptableImage = false
+				this.resetFile()
+				return
+			}
+			this.acceptableImage = true
       this.tmpFileURL = URL.createObjectURL(file)
 		},
 		

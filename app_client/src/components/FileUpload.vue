@@ -1,11 +1,16 @@
 // TO BE COMPLETED: THE FILE UPLOADING NEEDS REPAIRMENT
 // NOTE THAT THE FILEUPLOAD COPY WORKS OK
 
+// is this the adequate way or having the user profile?
+
+// colors of the file validation status do not look correct
+// furthermore, check that the uploaded image is correct
+
 <template lang="pug">
 
 	div(id="fileUpload")
 	
-		form-wizard(title="", subtitle="", stepSize="xs")
+		form-wizard(title="", subtitle="", stepSize="xs", finishButtonText="Submit", @on-complete="onComplete")
 			
 			tab-content(title="photo", :beforeChange="imageAvailable")
 				b-form-file(
@@ -15,7 +20,7 @@
 					:state="Boolean(formData.file)",
 					placeholder="Choose a file..."
 				)
-				b-button(type="button", variant="outline-success", v-on:click="resetButtonClicked") Reset
+				b-button(type="button", variant="outline-success", v-on:click="resetFile") Reset
 		
 			tab-content(title="avion", :beforeChange="leavingAvion")
 				head-or-tail(v-model="avion.headSelected")
@@ -87,7 +92,7 @@
 					b-list-group-item(v-if="formData.aerodrome") Aerodrome: {{ formData.aerodrome.text }}
 					b-list-group-item(v-if="formData.galerie") Galerie: {{ formData.galerie.text }}
 					
-				b-button(type="button", v-on:click="submit") SUBMIT	
+		img(:src="tmpFileURL", width="500") 
 			
 		
 </template>
@@ -116,7 +121,6 @@ export default {
 			aerodrome: {options: [], headSelected: true, head: null, tail: null},
 			galerie: {options: [], headSelected: true, head: null, tail: null},
 			tmpFileURL: "",
-			uploadError: null,
 		}
 	},
 	
@@ -136,7 +140,7 @@ export default {
 	},
 	
 	mounted() {
-		this.reset()
+		this.resetFile()
 		this.getOptions('avions', this.avion)
 		this.getOptions('galeries', this.galerie)
 		this.getOptions('compagnies', this.compagnie)
@@ -178,17 +182,10 @@ export default {
 			const id = (selected)? selected.id : false
 			this.getAppareilOptions(id)
 		},
-				
-		submit() {
-			console.log("before SUBMITTING " + JSON.stringify(this.formData))
-		},
 		
-    reset() {
-      //this.$refs.fileinput.reset()
-			//this.currentStatus = STATUS_INITIAL
-			//this.uploadError = null
-      //this.tmpFileURL = ""
-    },
+		onComplete() {
+			console.log("on COMPLETE " + JSON.stringify(this.formData))
+		},
 		
 		getOptions(apicall, variable) {
 			var vm = this
@@ -199,9 +196,11 @@ export default {
 		},
 		
 		getAppareilOptions(avionId=false) {
-			// if an avion is given, filter appareil by avion
+			// reset appareil
+			// if an avion is given, set appareil options filtered by avion
 			var vm = this
-			if (!avionId) vm.appareil.options = []
+			vm.appareil = {options: [], headSelected: true, head: null, tail: null}
+			if (!avionId) return
 			else vm.axios.get(`appareils/byAvion/${avionId}`)
 				.then(response => vm.appareil.options = response.data)
 				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
@@ -211,18 +210,12 @@ export default {
 		
 		onFileChange(e) {
 			const file = e.target.files[0]
-			if (!file.type.match('image.*')) {this.reset()}
+			if (!file.type.match('image.*')) {this.resetFile()}
       this.tmpFileURL = URL.createObjectURL(file)
 		},
 		
-		resetButtonClicked () {this.reset()},
-    
-		uploadButtonClicked() {this.upload()},
-		
-    reset() {
+    resetFile() {
       this.$refs.fileinput.reset()
-			//this.currentStatus = STATUS_INITIAL
-			this.uploadError = null
       this.tmpFileURL = ""
     },
 		

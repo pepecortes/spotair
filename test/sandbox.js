@@ -12,8 +12,12 @@ const db = require('../app_api/models/db')
 // connect database and models
 console.log("START TEST")
 
-db.Photo.findById(2)
-	.then(photo => {photo.addView = 10; return photo.save()})
+db.PhotoUpload.findById(7, {include: [{all:true, nested:true}]})
+	.then(photo => {
+		console.log("photo: " + JSON.stringify(photo))
+		console.log("photo.jsonData.aerodrome.text: " + photo.jsonData.aerodrome.text)
+		console.log("photo.photographe: " + JSON.stringify(photo.photographe))
+		})
 	.catch(err => console.error(err.toString()))
 
 //const exifParser = require('exif-parser')

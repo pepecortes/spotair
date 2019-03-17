@@ -18,15 +18,6 @@ module.exports = function(sequelize, DataTypes) {
 				unique: true,
 		},
 		
-		dateUpload: {
-			type: DataTypes.DATE,
-			allowNull: true,
-			set(val) {
-				try {this.setDataValue('dateUpload', val)}
-				catch (e) {this.setDataValue('dateUpload', null)}
-			},
-		},
-		
     jsonData: {
 			type: DataTypes.JSON,
 			allowNull: true,

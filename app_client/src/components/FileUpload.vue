@@ -1,7 +1,6 @@
-// TO BE COMPLETED: THE FILE UPLOADING NEEDS REPAIRMENT
-// NOTE THAT THE FILEUPLOAD COPY WORKS OK
-
-// is this the adequate way or having the user profile?
+// TO BE COMPLETED:
+	// UPLOAD TEMP IMG FILE
+	// LINK IMG FILE TO IMG DATA
 
 <template lang="pug">
 
@@ -18,7 +17,7 @@
 					placeholder="Choose a file..."
 				)
 				b-button(type="button", variant="outline-success", v-on:click="resetFile") Reset
-		
+
 			tab-content(title="avion", :beforeChange="leavingAvion")
 				head-or-tail(v-model="avion.headSelected")
 					template(v-slot:head-slot)
@@ -31,7 +30,7 @@
 						)
 					template(v-slot:tail-slot)
 						input(type='text', v-model="avion.tail")
-						
+					
 			tab-content(title="immat" :beforeChange="leavingAppareil")
 				head-or-tail(v-model="appareil.headSelected")
 					template(v-slot:head-slot)
@@ -79,15 +78,15 @@
 						)
 					template(v-slot:tail-slot)
 						input(type='text', v-model="aerodrome.tail")
-		
+
 			tab-content(title="review")
 				b-list-group
-					b-list-group-item(variant="primary") Photographe: {{ formData.photographe.text }}
-					b-list-group-item(v-if="formData.avion") Avion: {{ formData.avion.text }}
-					b-list-group-item(v-if="formData.appareil") Appareil: {{ formData.appareil.text }}
-					b-list-group-item(v-if="formData.compagnie") Compagnie: {{ formData.compagnie.text }}
-					b-list-group-item(v-if="formData.aerodrome") Aerodrome: {{ formData.aerodrome.text }}
-					b-list-group-item(v-if="formData.galerie") Galerie: {{ formData.galerie.text }}
+					b-list-group-item(variant="primary") Photographe: {{ photographe.text }}
+					b-list-group-item(v-if="photoData.avion") Avion: {{ photoData.avion.text }}
+					b-list-group-item(v-if="photoData.appareil") Appareil: {{ photoData.appareil.text }}
+					b-list-group-item(v-if="photoData.compagnie") Compagnie: {{ photoData.compagnie.text }}
+					b-list-group-item(v-if="photoData.aerodrome") Aerodrome: {{ photoData.aerodrome.text }}
+					b-list-group-item(v-if="photoData.galerie") Galerie: {{ photoData.galerie.text }}
 					
 		img(:src="tmpFileURL", width="500") 
 			
@@ -125,9 +124,8 @@ export default {
 	
 	computed: {
 		
-		formData() {
+		photoData() {
 			var output = {}
-			output.photographe = this.photographe
 			output.avion = this.extractData(this.avion)
 			output.appareil = this.extractData(this.appareil)
 			output.compagnie = this.extractData(this.compagnie)
@@ -152,7 +150,7 @@ export default {
 	methods: {
 		
 		extractData(dataObject) {
-			// extract data that will be entered in formData	
+			// extract data that will be entered in photoData	
 			// example of dataObject: this.avion
 			if (!dataObject.head && !dataObject.tail) return
 			var output = {}
@@ -166,24 +164,20 @@ export default {
 		},
 		
 		leavingAvion() {
-			if (!this.formData.avion) return false
+			if (!this.photoData.avion) return false
 			if (this.appareil.options.length == 0) this.appareil.headSelected = false
 			else this.appareil.headSelected = true
 			return true
 		},
 		
-		leavingAppareil() {return (this.formData.appareil != null)},
-		leavingCompagnie() {return (this.formData.compagnie != null)},
-		leavingAerodrome() {return (this.formData.aerodrome != null)},
-		leavingGalerie() {return (this.formData.galerie != null)},
+		leavingAppareil() {return (this.photoData.appareil != null)},
+		leavingCompagnie() {return (this.photoData.compagnie != null)},
+		leavingAerodrome() {return (this.photoData.aerodrome != null)},
+		leavingGalerie() {return (this.photoData.galerie != null)},
 		
 		avionChanged(selected) {
 			const id = (selected)? selected.id : false
 			this.getAppareilOptions(id)
-		},
-		
-		onComplete() {
-			console.log("on COMPLETE " + JSON.stringify(this.formData))
 		},
 		
 		getOptions(apicall, variable) {
@@ -224,14 +218,22 @@ export default {
       this.tmpFileURL = ""
     },
 		
-		upload() {
+		onComplete() {
 			var vm = this
-			//vm.currentStatus = STATUS_SAVING
-			const url = vm.apiURL + "putFile"
+			var data = {jsonData: vm.photoData, photographe: vm.photographe}
 			
-			var FormData = require('form-data')
-			var myform = new FormData()
-			myform.append('myfile', vm.formData.file)
+			vm.axios.post("photouploads/", data)
+				.then(output => {
+					console.log("output: " + output)
+				})
+				.catch(err => {
+					console.log("error: " + err)
+				})			
+			
+			//const url = vm.apiURL + "putFile"
+			//var FormData = require('form-data')
+			//var myform = new FormData()
+			//myform.append('myfile', vm.formData.file)
 			
 			//vm.axios.post(url, myform, {headers: {'Content-Type': 'multipart/form-data'}})
 				//.then(output => {

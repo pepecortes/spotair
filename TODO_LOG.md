@@ -28,4 +28,6 @@ check this for multistep forms
 	
 Pictadd profile: nom premon do not appear
 
+Database: photoUpload model changed: modify databases where needed
+
 

@@ -25,6 +25,7 @@ const ctrlGaleries = require('./controllers/galeries')
 const ctrlPhotographes = require('./controllers/photographes')
 const ctrlUsers = require('./controllers/users')
 const ctrlPhotos = require('./controllers/photos')
+const ctrlPhotoUploads = require('./controllers/photouploads')
 
 // Import the storage controllers
 const ctrlStorage = require('./controllers/storage')
@@ -67,6 +68,7 @@ module.exports = function(passport) {
 	standardRouteFactory('photographes', ctrlPhotographes)
 	standardRouteFactory('users', ctrlUsers)
 	standardRouteFactory('photos', ctrlPhotos)
+	standardRouteFactory('photouploads', ctrlPhotoUploads)
 	
 	// Create additional routes
 	router.get('/appareils/byAvion/:id(\\d+)', (req, res) => ctrlAppareils.byAvion(req, res))

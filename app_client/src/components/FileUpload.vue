@@ -224,11 +224,14 @@ export default {
 			var data = {jsonData: vm.photoData, photographe: vm.photographe}
 			const FormData = require('form-data')
 			var fileData = new FormData()
-			fileData.append('imgFile', vm.filex)
 			
 			vm.axios.post("photouploads/", data)
-				.then(output => {console.log(JSON.stringify(output)); return output.id})
-				.then(id => console.log("data id: " + id)) // ERROR: IT RETURNS UNDEFINED
+				.then(output => output.data.id)
+				.then(id => {
+					fileData.append('imgFile', vm.filex, {filename: "koko.jpg"})
+					return vm.axios.post("storage/putFile/", fileData, {headers: {'Content-Type': 'multipart/form-data'}})
+				})
+				.then(output => console.log("#####" + JSON.stringify(data)))
 				.catch(err => console.log("error: " + err))			
 			
 			//const url = vm.apiURL + "putFile"

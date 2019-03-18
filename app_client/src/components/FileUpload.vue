@@ -1,6 +1,7 @@
 // TO BE COMPLETED:
 	// UPLOAD TEMP IMG FILE
 	// LINK IMG FILE TO IMG DATA
+	// CREATE ERROR COMMUNICATION
 
 <template lang="pug">
 
@@ -221,14 +222,14 @@ export default {
 		onComplete() {
 			var vm = this
 			var data = {jsonData: vm.photoData, photographe: vm.photographe}
+			const FormData = require('form-data')
+			var fileData = new FormData()
+			fileData.append('imgFile', vm.filex)
 			
 			vm.axios.post("photouploads/", data)
-				.then(output => {
-					console.log("output: " + output)
-				})
-				.catch(err => {
-					console.log("error: " + err)
-				})			
+				.then(output => {console.log(JSON.stringify(output)); return output.id})
+				.then(id => console.log("data id: " + id)) // ERROR: IT RETURNS UNDEFINED
+				.catch(err => console.log("error: " + err))			
 			
 			//const url = vm.apiURL + "putFile"
 			//var FormData = require('form-data')

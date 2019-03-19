@@ -86,7 +86,7 @@ var storageController = {}
 storageController.postFile = function(req, res) {
 	var form = new formidable.IncomingForm()
 	form.parse(req, function(err, fields, files) {
-		storeToContainer(files.myfile)
+		storeToContainer(files.file)
 			.then(output => sendJSON.ok(res, output))	
 			.catch(err => sendJSON.serverError(res, err))
 	})

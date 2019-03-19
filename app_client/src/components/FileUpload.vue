@@ -19,54 +19,7 @@
 				)
 				b-button(type="button", variant="outline-success", v-on:click="resetFile") Reset
 
-			tab-content(title="avion", :beforeChange="leavingAvion")
-				head-or-tail(v-model="avion.headSelected")
-					template(v-slot:head-slot)
-						v-select(
-							id="avion",
-							:options="avion.options",
-							label="text",
-							v-model="avion.head",
-							@input="avionChanged",
-						)
-					template(v-slot:tail-slot)
-						input(type='text', v-model="avion.tail")
-					
-			tab-content(title="immat" :beforeChange="leavingAppareil")
-				head-or-tail(v-model="appareil.headSelected")
-					template(v-slot:head-slot)
-						v-select(
-							id="immatriculation",
-							:options="appareil.options",
-							label="text",
-							v-model="appareil.head",
-						)
-					template(v-slot:tail-slot)
-						input(type='text', v-model="appareil.tail")
-						
-			tab-content(title="galerie" :beforeChange="leavingGalerie")
-				head-or-tail(v-model="galerie.headSelected")
-					template(v-slot:head-slot)
-						v-select(
-							id="galerie",
-							:options="galerie.options",
-							label="text",
-							v-model="galerie.head"
-						)
-					template(v-slot:tail-slot)
-						input(type='text', v-model="galerie.tail")
-						
-			tab-content(title="exploitant" :beforeChange="leavingCompagnie")
-				head-or-tail(v-model="compagnie.headSelected")
-					template(v-slot:head-slot)
-						v-select(
-							id="compagnie",
-							:options="compagnie.options",
-							label="text",
-							v-model="compagnie.head"
-						)
-					template(v-slot:tail-slot)
-						input(type='text', v-model="compagnie.tail")
+
 						
 			tab-content(title="lieu" :beforeChange="leavingAerodrome")
 				head-or-tail(v-model="aerodrome.headSelected")
@@ -228,11 +181,12 @@ export default {
 			vm.axios.post("photouploads/", data)
 				.then(output => output.data.id)
 				.then(id => {
-					fileData.append('imgFile', vm.filex, {filename: "koko.jpg"})
+					const filename = `${id}.jpg`
+					fileData.append('file', vm.filex, filename)
 					return vm.axios.post("storage/putFile/", fileData, {headers: {'Content-Type': 'multipart/form-data'}})
 				})
 				.then(output => console.log("#####" + JSON.stringify(data)))
-				.catch(err => console.log("error: " + err))			
+				.catch(err => console.log("error: " + JSON.stringify(err)))
 			
 			//const url = vm.apiURL + "putFile"
 			//var FormData = require('form-data')

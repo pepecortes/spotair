@@ -25,20 +25,20 @@ const containerOVH = new OVHStorage(configOVH)
  * @param {String} path		- Path where the file is stored in the container
  * @return {Promise} Promise that resolves or error
  */
-function storeToContainer(file) {
+function storeToContainer(file, selectedPath="") {
 	if (LOCAL_STORAGE) {
 		const source = path.resolve(file.path)
-		const target = path.resolve('./', process.env.LOCAL_STORAGE_LOCATION, file.name)
+		const target = path.resolve('./', process.env.LOCAL_STORAGE_LOCATION, selectedPath, file.name)
 		debug(`local file copy from: ${source} to ${target}`)
 		return fsp.copyFile(source, target)
 	}
 	// if OVH remote storage...
 	function putFilePromise() {
 		var stream = fs.createReadStream(file.path)
-		const path = "/" + process.env.CONTAINER_NAME + "/" + file.name
-		debug(`OVH file copy from: ${file.path} to ${path}`)
+		const remotePath = "/" + process.env.CONTAINER_NAME + "/" + selectedPath + file.name
+		debug(`OVH file copy from: ${file.path} to ${remotePath}`)
 		return new Promise((resolve, reject) =>
-			containerOVH.putStream(stream, path, (err, data) => {
+			containerOVH.putStream(stream, remotePath, (err, data) => {
 				if (err !== null) reject(err)
 				else resolve(data)
 			}))
@@ -86,7 +86,7 @@ var storageController = {}
 storageController.postFile = function(req, res) {
 	var form = new formidable.IncomingForm()
 	form.parse(req, function(err, fields, files) {
-		storeToContainer(files.file)
+		storeToContainer(files.file, fields.path)
 			.then(output => sendJSON.ok(res, output))	
 			.catch(err => sendJSON.serverError(res, err))
 	})

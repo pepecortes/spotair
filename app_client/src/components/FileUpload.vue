@@ -1,7 +1,7 @@
 // TO BE COMPLETED:
-	// UPLOAD TEMP IMG FILE
-	// LINK IMG FILE TO IMG DATA
 	// CREATE ERROR COMMUNICATION
+	// BUG: if you post with key "filex" instead if "file" the API crashes!
+	// TEST REMOTE UPLOADING
 
 <template lang="pug">
 
@@ -19,7 +19,54 @@
 				)
 				b-button(type="button", variant="outline-success", v-on:click="resetFile") Reset
 
-
+			tab-content(title="avion", :beforeChange="leavingAvion")
+				head-or-tail(v-model="avion.headSelected")
+					template(v-slot:head-slot)
+						v-select(
+							id="avion",
+							:options="avion.options",
+							label="text",
+							v-model="avion.head",
+							@input="avionChanged",
+						)
+					template(v-slot:tail-slot)
+						input(type='text', v-model="avion.tail")
+					
+			tab-content(title="immat" :beforeChange="leavingAppareil")
+				head-or-tail(v-model="appareil.headSelected")
+					template(v-slot:head-slot)
+						v-select(
+							id="immatriculation",
+							:options="appareil.options",
+							label="text",
+							v-model="appareil.head",
+						)
+					template(v-slot:tail-slot)
+						input(type='text', v-model="appareil.tail")
+						
+			tab-content(title="galerie" :beforeChange="leavingGalerie")
+				head-or-tail(v-model="galerie.headSelected")
+					template(v-slot:head-slot)
+						v-select(
+							id="galerie",
+							:options="galerie.options",
+							label="text",
+							v-model="galerie.head"
+						)
+					template(v-slot:tail-slot)
+						input(type='text', v-model="galerie.tail")
+						
+			tab-content(title="exploitant" :beforeChange="leavingCompagnie")
+				head-or-tail(v-model="compagnie.headSelected")
+					template(v-slot:head-slot)
+						v-select(
+							id="compagnie",
+							:options="compagnie.options",
+							label="text",
+							v-model="compagnie.head"
+						)
+					template(v-slot:tail-slot)
+						input(type='text', v-model="compagnie.tail")
 						
 			tab-content(title="lieu" :beforeChange="leavingAerodrome")
 				head-or-tail(v-model="aerodrome.headSelected")
@@ -183,6 +230,7 @@ export default {
 				.then(id => {
 					const filename = `${id}.jpg`
 					fileData.append('file', vm.filex, filename)
+					fileData.append('path', 'originals/')
 					return vm.axios.post("storage/putFile/", fileData, {headers: {'Content-Type': 'multipart/form-data'}})
 				})
 				.then(output => console.log("#####" + JSON.stringify(data)))

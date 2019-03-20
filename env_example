@@ -24,6 +24,7 @@ API_USER=APIuser
 STORAGE=LOCAL
 	// use a local storage (use for development only)
 LOCAL_STORAGE_LOCATION=dev_localstorage/
+UPLOAD_LOCATION=uploads/
 CONTAINER_NAME=static
 
 OVH_USERNAME=sJm6rkJbMD8h

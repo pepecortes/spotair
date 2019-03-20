@@ -1,13 +1,19 @@
-// TO BE COMPLETED:
-	// CREATE ERROR COMMUNICATION
-	// BUG: if you post with key "filex" instead if "file" the API crashes!
-	// TEST REMOTE UPLOADING
+// perhaps pass axiosErrorToSTring to the alert mixin (instead of importing it at each module?)
+// make upload location correctly defined (should be OK now: mistake in .env)
 
 <template lang="pug">
 
 	div(id="fileUpload")
 	
-		form-wizard(title="", subtitle="", stepSize="xs", finishButtonText="Submit", @on-complete="onComplete")
+		b-alert(
+			:variant="alert.type",
+			dismissible,
+			fade,
+			:show="alert.show",
+			@dismissed="alert.show=false",
+		) {{ alert.text }}
+	
+		form-wizard(ref="formWizard", title="", subtitle="", stepSize="xs", finishButtonText="Submit", @on-complete="onComplete")
 			
 			tab-content(title="photo", :beforeChange="imageAvailable")
 				b-form-file(
@@ -18,6 +24,7 @@
 					placeholder="Choose a file..."
 				)
 				b-button(type="button", variant="outline-success", v-on:click="resetFile") Reset
+
 
 			tab-content(title="avion", :beforeChange="leavingAvion")
 				head-or-tail(v-model="avion.headSelected")
@@ -67,7 +74,8 @@
 						)
 					template(v-slot:tail-slot)
 						input(type='text', v-model="compagnie.tail")
-						
+
+
 			tab-content(title="lieu" :beforeChange="leavingAerodrome")
 				head-or-tail(v-model="aerodrome.headSelected")
 					template(v-slot:head-slot)
@@ -99,6 +107,9 @@ import VueSelect from 'vue-select'
 import {FormWizard, TabContent} from 'vue-form-wizard'
 import HeadOrTail from './HeadOrTail.vue'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'
+import { alertMixin } from './AlertMixin'
+
+import { axiosErrorToString } from '../lib/common'
 
 export default {
 	
@@ -146,7 +157,9 @@ export default {
 		this.axios.get(process.env.WEB_URL + 'profile') 
 			.then(response => this.photographe = response.data.photographe)
 			.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
-	},
+	},	
+	
+	mixins: [alertMixin],
 	
 	methods: {
 		
@@ -218,6 +231,11 @@ export default {
       this.$refs.fileinput.reset()
       this.tmpFileURL = ""
     },
+    
+    resetForm() {
+			this.resetFile()
+			this.$refs.formWizard.reset()
+		},
 		
 		onComplete() {
 			var vm = this
@@ -230,33 +248,22 @@ export default {
 				.then(id => {
 					const filename = `${id}.jpg`
 					fileData.append('file', vm.filex, filename)
-					fileData.append('path', 'originals/')
+					fileData.append('path', process.env.UPLOAD_LOCATION)
 					return vm.axios.post("storage/putFile/", fileData, {headers: {'Content-Type': 'multipart/form-data'}})
 				})
-				.then(output => console.log("#####" + JSON.stringify(data)))
-				.catch(err => console.log("error: " + JSON.stringify(err)))
-			
-			//const url = vm.apiURL + "putFile"
-			//var FormData = require('form-data')
-			//var myform = new FormData()
-			//myform.append('myfile', vm.formData.file)
-			
-			//vm.axios.post(url, myform, {headers: {'Content-Type': 'multipart/form-data'}})
-				//.then(output => {
-					//vm.currentStatus = STATUS_SUCCESS
-					//const url = process.env.STORAGE_URL + vm.formData.file.name
-					//console.log("URL: " + url)
-					////window.location.href = url
-				//})
-				//.catch(err => {
-					//this.currentStatus = STATUS_FAILED;
-					//console.log("error: " + err)
-				//})
-			
-		},
+				.then(output => {
+					console.log("OUTPUT OK: " + JSON.stringify(output))
+					vm.showAlert("Photo envoyée pour validation", "success")
+					vm.resetForm()
+				})
+				.catch(err => {
+					console.log("ERROR: " + JSON.stringify(err))
+					console.log("axios error: " + axiosErrorToString(err))
+					vm.showAlert(axiosErrorToString(err), "danger")})
+		}, 
 		
 	},
-
+	
 }
 	
 

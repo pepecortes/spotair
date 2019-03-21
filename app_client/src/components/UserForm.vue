@@ -73,7 +73,7 @@ export default {
 			var vm = this
 			vm.axios.get('photographes/')
 				.then(response => vm.photographeOptions = response.data)
-				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+				.catch(err => vm.showAxiosAlert(err))
 		},
 	
 		// Reset the  password to the DEFAULT one
@@ -85,7 +85,7 @@ export default {
 				.then(function(response) {
 					vm.showAlert("Mot de passe réinitialisé", "success")
 				})
-				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+				.catch(err => vm.showAxiosAlert(err))
 			},
 		},
 	}

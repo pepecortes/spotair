@@ -36,7 +36,6 @@
 <script>
 import BaseForm from './BaseForm.vue'
 import { required } from "vuelidate/lib/validators"
-import { axiosErrorToString } from '../lib/common'
 
 export default {
 	
@@ -63,7 +62,7 @@ export default {
 			var vm = this
 			vm.axios.get('modeles/')
 				.then(response => vm.modeleOptions = response.data)
-				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+				.catch(err => vm.showAxiosAlert(err))
 		},
 	}
 	

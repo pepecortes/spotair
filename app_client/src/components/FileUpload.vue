@@ -1,6 +1,3 @@
-// perhaps pass axiosErrorToSTring to the alert mixin (instead of importing it at each module?)
-// make upload location correctly defined (should be OK now: mistake in .env)
-
 <template lang="pug">
 
 	div(id="fileUpload")
@@ -109,8 +106,6 @@ import HeadOrTail from './HeadOrTail.vue'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'
 import { alertMixin } from './AlertMixin'
 
-import { axiosErrorToString } from '../lib/common'
-
 export default {
 	
 	components: {
@@ -156,7 +151,7 @@ export default {
 		this.getOptions('aerodromes', this.aerodrome)
 		this.axios.get(process.env.WEB_URL + 'profile') 
 			.then(response => this.photographe = response.data.photographe)
-			.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+			.catch(err => vm.showAxiosAlert(err, "danger"))
 	},	
 	
 	mixins: [alertMixin],
@@ -199,7 +194,7 @@ export default {
 			const url = apicall + '/'
 			vm.axios.get(url)
 				.then(response => variable.options = response.data)
-				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},
 		
 		getAppareilOptions(avionId=false) {
@@ -210,7 +205,7 @@ export default {
 			if (!avionId) return
 			else vm.axios.get(`appareils/byAvion/${avionId}`)
 				.then(response => vm.appareil.options = response.data)
-				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},
 		
 		imageAvailable() {return (this.tmpFileURL != "")},
@@ -252,14 +247,10 @@ export default {
 					return vm.axios.post("storage/putFile/", fileData, {headers: {'Content-Type': 'multipart/form-data'}})
 				})
 				.then(output => {
-					console.log("OUTPUT OK: " + JSON.stringify(output))
 					vm.showAlert("Photo envoyée pour validation", "success")
 					vm.resetForm()
 				})
-				.catch(err => {
-					console.log("ERROR: " + JSON.stringify(err))
-					console.log("axios error: " + axiosErrorToString(err))
-					vm.showAlert(axiosErrorToString(err), "danger")})
+				.catch(err => vm.showAxiosAlert(err, "danger"))
 		}, 
 		
 	},

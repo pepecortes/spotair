@@ -48,7 +48,7 @@
 <script>
 import { alertMixin } from './AlertMixin'
 import { validationMixin } from 'vuelidate'
-import { confirmDialog, axiosErrorToString } from '../lib/common'
+import { confirmDialog } from '../lib/common'
 import { required, minLength } from "vuelidate/lib/validators"
 
 export default {
@@ -79,7 +79,7 @@ export default {
 			vm.axios.get(process.env.WEB_URL + 'profile') 
 				// note that the call is NOT an API call
 				.then(response => vm.user = response.data)
-				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},
 		
 		modifyPasswordClicked() {
@@ -94,7 +94,7 @@ export default {
 				.then(function(response) {
 					vm.showAlert("Mot de passe modifié", "success")
 				})
-				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},
 		
 	},

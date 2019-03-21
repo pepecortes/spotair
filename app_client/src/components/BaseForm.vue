@@ -6,7 +6,7 @@
 import VueSelect from 'vue-select'
 import pluralize from 'pluralize'
 import { validationMixin } from 'vuelidate'
-import { confirmDialog, axiosErrorToString } from '../lib/common'
+import { confirmDialog } from '../lib/common'
 import { required } from "vuelidate/lib/validators"
 import { alertMixin } from './AlertMixin'
 
@@ -70,7 +70,7 @@ export default {
 			var vm = this
 			this.axios.get(vm.apiURL + 'fresh')
 				.then(response => {vm.selection = response.data})
-				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},
 		
 		// Get all the available options for the SELECT control
@@ -81,7 +81,7 @@ export default {
 					vm.selectOptions = response.data
 					vm.selection = (preselected)? preselected : null
 				})
-				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},  
     
     removeButtonClicked() {
@@ -122,7 +122,7 @@ export default {
 					vm.showAlert("Removed: " + vm.formData.text, "success")
 					vm.getSelectOptions()
 				})
-				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},
 		
 		// Add the form data to the database
@@ -135,7 +135,7 @@ export default {
 					vm.showAlert("Created: " + response.data.text, "success")
 					vm.newForm()
 				})
-				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},
 		
 		// Update the form data on the database
@@ -149,7 +149,7 @@ export default {
 					vm.showAlert("Updated: " + response.data.text, "success")
 					vm.getSelectOptions(response.data)
 				})
-				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+				.catch(err => vm.showAxiosAlert(err, "danger"))
     },
     
     // Fusion: all references to the selection will be changed to the targetFusion
@@ -163,7 +163,7 @@ export default {
 					vm.showAlert(`Fusion OK: updated ${response.data.updated}, removed: ${vm.formData.text}`, "success")
 					vm.getSelectOptions()
 				})
-				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},
     
 	},

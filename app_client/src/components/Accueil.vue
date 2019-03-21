@@ -14,7 +14,7 @@
 <script>
 
 import VuePictureSwipe from 'vue-picture-swipe'
-import { axiosErrorToString, photoToImgData } from '../lib/common'
+import { photoToImgData } from '../lib/common'
 import { alertMixin } from './AlertMixin'
 
 export default {
@@ -39,7 +39,7 @@ export default {
 			var vm = this
 			this.axios.get('/photos/recent')
 				.then(response =>  vm.items = response.data.map(photoToImgData))
-				.catch(err => {console.error(err.toString());vm.showAlert(axiosErrorToString(err), "danger")})
+				.catch(err => vm.showAxiosAlert(err))
 		},
 		
 	},

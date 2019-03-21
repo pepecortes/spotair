@@ -76,7 +76,6 @@
 <script>
 import BaseForm from './BaseForm.vue'
 import { required } from "vuelidate/lib/validators"
-import { axiosErrorToString } from '../lib/common'
 
 export default {
 	
@@ -110,21 +109,21 @@ export default {
 			var vm = this
 			vm.axios.get('annees/')
 				.then(response => vm.anneeOptions = response.data)
-				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+				.catch(err => vm.showAxiosAlert(err))
 		},
 		
 		getThemeOptions() {
 			var vm = this
 			vm.axios.get('themes/')
 				.then(response => vm.themeOptions = response.data)
-				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+				.catch(err => vm.showAxiosAlert(err))
 		},
 		
 		getAerodromeOptions() {
 			var vm = this
 			vm.axios.get('aerodromes/')
 				.then(response => vm.aerodromeOptions = response.data)
-				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+				.catch(err => vm.showAxiosAlert(err))
 		},
 	}
 	

@@ -93,7 +93,6 @@
 <script>
 import BaseForm from './BaseForm.vue'
 import { required } from "vuelidate/lib/validators"
-import { axiosErrorToString } from '../lib/common'
 
 export default {
 	
@@ -130,28 +129,28 @@ export default {
 			var vm = this
 			vm.axios.get('photographes/')
 				.then(response => vm.photographeOptions = response.data)
-				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+				.catch(err => vm.showAxiosAlert(err))
 		},
 		
 		getCompagnieOptions() {
 			var vm = this
 			vm.axios.get('compagnies/')
 				.then(response => vm.compagnieOptions = response.data)
-				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+				.catch(err => vm.showAxiosAlert(err))
 		},
 		
 		getAppareilOptions() {
 			var vm = this
 			vm.axios.get('appareils/')
 				.then(response => vm.appareilOptions = response.data)
-				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+				.catch(err => vm.showAxiosAlert(err))
 		},
 		
 		getGalerieOptions() {
 			var vm = this
 			vm.axios.get('galeries/')
 				.then(response => vm.galerieOptions = response.data)
-				.catch(err => vm.showAlert(axiosErrorToString(err), "danger"))
+				.catch(err => vm.showAxiosAlert(err))
 		},
 		
 	}

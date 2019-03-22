@@ -2,6 +2,7 @@
 	div(id='admin')
 		b-nav(fill, tabs)
 			b-nav-item(href="/") Home
+			b-nav-item(to="/admin/validatePhoto") Validate
 			b-nav-item(to="/admin/aerodromes") Aérodromes
 			b-nav-item(to="/admin/themes") Thèmes
 			b-nav-item(to="/admin/annees") Années

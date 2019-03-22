@@ -21,11 +21,6 @@ file uploads:
 	https://flaviocopes.com/express-forms-files/
 	https://www.npmjs.com/package/express-formidable
 	
-put a link to portainer in the docs
-
-check this for multistep forms
-	https://binarcode.github.io/vue-form-wizard/#/
-	
 Pictadd profile: nom premon do not appear
 
 Database: photoUpload model changed: modify databases where needed

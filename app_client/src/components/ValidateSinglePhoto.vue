@@ -12,8 +12,7 @@
 		
 		b-form-input(v-model='idPhoto', type='text', placeholder='enter a photo id', @change='idPhotoChanged')
 		
-
-			
+		validator-input(:options='avionOptions', :value='avionSelection')
 		
 </template>
 
@@ -22,20 +21,24 @@
 //import {FormWizard, TabContent} from 'vue-form-wizard'
 //import HeadOrTail from './HeadOrTail.vue'
 //import 'vue-form-wizard/dist/vue-form-wizard.min.css'
+import ValidatorInput from './ValidatorInput.vue'
 import { alertMixin } from './AlertMixin'
 
 export default {
 	
-	//components: {
+	components: {
+		'validator-input': ValidatorInput,
 		//'form-wizard': FormWizard,
 		//'tab-content': TabContent,
 		//'v-select': VueSelect,
 		//'head-or-tail': HeadOrTail,
-	//},		
+	},		
 	
 	data() {
 		return {
 			idPhoto: null,
+			avionOptions: [],
+			avionSelection: null,
 		}
 	},
 	
@@ -53,16 +56,16 @@ export default {
 		
 	//},
 	
-	//mounted() {
+	mounted() {
 		//this.resetFile()
-		//this.getOptions('avions', this.avion)
+		this.getOptions('avions')
 		//this.getOptions('galeries', this.galerie)
 		//this.getOptions('compagnies', this.compagnie)
 		//this.getOptions('aerodromes', this.aerodrome)
 		//this.axios.get(process.env.WEB_URL + 'profile') 
 			//.then(response => this.photographe = response.data.photographe)
 			//.catch(err => vm.showAxiosAlert(err, "danger"))
-	//},	
+	},	
 	
 	mixins: [alertMixin],
 	
@@ -103,13 +106,13 @@ export default {
 			//this.getAppareilOptions(id)
 		//},
 		
-		//getOptions(apicall, variable) {
-			//var vm = this
-			//const url = apicall + '/'
-			//vm.axios.get(url)
-				//.then(response => variable.options = response.data)
-				//.catch(err => vm.showAxiosAlert(err, "danger"))
-		//},
+		getOptions(apicall, variable) {
+			var vm = this
+			const url = apicall + '/'
+			vm.axios.get(url)
+				.then(response => vm.avionOptions = response.data)
+				.catch(err => vm.showAxiosAlert(err, "danger"))
+		},
 		
 		//getAppareilOptions(avionId=false) {
 			//// reset appareil

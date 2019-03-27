@@ -12,12 +12,11 @@
 		
 		b-form-input(v-model='idPhoto', type='text', placeholder='enter a photo id', @change='idPhotoChanged')
 		
-		validator-input(:options='avionOptions', :value='avionSelection')
+		validator-input(:options='avionOptions', v-model='avionSelection')
 		
 </template>
 
 <script>
-//import VueSelect from 'vue-select'
 //import {FormWizard, TabContent} from 'vue-form-wizard'
 //import HeadOrTail from './HeadOrTail.vue'
 //import 'vue-form-wizard/dist/vue-form-wizard.min.css'
@@ -30,15 +29,14 @@ export default {
 		'validator-input': ValidatorInput,
 		//'form-wizard': FormWizard,
 		//'tab-content': TabContent,
-		//'v-select': VueSelect,
 		//'head-or-tail': HeadOrTail,
 	},		
 	
 	data() {
 		return {
 			idPhoto: null,
-			avionOptions: [],
-			avionSelection: null,
+			avionOptions: ['koko', 'kaka'],
+			avionSelection: 'koko',
 		}
 	},
 	
@@ -57,6 +55,7 @@ export default {
 	//},
 	
 	mounted() {
+		//return
 		//this.resetFile()
 		this.getOptions('avions')
 		//this.getOptions('galeries', this.galerie)
@@ -107,10 +106,14 @@ export default {
 		//},
 		
 		getOptions(apicall, variable) {
+			//return
 			var vm = this
 			const url = apicall + '/'
 			vm.axios.get(url)
-				.then(response => vm.avionOptions = response.data)
+				.then(response => {
+					vm.avionOptions = response.data
+					vm.avionSelection = vm.avionOptions[1] // FOR TESTING PURPOSES
+				})
 				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},
 		

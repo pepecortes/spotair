@@ -3,9 +3,9 @@
 		b-input-group(size="lg", prepend="$")
 			v-select(
 				id="selector",
-				:options="options",
+				:options="mutableOptions",
 				label="text",
-				v-model="value",
+				v-model="mutableValue",
 			)
 			b-input-group-append
 				b-button(variant='outline-secondary') V
@@ -26,8 +26,8 @@ export default {
 	
 	data() {
 		return {
-			//options: [1,2],
-			//value: 0,
+			mutableValue: null,
+			mutableOptions: [],
 		}
 	},
 	
@@ -39,10 +39,30 @@ export default {
 		},
 		
 		value: {
-			type: Number,
 			default: null
 		},
 		
+	},
+	
+	watch: {
+		
+		value(val) {
+			this.mutableValue = val
+		},
+		
+		options(val) {
+			this.mutableOptions = val
+		},
+		
+	},
+	
+	/**
+   * Clone props into mutable values,
+   * attach any event listeners.
+   */
+	created() {
+		this.mutableValue = this.value
+		this.mutableOptions = this.options
 	},
 	
 	//model: {

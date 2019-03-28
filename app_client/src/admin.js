@@ -50,7 +50,7 @@ const routes = [
   { path: '/admin/photographes', component: PhotographeForm },
   { path: '/admin/constructeurs', component: ConstructeurForm },
   { path: '/admin/modeles', component: ModeleForm },
-  { path: '/admin/avions', component: AvionForm },
+  { path: '/admin/avions/:tab', component: AvionForm },
   { path: '/admin/appareils', component: AppareilForm },
   { path: '/admin/photos', component: PhotoForm },
   { path: '/admin/users', component: UserForm },

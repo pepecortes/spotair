@@ -12,7 +12,7 @@
 		
 		b-form-input(v-model='idPhoto', type='text', placeholder='enter a photo id', @change='idPhotoChanged')
 		
-		validator-input(:options='avionOptions', v-model='avionSelection')
+		validator-input(ref='avionValidator', :options='avionOptions', v-model='avionSelection')
 		
 </template>
 
@@ -35,8 +35,8 @@ export default {
 	data() {
 		return {
 			idPhoto: null,
-			avionOptions: ['koko', 'kaka'],
-			avionSelection: 'koko',
+			avionOptions: [],
+			avionSelection: null,
 		}
 	},
 	
@@ -106,13 +106,12 @@ export default {
 		//},
 		
 		getOptions(apicall, variable) {
-			//return
 			var vm = this
 			const url = apicall + '/'
 			vm.axios.get(url)
 				.then(response => {
 					vm.avionOptions = response.data
-					vm.avionSelection = vm.avionOptions[1] // FOR TESTING PURPOSES
+					vm.$refs.avionValidator.setInitialValue(vm.avionOptions[0])
 				})
 				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},

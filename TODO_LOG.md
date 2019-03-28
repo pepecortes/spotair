@@ -1,3 +1,5 @@
+ADMIN: modify router so as to be able to load a particular TAB (seen AvionForm.vue and admin.js)
+
 Check again if bootstrap-vue requires @babel/runtime dependency. It should not, and I do not understand why
 
 Explore https://www.npmjs.com/package/vue-picture-swipe

@@ -23,6 +23,7 @@ export default {
 			selection: null, // the original selection, in case you need to reset
 			fusionTarget: null, // self-explanatory
 			validations: {}, // overriden by each form validations object
+			tabIndex: 0, // the index of the selected tab (0-based)
 		}
 	},
 	
@@ -36,7 +37,23 @@ export default {
 		apiURL () {return this.models + "/"}
 	},
 
-	mounted () {this.getSelectOptions()},
+	mounted () {
+		//this.getSelectOptions()
+		return
+		// DOES NOT WORK: nothing is displayed if navigate straight to "nouveau": suspected the parameter selection
+		console.log("MOUNTED " + console.log(this.$route.params.tab))
+		switch(this.$route.params.tab) {
+			case "new":
+				this.tabIndex = 1
+				break;
+			case "fusion":
+				this.tabIndex = 2
+				break;
+			default:
+				this.tabIndex = 0
+		}
+		console.log("mounted " + this.tabIndex)
+	},
 
 	methods: {
 	

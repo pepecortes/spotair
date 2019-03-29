@@ -54,7 +54,6 @@ export default {
 	
 	mounted() {
 		this.getModeleOptions()
-		console.log("AVIONFORM MOUNTED " + console.log(JSON.stringify(this.$route.params)))
 	},
 	
 	methods: {

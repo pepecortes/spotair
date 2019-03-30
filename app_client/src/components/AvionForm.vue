@@ -48,7 +48,7 @@ export default {
 				version: {required},
 				modele: {required},
 			},
-			modeleOptions: null,
+			modeleOptions: []
 		}
 	},
 	

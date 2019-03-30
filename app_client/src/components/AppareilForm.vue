@@ -76,7 +76,7 @@ export default {
 				commentaire: {},
 				avion: {required},
 			},
-			avionOptions: null,
+			avionOptions: [],
 		}
 	},
 	

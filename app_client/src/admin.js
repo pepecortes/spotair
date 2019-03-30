@@ -42,18 +42,18 @@ import ValidateSinglePhoto from './components/ValidateSinglePhoto.vue'
 
 // Define the routes
 const routes = [
-  { path: '/admin/aerodromes', component: AerodromeForm },
-  { path: '/admin/themes', component: ThemeForm },
-  { path: '/admin/annees', component: AnneeForm },
-  { path: '/admin/galeries', component: GalerieForm },
-  { path: '/admin/compagnies', component: CompagnieForm },
-  { path: '/admin/photographes', component: PhotographeForm },
-  { path: '/admin/constructeurs', component: ConstructeurForm },
-  { path: '/admin/modeles', component: ModeleForm },
-  { path: '/admin/avions/:tab', component: AvionForm },
-  { path: '/admin/appareils', component: AppareilForm },
-  { path: '/admin/photos', component: PhotoForm },
-  { path: '/admin/users', component: UserForm },
+  { path: '/admin/aerodromes/:tab?', component: AerodromeForm },
+  { path: '/admin/themes/:tab?', component: ThemeForm },
+  { path: '/admin/annees/:tab?', component: AnneeForm },
+  { path: '/admin/galeries/:tab?', component: GalerieForm },
+  { path: '/admin/compagnies/:tab?', component: CompagnieForm },
+  { path: '/admin/photographes/:tab?', component: PhotographeForm },
+  { path: '/admin/constructeurs/:tab?', component: ConstructeurForm },
+  { path: '/admin/modeles/:tab?', component: ModeleForm },
+  { path: '/admin/avions/:tab?', component: AvionForm },
+  { path: '/admin/appareils/:tab?', component: AppareilForm },
+  { path: '/admin/photos/:tab?', component: PhotoForm },
+  { path: '/admin/users/:tab?', component: UserForm },
   { path: '/admin/validatePhoto', component: ValidateSinglePhoto },
 ]
 

@@ -62,7 +62,7 @@ export default {
 				surnom: {},
 				constructeur: {required},
 			},
-			constructeurOptions: null,
+			constructeurOptions: [],
 		}
 	},
 	

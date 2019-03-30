@@ -38,21 +38,19 @@ export default {
 	},
 
 	mounted () {
-		//this.getSelectOptions()
-		return
-		// DOES NOT WORK: nothing is displayed if navigate straight to "nouveau": suspected the parameter selection
-		console.log("MOUNTED " + console.log(this.$route.params.tab))
 		switch(this.$route.params.tab) {
 			case "new":
+				this.newClicked()
 				this.tabIndex = 1
 				break;
 			case "fusion":
+				this.fusionClicked()
 				this.tabIndex = 2
 				break;
 			default:
+				this.modifyClicked()
 				this.tabIndex = 0
 		}
-		console.log("mounted " + this.tabIndex)
 	},
 
 	methods: {

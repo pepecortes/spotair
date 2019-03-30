@@ -109,10 +109,10 @@ export default {
 				appareil: {required},
 				galerie: {required},
 			},
-			photographeOptions: null,
-			compagnieOptions: null,
-			appareilOptions: null,
-			galerieOptions: null,
+			photographeOptions: [],
+			compagnieOptions: [],
+			appareilOptions: [],
+			galerieOptions: [],
 		}
 	},
 	

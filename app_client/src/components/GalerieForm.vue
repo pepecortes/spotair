@@ -91,9 +91,9 @@ export default {
 				theme: {required},
 				aerodrome: {required},
 			},
-			anneeOptions: null,
-			themeOptions: null,
-			aerodromeOptions: null,
+			anneeOptions: [],
+			themeOptions: [],
+			aerodromeOptions: [],
 		}
 	},
 	

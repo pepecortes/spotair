@@ -59,7 +59,7 @@ export default {
 				photographe: {required},
 				mail: {required, email}
 			},
-			photographeOptions: null,
+			photographeOptions: [],
 		}
 	},
 	

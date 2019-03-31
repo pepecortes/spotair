@@ -10,11 +10,20 @@ import { confirmDialog } from '../lib/common'
 import { required } from "vuelidate/lib/validators"
 import { alertMixin } from './AlertMixin'
 
+const	localRouter = {"modify": 0, "new": 1,	"fusion": 2}
+
 export default {
 	
 	components: {
 		'v-select': VueSelect
 	},
+	
+	props: {
+		initialTab: {
+			type: Number,
+			default: 0
+		},
+	}, 
 	
 	data () {
 		return {
@@ -23,7 +32,7 @@ export default {
 			selection: null, // the original selection, in case you need to reset
 			fusionTarget: null, // self-explanatory
 			validations: {}, // overriden by each form validations object
-			tabIndex: 0, // the index of the selected tab (0-based)
+			tabIndex: this.initialTab, // the index of the selected tab (0-based)
 		}
 	},
 	
@@ -36,20 +45,18 @@ export default {
 		models () {return pluralize(this.model)},
 		apiURL () {return this.models + "/"}
 	},
-
-	mounted () {
-		switch(this.$route.params.tab) {
-			case "new":
+	
+	beforeMount () {
+		if (this.$route.params.tab) this.tabIndex = localRouter[this.$route.params.tab]
+		switch(this.tabIndex) {
+			case 1:
 				this.newClicked()
-				this.tabIndex = 1
 				break;
-			case "fusion":
+			case 2:
 				this.fusionClicked()
-				this.tabIndex = 2
 				break;
 			default:
 				this.modifyClicked()
-				this.tabIndex = 0
 		}
 	},
 

@@ -1,5 +1,6 @@
 <template lang="pug">
 	div
+	
 		b-input-group(size="lg", prepend="$")
 			v-select(
 				v-if='!validated',
@@ -12,18 +13,26 @@
 			b-input-group-append
 				b-button(variant='outline-secondary', @click='validate') V
 				b-button(variant='outline-secondary', @click='reset') X
-				b-button(variant='outline-secondary') N
+				b-button(variant='outline-secondary', @click='newRecord') N
+				
+				
+			b-modal(ref="my-modal", title="Avions")
+				div(class="d-block")
+					avion-form(:initialTab=1)
+				
 		
 </template>
 
 <script>
 
 import VueSelect from 'vue-select'
+import AvionForm from './AvionForm.vue'
 
 export default {
 	
 	components: {
 		'v-select': VueSelect,
+		'avion-form': AvionForm,
 	},
 	
 	data() {
@@ -67,26 +76,16 @@ export default {
 		this.mutableValue = this.value
 		this.mutableOptions = this.options
 	},
-	
-	//model: {
-		//prop: 'headSelected',
-    //event: 'toggle'
-	//},
-	
-	//watch: {
-
-		//onHead: function() {
-			//this.$emit('toggle', this.onHead)
-		//},
-		
-		//headSelected: function(v) {
-			//this.onHead = v
-			//this.onTail = !v
-		//}
-
-	//},
 
 	methods: {
+		
+		hideModal() {
+			console.log("hide modal")
+		},
+		
+		toggleModal() {
+			console.log("toggle modal")
+		},
 		
 		setInitialValue(val) {
 			this.initialValue = val
@@ -102,9 +101,10 @@ export default {
 			this.validated = false
 		},
 		
-		//setSelection(id) {
-			//console.log("SETTING SELECTION")
-		//},
+		newRecord() {
+			this.$refs['my-modal'].show()
+			//this.$router.push("/admin/avions/new")
+		},
 		
 	},
 	

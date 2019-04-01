@@ -12,7 +12,7 @@
 		
 		b-form-input(v-model='idPhoto', type='text', placeholder='enter a photo id', @change='idPhotoChanged')
 		
-		validator-input(ref='avionValidator', :options='avionOptions', v-model='avionSelection')
+		validator-input(ref='avionValidator', :options='avionOptions', v-model='avionSelection', v-on:need-refresh='refreshAvionOptions')
 		
 </template>
 
@@ -69,6 +69,12 @@ export default {
 	mixins: [alertMixin],
 	
 	methods: {
+		
+		refreshAvionOptions() {
+			this.getOptions('avions')
+			// TBC: select the recently added option in the corresponding validatorinput
+			// PERHAPS all this functions should be carried out in the validatorInput component instead of here...
+		},
 		
 		idPhotoChanged(id) {
 			console.log("ID: " + id)

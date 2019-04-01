@@ -16,7 +16,7 @@
 				b-button(variant='outline-secondary', @click='newRecord') N
 				
 				
-			b-modal(ref="my-modal", title="Avions")
+			b-modal(ref="avionAdmin", title="Avions", @hide='modalHidden')
 				div(class="d-block")
 					avion-form(:initialTab=1)
 				
@@ -79,6 +79,11 @@ export default {
 
 	methods: {
 		
+		modalHidden() {
+			console.log("MODAL HIDDEN")
+			this.$emit('need-refresh')
+		},
+		
 		hideModal() {
 			console.log("hide modal")
 		},
@@ -102,8 +107,7 @@ export default {
 		},
 		
 		newRecord() {
-			this.$refs['my-modal'].show()
-			//this.$router.push("/admin/avions/new")
+			this.$refs['avionAdmin'].show()
 		},
 		
 	},

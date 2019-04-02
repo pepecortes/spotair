@@ -1,17 +1,17 @@
 <template lang="pug">
 	div
 	
-		b-input-group(size="lg", prepend="$")
+		b-input-group(size="lg", prepend="Avion")
 			v-select(
 				v-if='!validated',
 				id="selector",
-				:options="mutableOptions",
+				:options="options",
 				label="text",
 				v-model="mutableValue",
 			)
 			p(v-if="validated") {{ mutableValue.text }}
 			b-input-group-append
-				b-button(variant='outline-secondary', @click='validate') V
+				b-button(v-if='selectionIsLegal', variant='outline-secondary', @click='validate') V
 				b-button(variant='outline-secondary', @click='reset') X
 				b-button(variant='outline-secondary', @click='newRecord') N
 				
@@ -37,33 +37,33 @@ export default {
 	
 	data() {
 		return {
+			options: [],
+			selectionIsLegal: false, // true if the selection is a value from 'options'
 			validated: false,
 			mutableValue: null,
-			mutableOptions: [],
 		}
 	},
 	
 	props: {
 		
-		options: {
-			type: Array,
-			default: () => []
-		},
-		
 		value: {
 			default: null
+		},
+		
+		apiCall: {
+			type: String,
+		},
+		
+		initial: {
+			type: Object,
 		},
 		
 	},
 	
 	watch: {
 		
-		value(val) {
-			this.mutableValue = val
-		},
-		
-		options(val) {
-			this.mutableOptions = val
+		mutableValue(val) {
+			this.selectionIsLegal = (val && val.id)
 		},
 		
 	},
@@ -73,15 +73,28 @@ export default {
    * attach any event listeners.
    */
 	created() {
-		this.mutableValue = this.value
-		this.mutableOptions = this.options
+		//this.mutableValue = this.value
+		this.mutableValue = this.initial
+		this.getOptions()
 	},
 
 	methods: {
 		
+		getOptions() {
+			//TBC: how to alert of an error in the component?
+			var vm = this
+			const url = this.apiCall + '/'
+			vm.axios.get(url)
+				.then(response => {
+					vm.options = response.data
+				})
+				.catch(err => vm.showAxiosAlert(err, "danger"))
+		},
+		
 		modalHidden() {
 			console.log("MODAL HIDDEN")
 			this.$emit('need-refresh')
+			// TBC: sure you want to emit this?
 		},
 		
 		hideModal() {

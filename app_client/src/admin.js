@@ -54,7 +54,7 @@ const routes = [
   { path: '/admin/appareils/:tab?', component: AppareilForm },
   { path: '/admin/photos/:tab?', component: PhotoForm },
   { path: '/admin/users/:tab?', component: UserForm },
-  { path: '/admin/validatePhoto', component: ValidateSinglePhoto },
+  { path: '/admin/validatePhoto/:id(\\d+)?', component: ValidateSinglePhoto },
 ]
 
 // Create the router

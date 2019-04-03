@@ -38,9 +38,9 @@ export default {
 	data() {
 		return {
 			options: [],
-			selectionIsLegal: false, // true if the selection is a value from 'options'
 			validated: false,
 			mutableValue: null,
+			initial: null,
 		}
 	},
 	
@@ -54,27 +54,17 @@ export default {
 			type: String,
 		},
 		
-		initial: {
-			type: Object,
+	},
+	
+	computed: {
+		
+		selectionIsLegal() {
+			return (this.mutableValue && this.mutableValue.id)
 		},
 		
 	},
-	
-	watch: {
 		
-		mutableValue(val) {
-			this.selectionIsLegal = (val && val.id)
-		},
-		
-	},
-	
-	/**
-   * Clone props into mutable values,
-   * attach any event listeners.
-   */
 	created() {
-		//this.mutableValue = this.value
-		this.mutableValue = this.initial
 		this.getOptions()
 	},
 
@@ -85,9 +75,7 @@ export default {
 			var vm = this
 			const url = this.apiCall + '/'
 			vm.axios.get(url)
-				.then(response => {
-					vm.options = response.data
-				})
+				.then(response => vm.options = response.data)
 				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},
 		
@@ -106,17 +94,20 @@ export default {
 		},
 		
 		setInitialValue(val) {
-			this.initialValue = val
-			this.mutableValue = val
+			this.initial = val
+			this.reset()
 		},
 		
 		validate() {
+			if (!this.selectionIsLegal) {this.reset(); return}
 			this.validated = true
+			this.$emit('input', this.mutableValue)
 		},
 		
 		reset() {
-			this.mutableValue = this.initialValue
+			this.mutableValue = this.initial
 			this.validated = false
+			this.$emit('input', null)
 		},
 		
 		newRecord() {

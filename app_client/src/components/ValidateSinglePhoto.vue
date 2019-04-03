@@ -13,9 +13,10 @@
 		validator-input(
 			ref='avionValidator',
 			apiCall="avions",
-			:initial='initialSelection',
 			v-model='avionSelection',
 		)
+		
+		b-button(type="button", variant="outline-warning", v-on:click="validateButtonClicked") Validate
 		
 </template>
 
@@ -26,14 +27,10 @@ import { alertMixin } from './AlertMixin'
 export default {
 		
 	beforeMount() {
-		console.log("photoupload id is " + this.$route.params.id)
 		var vm = this
 		const url = 'photouploads/' + this.$route.params.id
 		vm.axios.get(url)
-			.then(response => {
-				//TODO CONTINUE HERE: CLARIFY INITIAL AND V-MODEL
-				vm.avionSelection = response.data.jsonData.avion
-			})
+			.then(response => vm.$refs.avionValidator.setInitialValue(response.data.jsonData.avion))
 			.catch(err => vm.showAxiosAlert(err, "danger"))
 	},
 	
@@ -44,13 +41,16 @@ export default {
 	data() {
 		return {
 			avionSelection: null,
-			initialSelection: {id:1, text: "BIDONCILLO"}
 		}
-	},	
+	},
 	
 	mixins: [alertMixin],
 	
 	methods: {
+			
+			validateButtonClicked() {
+				console.log("avionSelection: " + JSON.stringify(this.avionSelection))
+			},
 			
 	},
 	

@@ -11,9 +11,11 @@
 		) {{ alert.text }}
 		
 		validator-input(
-			ref='avionValidator',
-			apiCall="avions",
-			v-model='avionSelection',
+			ref='validator',
+			apiCall="compagnies",
+			v-model='selection',
+			title="Compagnie",
+			:adminForm='adminform',
 		)
 		
 		b-button(type="button", variant="outline-warning", v-on:click="validateButtonClicked") Validate
@@ -23,6 +25,8 @@
 <script>
 import ValidatorInput from './ValidatorInput.vue'
 import { alertMixin } from './AlertMixin'
+import AvionForm from './AvionForm.vue'
+import CompagnieForm from './CompagnieForm.vue'
 
 export default {
 		
@@ -30,7 +34,8 @@ export default {
 		var vm = this
 		const url = 'photouploads/' + this.$route.params.id
 		vm.axios.get(url)
-			.then(response => vm.$refs.avionValidator.setInitialValue(response.data.jsonData.avion))
+			//.then(response => vm.$refs.validator.setInitialValue(response.data.jsonData.avion))
+			.then(response => vm.$refs.validator.setInitialValue(response.data.jsonData.compagnie))
 			.catch(err => vm.showAxiosAlert(err, "danger"))
 	},
 	
@@ -40,7 +45,9 @@ export default {
 	
 	data() {
 		return {
-			avionSelection: null,
+			selection: null,
+			adminform: CompagnieForm,
+			//adminform: AvionForm,
 		}
 	},
 	
@@ -49,7 +56,7 @@ export default {
 	methods: {
 			
 			validateButtonClicked() {
-				console.log("avionSelection: " + JSON.stringify(this.avionSelection))
+				console.log("selection: " + JSON.stringify(this.selection))
 			},
 			
 	},

@@ -1,7 +1,7 @@
 <template lang="pug">
 	div
 	
-		b-input-group(size="lg", prepend="Avion")
+		b-input-group(size="lg", :prepend='title')
 			v-select(
 				v-if='!validated',
 				id="selector",
@@ -16,9 +16,15 @@
 				b-button(variant='outline-secondary', @click='newRecord') N
 				
 				
-			b-modal(ref="avionAdmin", title="Avions", @hide='modalHidden')
+			b-modal(ref="adminComponent", :title='title', @hide='modalHidden')
 				div(class="d-block")
-					avion-form(:initialTab=1)
+					component(
+						v-bind:is='adminForm',
+						:initialTab=1,
+						@record-added='recordModified',
+						@record-updated='recordModified',
+						@record-fusion='recordFusion',
+					)
 				
 		
 </template>
@@ -26,13 +32,11 @@
 <script>
 
 import VueSelect from 'vue-select'
-import AvionForm from './AvionForm.vue'
 
 export default {
 	
 	components: {
 		'v-select': VueSelect,
-		'avion-form': AvionForm,
 	},
 	
 	data() {
@@ -54,14 +58,23 @@ export default {
 			type: String,
 		},
 		
+		title: {
+			type: String,
+			default: "title missing"
+		},
+		
+		adminForm: {
+			// Form used for adding new records (i.e. AvionForm.vue)
+			type: Object,
+			default: null,
+		},
+		
 	},
 	
 	computed: {
-		
 		selectionIsLegal() {
 			return (this.mutableValue && this.mutableValue.id)
 		},
-		
 	},
 		
 	created() {
@@ -71,7 +84,6 @@ export default {
 	methods: {
 		
 		getOptions() {
-			//TBC: how to alert of an error in the component?
 			var vm = this
 			const url = this.apiCall + '/'
 			vm.axios.get(url)
@@ -79,10 +91,19 @@ export default {
 				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},
 		
+		recordModified(record) {
+			this.getOptions()
+			this.invalidate()
+			this.mutableValue = record
+		},
+		
+		recordFusion() {
+			this.getOptions()
+			this.reset()
+		},
+		
 		modalHidden() {
-			console.log("MODAL HIDDEN")
-			this.$emit('need-refresh')
-			// TBC: sure you want to emit this?
+			console.log("modal hidden")
 		},
 		
 		hideModal() {
@@ -104,14 +125,18 @@ export default {
 			this.$emit('input', this.mutableValue)
 		},
 		
-		reset() {
-			this.mutableValue = this.initial
+		invalidate() {
 			this.validated = false
 			this.$emit('input', null)
 		},
 		
+		reset() {
+			this.mutableValue = this.initial
+			this.invalidate()
+		},
+		
 		newRecord() {
-			this.$refs['avionAdmin'].show()
+			this.$refs.adminComponent.show()
 		},
 		
 	},

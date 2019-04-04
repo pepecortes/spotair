@@ -154,6 +154,7 @@ export default {
       if (vm.$v.formData.$invalid) return
 			vm.axios.post(vm.apiURL, vm.formData)
 				.then(function(response) {
+					vm.$emit('record-added', response.data)
 					vm.showAlert("Created: " + response.data.text, "success")
 					vm.newForm()
 				})
@@ -167,7 +168,8 @@ export default {
       if (this.$v.formData.$invalid) return
 			const url = vm.apiURL + vm.formData.id
 			vm.axios.put(url, vm.formData)
-				.then(function(response) {					
+				.then(function(response) {		
+					vm.$emit('record-updated', response.data)			
 					vm.showAlert("Updated: " + response.data.text, "success")
 					vm.getSelectOptions(response.data)
 				})
@@ -182,6 +184,7 @@ export default {
 			const url = vm.apiURL + `fusion/source/${vm.formData.id}/destination/${vm.fusionTarget.id}`
 			vm.axios.put(url)
 				.then(function(response) {
+					vm.$emit('record-fusion', response.data)
 					vm.showAlert(`Fusion OK: updated ${response.data.updated}, removed: ${vm.formData.text}`, "success")
 					vm.getSelectOptions()
 				})

@@ -34,11 +34,9 @@
 import VueSelect from 'vue-select'
 
 export default {
-	
-	//TBC: when all finished, check what happens if you validate the
-	// default proposal (not selecting anything in the list)
-	
 	//TBC: remove button V when already validated
+	
+	//TBC: improve user experience: display initial value even if not yet confirmed on the database
 	
 	components: {
 		'v-select': VueSelect,
@@ -90,7 +88,7 @@ export default {
 		
 		getOptions() {
 			var vm = this
-			const url = this.apiCall + '/'
+			const url = vm.apiCall + '/'
 			vm.axios.get(url)
 				.then(response => vm.options = response.data)
 				.catch(err => vm.showAxiosAlert(err, "danger"))
@@ -112,8 +110,19 @@ export default {
 		},
 		
 		setInitialValue(val) {
-			this.initial = val
-			this.reset()
+			var vm = this	
+			this.lookupInitialValue(val)
+				.then (response => {
+					vm.initial = response.data
+					vm.reset()
+				})
+				.catch(err => vm.showAxiosAlert(err, "danger"))
+		},
+		
+		async lookupInitialValue(val) {
+			if (!val.id) return Promise.resolve({data: val})
+			const url = this.apiCall + '/' + val.id
+			return this.axios.get(url)
 		},
 		
 		validate() {

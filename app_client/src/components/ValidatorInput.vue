@@ -11,7 +11,7 @@
 			)
 			p(v-if="validated") {{ mutableValue.text }}
 			b-input-group-append
-				b-button(v-if='selectionIsLegal', variant='outline-secondary', @click='validate') V
+				b-button(v-if='selectionIsLegal && !validated', variant='outline-secondary', @click='validate') V
 				b-button(variant='outline-secondary', @click='reset') X
 				b-button(variant='outline-secondary', @click='admin') N
 				
@@ -34,10 +34,7 @@
 import VueSelect from 'vue-select'
 
 export default {
-	//TBC: remove button V when already validated
-	
-	//TBC: improve user experience: display initial value even if not yet confirmed on the database
-	
+		
 	components: {
 		'v-select': VueSelect,
 	},
@@ -110,7 +107,8 @@ export default {
 		},
 		
 		setInitialValue(val) {
-			var vm = this	
+			var vm = this
+			vm.mutableValue = val // improve user experience
 			this.lookupInitialValue(val)
 				.then (response => {
 					vm.initial = response.data

@@ -69,6 +69,20 @@ export default {
 			default: null,
 		},
 		
+		//TESTING
+		state: {
+			type: Boolean
+		},
+		
+	},
+	
+	//TESTING
+	watch: {
+		
+		state(val) {
+			console.log("change state is " + val)
+		},
+		
 	},
 	
 	computed: {
@@ -79,6 +93,7 @@ export default {
 		
 	created() {
 		this.getOptions()
+		console.log("state is " + this.state)
 	},
 
 	methods: {

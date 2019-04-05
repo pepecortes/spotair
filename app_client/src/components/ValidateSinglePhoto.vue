@@ -16,6 +16,7 @@
 			v-model='value.avion',
 			title="Avion",
 			:adminForm='admin.avion',
+			:state="$v.value.avion.$invalid",
 		)
 		
 		validator-input(
@@ -56,6 +57,8 @@
 
 <script>
 import { alertMixin } from './AlertMixin'
+import { validationMixin } from 'vuelidate'
+import { required } from "vuelidate/lib/validators"
 
 import ValidatorInput from './ValidatorInput.vue'
 
@@ -94,14 +97,27 @@ export default {
 		}
 	},
 	
-	mixins: [alertMixin],
+	mixins: [validationMixin, alertMixin],
 	
 	methods: {
 			
 			validateButtonClicked() {
 				console.log("selection: " + JSON.stringify(this.value))
+				console.log("validation before touch: " + JSON.stringify(this.$v.value.avion))
+				this.$v.value.$touch()
+				console.log("validation after touch: " + JSON.stringify(this.$v.value.avion))
 			},
 			
+	},  
+	
+	validations: {
+		
+    value: {
+			avion: {
+				required,
+			},
+    },
+    
 	},
 	
 }

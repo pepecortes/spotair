@@ -11,11 +11,43 @@
 		) {{ alert.text }}
 		
 		validator-input(
-			ref='validator',
+			ref='avionValidator',
+			apiCall="avions",
+			v-model='value.avion',
+			title="Avion",
+			:adminForm='admin.avion',
+		)
+		
+		validator-input(
+			ref='appareilValidator',
+			apiCall="appareils",
+			v-model='value.appareil',
+			title="Immat",
+			:adminForm='admin.appareil',
+		)
+		
+		validator-input(
+			ref='galerieValidator',
+			apiCall="galeries",
+			v-model='value.galerie',
+			title="Galerie",
+			:adminForm='admin.galerie',
+		)
+		
+		validator-input(
+			ref='compagnieValidator',
 			apiCall="compagnies",
-			v-model='selection',
+			v-model='value.compagnie',
 			title="Compagnie",
-			:adminForm='adminform',
+			:adminForm='admin.compagnie',
+		)
+		
+		validator-input(
+			ref='aerodromeValidator',
+			apiCall="aerodromes",
+			v-model='value.aerodrome',
+			title="Lieu",
+			:adminForm='admin.aerodrome',
 		)
 		
 		b-button(type="button", variant="outline-warning", v-on:click="validateButtonClicked") Validate
@@ -23,10 +55,15 @@
 </template>
 
 <script>
-import ValidatorInput from './ValidatorInput.vue'
 import { alertMixin } from './AlertMixin'
+
+import ValidatorInput from './ValidatorInput.vue'
+
 import AvionForm from './AvionForm.vue'
+import AppareilForm from './AppareilForm.vue'
+import GalerieForm from './GalerieForm.vue'
 import CompagnieForm from './CompagnieForm.vue'
+import AerodromeForm from './AerodromeForm.vue'
 
 export default {
 		
@@ -34,8 +71,14 @@ export default {
 		var vm = this
 		const url = 'photouploads/' + this.$route.params.id
 		vm.axios.get(url)
-			//.then(response => vm.$refs.validator.setInitialValue(response.data.jsonData.avion))
-			.then(response => vm.$refs.validator.setInitialValue(response.data.jsonData.compagnie))
+			.then(response => {
+				const data = response.data.jsonData
+				vm.$refs.avionValidator.setInitialValue(data.avion)
+				vm.$refs.appareilValidator.setInitialValue(data.appareil)
+				vm.$refs.galerieValidator.setInitialValue(data.galerie)
+				vm.$refs.compagnieValidator.setInitialValue(data.compagnie)
+				vm.$refs.aerodromeValidator.setInitialValue(data.aerodrome)
+			})
 			.catch(err => vm.showAxiosAlert(err, "danger"))
 	},
 	
@@ -45,9 +88,9 @@ export default {
 	
 	data() {
 		return {
-			selection: null,
-			adminform: CompagnieForm,
-			//adminform: AvionForm,
+			value: {avion: null, appareil: null, galerie: null, compagnie: null, aerodrome: null},
+			admin: {avion: AvionForm, appareil: AppareilForm, galerie: GalerieForm, compagnie: CompagnieForm, aerodrome: AerodromeForm},
+			compagnie: null,
 		}
 	},
 	
@@ -56,7 +99,7 @@ export default {
 	methods: {
 			
 			validateButtonClicked() {
-				console.log("selection: " + JSON.stringify(this.selection))
+				console.log("selection: " + JSON.stringify(this.value))
 			},
 			
 	},

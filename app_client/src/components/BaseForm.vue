@@ -141,6 +141,7 @@ export default {
 			const url = vm.apiURL + vm.formData.id
 			vm.axios.delete(url)
 				.then(function(response) {
+					vm.$emit('record-removed', response.data)
 					vm.showAlert("Removed: " + vm.formData.text, "success")
 					vm.getSelectOptions()
 				})

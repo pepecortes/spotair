@@ -13,19 +13,19 @@
 			b-input-group-append
 				b-button(v-if='selectionIsLegal', variant='outline-secondary', @click='validate') V
 				b-button(variant='outline-secondary', @click='reset') X
-				b-button(variant='outline-secondary', @click='newRecord') N
+				b-button(variant='outline-secondary', @click='admin') N
 				
-				
-			b-modal(ref="adminComponent", :title='title', @hide='modalHidden')
-				div(class="d-block")
-					component(
-						v-bind:is='adminForm',
-						:initialTab=1,
-						@record-added='recordModified',
-						@record-updated='recordModified',
-						@record-fusion='recordFusion',
-					)
-				
+		b-modal(ref="adminModal", :title='title', @hide='adminHidden')
+			div(class="d-block")
+				component(
+					ref="adminComponent",
+					v-bind:is='adminForm',
+					:initialTab=1,
+					@record-added='recordAddedOrUpdated',
+					@record-updated='recordAddedOrUpdated',
+					@record-removed='recordRemovedOrFusion',
+					@record-fusion='recordRemovedOrFusion',
+				)
 		
 </template>
 
@@ -34,6 +34,11 @@
 import VueSelect from 'vue-select'
 
 export default {
+	
+	//TBC: when all finished, check what happens if you validate the
+	// default proposal (not selecting anything in the list)
+	
+	//TBC: remove button V when already validated
 	
 	components: {
 		'v-select': VueSelect,
@@ -91,27 +96,19 @@ export default {
 				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},
 		
-		recordModified(record) {
+		recordAddedOrUpdated(record) {
 			this.getOptions()
 			this.invalidate()
 			this.mutableValue = record
 		},
 		
-		recordFusion() {
+		recordRemovedOrFusion() {
 			this.getOptions()
 			this.reset()
 		},
 		
-		modalHidden() {
-			console.log("modal hidden")
-		},
-		
-		hideModal() {
-			console.log("hide modal")
-		},
-		
-		toggleModal() {
-			console.log("toggle modal")
+		adminHidden() {
+			this.$refs.adminComponent.resetAlert()
 		},
 		
 		setInitialValue(val) {
@@ -135,8 +132,8 @@ export default {
 			this.invalidate()
 		},
 		
-		newRecord() {
-			this.$refs.adminComponent.show()
+		admin() {
+			this.$refs.adminModal.show()
 		},
 		
 	},

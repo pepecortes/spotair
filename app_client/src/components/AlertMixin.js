@@ -52,6 +52,10 @@ module.exports.alertMixin = {
 			this.alert = {show: true, text: message, type: type}
 		},
 		
+		resetAlert() {
+			this.alert = {show: false, text: "", type: "warning"}
+		},
+		
 		showAxiosAlert(err, type="danger") {
 			this.showAlert(axiosErrorToString(err), type)
 		},

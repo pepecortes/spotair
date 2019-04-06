@@ -16,51 +16,56 @@
 			v-model='value.avion',
 			title="Avion",
 			:adminForm='admin.avion',
-			:state="$v.value.avion.$invalid",
+			:state='!$v.value.avion.$invalid',
 		)
-		
+
 		validator-input(
 			ref='appareilValidator',
 			apiCall="appareils",
 			v-model='value.appareil',
 			title="Immat",
 			:adminForm='admin.appareil',
+			:state='!$v.value.appareil.$invalid',
 		)
-		
+
+
 		validator-input(
 			ref='galerieValidator',
 			apiCall="galeries",
 			v-model='value.galerie',
 			title="Galerie",
 			:adminForm='admin.galerie',
+			:state='!$v.value.galerie.$invalid',
 		)
-		
+
 		validator-input(
 			ref='compagnieValidator',
 			apiCall="compagnies",
 			v-model='value.compagnie',
 			title="Compagnie",
 			:adminForm='admin.compagnie',
+			:state='!$v.value.compagnie.$invalid',
 		)
-		
+
 		validator-input(
 			ref='aerodromeValidator',
 			apiCall="aerodromes",
 			v-model='value.aerodrome',
 			title="Lieu",
 			:adminForm='admin.aerodrome',
+			:state='!$v.value.aerodrome.$invalid',
 		)
 		
-		b-button(type="button", variant="outline-warning", v-on:click="validateButtonClicked") Validate
+		b-button(v-if='allValidated', type="button", variant="outline-success", v-on:click="validateButtonClicked") Validate
 		
 </template>
 
 <script>
 import { alertMixin } from './AlertMixin'
 import { validationMixin } from 'vuelidate'
-import { required } from "vuelidate/lib/validators"
 
 import ValidatorInput from './ValidatorInput.vue'
+import { required } from "vuelidate/lib/validators"
 
 import AvionForm from './AvionForm.vue'
 import AppareilForm from './AppareilForm.vue'
@@ -87,7 +92,7 @@ export default {
 	
 	components: {
 		'validator-input': ValidatorInput,
-	},		
+	},	
 	
 	data() {
 		return {
@@ -97,27 +102,42 @@ export default {
 		}
 	},
 	
+	computed: {
+		
+		allValidated() {
+			return !(
+				this.$v.value.avion.$invalid
+				|| this.$v.value.appareil.$invalid
+				|| this.$v.value.galerie.$invalid
+				|| this.$v.value.compagnie.$invalid
+				|| this.$v.value.aerodrome.$invalid
+			)
+		},
+		
+	},
+	
 	mixins: [validationMixin, alertMixin],
 	
 	methods: {
 			
 			validateButtonClicked() {
-				console.log("selection: " + JSON.stringify(this.value))
-				console.log("validation before touch: " + JSON.stringify(this.$v.value.avion))
+				//console.log("selection: " + JSON.stringify(this.value))
 				this.$v.value.$touch()
 				console.log("validation after touch: " + JSON.stringify(this.$v.value.avion))
 			},
 			
-	},  
+	},
 	
-	validations: {
-		
-    value: {
-			avion: {
-				required,
-			},
-    },
-    
+	validations() {
+		return {value: 
+			{
+				avion: {required},
+				appareil: {required},
+				galerie: {required},
+				compagnie: {required},
+				aerodrome: {required}
+			}
+		}
 	},
 	
 }

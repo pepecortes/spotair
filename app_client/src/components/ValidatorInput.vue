@@ -1,20 +1,23 @@
 <template lang="pug">
 	div
 	
-		b-input-group(size="lg", :prepend='title')
-			v-select(
-				v-if='!validated',
-				id="selector",
-				:options="options",
-				label="text",
-				v-model="mutableValue",
-			)
-			p(v-if="validated") {{ mutableValue.text }}
-			b-input-group-append
-				b-button(v-if='selectionIsLegal && !validated', variant='outline-secondary', @click='validate') V
-				b-button(variant='outline-secondary', @click='reset') X
-				b-button(variant='outline-secondary', @click='admin') N
-				
+		b-form-group(:state='state')
+			b-input-group(size="sm")
+				b-badge(slot='prepend', variant="success", v-if='state') V
+				span(slot='prepend') {{ title }} &nbsp;
+				v-select(
+					v-if='!mutableValidated',
+					id="selector",
+					:options="options",
+					label="text",
+					v-model="mutableValue",
+				)
+				p(v-if="mutableValidated") {{ mutableValue.text }}
+				b-input-group-append
+					b-button(v-if='selectionIsLegal && !mutableValidated', variant='outline-secondary', @click='validate') V
+					b-button(variant='outline-secondary', @click='reset') X
+					b-button(variant='outline-secondary', @click='admin') N
+					
 		b-modal(ref="adminModal", :title='title', @hide='adminHidden')
 			div(class="d-block")
 				component(
@@ -25,7 +28,7 @@
 					@record-updated='recordAddedOrUpdated',
 					@record-removed='recordRemovedOrFusion',
 					@record-fusion='recordRemovedOrFusion',
-				)
+			)
 		
 </template>
 
@@ -42,7 +45,7 @@ export default {
 	data() {
 		return {
 			options: [],
-			validated: false,
+			mutableValidated: false,
 			mutableValue: null,
 			initial: null,
 		}
@@ -52,6 +55,10 @@ export default {
 		
 		value: {
 			default: null
+		},
+		
+		validated: {
+			default: false
 		},
 		
 		apiCall: {
@@ -69,18 +76,10 @@ export default {
 			default: null,
 		},
 		
-		//TESTING
 		state: {
-			type: Boolean
-		},
-		
-	},
-	
-	//TESTING
-	watch: {
-		
-		state(val) {
-			console.log("change state is " + val)
+			// Whether or not its validated (see parent)
+			type: Boolean,
+			default: false
 		},
 		
 	},
@@ -93,7 +92,6 @@ export default {
 		
 	created() {
 		this.getOptions()
-		console.log("state is " + this.state)
 	},
 
 	methods: {
@@ -140,12 +138,12 @@ export default {
 		
 		validate() {
 			if (!this.selectionIsLegal) {this.reset(); return}
-			this.validated = true
+			this.mutableValidated = true
 			this.$emit('input', this.mutableValue)
 		},
 		
 		invalidate() {
-			this.validated = false
+			this.mutableValidated = false
 			this.$emit('input', null)
 		},
 		

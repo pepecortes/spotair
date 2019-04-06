@@ -34,4 +34,22 @@ I use **passport.js** as authentication middleware for `express`. I still do not
 #### February 2019
 I will use **SCSS** for styles. **Airbus B612** as main font
 
+#### March 2019
+Notes for a new local installation
+
+	Install git and clone https://github.com/pepecortes/spotair into your local machine
+	Checkout the branch you want to work on (avoid master!)
+	Install docker + docker-compose
+	Create .env on the folder root (see example on git repo)
+	docker-compose up --build
+	The site will not work: 'spotair' database does not exist yet + there is not any user available
+		Navigate to localhost:3001 (or the adminer port) and create  'spotair' database (collation 'utf8_general_ci')
+		Create a Photographe
+		Create a 'admin' User (link to the Photographe just created, isAdmin=1, passwordHash unchanged)
+	docker-compose down -v
+	docker-compose up
+	docker-compose exec web bash & npm run watch (this will create the client-side javascript)
+	Navigate to localhost:3001, then Admin, and create some database entries
+	
+
 

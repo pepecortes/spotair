@@ -10,6 +10,10 @@
 			@dismissed="alert.show=false",
 		) {{ alert.text }}
 		
+		img(:src="uploadedFileURL", width="400") 
+		
+		p(v-if='value.photographe') Photographe: {{ value.photographe.text }}
+		
 		validator-input(
 			ref='avionValidator',
 			apiCall="avions",
@@ -63,9 +67,9 @@
 <script>
 import { alertMixin } from './AlertMixin'
 import { validationMixin } from 'vuelidate'
+import { required } from 'vuelidate/lib/validators'
 
 import ValidatorInput from './ValidatorInput.vue'
-import { required } from "vuelidate/lib/validators"
 
 import AvionForm from './AvionForm.vue'
 import AppareilForm from './AppareilForm.vue'
@@ -74,18 +78,17 @@ import CompagnieForm from './CompagnieForm.vue'
 import AerodromeForm from './AerodromeForm.vue'
 
 export default {
-		
+	
 	beforeMount() {
 		var vm = this
-		const url = 'photouploads/' + this.$route.params.id
+		const id = this.$route.params.id
+		const url = 'photouploads/' + id
+		const fileLocation = process.env.STORAGE_URL + process.env.UPLOAD_LOCATION
+		vm.uploadedFileURL =  `${fileLocation}${id}.jpg`
 		vm.axios.get(url)
 			.then(response => {
-				const data = response.data.jsonData
-				vm.$refs.avionValidator.setInitialValue(data.avion)
-				vm.$refs.appareilValidator.setInitialValue(data.appareil)
-				vm.$refs.galerieValidator.setInitialValue(data.galerie)
-				vm.$refs.compagnieValidator.setInitialValue(data.compagnie)
-				vm.$refs.aerodromeValidator.setInitialValue(data.aerodrome)
+				vm.setInitialValue(response.data.jsonData)
+				vm.value.photographe = response.data.photographe
 			})
 			.catch(err => vm.showAxiosAlert(err, "danger"))
 	},
@@ -96,9 +99,10 @@ export default {
 	
 	data() {
 		return {
-			value: {avion: null, appareil: null, galerie: null, compagnie: null, aerodrome: null},
+			value: {photographe: null, avion: null, appareil: null, galerie: null, compagnie: null, aerodrome: null},
 			admin: {avion: AvionForm, appareil: AppareilForm, galerie: GalerieForm, compagnie: CompagnieForm, aerodrome: AerodromeForm},
 			compagnie: null,
+			uploadedFileURL: null,
 		}
 	},
 	
@@ -119,12 +123,20 @@ export default {
 	mixins: [validationMixin, alertMixin],
 	
 	methods: {
+		
+		setInitialValue(data) {
+			this.$refs.avionValidator.setInitialValue(data.avion)
+			this.$refs.appareilValidator.setInitialValue(data.appareil)
+			this.$refs.galerieValidator.setInitialValue(data.galerie)
+			this.$refs.compagnieValidator.setInitialValue(data.compagnie)
+			this.$refs.aerodromeValidator.setInitialValue(data.aerodrome)
+		},
 			
-			validateButtonClicked() {
-				//console.log("selection: " + JSON.stringify(this.value))
-				this.$v.value.$touch()
-				console.log("validation after touch: " + JSON.stringify(this.$v.value.avion))
-			},
+		validateButtonClicked() {
+			console.log("selection: " + JSON.stringify(this.value))
+			//this.$v.value.$touch()
+			
+		},
 			
 	},
 	

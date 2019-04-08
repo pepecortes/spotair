@@ -64,18 +64,6 @@
 				span(slot="no options") Aucun résultat
 				
 		b-form-group(
-			label="Validation",
-			label-for="validation",
-			:invalid-feedback="formData.invalid.validation",
-			:state="checkValidityState($v.formData.validation)"
-		)
-			b-form-checkbox(
-				id="validation",
-				v-model="formData.validation",
-				:state="checkValidityState($v.formData.validation)"
-			)
-				
-		b-form-group(
 			label="Commentaire",
 			label-for="commentaire",
 			:invalid-feedback="formData.invalid.commentaire",
@@ -102,7 +90,6 @@ export default {
 		return {
 			model: "photo",
 			validations: {
-				validation: {},
 				commentaire: {},
 				photographe: {required},
 				compagnie: {required},

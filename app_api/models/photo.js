@@ -55,18 +55,6 @@ module.exports = function(sequelize, DataTypes) {
 			defaultValue: 0,
 		},
 		
-		messageUpload: {
-			type: DataTypes.STRING,
-			allowNull: true,		
-			defaultValue: null,		
-		},
-		
-		validation: {
-			type: DataTypes.BOOLEAN,
-			allowNull: false,
-			defaultValue: false,
-		},
-		
 		commentaire: {
 			type: DataTypes.STRING,
 			allowNull: true,		
@@ -76,13 +64,11 @@ module.exports = function(sequelize, DataTypes) {
 		text: {
 			type: DataTypes.VIRTUAL,
 			get: function() {
-				const validation = (this.validation)? "publiée" : null
 				const photographe = (this.photographe)? this.photographe.text : null
 				const compagnie = (this.compagnie)? this.compagnie.text : null
 				const appareil = (this.appareil)? this.appareil.text : null
 				const galerie = (this.galerie)? this.galerie.text : null
 				return [
-					validation,
 					photographe, compagnie, appareil, galerie,
 					this.commentaire
 				].filter(Boolean).join(', ')
@@ -93,7 +79,6 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.VIRTUAL,
 			get() {
 				return {
-					validation: '',
 					photographe: 'Requis',
 					compagnie: 'Requis',
 					appareil: 'Requis',
@@ -143,9 +128,8 @@ module.exports = function(sequelize, DataTypes) {
 		hasForeignKeys: true,
 		fieldNames: [
 									'width', 'height', 'dateUpload', 'views',
-									'messageUpload', 'validation', 'dateValidation',
-									'commentaire', 'photographeId', 'compagnieId',
-									'appareilId', 'galerieId'
+									'dateValidation', 'commentaire', 'photographeId',
+									'compagnieId', 'appareilId', 'galerieId'
 								],
 	}
 	

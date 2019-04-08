@@ -67,15 +67,6 @@ module.exports = function(sequelize, DataTypes) {
 			defaultValue: false,
 		},
 		
-		dateValidation: {
-			type: DataTypes.DATE,
-			allowNull: true,
-			set(val) {
-				try {this.setDataValue('dateUpload', val)}
-				catch (e) {this.setDataValue('dateUpload', null)}
-			},
-		},
-		
 		commentaire: {
 			type: DataTypes.STRING,
 			allowNull: true,		

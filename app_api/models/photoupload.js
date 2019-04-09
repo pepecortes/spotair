@@ -18,6 +18,12 @@ module.exports = function(sequelize, DataTypes) {
 				unique: true,
 		},
 		
+		validated: {
+			type: DataTypes.BOOLEAN,
+			allowNull: null,
+			defaultValue: null,
+		},
+		
     jsonData: {
 			type: DataTypes.JSON,
 			allowNull: true,
@@ -27,9 +33,10 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.VIRTUAL,
 			get: function() {
 				const id = this.id
+				const validated = (this.validated)? "V" : "X"
 				const photographe = (this.photographe)? this.photographe.text : null
 				const date = (this.dateUpload)? this.dateUpload : null
-				return [id, photographe, date].filter(Boolean).join(', ')
+				return [id, validated, photographe, date].filter(Boolean).join(', ')
 			}
 		},
 		
@@ -47,14 +54,29 @@ module.exports = function(sequelize, DataTypes) {
 			
 	},
 	
-	{}
+	{
+		scopes: {
+			
+			// returns different validation status...
+			rejected: {
+				where: {validated: false}
+			},
+			pending: {
+				where: {validated: null}
+			},		
+			validated: {
+				where: {validated: true}
+			},
+			
+		},	
+	}
 	
   );
   
 	Model.metadata = {
 		name: "PhotoUpload",
 		hasForeignKeys: true,
-		fieldNames: ['dateUpload', 'photographeId', 'jsonData'],
+		fieldNames: ['validated', 'jsonData', 'photographeId'],
 	}
 	
 	return Model;

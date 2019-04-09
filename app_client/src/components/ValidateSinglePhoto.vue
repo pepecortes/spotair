@@ -13,6 +13,7 @@
 		img(:src="uploadedFileURL", width="400") 
 		
 		p(v-if='value.photographe') Photographe: {{ value.photographe.text }}
+		p(v-if='value.dateUpload') Uploaded: {{ value.dateUpload }}
 		
 		validator-input(
 			ref='avionValidator',
@@ -79,6 +80,9 @@ import AerodromeForm from './AerodromeForm.vue'
 
 export default {
 	
+	//TBC: how do you deal with Avion? (only Appareil is copied to
+	//the db...
+	
 	beforeMount() {
 		var vm = this
 		const id = this.$route.params.id
@@ -89,6 +93,7 @@ export default {
 			.then(response => {
 				vm.setInitialValue(response.data.jsonData)
 				vm.value.photographe = response.data.photographe
+				vm.value.dateUpload = response.data.createdAt
 			})
 			.catch(err => vm.showAxiosAlert(err, "danger"))
 	},
@@ -99,7 +104,12 @@ export default {
 	
 	data() {
 		return {
-			value: {photographe: null, avion: null, appareil: null, galerie: null, compagnie: null, aerodrome: null},
+			value:
+				{
+					photographe: null, avion: null, appareil: null,
+					galerie: null, compagnie: null, aerodrome: null,
+					dateUpload: null
+				},
 			admin: {avion: AvionForm, appareil: AppareilForm, galerie: GalerieForm, compagnie: CompagnieForm, aerodrome: AerodromeForm},
 			compagnie: null,
 			uploadedFileURL: null,
@@ -133,9 +143,31 @@ export default {
 		},
 			
 		validateButtonClicked() {
-			console.log("selection: " + JSON.stringify(this.value))
-			//this.$v.value.$touch()
+			// TBC compute (and store) width and height
+			// TBC: commentaire
+			// TBC: mark as validated
 			
+			var vm = this
+			vm.$v.value.$touch()
+			
+			// TEST
+			vm.value.width = 200
+			vm.value.height = 201
+			console.log("value: " + JSON.stringify(vm.value))
+			console.log("invalid: " + vm.$v.value.$invalid)
+			
+      if (vm.$v.value.$invalid) return
+			vm.axios.post("photos/", vm.value)
+				.then(response => response.data.id)
+				.then(id => {
+					const filename = `${id}.jpg`
+					//fileData.append('file', vm.filex, filename)
+					//fileData.append('path', process.env.UPLOAD_LOCATION)
+					//return vm.axios.post("storage/putFile/", fileData, {headers: {'Content-Type': 'multipart/form-data'}})
+					return filename
+				})
+				.then(id => "OK")
+				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},
 			
 	},

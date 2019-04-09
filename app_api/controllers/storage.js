@@ -46,6 +46,13 @@ function storeToContainer(file, selectedPath="") {
 	return getOVHToken(containerOVH).then(() => putFilePromise())
 }
 
+// TEST
+function copyToContainer(id, selectedPath="") {
+	const filename  = id + ".jpg"
+	const target = path.resolve('./', process.env.LOCAL_STORAGE_LOCATION, selectedPath, filename)
+	return `src: ${filename} -> tgt: ${target}`
+}
+
 function listContainer() {
 	if (LOCAL_STORAGE) {
 		const dir = path.resolve('./', process.env.LOCAL_STORAGE_LOCATION)
@@ -82,6 +89,18 @@ function getOVHToken(container) {
  * @param DOC IN PROGRESS
  */
 var storageController = {}
+
+
+/**
+ * @function
+ * @desc Copy file (given by its path) to the selected storage
+ */
+ // TESTING
+storageController.copyFile = function(req, res) {
+	const id = req.params.id
+	const output = copyToContainer(id, "selectedPath")
+	sendJSON.ok(res, "output: " + output)
+}
 
 storageController.postFile = function(req, res) {
 	var form = new formidable.IncomingForm()

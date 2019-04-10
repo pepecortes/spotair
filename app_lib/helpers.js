@@ -117,7 +117,7 @@ exports.dbReplaceReference = async function(Model, refModel, refField, sourceid,
 }
 
 /**
- * @function jpegMetadat
+ * @function jpegMetadata
  * @desc Obtain EXIF + image size by reading the first 65 KB of the jpg
  * @param {string} path	- jpeg path
  * @return {Promise<Object>} {height, width, exiftags...}

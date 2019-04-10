@@ -6,22 +6,33 @@ const fs = require('fs');
 const fsp = require('fs').promises
 const pickObject = require('lodash').pick;
 const helpers = require('../app_lib/helpers')
+const pict = require('../app_lib/pictureHelpers')
 const Sharp = require('sharp')
 const db = require('../app_api/models/db')
 
 // connect database and models
 console.log("START TEST")
 
-db.PhotoUpload.findById(7, {include: [{all:true, nested:true}]})
-	.then(photo => {
-		console.log("photo: " + JSON.stringify(photo))
-		console.log("photo.jsonData.aerodrome.text: " + photo.jsonData.aerodrome.text)
-		console.log("photo.photographe: " + JSON.stringify(photo.photographe))
-		})
-	.catch(err => console.error(err.toString()))
+
+//pict.createThumbnail()
+const path = "./pluto.jpg"
+fsp.readFile(path)
+	//.then(inputBuffer => pict.normalizePicture(inputBuffer))
+	//.then(inputBuffer => pict.createThumbnail(inputBuffer))
+	.then(buffer => {
+		const x = new pict.SpotairPict(buffer)
+		x.thumbnail().toFile('./output.jpg')
+		//x.normalize().toFile('./output.jpg')
+	})
+	//.then(outputBuffer => fsp.writeFile('./output.jpg', outputBuffer))
+	.catch(err => console.log("Error: " + err))
+
+
+//fsp.readFile(path)
+	//.then(buffer => new Sharp(buffer).withMetadata().resize(500).toFile(pathResized))
+	//.catch(err => {console.log("ERROR: " + err)})
 
 //const exifParser = require('exif-parser')
-//const path = "./pluto.jpg"
 //const pathResized = "./pluto_resized.jpg"
 //const pathThumb = "./pluto_thumb.jpg"
 
@@ -68,17 +79,6 @@ db.PhotoUpload.findById(7, {include: [{all:true, nested:true}]})
 //probe(url).then(result => {
   //console.log(result)
  //})
-
-//db.Photo.findAll({
-									//limit: 50,
-									//order:[['dateValidation', 'DESC']],
-									//include: [{all:true, nested:true}]
-									//})
-	//.then(records => {
-		//const items = records.map(photo => toItem(photo))
-		//console.dir(items)
-	//})
-	//.catch(err => console.error(err.toString()))
 	
 //function toItem(photo) {
 	//return {

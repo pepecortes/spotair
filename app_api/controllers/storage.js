@@ -46,12 +46,26 @@ function storeToContainer(file, selectedPath="") {
 	return getOVHToken(containerOVH).then(() => putFilePromise())
 }
 
-// TEST
-function copyToContainer(id, selectedPath="") {
-	const filename  = id + ".jpg"
-	const target = path.resolve('./', process.env.LOCAL_STORAGE_LOCATION, selectedPath, filename)
-	return `src: ${filename} -> tgt: ${target}`
+//TEST----------
+// Copy an image of the uploaded directory into the picture directory
+function transferUploadedToPicture(id) {
+	if (LOCAL_STORAGE) {
+		const source = path.resolve('./',
+																process.env.LOCAL_STORAGE_LOCATION,
+																process.env.UPLOAD_LOCATION,
+																`${id}.jpg`
+																)
+		const target = path.resolve('./',
+																process.env.LOCAL_STORAGE_LOCATION,
+																process.env.PICTURE_LOCATION,
+																`${id}.jpg`
+																)
+		debug(`local file copy from: ${source} to ${target}`)
+		return fsp.copyFile(source, target)
+	}
 }
+
+//------------TEST
 
 function listContainer() {
 	if (LOCAL_STORAGE) {
@@ -96,9 +110,9 @@ var storageController = {}
  * @desc Copy file (given by its path) to the selected storage
  */
  // TESTING
-storageController.copyFile = function(req, res) {
+storageController.storeImage = function(req, res) {
 	const id = req.params.id
-	const output = copyToContainer(id, "selectedPath")
+	const output = transferUploadedToPicture(id)
 	sendJSON.ok(res, "output: " + output)
 }
 

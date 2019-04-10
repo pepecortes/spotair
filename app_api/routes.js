@@ -83,7 +83,7 @@ module.exports = function(passport) {
 	
 	// Routes for object storage
 	router.post('/storage/putFile', (req, res) => ctrlStorage.postFile(req, res))
-	router.post('/storage/copyFile/:id(\\d+)', (req, res) => ctrlStorage.copyFile(req, res))
+	router.post('/storage/storeImage/:id(\\d+)', (req, res) => ctrlStorage.storeImage(req, res))
 	router.get('/storage/list', (req, res) => ctrlStorage.list(req, res))
 
 	// Not found

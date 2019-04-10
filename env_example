@@ -25,7 +25,12 @@ STORAGE=LOCAL
 	// use a local storage (use for development only)
 LOCAL_STORAGE_LOCATION=dev_localstorage/
 UPLOAD_LOCATION=uploads/
+PICTURE_LOCATION=pictures/
 CONTAINER_NAME=static
+
+	// Picture constants
+PICTURE_MAX_LENGTH_PX=1600
+THUMBNAIL_HEIGHT_PX=200
 
 OVH_USERNAME=sJm6rkJbMD8h
 OVH_PASSWORD=3478wfekYQEwWQNN5TaWEpRx6sHsYBqw

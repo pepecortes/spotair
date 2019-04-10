@@ -143,16 +143,14 @@ export default {
 		},
 			
 		validateButtonClicked() {
-			// TBC compute (and store) width and height
 			// TBC: commentaire
-			// TBC: mark as validated
 			
 			var vm = this
 			vm.$v.value.$touch()
 			
 			// TEST
-			vm.value.width = 200
-			vm.value.height = 201
+			//vm.value.width = 200
+			//vm.value.height = 201
 			console.log("value: " + JSON.stringify(vm.value))
 			console.log("invalid: " + vm.$v.value.$invalid)
 			
@@ -166,6 +164,10 @@ export default {
 					//return vm.axios.post("storage/putFile/", fileData, {headers: {'Content-Type': 'multipart/form-data'}})
 					return filename
 				})
+				// then copy from uploads to pictures and thumbnails
+				// then read image size with require('probe-image-size')
+				// then update photo record with size data
+				// then mark photoUpload as validated
 				.then(id => "OK")
 				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},

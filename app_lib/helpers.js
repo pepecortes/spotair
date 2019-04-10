@@ -4,6 +4,7 @@
  */ 
 const debug = require('debug')('app:lib:helpers')
 const HTTPStatus = require('http-status')
+const path = require('path')
 const fs = require('fs')
 const fsp = require('fs').promises
 const pickObject = require('lodash').pick
@@ -147,6 +148,41 @@ exports.jpegMetadataSync = function(path) {
 	var parser = exifParser.create(buffer)
 	var result = parser.parse()
 	return Object.assign(result.getImageSize(), result.tags)
+}
+
+/**
+ * @constant
+ * @desc describe several image types
+ */
+const imgType = {
+	picture: 0,
+	upload: 1,
+	thumbnail: 2,	
+}
+exports.imgType = imgType
+
+
+/**
+ * @function buildLocalPath
+ * @desc Creates filesystem local path related to images types
+ * @param {String} id	- id to build the filename as id.jpg
+ * @param {Integer} type - see imgType
+ * @return {String} absolute local path + filename
+ */
+exports.buildLocalPath = function(id, type=imgType.picture) {
+	var filepath = path.resolve('./', process.env.LOCAL_STORAGE_LOCATION)
+	switch(type) {
+		case imgType.upload:
+			filepath = path.resolve(filepath, process.env.UPLOAD_LOCATION)
+			break
+		case imgType.thumbnail:
+			filepath = path.resolve(filepath, process.env.THUMBNAIL_LOCATION)
+			break
+		default:
+			filepath = path.resolve(filepath, process.env.PICTURE_LOCATION)
+	}
+	filepath = path.resolve(filepath, `${id}.jpg`)
+	return filepath
 }
 
 

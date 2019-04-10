@@ -6,23 +6,19 @@ const fs = require('fs');
 const fsp = require('fs').promises
 const pickObject = require('lodash').pick;
 const helpers = require('../app_lib/helpers')
-const pict = require('../app_lib/pictureHelpers')
+const SpotairPict = require('../app_lib/SpotairPict')
 const Sharp = require('sharp')
 const db = require('../app_api/models/db')
 
 // connect database and models
 console.log("START TEST")
 
-
-//pict.createThumbnail()
 const path = "./pluto.jpg"
 fsp.readFile(path)
-	//.then(inputBuffer => pict.normalizePicture(inputBuffer))
-	//.then(inputBuffer => pict.createThumbnail(inputBuffer))
 	.then(buffer => {
-		const x = new pict.SpotairPict(buffer)
-		x.thumbnail().toFile('./output.jpg')
-		//x.normalize().toFile('./output.jpg')
+		const x = new SpotairPict(buffer)
+		x.thumbnail().toThumbnailFile('thumb')
+		//x.normalize().toPictureFile('pic')
 	})
 	//.then(outputBuffer => fsp.writeFile('./output.jpg', outputBuffer))
 	.catch(err => console.log("Error: " + err))

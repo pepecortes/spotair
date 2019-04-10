@@ -1,5 +1,6 @@
 const debug = require('debug')('app:api:storage')
 const helpers = require('../../app_lib/helpers')
+const SpotairPict = require('../../app_lib/SpotairPict')
 const sendJSON = helpers.sendJSON
 const fs = require('fs')
 const fsp = require('fs').promises
@@ -50,6 +51,19 @@ function storeToContainer(file, selectedPath="") {
 // Copy an image of the uploaded directory into the picture directory
 function transferUploadedToPicture(id) {
 	if (LOCAL_STORAGE) {
+		debug("LOCAL STORAGE")
+		const x = helpers.buildLocalPath("test")
+		debug("str: " + x)
+		//fsp.readFile(path)
+	//.then(buffer => {
+		//const x = new SpotairPict(buffer)
+		//x.thumbnail().toThumbnailFile('thumb')
+		////x.normalize().toPictureFile('pic')
+	//})
+	////.then(outputBuffer => fsp.writeFile('./output.jpg', outputBuffer))
+	//.catch(err => console.log("Error: " + err))
+	
+		return
 		const source = path.resolve('./',
 																process.env.LOCAL_STORAGE_LOCATION,
 																process.env.UPLOAD_LOCATION,
@@ -63,6 +77,7 @@ function transferUploadedToPicture(id) {
 		debug(`local file copy from: ${source} to ${target}`)
 		return fsp.copyFile(source, target)
 	}
+	debug("REMOTE STORAGE FUNCTION NOT YET COMPLETED")
 }
 
 //------------TEST

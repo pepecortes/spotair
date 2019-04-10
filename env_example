@@ -26,6 +26,7 @@ STORAGE=LOCAL
 LOCAL_STORAGE_LOCATION=dev_localstorage/
 UPLOAD_LOCATION=uploads/
 PICTURE_LOCATION=pictures/
+THUMBNAIL_LOCATION=thumbnails/
 CONTAINER_NAME=static
 
 	// Picture constants

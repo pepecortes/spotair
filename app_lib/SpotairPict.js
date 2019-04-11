@@ -7,8 +7,28 @@ const Sharp = require('sharp')
 const probe = require('probe-image-size')
 const imgType = require('./helpers').imgType
 const buildLocalPath = require('./helpers').buildLocalPath
+const buildOVHPath = require('./helpers').buildOVHPath
 
 const LOCAL_STORAGE = (process.env.STORAGE === "LOCAL")
+
+
+// TBC DRY: ALL this is already on storage.js--------------------------
+var OVHStorage = require('node-ovh-storage')
+var configOVH = {
+	username:	process.env.OVH_USERNAME,
+	password:	process.env.OVH_PASSWORD,
+	authURL:	process.env.OVH_AUTH_URL,
+  tenantId: process.env.OVH_TENTANT_ID,
+  region: 	process.env.OVH_REGION
+}
+const containerOVH = new OVHStorage(configOVH)
+function getOVHToken(container) {
+	return new Promise((resolve, reject) => container.getToken((err, data) => {
+		if (err !== null) reject(err)
+		else resolve(data)
+	}))
+}
+//----------------------------------------------------------------------
 
 class SpotairPict extends Sharp {
 	
@@ -54,8 +74,23 @@ class SpotairPict extends Sharp {
 	 * @desc Convert to file and save to the spotair Thumbnails location
 	 */
 	toThumbnailFile(id) {
-		const target = buildLocalPath(id, imgType.thumbnail)
-		return this.toFile(target)
+		if (LOCAL_STORAGE) {
+			const target = buildLocalPath(id, imgType.thumbnail)
+			return this.toFile(target)
+		}
+		
+		function putFilePromise(stream, target) {
+			return new Promise((resolve, reject) =>
+				containerOVH.putStream(stream, target, (err, data) => {
+					if (err !== null) reject(err)
+					else resolve(data)
+				}))
+		}
+
+		// TBC: HOW CAN i return the size of the created image?
+		const target = buildOVHPath(id, imgType.thumbnail)
+		return getOVHToken(containerOVH).then(() => putFilePromise(this, target))
+		
 	}
 
 }

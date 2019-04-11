@@ -1,5 +1,3 @@
-Solve the following: helpers.buildLocalPath should return an absolute path regardless where it is used
-
 In pictadd, we can try to skip avion if immat is selected from list (instead of free text)
 Same thing with the couple galerie-aerodrome
 

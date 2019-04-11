@@ -1,7 +1,10 @@
 const debug = require('debug')('app:api:storage')
 const helpers = require('../../app_lib/helpers')
-const SpotairPict = require('../../app_lib/SpotairPict')
+const buildLocalPath = helpers.buildLocalPath
+const buildOVHPath = helpers.buildOVHPath
+const imgType = helpers.imgType
 const sendJSON = helpers.sendJSON
+const SpotairPict = require('../../app_lib/SpotairPict')
 const fs = require('fs')
 const fsp = require('fs').promises
 const path = require('path')
@@ -47,40 +50,49 @@ function storeToContainer(file, selectedPath="") {
 	return getOVHToken(containerOVH).then(() => putFilePromise())
 }
 
-//TEST----------
-// Copy an image of the uploaded directory into the picture directory
-function transferUploadedToPicture(id) {
+// TO BE COMPLETED------------------------------------------------------
+/**
+ * @function createThumbnail
+ * @desc create and stores a thumbnail out of the uploaded image
+ * @param {String} id - id of the image existing in the uploads store
+ * @return {Promise} Object containing properties of the thumbnail file (height and width among them)
+ */
+async function createThumbnail(id) {
 	if (LOCAL_STORAGE) {
-		debug("LOCAL STORAGE")
-		const x = helpers.buildLocalPath("test")
-		debug("str: " + x)
-		//fsp.readFile(path)
-	//.then(buffer => {
-		//const x = new SpotairPict(buffer)
-		//x.thumbnail().toThumbnailFile('thumb')
-		////x.normalize().toPictureFile('pic')
-	//})
-	////.then(outputBuffer => fsp.writeFile('./output.jpg', outputBuffer))
-	//.catch(err => console.log("Error: " + err))
-	
-		return
-		const source = path.resolve('./',
-																process.env.LOCAL_STORAGE_LOCATION,
-																process.env.UPLOAD_LOCATION,
-																`${id}.jpg`
-																)
-		const target = path.resolve('./',
-																process.env.LOCAL_STORAGE_LOCATION,
-																process.env.PICTURE_LOCATION,
-																`${id}.jpg`
-																)
-		debug(`local file copy from: ${source} to ${target}`)
-		return fsp.copyFile(source, target)
+		const source = buildLocalPath(id, imgType.upload)
+		return fsp.readFile(source)
+			.then(buffer => (new SpotairPict(buffer)).thumbnail().toThumbnailFile(id))
 	}
-	debug("REMOTE STORAGE FUNCTION NOT YET COMPLETED")
+	
+	// if OVH remote storage...
+	function getFilePromise(id) {
+		const remotePath = buildOVHPath(id, imgType.upload)
+		return new Promise((resolve, reject) =>
+			containerOVH.getFile(remotePath, (err, data) => {
+				if (err !== null) reject(err)
+				else resolve(data)
+			}))
+	}
+	return getOVHToken(containerOVH)
+					.then(() => getFilePromise(id))
+					.then(buffer => (new SpotairPict(buffer)).thumbnail().toThumbnailFile(id))
 }
 
-//------------TEST
+/**
+ * @function createPicture
+ * @desc create and stores a spotair-normalized image out of the uploaded image
+ * @param {String} id - id of the image existing in the uploads store
+ * @return {Promise} Object containing properties of the normalized file (height and width among them)
+ */
+async function createPicture(id) {
+	if (LOCAL_STORAGE) {
+		const source = buildLocalPath(id, imgType.upload)
+		return fsp.readFile(source)
+			.then(buffer => (new SpotairPict(buffer)).normalize().toPictureFile(id))
+	}
+	return "REMOTE STORAGE"
+}
+//----------------------------------------------------------------------
 
 function listContainer() {
 	if (LOCAL_STORAGE) {
@@ -122,13 +134,19 @@ var storageController = {}
 
 /**
  * @function
- * @desc Copy file (given by its path) to the selected storage
+ * @desc Store the uploaded image (given by its id) to Pictures and Thumbnails storage
+ * @return {Object} Object containing height and width of the store picture
  */
- // TESTING
 storageController.storeImage = function(req, res) {
 	const id = req.params.id
-	const output = transferUploadedToPicture(id)
-	sendJSON.ok(res, "output: " + output)
+	//const p1 = createPicture(id)
+	//const p2 = createThumbnail(id)
+	//Promise.all([p1, p2])
+		//.then(output => sendJSON.ok(res, output[0]))
+		//.catch(err => sendJSON.serverError(res, err))
+	createThumbnail(id)
+		.then(output => sendJSON.ok(res, output))
+		.catch(err => sendJSON.serverError(res, err))
 }
 
 storageController.postFile = function(req, res) {

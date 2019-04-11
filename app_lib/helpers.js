@@ -170,7 +170,7 @@ exports.imgType = imgType
  * @return {String} absolute local path + filename
  */
 exports.buildLocalPath = function(id, type=imgType.picture) {
-	var filepath = path.resolve('./', process.env.LOCAL_STORAGE_LOCATION)
+	var filepath = path.resolve(process.env.APP_ROOT, process.env.LOCAL_STORAGE_LOCATION)
 	switch(type) {
 		case imgType.upload:
 			filepath = path.resolve(filepath, process.env.UPLOAD_LOCATION)
@@ -182,6 +182,29 @@ exports.buildLocalPath = function(id, type=imgType.picture) {
 			filepath = path.resolve(filepath, process.env.PICTURE_LOCATION)
 	}
 	filepath = path.resolve(filepath, `${id}.jpg`)
+	return filepath
+}
+
+/**
+ * @function buildOVHPath
+ * @desc Creates OVH remote path related to images types
+ * @param {String} id	- id to build the filename as id.jpg
+ * @param {Integer} type - see imgType
+ * @return {String} remote path + filename
+ */
+exports.buildOVHPath = function(id, type=imgType.picture) {
+	var folder = ""
+	switch(type) {
+		case imgType.upload:
+			folder = process.env.UPLOAD_LOCATION
+			break
+		case imgType.thumbnail:
+			folder = process.env.THUMBNAIL_LOCATION
+			break
+		default:
+			folder = process.env.PICTURE_LOCATION
+	}
+	const filepath = `/${process.env.CONTAINER_NAME}/${folder}${id}.jpg`
 	return filepath
 }
 

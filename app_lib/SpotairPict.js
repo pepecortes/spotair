@@ -28,6 +28,14 @@ function getOVHToken(container) {
 		else resolve(data)
 	}))
 }
+// support function: converts containerOVH.putStream into a promise
+function putFilePromise(stream, target) {
+	return new Promise((resolve, reject) =>
+		containerOVH.putStream(stream, target, (err, data) => {
+			if (err !== null) reject(err)
+			else resolve(data)
+		}))
+}
 //----------------------------------------------------------------------
 
 class SpotairPict extends Sharp {
@@ -78,19 +86,13 @@ class SpotairPict extends Sharp {
 			const target = buildLocalPath(id, imgType.thumbnail)
 			return this.toFile(target)
 		}
-		
-		function putFilePromise(stream, target) {
-			return new Promise((resolve, reject) =>
-				containerOVH.putStream(stream, target, (err, data) => {
-					if (err !== null) reject(err)
-					else resolve(data)
-				}))
-		}
-
 		// TBC: HOW CAN i return the size of the created image?
 		const target = buildOVHPath(id, imgType.thumbnail)
-		return getOVHToken(containerOVH).then(() => putFilePromise(this, target))
-		
+		return getOVHToken(containerOVH)
+			.then(() => Promise.all([
+																this.metadata(),
+																putFilePromise(this, target)
+															]))
 	}
 
 }

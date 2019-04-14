@@ -77,13 +77,14 @@ module.exports = function(passport) {
 	router.put('/users/setPassword/:id(\\d+)', (req, res) => ctrlUsers.setPassword(req, res))
 	router.get('/users/byLogin/:username', (req, res) => ctrlUsers.byLogin(req, res))
 	router.get('/photos/recent', (req, res) => ctrlPhotos.recent(req, res))
+	router.post('/photos/validateUpload/:id(\\d+)', (req, res) => ctrlPhotos.validateUpload(req, res))
 	router.get('/photouploads/pending', (req, res) => ctrlPhotoUploads.pending(req, res))
 	router.get('/photouploads/validated', (req, res) => ctrlPhotoUploads.validated(req, res))
 	router.get('/photouploads/rejected', (req, res) => ctrlPhotoUploads.rejected(req, res))
 	
 	// Routes for object storage
 	router.post('/storage/putFile', (req, res) => ctrlStorage.postFile(req, res))
-	router.post('/storage/storeImage/:id(\\d+)', (req, res) => ctrlStorage.storeImage(req, res))
+	router.post('/storage/storeImage/srcId/:srcId(\\d+)/destId/:destId(\\d+)', (req, res) => ctrlStorage.storeImage(req, res))
 	router.get('/storage/list', (req, res) => ctrlStorage.list(req, res))
 
 	// Not found

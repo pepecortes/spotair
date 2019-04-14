@@ -76,7 +76,7 @@ module.exports = function(sequelize, DataTypes) {
 	Model.metadata = {
 		name: "PhotoUpload",
 		hasForeignKeys: true,
-		fieldNames: ['validated', 'jsonData', 'photographeId'],
+		fieldNames: ['validated', 'jsonData', 'photographeId', 'photoId'],
 	}
 	
 	return Model;

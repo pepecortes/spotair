@@ -57,11 +57,11 @@ function storeToContainer(file, selectedPath="") {
  * @param {String} id - id of the image existing in the uploads store
  * @return {Promise} Object containing properties of the thumbnail file (height and width among them)
  */
-async function createThumbnail(id) {
+async function createThumbnail(srcId, destId) {
 	if (LOCAL_STORAGE) {
-		const source = buildLocalPath(id, imgType.upload)
+		const source = buildLocalPath(srcId, imgType.upload)
 		return fsp.readFile(source)
-			.then(buffer => (new SpotairPict(buffer)).thumbnail().toThumbnailFile(id))
+			.then(buffer => (new SpotairPict(buffer)).thumbnail().toThumbnailFile(destId))
 	}
 	
 	// if OVH remote storage...
@@ -74,8 +74,8 @@ async function createThumbnail(id) {
 			}))
 	}
 	return getOVHToken(containerOVH)
-					.then(() => getFilePromise(id))
-					.then(buffer => (new SpotairPict(buffer)).thumbnail().toThumbnailFile(id))
+					.then(() => getFilePromise(srcId))
+					.then(buffer => (new SpotairPict(buffer)).thumbnail().toThumbnailFile(destId))
 }
 
 /**
@@ -84,13 +84,25 @@ async function createThumbnail(id) {
  * @param {String} id - id of the image existing in the uploads store
  * @return {Promise} Object containing properties of the normalized file (height and width among them)
  */
-async function createPicture(id) {
+async function createPicture(srcId, destId) {
 	if (LOCAL_STORAGE) {
-		const source = buildLocalPath(id, imgType.upload)
+		const source = buildLocalPath(srcId, imgType.upload)
 		return fsp.readFile(source)
-			.then(buffer => (new SpotairPict(buffer)).normalize().toPictureFile(id))
+			.then(buffer => (new SpotairPict(buffer)).normalize().toPictureFile(destId))
 	}
-	return "REMOTE STORAGE"
+	
+	// if OVH remote storage...
+	function getFilePromise(id) {
+		const remotePath = buildOVHPath(id, imgType.upload)
+		return new Promise((resolve, reject) =>
+			containerOVH.getFile(remotePath, (err, data) => {
+				if (err !== null) reject(err)
+				else resolve(data)
+			}))
+	}
+	return getOVHToken(containerOVH)
+					.then(() => getFilePromise(srcId))
+					.then(buffer => (new SpotairPict(buffer)).normalize().toPictureFile(destId))
 }
 //----------------------------------------------------------------------
 
@@ -131,22 +143,31 @@ function getOVHToken(container) {
  */
 var storageController = {}
 
-
 /**
  * @function
  * @desc Store the uploaded image (given by its id) to Pictures and Thumbnails storage
+ * @param {String} srcId - source Id
+ * @param {String} destId - Id for the generated images
  * @return {Object} Object containing height and width of the store picture
  */
 storageController.storeImage = function(req, res) {
-	const id = req.params.id
-	//const p1 = createPicture(id)
-	//const p2 = createThumbnail(id)
-	//Promise.all([p1, p2])
-		//.then(output => sendJSON.ok(res, output[0]))
-		//.catch(err => sendJSON.serverError(res, err))
-	createThumbnail(id)
+	const srcId = req.params.srcId
+	const destId = req.params.destId
+	this._storeImage(srcId, destId)
 		.then(output => sendJSON.ok(res, output))
 		.catch(err => sendJSON.serverError(res, err))
+}
+
+/**
+ * @function createThumbnail
+ * @desc create and stores picture and thumbnail out of the uploaded image
+ * @param {String} srcId - id of the image existing in the uploads store
+ * @param {String} destId - picture and thumbnail id (referring to a photo)
+ */
+storageController._storeImage = async function(srcId, destId) {
+	const p1 = createPicture(srcId, destId)
+	const p2 = createThumbnail(srcId, destId)
+	return Promise.all([p1, p2]).then(([r1, r2]) => r1)
 }
 
 storageController.postFile = function(req, res) {

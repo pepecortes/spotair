@@ -11,6 +11,9 @@ const buildOVHPath = require('./helpers').buildOVHPath
 
 const LOCAL_STORAGE = (process.env.STORAGE === "LOCAL")
 
+// TEST
+const exifParser = require('exif-parser')
+
 
 // TBC DRY: ALL this is already on storage.js--------------------------
 var OVHStorage = require('node-ovh-storage')
@@ -67,14 +70,22 @@ class SpotairPict extends Sharp {
 		resizeDim[largestDimension] = parseInt(process.env.PICTURE_MAX_LENGTH_PX)
 		return this.withMetadata().resize(resizeDim)
 	}
-	
+
 	/** 
 	 * @function toPictureFile
 	 * @desc Convert to file and save to the spotair Pictures location
+	 * @param {Integer} id - used to name the output picture
+	 * @returns {Object} Containing the size of the output picture
 	 */
 	toPictureFile(id) {
-		const target = buildLocalPath(id, imgType.picture)
-		return this.toFile(target)
+		if (LOCAL_STORAGE) {
+			const target = buildLocalPath(id, imgType.picture)
+			return this.toFile(target)
+		}
+		const target = buildOVHPath(id, imgType.picture)
+		const p1 = this.toBuffer().then(buffer => exifParser.create(buffer).parse().getImageSize())
+		const p2 = getOVHToken(containerOVH).then(() => putFilePromise(this, target))
+		return Promise.all([p1, p2]).then(([r1, r2]) => r1)
 	}
 	
 	/** 
@@ -86,13 +97,8 @@ class SpotairPict extends Sharp {
 			const target = buildLocalPath(id, imgType.thumbnail)
 			return this.toFile(target)
 		}
-		// TBC: HOW CAN i return the size of the created image?
 		const target = buildOVHPath(id, imgType.thumbnail)
-		return getOVHToken(containerOVH)
-			.then(() => Promise.all([
-																this.metadata(),
-																putFilePromise(this, target)
-															]))
+		return getOVHToken(containerOVH).then(() => putFilePromise(this, target))
 	}
 
 }

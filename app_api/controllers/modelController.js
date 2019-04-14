@@ -45,12 +45,15 @@ ModelController.prototype.all = function(req, res) {
 		.findAll(this.includeOption)
 		.then(record => sendJSON.ok(res, record))
 		.catch(err => sendJSON.serverError(res, err));
-}	
+}
+
+ModelController.prototype._byId = async function(id) {
+	return this.Model.findByPk(id, this.includeOption)
+}
 
 ModelController.prototype.byId = function(req, res) {
 	const id = req.params.id;
-	this.Model
-		.findByPk(id, this.includeOption)
+	this._byId(id)
 		.then((record) => {
 			if (record) sendJSON.ok(res, record);
 			else sendJSON.notFound(res, "id: " + id + " not found");
@@ -64,10 +67,13 @@ ModelController.prototype.fresh = function(req, res) {
 	sendJSON.ok(res, instance);
 }
 
+ModelController.prototype._create = function(data) {
+	const record = createInstanceFromQuery(data, this.Model.metadata.fieldNames)
+	return this.Model.findOrCreate({where: record})
+}
+
 ModelController.prototype.create = function(req, res) {
-	const record = createInstanceFromQuery(req.body, this.Model.metadata.fieldNames)
-	this.Model
-		.findOrCreate({where: record})
+	this._create(req.body)
 		.spread((record, created) => sendJSON.ok(res, record))
 		.catch(err => {sendJSON.serverError(res, err)});
 }

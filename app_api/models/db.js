@@ -56,6 +56,7 @@ Photo.belongsTo(Appareil, {onDelete: 'RESTRICT'})
 Photo.belongsTo(Galerie, {onDelete: 'RESTRICT'})
 User.belongsTo(Photographe, {onDelete: 'RESTRICT'})
 PhotoUpload.belongsTo(Photographe, {onDelete: 'RESTRICT'})
+PhotoUpload.belongsTo(Photo, {onDelete: 'RESTRICT'})
 
 // export sequelize object (a handler to the db) and the Models
 module.exports.sequelize = sequelize

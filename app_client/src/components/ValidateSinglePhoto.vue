@@ -85,10 +85,10 @@ export default {
 	
 	beforeMount() {
 		var vm = this
-		const id = this.$route.params.id
-		const url = 'photouploads/' + id
+		vm.id = vm.$route.params.id
+		const url = `photouploads/${vm.id}`
 		const fileLocation = process.env.STORAGE_URL + process.env.UPLOAD_LOCATION
-		vm.uploadedFileURL =  `${fileLocation}${id}.jpg`
+		vm.uploadedFileURL =  `${fileLocation}${vm.id}.jpg`
 		vm.axios.get(url)
 			.then(response => {
 				vm.setInitialValue(response.data.jsonData)
@@ -104,6 +104,7 @@ export default {
 	
 	data() {
 		return {
+			id: null,
 			value:
 				{
 					photographe: null, avion: null, appareil: null,
@@ -146,29 +147,32 @@ export default {
 			// TBC: commentaire
 			
 			var vm = this
+			var createdId
 			vm.$v.value.$touch()
 			
 			// TEST
 			//vm.value.width = 200
 			//vm.value.height = 201
-			console.log("value: " + JSON.stringify(vm.value))
-			console.log("invalid: " + vm.$v.value.$invalid)
+			//console.log("value: " + JSON.stringify(vm.value))
+			//console.log("invalid: " + vm.$v.value.$invalid)
 			
+			
+			// TBC: YOU ARE NOT SENDING THE UPLOADPHOTO ID
       if (vm.$v.value.$invalid) return
-			vm.axios.post("photos/", vm.value)
-				.then(response => response.data.id)
-				.then(id => {
-					const filename = `${id}.jpg`
+			vm.axios.post(`photos/validateUpload/${vm.id}`, vm.value)
+				.then(response => {createdId = response.id; return response.id})
+				//.then(response => response.data.id)
+				//.then(id => {
+					//const filename = `${id}.jpg`
 					//fileData.append('file', vm.filex, filename)
 					//fileData.append('path', process.env.UPLOAD_LOCATION)
 					//return vm.axios.post("storage/putFile/", fileData, {headers: {'Content-Type': 'multipart/form-data'}})
-					return filename
-				})
+					//return filename
+				//})
 				// then copy from uploads to pictures and thumbnails
 				// then read image size with require('probe-image-size')
 				// then update photo record with size data
 				// then mark photoUpload as validated
-				.then(id => "OK")
 				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},
 			

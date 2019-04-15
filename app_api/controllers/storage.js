@@ -148,7 +148,7 @@ var storageController = {}
  * @desc Store the uploaded image (given by its id) to Pictures and Thumbnails storage
  * @param {String} srcId - source Id
  * @param {String} destId - Id for the generated images
- * @return {Object} Object containing height and width of the store picture
+ * @return {Object} Object containing id, height and width of the stored picture
  */
 storageController.storeImage = function(req, res) {
 	const srcId = req.params.srcId
@@ -158,16 +158,10 @@ storageController.storeImage = function(req, res) {
 		.catch(err => sendJSON.serverError(res, err))
 }
 
-/**
- * @function createThumbnail
- * @desc create and stores picture and thumbnail out of the uploaded image
- * @param {String} srcId - id of the image existing in the uploads store
- * @param {String} destId - picture and thumbnail id (referring to a photo)
- */
 storageController._storeImage = async function(srcId, destId) {
 	const p1 = createPicture(srcId, destId)
 	const p2 = createThumbnail(srcId, destId)
-	return Promise.all([p1, p2]).then(([r1, r2]) => r1)
+	return Promise.all([p1, p2]).then(([r1, r2]) => Object.assign({id: destId}, r1))
 }
 
 storageController.postFile = function(req, res) {

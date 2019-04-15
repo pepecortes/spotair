@@ -78,15 +78,19 @@ ModelController.prototype.create = function(req, res) {
 		.catch(err => {sendJSON.serverError(res, err)});
 }
 
-ModelController.prototype.update = function(req, res) {
-	var updates = createInstanceFromQuery(req.body, this.Model.metadata.fieldNames)
-	this.Model
-		.findByPk(req.params.id, this.includeOption)
+ModelController.prototype._update = function(id, data) {
+	var updates = createInstanceFromQuery(data, this.Model.metadata.fieldNames)
+	return this.Model
+		.findByPk(id, this.includeOption)
 		.then(record => {
 			record = Object.assign(record, updates);
 			return record.save();
 		})
 		.then(record => this.Model.findByPk(record.id, this.includeOption))
+}
+
+ModelController.prototype.update = function(req, res) {
+	this._update(req.params.id, req.body)
 		.then(record => sendJSON.ok(res, record))
 		.catch(err => sendJSON.serverError(res, err));
 }

@@ -7,6 +7,7 @@ const db = require('../models/db')
 const sendJSON = require('../../app_lib/helpers').sendJSON
 const ModelController = require('./modelController')
 const storageController = require('./storage')
+const photoUploadController = require('./photouploads')
 
 const controller = new ModelController(db.Photo)
 
@@ -35,24 +36,21 @@ controller.recent = async function(req, res) {
  * @desc Validate referred upload with the given photo data
  * @params {Integer} req.params.id - id of the uploaded photo
  * @params {Object} body - photo data for validation
- * @return {Object} Object the photo created
  */
 controller.validateUpload = function(req, res) {
 	const srcId = req.params.id
 	
 	// create new photo object and take id
-	// generate picture and thumbnail
-	controller._create(req.body)
-		.spread((record, created) => record.id)
-		.then((destId) => {storageController._storeImage(srcId, destId); return destId})
-		//.then((destId) => 
-		.then(output => sendJSON.ok(res, output))
-		.catch(err => debug("error " + err))
-		
-	// obtain picture dimensions
+	// generate picture and thumbnail and obtain dimensions
 	// update photo with the dimension
 	// update photoUpload (validate and reference to photo)
-	// say goodbye
+	controller._create(req.body)
+		.spread((record, created) => record.id)
+		.then(destId => storageController._storeImage(srcId, destId))
+		.then(info => controller._update(info.id, {height: info.height, width: info.width}))
+		.then(picture => photoUploadController._update(srcId, {photo: picture, validated: true}))
+		.then(output => sendJSON.ok(res, output))
+		.catch(err => debug("error " + err))
 }
 
 module.exports = controller

@@ -160,19 +160,7 @@ export default {
 			// TBC: YOU ARE NOT SENDING THE UPLOADPHOTO ID
       if (vm.$v.value.$invalid) return
 			vm.axios.post(`photos/validateUpload/${vm.id}`, vm.value)
-				.then(response => {createdId = response.id; return response.id})
-				//.then(response => response.data.id)
-				//.then(id => {
-					//const filename = `${id}.jpg`
-					//fileData.append('file', vm.filex, filename)
-					//fileData.append('path', process.env.UPLOAD_LOCATION)
-					//return vm.axios.post("storage/putFile/", fileData, {headers: {'Content-Type': 'multipart/form-data'}})
-					//return filename
-				//})
-				// then copy from uploads to pictures and thumbnails
-				// then read image size with require('probe-image-size')
-				// then update photo record with size data
-				// then mark photoUpload as validated
+				.then(response => console.log(JSON.stringify(response.data)))
 				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},
 			

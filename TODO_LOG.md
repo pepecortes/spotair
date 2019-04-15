@@ -1,8 +1,3 @@
-PROPOSAL: refactor SpotairPict so as to return a buffer out of the toPicture and toThumbnail functions
-(remember the way the picture size is computed: you will need it)
-then refactor storage so as to compute the image size after having created Picture
-
-
 API call photos/recent is broken
 
 In pictadd, we can try to skip avion if immat is selected from list (instead of free text)

@@ -70,6 +70,15 @@ class SpotairPict extends Sharp {
 		resizeDim[largestDimension] = parseInt(process.env.PICTURE_MAX_LENGTH_PX)
 		return this.withMetadata().resize(resizeDim)
 	}
+	
+	/** 
+	 * @function size
+	 * @desc Returns the dimensions of the image
+	 * @return {Object} {height: px, width: px}
+	 */
+	dimensions() {
+		return this.toBuffer().then(buffer => exifParser.create(buffer).parse().getImageSize())
+	}
 
 	/** 
 	 * @function toPictureFile
@@ -83,7 +92,7 @@ class SpotairPict extends Sharp {
 			return this.toFile(target)
 		}
 		const target = buildOVHPath(id, imgType.picture)
-		const p1 = this.toBuffer().then(buffer => exifParser.create(buffer).parse().getImageSize())
+		const p1 = this.dimensions()
 		const p2 = getOVHToken(containerOVH).then(() => putFilePromise(this, target))
 		return Promise.all([p1, p2]).then(([r1, r2]) => r1)
 	}

@@ -64,8 +64,8 @@ class OVH extends OVHStorage {
 		}))
 	}
 	
-	async putFileAsync(file, path) {
-		return new Promise((resolve, reject) => this.putFile(file, path, (err, data) => {
+	async putFileAsync(localpath, remotepath) {
+		return new Promise((resolve, reject) => this.putFile(localpath, remotepath, (err, data) => {
 			if (err !== null) reject(err)
 			else resolve(data)
 		}))
@@ -94,13 +94,27 @@ class OVH extends OVHStorage {
 	}
 	
 	/**
-	 * @function list
+	 * @function read
 	 * @param {String} path
 	 * @return {Promise} Return a buffer of the file read
 	 */
 	async read(path) {			
 		return this.connect().then(() => this.getFileAsync(path))
-	}	
+	}
+	
+	/**
+	 * @function write
+	 * @desc Copy a local file to the container
+	 * @param {String | Stream} source	- path on the local filesystem or a stream
+	 * @param {String} remotepath
+	 */
+	async write(source, remotepath) {
+		if (typeof source === 'string') {
+			return this.connect().then(() => this.putFileAsync(source, remotepath))
+		} else {
+			return this.connect().then(() => this.putStreamAsync(source, remotepath))
+		}
+	}
 	
 	/**
 	 * @function readUploaded
@@ -121,6 +135,28 @@ class OVH extends OVHStorage {
 	async readThumbnail(id) {
 		return this.read(OVH.buildPath(id, imgType.thumbnail))
 	}
+	
+	/**
+	 * @function writeUploaded
+	 * @desc write a local file to the remote container uploaded images location
+	 * @param {String} localpath	- path on the local filesystem
+	 * @param {Integer} id
+	 */
+	async writeUploaded(localpath, id) {
+		return this.write(localpath, OVH.buildPath(id, imgType.upload))
+	}
+	
+	/**  @desc see writeUploaded */
+	async writePicture(localpath, id) {
+		return this.write(localpath, OVH.buildPath(id, imgType.picture))
+	}
+	
+	/**  @desc see writeUploaded */
+	async writeThumbnail(localpath, id) {
+		return this.write(localpath, OVH.buildPath(id, imgType.thumbnail))
+	}
+	
+	
 
 }
 

@@ -27,9 +27,9 @@ const containerOVH = new OVHStorage(configOVH)
  * @desc Store the file in the current container
  * @param {Object} file		- File object given by the http req
  * @param {String} path		- Path where the file is stored in the container
- * @return {Promise} Promise that resolves or error
+ * @return {Promise}
  */
-function storeToContainer(file, selectedPath="") {
+async function storeToContainer(file, selectedPath="") {
 	if (LOCAL_STORAGE) {
 		const source = path.resolve(file.path)
 		const target = path.resolve('./', process.env.LOCAL_STORAGE_LOCATION, selectedPath, file.name)

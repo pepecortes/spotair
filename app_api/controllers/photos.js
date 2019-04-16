@@ -20,11 +20,14 @@ controller.fusion =  async function(req, res) {
 	sendJSON.serverError(res, "METHOD NOT YET IMPLEMENTED")
 }
 
-// recent photos
+/**
+ * @function recent
+ * @desc Returns the last 50 recently createdf photos
+ */
 controller.recent = async function(req, res) {
 	db.Photo.findAll({
 										limit: 50,
-										order:[['dateValidation', 'DESC']],
+										order:[['createdAt', 'DESC']],
 										include: [{all:true, nested:true}]
 										})
 		.then(record => sendJSON.ok(res, record))
@@ -36,21 +39,25 @@ controller.recent = async function(req, res) {
  * @desc Validate referred upload with the given photo data
  * @params {Integer} req.params.id - id of the uploaded photo
  * @params {Object} body - photo data for validation
+ * @return {Object} uploaded photo, with reference to validated photo
  */
-controller.validateUpload = function(req, res) {
-	const srcId = req.params.id
-	
-	// create new photo object and take id
+controller.validateUpload = async function(req, res) {
+	// check that the image is not yet validated or rejected
+	// create new photo object and return destId
 	// generate picture and thumbnail and obtain dimensions
 	// update photo with the dimension
-	// update photoUpload (validate and reference to photo)
-	controller._create(req.body)
-		.spread((record, created) => record.id)
+	// update photoUpload (validate and a reference to photo)
+
+	const srcId = req.params.id
+	photoUploadController._byId(srcId)
+		.then(upload => (upload.validated == null)? upload : Promise.reject(new Error('Photo already validated or rejected')))
+		.then(() => controller._create(req.body))
+		.then(photoCreated => photoCreated[0].id)
 		.then(destId => storageController._storeImage(srcId, destId))
 		.then(info => controller._update(info.id, {height: info.height, width: info.width}))
-		.then(picture => photoUploadController._update(srcId, {photo: picture, validated: true}))
-		.then(output => sendJSON.ok(res, output))
-		.catch(err => debug("error " + err))
+		.then(photo => photoUploadController._update(srcId, {photo: photo, validated: true}))
+		.then(upload => sendJSON.ok(res, upload))
+		.catch(err => sendJSON.serverError(res, err))
 }
 
 module.exports = controller

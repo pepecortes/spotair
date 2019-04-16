@@ -149,15 +149,6 @@ export default {
 			var vm = this
 			var createdId
 			vm.$v.value.$touch()
-			
-			// TEST
-			//vm.value.width = 200
-			//vm.value.height = 201
-			//console.log("value: " + JSON.stringify(vm.value))
-			//console.log("invalid: " + vm.$v.value.$invalid)
-			
-			
-			// TBC: YOU ARE NOT SENDING THE UPLOADPHOTO ID
       if (vm.$v.value.$invalid) return
 			vm.axios.post(`photos/validateUpload/${vm.id}`, vm.value)
 				.then(response => console.log(JSON.stringify(response.data)))

@@ -1,6 +1,4 @@
-Check that we cannot call validate on an already validated photo. Return and good error message
-API call photos/recent is broken
-
+In validation: why can I select an immat that does not correspond to the avion?
 In pictadd, we can try to skip avion if immat is selected from list (instead of free text)
 Same thing with the couple galerie-aerodrome
 

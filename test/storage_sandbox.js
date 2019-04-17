@@ -11,6 +11,7 @@ const Sharp = require('sharp')
 const db = require('../app_api/models/db')
 const path = require('path')
 const formidable = require('formidable')
+const SpotairPict = require('../app_lib/SpotairPict')
 
 //var LOCAL_STORAGE = (process.env.STORAGE === "LOCAL")
 LOCAL_STORAGE = false
@@ -22,12 +23,16 @@ console.log("START TEST: " + LOCAL_STORAGE)
 console.log("path " + readUploadedImage(1))
 
 const container = new OVH()
+//container.deletePicture(3)
 //container.connect()
-	//.then(() => container.getFileAsync(OVH.buildPath("8")))
-var stream = fs.createReadStream(readUploadedImage(1))
-container.writePicture(stream, "3")
+container.readUploaded("3")
+	.then(buffer => (new SpotairPict(buffer)).thumbnail().toThumbnailFile("x"))
+	//.then(() => container.getFileAsync("/static/uploads/3.jpg"))
+//var stream = fs.createReadStream(readUploadedImage(1))
+//container.writePicture(stream, "3")
 	//.then(() => container.getFileListAsync("/static"))
-	.then(output => console.log(JSON.stringify(output)))
+	//.then(output => console.log(JSON.stringify(output)))
+	.then(output => console.log(output instanceof Buffer))
 	.catch(err => console.log("error " + err))
 	
 	
@@ -37,26 +42,3 @@ function readUploadedImage(id) {
 	return dir
 }
 
-//function listContainer() {
-	//if (LOCAL_STORAGE) {
-		//const dir = path.resolve('../', process.env.LOCAL_STORAGE_LOCATION)
-		//debug(`reading folder contents from: ${dir}`)
-		//return fsp.readdir(dir)
-	//}
-	//// if OVH remote storage...
-	//function getListPromise() {
-		//return new Promise((resolve, reject) =>
-			//containerOVH.getFileList("/" + process.env.CONTAINER_NAME, (err, data) => {
-				//if (err !== null) reject(err)
-				//else resolve(data)
-			//}))
-	//}
-	//return getOVHToken(containerOVH).then(() => getListPromise())
-//}
-
-//function getOVHToken(container) {
-	//return new Promise((resolve, reject) => container.getToken((err, data) => {
-		//if (err !== null) reject(err)
-		//else resolve(data)
-	//}))
-//}

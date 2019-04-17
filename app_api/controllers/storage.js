@@ -1,7 +1,6 @@
 const debug = require('debug')('app:api:storage')
 const helpers = require('../../app_lib/helpers')
 const buildLocalPath = helpers.buildLocalPath
-const buildOVHPath = helpers.buildOVHPath
 const imgType = helpers.imgType
 const sendJSON = helpers.sendJSON
 const SpotairPict = require('../../app_lib/SpotairPict')
@@ -9,48 +8,31 @@ const fs = require('fs')
 const fsp = require('fs').promises
 const path = require('path')
 const formidable = require('formidable')
+const OVH = require('../../app_lib/OVH')
 
-const LOCAL_STORAGE = (process.env.STORAGE === "LOCAL") 
-
-var OVHStorage = require('node-ovh-storage')
-var configOVH = {
-	username:	process.env.OVH_USERNAME,
-	password:	process.env.OVH_PASSWORD,
-	authURL:	process.env.OVH_AUTH_URL,
-  tenantId: process.env.OVH_TENTANT_ID,
-  region: 	process.env.OVH_REGION
-}
-const containerOVH = new OVHStorage(configOVH)
+var containerOVH
+const LOCAL_STORAGE = (process.env.STORAGE === "LOCAL")
+if (!LOCAL_STORAGE) containerOVH = new OVH()
 
 /**
  * @function
  * @desc Store the file in the current container
  * @param {Object} file		- File object given by the http req
- * @param {String} path		- Path where the file is stored in the container
+ * @param {String} selectedPath		- Path where the file is stored in the container
  * @return {Promise}
  */
 async function storeToContainer(file, selectedPath="") {
 	if (LOCAL_STORAGE) {
 		const source = path.resolve(file.path)
 		const target = path.resolve('./', process.env.LOCAL_STORAGE_LOCATION, selectedPath, file.name)
-		debug(`local file copy from: ${source} to ${target}`)
 		return fsp.copyFile(source, target)
 	}
-	// if OVH remote storage...
-	function putFilePromise() {
-		var stream = fs.createReadStream(file.path)
-		const remotePath = "/" + process.env.CONTAINER_NAME + "/" + selectedPath + file.name
-		debug(`OVH file copy from: ${file.path} to ${remotePath}`)
-		return new Promise((resolve, reject) =>
-			containerOVH.putStream(stream, remotePath, (err, data) => {
-				if (err !== null) reject(err)
-				else resolve(data)
-			}))
-	}
-	return getOVHToken(containerOVH).then(() => putFilePromise())
+	// if OVH remote storage
+	const stream = fs.createReadStream(file.path)
+	const remotePath = "/" + process.env.CONTAINER_NAME + "/" + selectedPath + file.name
+	return containerOVH.write(stream, remotePath)
 }
 
-// TO BE COMPLETED------------------------------------------------------
 /**
  * @function createThumbnail
  * @desc create and stores a thumbnail out of the uploaded image
@@ -63,25 +45,16 @@ async function createThumbnail(srcId, destId) {
 		return fsp.readFile(source)
 			.then(buffer => (new SpotairPict(buffer)).thumbnail().toThumbnailFile(destId))
 	}
-	
-	// if OVH remote storage...
-	function getFilePromise(id) {
-		const remotePath = buildOVHPath(id, imgType.upload)
-		return new Promise((resolve, reject) =>
-			containerOVH.getFile(remotePath, (err, data) => {
-				if (err !== null) reject(err)
-				else resolve(data)
-			}))
-	}
-	return getOVHToken(containerOVH)
-					.then(() => getFilePromise(srcId))
-					.then(buffer => (new SpotairPict(buffer)).thumbnail().toThumbnailFile(destId))
+	// if OVH remote storage
+	return containerOVH.readUploaded(srcId)
+		.then(buffer => (new SpotairPict(buffer)).thumbnail().toThumbnailFile(destId))
 }
 
 /**
  * @function createPicture
  * @desc create and stores a spotair-normalized image out of the uploaded image
- * @param {String} id - id of the image existing in the uploads store
+ * @param {String} srcId 	- id of the image existing in the uploads store
+ * @param {String} destId	- id of the copied spotair picture
  * @return {Promise} Object containing properties of the normalized file (height and width among them)
  */
 async function createPicture(srcId, destId) {
@@ -90,49 +63,19 @@ async function createPicture(srcId, destId) {
 		return fsp.readFile(source)
 			.then(buffer => (new SpotairPict(buffer)).normalize().toPictureFile(destId))
 	}
-	
-	// if OVH remote storage...
-	function getFilePromise(id) {
-		const remotePath = buildOVHPath(id, imgType.upload)
-		return new Promise((resolve, reject) =>
-			containerOVH.getFile(remotePath, (err, data) => {
-				if (err !== null) reject(err)
-				else resolve(data)
-			}))
-	}
-	return getOVHToken(containerOVH)
-					.then(() => getFilePromise(srcId))
-					.then(buffer => (new SpotairPict(buffer)).normalize().toPictureFile(destId))
+	// if OVH remote storage
+	return containerOVH.readUploaded(srcId)
+		.then(buffer => (new SpotairPict(buffer)).normalize().toPictureFile(destId))
 }
-//----------------------------------------------------------------------
 
-function listContainer() {
+async function listContainer() {
 	if (LOCAL_STORAGE) {
 		const dir = path.resolve('./', process.env.LOCAL_STORAGE_LOCATION)
 		debug(`reading folder contents from: ${dir}`)
 		return fsp.readdir(dir)
 	}
-	// if OVH remote storage...
-	function getListPromise() {
-		return new Promise((resolve, reject) =>
-			containerOVH.getFileList("/" + process.env.CONTAINER_NAME, (err, data) => {
-				if (err !== null) reject(err)
-				else resolve(data)
-			}))
-	}
-	return getOVHToken(containerOVH).then(() => getListPromise())
-}
-
-/** @function
- * @desc Needed for getting access to OVH container
- * @param {Container} container
- * @return {Promise} Promise that resolves if the token is obtained
- */
-function getOVHToken(container) {
-	return new Promise((resolve, reject) => container.getToken((err, data) => {
-		if (err !== null) reject(err)
-		else resolve(data)
-	}))
+	// if OVH remote storage
+	return containerOVH.list()
 }
 
 
@@ -180,10 +123,7 @@ storageController.postFile = function(req, res) {
 storageController.list = function(req, res) {
 	listContainer()
 		.then(output => sendJSON.ok(res, output))	
-		.catch(err => {
-			debug(err)
-			sendJSON.serverError(res, err)
-		})
+		.catch(err => sendJSON.serverError(res, err))
 }
 
 module.exports = storageController

@@ -156,6 +156,26 @@ class OVH extends OVHStorage {
 		return this.write(localpath, OVH.buildPath(id, imgType.thumbnail))
 	}
 	
+	/**
+	 * @function delete
+	 * @desc remove a remote file
+	 * @param {String} remotepath
+	 */
+	 async delete(remotepath) {
+		 return this.connect().then(() => this.deleteFileAsync(remotepath))
+	 }
+	 
+	 async deleteUploaded(id) {
+		 return this.delete(OVH.buildPath(id, imgType.upload))
+	 }
+	 
+	 async deletePicture(id) {
+		 return this.delete(OVH.buildPath(id, imgType.picture))
+	 }
+	 
+	 async deleteThumbnail(id) {
+		 return this.delete(OVH.buildPath(id, imgType.thumbnail))
+	 }
 	
 
 }

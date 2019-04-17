@@ -7,39 +7,13 @@ const Sharp = require('sharp')
 const probe = require('probe-image-size')
 const imgType = require('./helpers').imgType
 const buildLocalPath = require('./helpers').buildLocalPath
-const buildOVHPath = require('./helpers').buildOVHPath
-
-const LOCAL_STORAGE = (process.env.STORAGE === "LOCAL")
-
-// TEST
 const exifParser = require('exif-parser')
 
+const OVH = require('./OVH')
 
-// TBC DRY: ALL this is already on storage.js--------------------------
-var OVHStorage = require('node-ovh-storage')
-var configOVH = {
-	username:	process.env.OVH_USERNAME,
-	password:	process.env.OVH_PASSWORD,
-	authURL:	process.env.OVH_AUTH_URL,
-  tenantId: process.env.OVH_TENTANT_ID,
-  region: 	process.env.OVH_REGION
-}
-const containerOVH = new OVHStorage(configOVH)
-function getOVHToken(container) {
-	return new Promise((resolve, reject) => container.getToken((err, data) => {
-		if (err !== null) reject(err)
-		else resolve(data)
-	}))
-}
-// support function: converts containerOVH.putStream into a promise
-function putFilePromise(stream, target) {
-	return new Promise((resolve, reject) =>
-		containerOVH.putStream(stream, target, (err, data) => {
-			if (err !== null) reject(err)
-			else resolve(data)
-		}))
-}
-//----------------------------------------------------------------------
+var containerOVH
+const LOCAL_STORAGE = (process.env.STORAGE === "LOCAL")
+if (!LOCAL_STORAGE) containerOVH = new OVH()
 
 class SpotairPict extends Sharp {
 	
@@ -91,9 +65,10 @@ class SpotairPict extends Sharp {
 			const target = buildLocalPath(id, imgType.picture)
 			return this.toFile(target)
 		}
-		const target = buildOVHPath(id, imgType.picture)
+		// OVH storage
+		// TBC------------------------
 		const p1 = this.dimensions()
-		const p2 = getOVHToken(containerOVH).then(() => putFilePromise(this, target))
+		const p2 = containerOVH.writePicture(this, id)
 		return Promise.all([p1, p2]).then(([r1, r2]) => r1)
 	}
 	
@@ -106,8 +81,8 @@ class SpotairPict extends Sharp {
 			const target = buildLocalPath(id, imgType.thumbnail)
 			return this.toFile(target)
 		}
-		const target = buildOVHPath(id, imgType.thumbnail)
-		return getOVHToken(containerOVH).then(() => putFilePromise(this, target))
+		// OVH storage
+		return containerOVH.writeThumbnail(this, id)
 	}
 
 }

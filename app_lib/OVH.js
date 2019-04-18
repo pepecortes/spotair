@@ -10,6 +10,10 @@ const imgType = require('./helpers').imgType
 
 class OVH extends OVHStorage {
 	
+	static get rootPath() {
+		return `/${process.env.CONTAINER_NAME}/`
+	}
+	
 	constructor() {
 		const config =  {
 			username:	process.env.OVH_USERNAME,
@@ -40,7 +44,7 @@ class OVH extends OVHStorage {
 			default:
 				folder = process.env.PICTURE_LOCATION
 		}
-		const filepath = `/${process.env.CONTAINER_NAME}/${folder}${id}.jpg`
+		const filepath = OVH.rootPath + `/${folder}${id}.jpg`
 		return filepath
 	}
 	
@@ -90,7 +94,8 @@ class OVH extends OVHStorage {
 	 * @function list
 	 * @return {Promise} Return the contents of the container
 	 */
-	async list(folderPath = `/${process.env.CONTAINER_NAME}`) {			
+	async list(folderPath = "") {	
+		var folderPath = OVH.rootPath + folderPath
 		return this.connect().then(() => this.getFileListAsync(folderPath))
 	}
 	
@@ -99,7 +104,8 @@ class OVH extends OVHStorage {
 	 * @param {String} path
 	 * @return {Promise} Return a buffer of the file read
 	 */
-	async read(path) {			
+	async read(path) {
+		var path = OVH.rootPath + path
 		return this.connect().then(() => this.getFileAsync(path))
 	}
 	
@@ -110,16 +116,14 @@ class OVH extends OVHStorage {
 	 * @param {String} remotepath
 	 */
 	async write(source, remotepath) {
-		// TBC worry about the root of the remotepath
+		var remotepath = OVH.rootPath + remotepath
 		if (typeof source === 'string') {
 			return this.connect().then(() => this.putFileAsync(source, remotepath))
 		} else {
-			//remotepath = `/${process.env.CONTAINER_NAME}/` + remotepath
 			debug("remotepath " + remotepath)
 			const stream = new Readable()
 			stream.push(source)
 			stream.push(null)
-			debug("JUST BEFORE CONNECT")
 			return this.connect().then(() => this.putStreamAsync(stream, remotepath))
 		}
 	}
@@ -170,6 +174,7 @@ class OVH extends OVHStorage {
 	 * @param {String} remotepath
 	 */
 	 async delete(remotepath) {
+		 var remotepath = OVH.rootPath + remotepath
 		 return this.connect().then(() => this.deleteFileAsync(remotepath))
 	 }
 	 

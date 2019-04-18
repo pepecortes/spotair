@@ -17,26 +17,10 @@ const container = (process.env.STORAGE === "LOCAL")? new LocalStorage() : new OV
  * @param {String} selectedPath		- Path where the file is stored in the container
  * @return {Promise}
  */
-async function storeToContainer(file, selectedPath="") {
-	// TBC repair this
-	// PAY ATTENTIon to the way the path is defined in OVH. make it consistent with localstorage, where the root is given
-	// WHY the error NotFound is not returned to FileUpload.vue?
-	debug("file.path: " + file.path)
-	debug("selectedPath: " + selectedPath)
+async function storeToContainer(file, selectedPath = "") {
 	const buffer = fs.readFileSync(file.path)
 	const filepath = selectedPath + file.name
-	debug("filepath: " + filepath)
 	return container.write(buffer, filepath)
-		
-	//if (LOCAL_STORAGE) {
-		//const source = path.resolve(file.path)
-		//const target = path.resolve('./', process.env.LOCAL_STORAGE_LOCATION, selectedPath, file.name)
-		//return fsp.copyFile(source, target)
-	//}
-	//// if OVH remote storage
-	//const stream = fs.createReadStream(file.path)
-	//const remotePath = "/" + process.env.CONTAINER_NAME + "/" + selectedPath + file.name
-	//return containerOVH.write(stream, remotePath)
 }
 
 /**

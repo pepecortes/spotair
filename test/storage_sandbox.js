@@ -13,27 +13,43 @@ const path = require('path')
 const formidable = require('formidable')
 const SpotairPict = require('../app_lib/SpotairPict')
 
-//var LOCAL_STORAGE = (process.env.STORAGE === "LOCAL")
-LOCAL_STORAGE = false
-
-
 const OVH = require('../app_lib/OVH')
+const LocalStorage = require('../app_lib/LocalStorage')
 
-console.log("START TEST: " + LOCAL_STORAGE)
+console.log("START TEST")
 console.log("path " + readUploadedImage(1))
 
+//const container = new LocalStorage()
 const container = new OVH()
-//container.deletePicture(3)
-//container.connect()
-container.readUploaded("3")
-	.then(buffer => (new SpotairPict(buffer)).thumbnail().toThumbnailFile("x"))
-	//.then(() => container.getFileAsync("/static/uploads/3.jpg"))
-//var stream = fs.createReadStream(readUploadedImage(1))
-//container.writePicture(stream, "3")
-	//.then(() => container.getFileListAsync("/static"))
+var buffer = fs.readFileSync(readUploadedImage(1))
+const filepath = "/pictures/koko.jpg"
+debug("filepath: " + filepath)
+container.write(buffer, filepath)
+	.then(output => console.log(JSON.stringify(output)))
+	.catch(err => console.log("error " + err))	
+	
+//const container = new OVH()
+////container.deletePicture(3)
+////container.connect()
+//container.readUploaded("3")
+	//.then(buffer => (new SpotairPict(buffer)).thumbnail().toThumbnailFile("x"))
+	////.then(() => container.getFileAsync("/static/uploads/3.jpg"))
+////var stream = fs.createReadStream(readUploadedImage(1))
+////container.writePicture(stream, "3")
+	////.then(() => container.getFileListAsync("/static"))
+	////.then(output => console.log(JSON.stringify(output)))
+	//.then(output => console.log(output instanceof Buffer))
+	//.catch(err => console.log("error " + err))
+	
+//const container = new LocalStorage()
+//var buffer = fs.readFileSync(readUploadedImage(1))
+//container.write(buffer, "pictures/x.jpg")
+//container.read("pictures/4.jpg")
+//container.list()
+//container.writePicture(buffer, "4")
+//container.delete("pictures/4.bak")
 	//.then(output => console.log(JSON.stringify(output)))
-	.then(output => console.log(output instanceof Buffer))
-	.catch(err => console.log("error " + err))
+	//.catch(err => console.log("error " + err))	
 	
 	
 function readUploadedImage(id) {

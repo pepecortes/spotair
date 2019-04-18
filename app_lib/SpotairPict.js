@@ -5,15 +5,11 @@
 const debug = require('debug')('app:lib:SpotairPict')
 const Sharp = require('sharp')
 const probe = require('probe-image-size')
-const imgType = require('./helpers').imgType
-const buildLocalPath = require('./helpers').buildLocalPath
 const exifParser = require('exif-parser')
-
 const OVH = require('./OVH')
+const LocalStorage = require('./LocalStorage')
 
-var containerOVH
-const LOCAL_STORAGE = (process.env.STORAGE === "LOCAL")
-if (!LOCAL_STORAGE) containerOVH = new OVH()
+const container = (process.env.STORAGE === "LOCAL")? new LocalStorage() : new OVH()
 
 class SpotairPict extends Sharp {
 	
@@ -61,14 +57,8 @@ class SpotairPict extends Sharp {
 	 * @returns {Object} Containing the size of the output picture
 	 */
 	toPictureFile(id) {
-		if (LOCAL_STORAGE) {
-			const target = buildLocalPath(id, imgType.picture)
-			return this.toFile(target)
-		}
-		// OVH storage
-		// TBC------------------------
 		const p1 = this.dimensions()
-		const p2 = containerOVH.writePicture(this, id)
+		const p2 = container.writePicture(this, id)
 		return Promise.all([p1, p2]).then(([r1, r2]) => r1)
 	}
 	
@@ -77,12 +67,7 @@ class SpotairPict extends Sharp {
 	 * @desc Convert to file and save to the spotair Thumbnails location
 	 */
 	toThumbnailFile(id) {
-		if (LOCAL_STORAGE) {
-			const target = buildLocalPath(id, imgType.thumbnail)
-			return this.toFile(target)
-		}
-		// OVH storage
-		return containerOVH.writeThumbnail(this, id)
+		return container.writeThumbnail(this, id)
 	}
 
 }

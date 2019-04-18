@@ -1,18 +1,14 @@
 const debug = require('debug')('app:api:storage')
-const helpers = require('../../app_lib/helpers')
-const buildLocalPath = helpers.buildLocalPath
-const imgType = helpers.imgType
-const sendJSON = helpers.sendJSON
+const sendJSON = require('../../app_lib/helpers').sendJSON
 const SpotairPict = require('../../app_lib/SpotairPict')
 const fs = require('fs')
 const fsp = require('fs').promises
 const path = require('path')
 const formidable = require('formidable')
 const OVH = require('../../app_lib/OVH')
+const LocalStorage = require('../../app_lib/LocalStorage')
 
-var containerOVH
-const LOCAL_STORAGE = (process.env.STORAGE === "LOCAL")
-if (!LOCAL_STORAGE) containerOVH = new OVH()
+const container = (process.env.STORAGE === "LOCAL")? new LocalStorage() : new OVH()
 
 /**
  * @function
@@ -22,15 +18,25 @@ if (!LOCAL_STORAGE) containerOVH = new OVH()
  * @return {Promise}
  */
 async function storeToContainer(file, selectedPath="") {
-	if (LOCAL_STORAGE) {
-		const source = path.resolve(file.path)
-		const target = path.resolve('./', process.env.LOCAL_STORAGE_LOCATION, selectedPath, file.name)
-		return fsp.copyFile(source, target)
-	}
-	// if OVH remote storage
-	const stream = fs.createReadStream(file.path)
-	const remotePath = "/" + process.env.CONTAINER_NAME + "/" + selectedPath + file.name
-	return containerOVH.write(stream, remotePath)
+	// TBC repair this
+	// PAY ATTENTIon to the way the path is defined in OVH. make it consistent with localstorage, where the root is given
+	// WHY the error NotFound is not returned to FileUpload.vue?
+	debug("file.path: " + file.path)
+	debug("selectedPath: " + selectedPath)
+	const buffer = fs.readFileSync(file.path)
+	const filepath = selectedPath + file.name
+	debug("filepath: " + filepath)
+	return container.write(buffer, filepath)
+		
+	//if (LOCAL_STORAGE) {
+		//const source = path.resolve(file.path)
+		//const target = path.resolve('./', process.env.LOCAL_STORAGE_LOCATION, selectedPath, file.name)
+		//return fsp.copyFile(source, target)
+	//}
+	//// if OVH remote storage
+	//const stream = fs.createReadStream(file.path)
+	//const remotePath = "/" + process.env.CONTAINER_NAME + "/" + selectedPath + file.name
+	//return containerOVH.write(stream, remotePath)
 }
 
 /**
@@ -40,13 +46,7 @@ async function storeToContainer(file, selectedPath="") {
  * @return {Promise} Object containing properties of the thumbnail file (height and width among them)
  */
 async function createThumbnail(srcId, destId) {
-	if (LOCAL_STORAGE) {
-		const source = buildLocalPath(srcId, imgType.upload)
-		return fsp.readFile(source)
-			.then(buffer => (new SpotairPict(buffer)).thumbnail().toThumbnailFile(destId))
-	}
-	// if OVH remote storage
-	return containerOVH.readUploaded(srcId)
+	return container.readUploaded(srcId)
 		.then(buffer => (new SpotairPict(buffer)).thumbnail().toThumbnailFile(destId))
 }
 
@@ -58,26 +58,9 @@ async function createThumbnail(srcId, destId) {
  * @return {Promise} Object containing properties of the normalized file (height and width among them)
  */
 async function createPicture(srcId, destId) {
-	if (LOCAL_STORAGE) {
-		const source = buildLocalPath(srcId, imgType.upload)
-		return fsp.readFile(source)
-			.then(buffer => (new SpotairPict(buffer)).normalize().toPictureFile(destId))
-	}
-	// if OVH remote storage
-	return containerOVH.readUploaded(srcId)
+	return container.readUploaded(srcId)
 		.then(buffer => (new SpotairPict(buffer)).normalize().toPictureFile(destId))
 }
-
-async function listContainer() {
-	if (LOCAL_STORAGE) {
-		const dir = path.resolve('./', process.env.LOCAL_STORAGE_LOCATION)
-		debug(`reading folder contents from: ${dir}`)
-		return fsp.readdir(dir)
-	}
-	// if OVH remote storage
-	return containerOVH.list()
-}
-
 
 /**
  * @Object
@@ -121,7 +104,7 @@ storageController.postFile = function(req, res) {
 }
 
 storageController.list = function(req, res) {
-	listContainer()
+	container.list()
 		.then(output => sendJSON.ok(res, output))	
 		.catch(err => sendJSON.serverError(res, err))
 }

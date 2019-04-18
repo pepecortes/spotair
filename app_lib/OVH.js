@@ -4,6 +4,7 @@
  */ 
 const debug = require('debug')('app:lib:OVH')
 const fs = require('fs')
+const Readable = require('stream').Readable
 const OVHStorage = require('node-ovh-storage')
 const imgType = require('./helpers').imgType
 
@@ -105,14 +106,21 @@ class OVH extends OVHStorage {
 	/**
 	 * @function write
 	 * @desc Copy a local file to the container
-	 * @param {String | Stream} source	- path on the local filesystem or a stream
+	 * @param {String | Buffer} source	- path on the local filesystem or a buffer
 	 * @param {String} remotepath
 	 */
 	async write(source, remotepath) {
+		// TBC worry about the root of the remotepath
 		if (typeof source === 'string') {
 			return this.connect().then(() => this.putFileAsync(source, remotepath))
 		} else {
-			return this.connect().then(() => this.putStreamAsync(source, remotepath))
+			//remotepath = `/${process.env.CONTAINER_NAME}/` + remotepath
+			debug("remotepath " + remotepath)
+			const stream = new Readable()
+			stream.push(source)
+			stream.push(null)
+			debug("JUST BEFORE CONNECT")
+			return this.connect().then(() => this.putStreamAsync(stream, remotepath))
 		}
 	}
 	
@@ -139,21 +147,21 @@ class OVH extends OVHStorage {
 	/**
 	 * @function writeUploaded
 	 * @desc write a local file to the remote container uploaded images location
-	 * @param {String} localpath	- path on the local filesystem
+	 * @param {String | Stream} source	- path on the local filesystem or a stream
 	 * @param {Integer} id
 	 */
-	async writeUploaded(localpath, id) {
-		return this.write(localpath, OVH.buildPath(id, imgType.upload))
+	async writeUploaded(source, id) {
+		return this.write(source, OVH.buildPath(id, imgType.upload))
 	}
 	
 	/**  @desc see writeUploaded */
-	async writePicture(localpath, id) {
-		return this.write(localpath, OVH.buildPath(id, imgType.picture))
+	async writePicture(source, id) {
+		return this.write(source, OVH.buildPath(id, imgType.picture))
 	}
 	
 	/**  @desc see writeUploaded */
-	async writeThumbnail(localpath, id) {
-		return this.write(localpath, OVH.buildPath(id, imgType.thumbnail))
+	async writeThumbnail(source, id) {
+		return this.write(source, OVH.buildPath(id, imgType.thumbnail))
 	}
 	
 	/**

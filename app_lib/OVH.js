@@ -32,7 +32,7 @@ class OVH extends OVHStorage {
 	 * @param {Integer} type - see imgType
 	 * @return {String} remote path + filename
 	 */
-	static buildPath(id, type=imgType.picture) {
+	static relativePath(id, type=imgType.picture) {
 		var folder = ""
 		switch(type) {
 			case imgType.upload:
@@ -44,8 +44,11 @@ class OVH extends OVHStorage {
 			default:
 				folder = process.env.PICTURE_LOCATION
 		}
-		const filepath = OVH.rootPath + `/${folder}${id}.jpg`
-		return filepath
+		return `${folder}${id}.jpg`
+	}
+	
+	static absolutePath(relativePath) {
+		return OVH.rootPath + relativePath
 	}
 	
 	async connect() {
@@ -95,7 +98,7 @@ class OVH extends OVHStorage {
 	 * @return {Promise} Return the contents of the container
 	 */
 	async list(folderPath = "") {	
-		var folderPath = OVH.rootPath + folderPath
+		var folderPath = OVH.absolutePath(folderPath)
 		return this.connect().then(() => this.getFileListAsync(folderPath))
 	}
 	
@@ -105,7 +108,7 @@ class OVH extends OVHStorage {
 	 * @return {Promise} Return a buffer of the file read
 	 */
 	async read(path) {
-		var path = OVH.rootPath + path
+		var path = OVH.absolutePath(path)
 		return this.connect().then(() => this.getFileAsync(path))
 	}
 	
@@ -116,11 +119,10 @@ class OVH extends OVHStorage {
 	 * @param {String} remotepath
 	 */
 	async write(source, remotepath) {
-		var remotepath = OVH.rootPath + remotepath
+		var remotepath = OVH.absolutePath(remotepath)
 		if (typeof source === 'string') {
 			return this.connect().then(() => this.putFileAsync(source, remotepath))
 		} else {
-			debug("remotepath " + remotepath)
 			const stream = new Readable()
 			stream.push(source)
 			stream.push(null)
@@ -129,23 +131,33 @@ class OVH extends OVHStorage {
 	}
 	
 	/**
+	 * @function delete
+	 * @desc remove a remote file
+	 * @param {String} remotepath
+	 */
+	 async delete(remotepath) {
+		 var remotepath = OVH.absolutePath(remotepath)
+		 return this.connect().then(() => this.deleteFileAsync(remotepath))
+	 }
+	
+	/**
 	 * @function readUploaded
 	 * @desc read an uploaded image
 	 * @param {Integer} id
 	 * @return {Promise} Return a buffer of the image
 	 */
 	async readUploaded(id) {
-		return this.read(OVH.buildPath(id, imgType.upload))
+		return this.read(OVH.relativePath(id, imgType.upload))
 	}	
 	
 	/**  @desc see readUploaded */
 	async readPicture(id) {
-		return this.read(OVH.buildPath(id, imgType.picture))
+		return this.read(OVH.relativePath(id, imgType.picture))
 	}	
 	
 	/**  @desc see readUploaded */
 	async readThumbnail(id) {
-		return this.read(OVH.buildPath(id, imgType.thumbnail))
+		return this.read(OVH.relativePath(id, imgType.thumbnail))
 	}
 	
 	/**
@@ -155,42 +167,31 @@ class OVH extends OVHStorage {
 	 * @param {Integer} id
 	 */
 	async writeUploaded(source, id) {
-		return this.write(source, OVH.buildPath(id, imgType.upload))
+		return this.write(source, OVH.relativePath(id, imgType.upload))
 	}
 	
 	/**  @desc see writeUploaded */
 	async writePicture(source, id) {
-		return this.write(source, OVH.buildPath(id, imgType.picture))
+		return this.write(source, OVH.relativePath(id, imgType.picture))
 	}
 	
 	/**  @desc see writeUploaded */
 	async writeThumbnail(source, id) {
-		return this.write(source, OVH.buildPath(id, imgType.thumbnail))
+		return this.write(source, OVH.relativePath(id, imgType.thumbnail))
 	}
-	
-	/**
-	 * @function delete
-	 * @desc remove a remote file
-	 * @param {String} remotepath
-	 */
-	 async delete(remotepath) {
-		 var remotepath = OVH.rootPath + remotepath
-		 return this.connect().then(() => this.deleteFileAsync(remotepath))
-	 }
 	 
 	 async deleteUploaded(id) {
-		 return this.delete(OVH.buildPath(id, imgType.upload))
+		 return this.delete(OVH.relativePath(id, imgType.upload))
 	 }
 	 
 	 async deletePicture(id) {
-		 return this.delete(OVH.buildPath(id, imgType.picture))
+		 return this.delete(OVH.relativePath(id, imgType.picture))
 	 }
 	 
 	 async deleteThumbnail(id) {
-		 return this.delete(OVH.buildPath(id, imgType.thumbnail))
+		 return this.delete(OVH.relativePath(id, imgType.thumbnail))
 	 }
 	
-
 }
 
 module.exports = OVH

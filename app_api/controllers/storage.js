@@ -3,7 +3,6 @@ const sendJSON = require('../../app_lib/helpers').sendJSON
 const SpotairPict = require('../../app_lib/SpotairPict')
 const fs = require('fs')
 const fsp = require('fs').promises
-const path = require('path')
 const formidable = require('formidable')
 const OVH = require('../../app_lib/OVH')
 const LocalStorage = require('../../app_lib/LocalStorage')
@@ -21,29 +20,6 @@ async function storeToContainer(file, selectedPath = "") {
 	const buffer = fs.readFileSync(file.path)
 	const filepath = selectedPath + file.name
 	return container.write(buffer, filepath)
-}
-
-/**
- * @function createThumbnail
- * @desc create and stores a thumbnail out of the uploaded image
- * @param {String} id - id of the image existing in the uploads store
- * @return {Promise} Object containing properties of the thumbnail file (height and width among them)
- */
-async function createThumbnail(srcId, destId) {
-	return container.readUploaded(srcId)
-		.then(buffer => (new SpotairPict(buffer)).thumbnail().toThumbnailFile(destId))
-}
-
-/**
- * @function createPicture
- * @desc create and stores a spotair-normalized image out of the uploaded image
- * @param {String} srcId 	- id of the image existing in the uploads store
- * @param {String} destId	- id of the copied spotair picture
- * @return {Promise} Object containing properties of the normalized file (height and width among them)
- */
-async function createPicture(srcId, destId) {
-	return container.readUploaded(srcId)
-		.then(buffer => (new SpotairPict(buffer)).normalize().toPictureFile(destId))
 }
 
 /**
@@ -69,9 +45,14 @@ storageController.storeImage = function(req, res) {
 }
 
 storageController._storeImage = async function(srcId, destId) {
-	const p1 = createPicture(srcId, destId)
-	const p2 = createThumbnail(srcId, destId)
-	return Promise.all([p1, p2]).then(([r1, r2]) => Object.assign({id: destId}, r1))
+	// create both picture and thumbnail and store into the container
+	return container.readUploaded(srcId)
+		.then(buffer => new SpotairPict(buffer))
+		.then(spotairpict => Promise.all([
+			spotairpict.normalize().toPictureFile(destId),
+			spotairpict.thumbnail().toThumbnailFile(destId)
+		]))
+		.then(([r1, r2]) => Object.assign({id: destId}, r1))
 }
 
 storageController.postFile = function(req, res) {

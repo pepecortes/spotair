@@ -20,13 +20,16 @@ console.log("START TEST")
 console.log("path " + readUploadedImage(1))
 
 //const container = new LocalStorage()
-const container = new OVH()
+const containerOVH = new OVH()
+const containerLocal = new LocalStorage()
 //var buffer = fs.readFileSync(readUploadedImage(1))
 //const filepath = "/pictures/koko.jpg"
-container.readUploaded("10")
-	.then(buffer => new SpotairPict(buffer))
-	.then(buffer => debug("result is buffer " + (buffer instanceof Buffer)))
-	//.then(output => console.log(JSON.stringify(output)))
+containerOVH.readUploaded("10")
+	.then(buffer => new SpotairPict(buffer).thumbnail().toThumbnailFile("666"))
+	//.then(spotairpict => containerLocal.writeThumbnail(spotairpict, 666))
+	//.then(spotairpict => containerOVH.writeThumbnail(spotairpict, 666))
+	//.then(buffer => debug("result is buffer " + (buffer instanceof Buffer)))
+	.then(output => console.log(JSON.stringify(output)))
 	.catch(err => console.log("error " + err))	
 	
 

@@ -58,7 +58,8 @@ class SpotairPict extends Sharp {
 	 */
 	toPictureFile(id) {
 		const p1 = this.dimensions()
-		const p2 = container.writePicture(this, id)
+		const p2 = this.toBuffer()
+			.then(buffer => container.writePicture(buffer, id))
 		return Promise.all([p1, p2]).then(([r1, r2]) => r1)
 	}
 	
@@ -67,7 +68,8 @@ class SpotairPict extends Sharp {
 	 * @desc Convert to file and save to the spotair Thumbnails location
 	 */
 	toThumbnailFile(id) {
-		return container.writeThumbnail(this, id)
+		return this.toBuffer()
+			.then(buffer => container.writeThumbnail(buffer, id))
 	}
 
 }

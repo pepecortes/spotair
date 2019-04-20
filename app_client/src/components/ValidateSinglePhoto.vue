@@ -17,6 +17,7 @@
 		
 		validator-input(
 			ref='avionValidator',
+			:hideValidateButton='true',
 			apiCall="avions",
 			v-model='value.avion',
 			title="Avion",
@@ -122,8 +123,7 @@ export default {
 		
 		allValidated() {
 			return !(
-				this.$v.value.avion.$invalid
-				|| this.$v.value.appareil.$invalid
+				this.$v.value.appareil.$invalid
 				|| this.$v.value.galerie.$invalid
 				|| this.$v.value.compagnie.$invalid
 				|| this.$v.value.aerodrome.$invalid
@@ -137,9 +137,15 @@ export default {
 	methods: {		
 		
 		avionChanged(selected) {
-			console.log("avion changed " + JSON.stringify(selected))
-			//const id = (selected)? selected.id : false
-			//this.getAppareilOptions(id)
+			if(!selected || !selected.id) return
+			var vm = this
+			const avionId = selected.id
+			vm.axios.get(`appareils/byAvion/${avionId}`)
+				.then(response => {
+					vm.$refs.appareilValidator.setOptions(response.data)
+					vm.$refs.appareilValidator.reset()
+				})
+				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},
 		
 		setInitialValue(data) {

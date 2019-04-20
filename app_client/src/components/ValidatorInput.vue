@@ -11,11 +11,11 @@
 					:options="options",
 					label="text",
 					v-model="mutableValue",
-					@change='xxx',
+					@change='vselectChanged',
 				)
 				p(v-if="mutableValidated") {{ mutableValue.text }}
 				b-input-group-append
-					b-button(v-if='selectionIsLegal && !mutableValidated', variant='outline-secondary', @click='validate') V
+					b-button(v-if='!hideValidateButton && selectionIsLegal && !mutableValidated', variant='outline-secondary', @click='validate') V
 					b-button(variant='outline-secondary', @click='reset') X
 					b-button(variant='outline-secondary', @click='admin') N
 					
@@ -58,6 +58,12 @@ export default {
 			default: null
 		},
 		
+		hideValidateButton: {
+			// in case you do not want to show the validator button
+			// note that the component will be always invalid!
+			default: false
+		},
+		
 		validated: {
 			default: false
 		},
@@ -97,19 +103,22 @@ export default {
 
 	methods: {
 		
-		// TEST
-		xxx(selected) {
-			//console.log("initial " + (this.initial == null))
-			//this.$emit('selector-changed', (this.initial == null))
+		vselectChanged(selected) {
+			// trigger the selector-changed event, except if the control
+			// is NOT YET initialized
 			if (this.initial == null || selected == this.initial) return
 			this.$emit('selector-changed', selected)
+		},
+		
+		setOptions(options) {
+			this.options = options
 		},
 		
 		getOptions() {
 			var vm = this
 			const url = vm.apiCall + '/'
 			vm.axios.get(url)
-				.then(response => vm.options = response.data)
+				.then(response => vm.setOptions(response.data))
 				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},
 		

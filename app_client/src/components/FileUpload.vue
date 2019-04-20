@@ -47,6 +47,19 @@
 						)
 					template(v-slot:tail-slot)
 						input(type='text', v-model="appareil.tail")
+
+			tab-content(title="lieu" :beforeChange="leavingAerodrome")
+				head-or-tail(v-model="aerodrome.headSelected")
+					template(v-slot:head-slot)
+						v-select(
+							id="aerodrome",
+							:options="aerodrome.options",
+							label="text",
+							v-model="aerodrome.head",
+							@input="aerodromeChanged",
+						)
+					template(v-slot:tail-slot)
+						input(type='text', v-model="aerodrome.tail")
 						
 			tab-content(title="galerie" :beforeChange="leavingGalerie")
 				head-or-tail(v-model="galerie.headSelected")
@@ -71,19 +84,6 @@
 						)
 					template(v-slot:tail-slot)
 						input(type='text', v-model="compagnie.tail")
-
-
-			tab-content(title="lieu" :beforeChange="leavingAerodrome")
-				head-or-tail(v-model="aerodrome.headSelected")
-					template(v-slot:head-slot)
-						v-select(
-							id="aerodrome",
-							:options="aerodrome.options",
-							label="text",
-							v-model="aerodrome.head"
-						)
-					template(v-slot:tail-slot)
-						input(type='text', v-model="aerodrome.tail")
 
 			tab-content(title="review")
 				b-list-group
@@ -178,16 +178,26 @@ export default {
 			else this.appareil.headSelected = true
 			return true
 		},
+
+		leavingAerodrome()  {
+			if (!this.photoData.aerodrome) return false
+			if (this.galerie.options.length == 0) this.galerie.headSelected = false
+			else this.galerie.headSelected = true
+			return true
+		},
 		
 		leavingAppareil() {return (this.photoData.appareil != null)},
 		leavingCompagnie() {return (this.photoData.compagnie != null)},
-		leavingAerodrome() {return (this.photoData.aerodrome != null)},
 		leavingGalerie() {return (this.photoData.galerie != null)},
 		
-		// TEST
 		avionChanged(selected) {
 			const id = (selected)? selected.id : false
 			this.getAppareilOptions(id)
+		},
+		
+		aerodromeChanged(selected) {
+			const id = (selected)? selected.id : false
+			this.getGalerieOptions(id)
 		},
 		
 		getOptions(apicall, variable) {
@@ -206,6 +216,17 @@ export default {
 			if (!avionId) return
 			else vm.axios.get(`appareils/byAvion/${avionId}`)
 				.then(response => vm.appareil.options = response.data)
+				.catch(err => vm.showAxiosAlert(err, "danger"))
+		},
+		
+		getGalerieOptions(aerodromeId=false) {
+			// reset galerie
+			// if an aerodrome is given, set galerie options filtered by aerodrome
+			var vm = this
+			vm.galerie = {options: [], headSelected: true, head: null, tail: null}
+			if (!aerodromeId) return
+			else vm.axios.get(`galeries/byAerodrome/${aerodromeId}`)
+				.then(response => vm.galerie.options = response.data)
 				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},
 		

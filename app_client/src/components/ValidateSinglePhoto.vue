@@ -35,6 +35,16 @@
 			:state='!$v.value.appareil.$invalid',
 		)
 
+		validator-input(
+			ref='aerodromeValidator',
+			:hideValidateButton='true',
+			apiCall="aerodromes",
+			v-model='value.aerodrome',
+			title="Lieu",
+			:adminForm='admin.aerodrome',
+			:state='!$v.value.aerodrome.$invalid',
+			@selector-changed='aerodromeChanged',
+		)
 
 		validator-input(
 			ref='galerieValidator',
@@ -52,15 +62,6 @@
 			title="Compagnie",
 			:adminForm='admin.compagnie',
 			:state='!$v.value.compagnie.$invalid',
-		)
-
-		validator-input(
-			ref='aerodromeValidator',
-			apiCall="aerodromes",
-			v-model='value.aerodrome',
-			title="Lieu",
-			:adminForm='admin.aerodrome',
-			:state='!$v.value.aerodrome.$invalid',
 		)
 		
 		b-button(v-if='allValidated', type="button", variant="outline-success", v-on:click="validateButtonClicked") Validate
@@ -81,9 +82,6 @@ import CompagnieForm from './CompagnieForm.vue'
 import AerodromeForm from './AerodromeForm.vue'
 
 export default {
-	
-	//TBC: how do you deal with Avion? (only Appareil is copied to
-	//the db...
 	
 	beforeMount() {
 		var vm = this
@@ -126,7 +124,6 @@ export default {
 				this.$v.value.appareil.$invalid
 				|| this.$v.value.galerie.$invalid
 				|| this.$v.value.compagnie.$invalid
-				|| this.$v.value.aerodrome.$invalid
 			)
 		},
 		
@@ -139,11 +136,21 @@ export default {
 		avionChanged(selected) {
 			if(!selected || !selected.id) return
 			var vm = this
-			const avionId = selected.id
-			vm.axios.get(`appareils/byAvion/${avionId}`)
+			vm.axios.get(`appareils/byAvion/${selected.id}`)
 				.then(response => {
 					vm.$refs.appareilValidator.setOptions(response.data)
 					vm.$refs.appareilValidator.reset()
+				})
+				.catch(err => vm.showAxiosAlert(err, "danger"))
+		},
+		
+		aerodromeChanged(selected) {
+			if(!selected || !selected.id) return
+			var vm = this
+			vm.axios.get(`galeries/byAerodrome/${selected.id}`)
+				.then(response => {
+					vm.$refs.galerieValidator.setOptions(response.data)
+					vm.$refs.galerieValidator.reset()
 				})
 				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},

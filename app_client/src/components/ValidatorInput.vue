@@ -11,6 +11,7 @@
 					:options="options",
 					label="text",
 					v-model="mutableValue",
+					@change='xxx',
 				)
 				p(v-if="mutableValidated") {{ mutableValue.text }}
 				b-input-group-append
@@ -95,6 +96,14 @@ export default {
 	},
 
 	methods: {
+		
+		// TEST
+		xxx(selected) {
+			//console.log("initial " + (this.initial == null))
+			//this.$emit('selector-changed', (this.initial == null))
+			if (this.initial == null || selected == this.initial) return
+			this.$emit('selector-changed', selected)
+		},
 		
 		getOptions() {
 			var vm = this

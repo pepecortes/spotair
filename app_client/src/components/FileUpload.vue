@@ -184,6 +184,7 @@ export default {
 		leavingAerodrome() {return (this.photoData.aerodrome != null)},
 		leavingGalerie() {return (this.photoData.galerie != null)},
 		
+		// TEST
 		avionChanged(selected) {
 			const id = (selected)? selected.id : false
 			this.getAppareilOptions(id)

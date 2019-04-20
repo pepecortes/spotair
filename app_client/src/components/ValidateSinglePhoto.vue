@@ -22,6 +22,7 @@
 			title="Avion",
 			:adminForm='admin.avion',
 			:state='!$v.value.avion.$invalid',
+			@selector-changed='avionChanged',
 		)
 
 		validator-input(
@@ -133,7 +134,13 @@ export default {
 	
 	mixins: [validationMixin, alertMixin],
 	
-	methods: {
+	methods: {		
+		
+		avionChanged(selected) {
+			console.log("avion changed " + JSON.stringify(selected))
+			//const id = (selected)? selected.id : false
+			//this.getAppareilOptions(id)
+		},
 		
 		setInitialValue(data) {
 			this.$refs.avionValidator.setInitialValue(data.avion)

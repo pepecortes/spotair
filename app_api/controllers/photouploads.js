@@ -35,6 +35,23 @@ controller.fusion =  async function(req, res) {
 	sendJSON.serverError(res, "METHOD NOT YET IMPLEMENTED")
 }
 
+/**
+ * @function reject
+ * @desc Reject the referred upload, only if it is not yet validated
+ * @params {Integer} req.params.id - id of the uploaded photo
+ */
+controller.reject = async function(req, res) {
+	const id = req.params.id
+	controller._byId(id)
+		.then(record => {
+			if (record.validated != null) return Promise.reject(new Error('status is not pending'))
+			else return controller._update(id, {validated: false})
+		})
+		.then(record => sendJSON.ok(res, record))
+		.catch(err => sendJSON.serverError(res, err))
+}
+
+
 module.exports = controller
 
 

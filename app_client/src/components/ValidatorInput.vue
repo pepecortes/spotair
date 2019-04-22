@@ -61,6 +61,7 @@ export default {
 		hideValidateButton: {
 			// in case you do not want to show the validator button
 			// note that the component will be always invalid!
+			type: Boolean,
 			default: false
 		},
 		

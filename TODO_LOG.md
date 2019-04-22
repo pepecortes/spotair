@@ -1,13 +1,9 @@
-FileUpload
-	add a comment field?
+ValidateSinglePhoto
+	manage failure and success of both validate and reject
 
-Verify Validate
-	make avion and lieu always valid
-	check that the data can be validated
-	add button for rejection
-	display the fileupload comment field
-	build up a photo comment field
-	
+Vertical CSS-only masonry
+	https://github.com/paulcollett/vue-masonry-css
+	using placeholders? https://github.com/paulcollett/vue-dummy
 	
 When using REMOTE: validation takes a long time: add icon for waiting
 In validation: why can I select an immat that does not correspond to the avion?

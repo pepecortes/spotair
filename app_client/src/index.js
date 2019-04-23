@@ -26,10 +26,12 @@ Vue.use(VueAxios, axios)
 
 // Define or input route components
 import Accueil from './components/Accueil.vue'
+import Masonry from './components/Masonry.vue'
 
 // Define the routes
 const routes = [
   { path: '/cover', component: Accueil },
+  { path: '/masonry', component: Masonry },
 ]
 
 // Create the router

@@ -5,6 +5,11 @@ import Axios from 'axios'
 import VueAxios from 'vue-axios'
 import Home from './Home.vue'
 
+// TEST MASONRY
+import {VueMasonryPlugin} from 'vue-masonry'
+Vue.use(VueMasonryPlugin)
+
+
 // Import bootstrap style
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'

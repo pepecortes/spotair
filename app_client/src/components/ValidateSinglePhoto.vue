@@ -12,9 +12,8 @@
 		
 		img(:src="uploadedFileURL", width="400") 
 		
-		p(v-if='value.dateUpload') Uploaded: {{ value.dateUpload }}
 		p(v-if='value.photographe') Photographe: {{ value.photographe.text }}
-		p(v-if='value.commentUpload') {{ value.commentUpload }}
+		p(v-if='value.dateUpload') Uploaded: {{ value.dateUpload }}
 		
 		validator-input(
 			ref='avionValidator',
@@ -23,6 +22,7 @@
 			v-model='value.avion',
 			title="Avion",
 			:adminForm='admin.avion',
+			:state='!$v.value.avion.$invalid',
 			@selector-changed='avionChanged',
 		)
 
@@ -42,6 +42,7 @@
 			v-model='value.aerodrome',
 			title="Lieu",
 			:adminForm='admin.aerodrome',
+			:state='!$v.value.aerodrome.$invalid',
 			@selector-changed='aerodromeChanged',
 		)
 
@@ -63,16 +64,7 @@
 			:state='!$v.value.compagnie.$invalid',
 		)
 		
-		b-form-textarea(
-			id="commentaire",
-			placeholder="Commentaire",
-			rows="3",
-			max-rows="6",
-			v-model="value.commentaire"
-		)
-		
-		b-button(v-if='allValidated', type="button", variant="outline-success", v-on:click="validateButtonClicked") Valider
-		b-button(type="button", variant="outline-danger", v-on:click="rejectButtonClicked") Rejeter
+		b-button(v-if='allValidated', type="button", variant="outline-success", v-on:click="validateButtonClicked") Validate
 		
 </template>
 
@@ -117,9 +109,10 @@ export default {
 				{
 					photographe: null, avion: null, appareil: null,
 					galerie: null, compagnie: null, aerodrome: null,
-					dateUpload: null, commentUpload: null, commentaire: null
+					dateUpload: null
 				},
 			admin: {avion: AvionForm, appareil: AppareilForm, galerie: GalerieForm, compagnie: CompagnieForm, aerodrome: AerodromeForm},
+			compagnie: null,
 			uploadedFileURL: null,
 		}
 	},
@@ -168,10 +161,11 @@ export default {
 			this.$refs.galerieValidator.setInitialValue(data.galerie)
 			this.$refs.compagnieValidator.setInitialValue(data.compagnie)
 			this.$refs.aerodromeValidator.setInitialValue(data.aerodrome)
-			this.value.commentUpload = data.commentaire
 		},
 			
 		validateButtonClicked() {
+			// TBC: commentaire
+			
 			var vm = this
 			var createdId
 			vm.$v.value.$touch()
@@ -181,20 +175,16 @@ export default {
 				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},
 			
-		rejectButtonClicked() {
-			this.axios.put(`photoUploads/reject/${this.id}`)
-				.then(response => console.log(JSON.stringify(response.data)))
-				.catch(err => vm.showAxiosAlert(err, "danger"))
-		},
-			
 	},
 	
 	validations() {
 		return {value: 
 			{
+				avion: {required},
 				appareil: {required},
 				galerie: {required},
 				compagnie: {required},
+				aerodrome: {required}
 			}
 		}
 	},

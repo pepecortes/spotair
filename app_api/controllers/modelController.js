@@ -83,8 +83,8 @@ ModelController.prototype._update = function(id, data) {
 	return this.Model
 		.findByPk(id, this.includeOption)
 		.then(record => {
-			record = Object.assign(record, updates)
-			return record.save()
+			record = Object.assign(record, updates);
+			return record.save();
 		})
 		.then(record => this.Model.findByPk(record.id, this.includeOption))
 }

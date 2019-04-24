@@ -7,27 +7,6 @@
 			b-nav-item(href="/pictadd") Pictadd
 			b-nav-item(href="/login") Login
 			b-nav-item(href="/logout") Logout
-					
-		div(v-masonry, transition-duration="0.3s", item-selector=".item", :origin-top="true", :horizontal-order="false")
-			div(v-masonry-tile)
-				img(src="https://via.placeholder.com/400")
-			div(v-masonry-tile)
-				img(src="https://via.placeholder.com/350")
-			div(v-masonry-tile)
-				img(src="https://via.placeholder.com/400")
-			div(v-masonry-tile)
-				img(src="https://via.placeholder.com/350")
-			div(v-masonry-tile)
-				img(src="https://via.placeholder.com/400")
-			div(v-masonry-tile)
-				img(src="https://via.placeholder.com/350")
-			div(v-masonry-tile)
-				img(src="https://via.placeholder.com/400")
-			div(v-masonry-tile)
-				img(src="https://via.placeholder.com/350")
-
-		
-
 
 		router-view
 		

@@ -5,6 +5,12 @@ import Axios from 'axios'
 import VueAxios from 'vue-axios'
 import Home from './Home.vue'
 
+//TEST CUSTOM DIRECTIVE
+//import './directives/vue-placeholders'
+//Vue.directive('phimg', require('./vue-placeholders-image'))
+Vue.directive('phtxt', require('./directives/vue-placeholders/dummy'))
+//Vue.directive('phtxt', require('./directives/vue-placeholders/vue-placeholders-text'))
+
 // Import bootstrap style
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'

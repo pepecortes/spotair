@@ -7,6 +7,11 @@
 			b-nav-item(href="/pictadd") Pictadd
 			b-nav-item(href="/login") Login
 			b-nav-item(href="/logout") Logout
+			
+		div
+			p hola karakola
+			
+		div(v-phtxt="13")
 					
 		router-view
 		

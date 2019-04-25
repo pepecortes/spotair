@@ -27,9 +27,16 @@ Vue.use(VueAxios, axios)
 // Define or input route components
 import Accueil from './components/Accueil.vue'
 
+// TEST
+import ExpoTest from './components/Exposition.vue'
+
 // Define the routes
 const routes = [
   { path: '/cover', component: Accueil },
+  
+  //TEST
+  { path: '/exposition', component: ExpoTest },
+  
 ]
 
 // Create the router

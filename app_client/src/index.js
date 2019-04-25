@@ -28,7 +28,7 @@ Vue.use(VueAxios, axios)
 import Accueil from './components/Accueil.vue'
 
 // TEST
-import ExpoTest from './components/Exposition.vue'
+import ExpoTest from './components/ExpoTest.vue'
 
 // Define the routes
 const routes = [

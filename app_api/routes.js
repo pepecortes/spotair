@@ -73,11 +73,12 @@ module.exports = function(passport) {
 	// Create additional routes
 	router.get('/appareils/byAvion/:id(\\d+)', (req, res) => ctrlAppareils.byAvion(req, res))
 	router.get('/galeries/spotair', (req, res) => ctrlGaleries.allSpotair(req, res))
-	router.get('/galeries/ByAerodrome/:id(\\d+)', (req, res) => ctrlGaleries.byAerodrome(req, res))
+	router.get('/galeries/byAerodrome/:id(\\d+)', (req, res) => ctrlGaleries.byAerodrome(req, res))
 	router.get('/photographes/actifs', (req, res) => ctrlPhotographes.onlyActives(req, res))
 	router.put('/users/setPassword/:id(\\d+)', (req, res) => ctrlUsers.setPassword(req, res))
 	router.get('/users/byLogin/:username', (req, res) => ctrlUsers.byLogin(req, res))
 	router.get('/photos/recent', (req, res) => ctrlPhotos.recent(req, res))
+	router.get('/photos/byGalerie/:id(\\d+)', (req, res) => ctrlPhotos.byGalerie(req, res))
 	router.post('/photos/validateUpload/:id(\\d+)', (req, res) => ctrlPhotos.validateUpload(req, res))
 	router.get('/photouploads/pending', (req, res) => ctrlPhotoUploads.pending(req, res))
 	router.get('/photouploads/validated', (req, res) => ctrlPhotoUploads.validated(req, res))

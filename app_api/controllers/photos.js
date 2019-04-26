@@ -20,6 +20,23 @@ controller.fusion =  async function(req, res) {
 	sendJSON.serverError(res, "METHOD NOT YET IMPLEMENTED")
 }
 
+
+/**
+ * @function byGalerie
+ * @desc Filter by galerie id
+ */
+controller.byGalerie = function(req, res) {
+	const id = req.params.id;
+	db.Photo
+		.findAll({
+			where: {galerieId: id},
+			order:[['createdAt', 'DESC']],
+			include: [{all:true, nested:true}]
+		})
+		.then(record => sendJSON.ok(res, record))
+		.catch(err => sendJSON.serverError(res, err))
+}
+
 /**
  * @function recent
  * @desc Returns the last 50 recently createdf photos

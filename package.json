@@ -52,7 +52,6 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "chance": "^1.0.18",
     "css-loader": "^2.0.1",
     "docco": "^0.8.0",
     "dotenv-webpack": "^1.5.7",

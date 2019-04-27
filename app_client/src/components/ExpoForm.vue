@@ -25,12 +25,16 @@ export default {
 			default: () => []
 		},
 		
+		fileLocation: {
+			type: String,
+			default: process.env.THUMBNAIL_LOCATION
+		},
+		
 	},
 	
 	data () {
 		return {
 			mutableValue: null,
-			fileLocation: process.env.STORAGE_URL + process.env.THUMBNAIL_LOCATION
 		}
 	},
 	
@@ -44,7 +48,7 @@ export default {
 	
 	methods: {
 		
-		getSrc(photo) {return `${this.fileLocation}${photo.id}.jpg`},
+		getSrc(photo) {return `${process.env.STORAGE_URL}${this.fileLocation}${photo.id}.jpg`},
 		
 		clicked: function(photo) {
 			this.mutableValue = photo

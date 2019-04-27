@@ -1,7 +1,12 @@
 <template lang="pug">
 	div
 		h1 test de Exposition
-		expo-form(:photos='photos', :value='selected', @input='inputChange')
+		expo-form(
+			:photos='photos',
+			v-model='selected',
+			@input='inputChange',
+			:fileLocation='fileLocation'
+		)
 </template>
 
 <script>
@@ -15,17 +20,22 @@ export default {
 	
 	data() {
 		return {
-			//photos: ["350x200", "250x200", "350x200", "200x200", "250x200", "150x200"]
-			photos: [{id: "7"},{id: "8"},{id: "9"}],
+			photos: [],
 			selected: null,
+			fileLocation: process.env.THUMBNAIL_LOCATION,
 		}
+	},	
+		
+	beforeMount() {
+		const vm = this
+		this.axios.get(`photos/`)
+			.then(response => vm.photos = response.data)
+			.catch(err => console.error("error " + err))
 	},
 
 	methods: {
 		
 		inputChange(event) {
-			console.log("INPUT CHANGE")
-			console.log("event " + JSON.stringify(event))
 			console.log("value " + JSON.stringify(this.selected))
 		},
 		

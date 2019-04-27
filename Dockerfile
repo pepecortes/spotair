@@ -1,4 +1,4 @@
-FROM node:11
+FROM node:12
 # you might use "alpine" if in production: the image is lighter
 
 # Create app directory

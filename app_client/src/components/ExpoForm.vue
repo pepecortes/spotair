@@ -4,7 +4,8 @@
 		img(
 			v-for='photo in photos',
 			:src='getSrc(photo)',
-			v-on:click='clicked(photo)'
+			v-on:click='clicked(photo)',
+			height='imgHeight'
 		)
 
 
@@ -28,6 +29,11 @@ export default {
 		fileLocation: {
 			type: String,
 			default: process.env.THUMBNAIL_LOCATION
+		},
+		
+		imgHeight: {
+			type: String,
+			default: process.env.THUMBNAIL_HEIGHT_PX
 		},
 		
 	},

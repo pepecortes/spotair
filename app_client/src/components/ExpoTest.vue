@@ -5,7 +5,7 @@
 			:photos='photos',
 			v-model='selected',
 			@input='inputChange',
-			:fileLocation='fileLocation'
+			:fileLocation='fileLocation',
 		)
 </template>
 

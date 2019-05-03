@@ -13,15 +13,20 @@ const db = require('../app_api/models/db')
 // connect database and models
 console.log("START TEST")
 
-const path = "./pluto.jpg"
-fsp.readFile(path)
-	.then(buffer => {
-		const x = new SpotairPict(buffer)
-		x.thumbnail().toThumbnailFile('thumb')
-		//x.normalize().toPictureFile('pic')
-	})
-	//.then(outputBuffer => fsp.writeFile('./output.jpg', outputBuffer))
-	.catch(err => console.log("Error: " + err))
+const chance = require('chance').Chance()
+var w = chance.integer({ min: 100, max: 350 })
+var dim = `http://via.placeholder.com/${w}x200`
+console.log(`chance: ${dim}`)
+
+//const path = "./pluto.jpg"
+//fsp.readFile(path)
+	//.then(buffer => {
+		//const x = new SpotairPict(buffer)
+		//x.thumbnail().toThumbnailFile('thumb')
+		////x.normalize().toPictureFile('pic')
+	//})
+	////.then(outputBuffer => fsp.writeFile('./output.jpg', outputBuffer))
+	//.catch(err => console.log("Error: " + err))
 
 
 //fsp.readFile(path)

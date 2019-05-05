@@ -11,6 +11,9 @@
 
 <script>
 import ExpoForm from './ExpoForm.vue'
+const chance = require('chance').Chance()
+const _ = require('lodash')
+
 
 export default {
 	
@@ -28,9 +31,16 @@ export default {
 		
 	beforeMount() {
 		const vm = this
-		this.axios.get(`photos/`)
-			.then(response => vm.photos = response.data)
-			.catch(err => console.error("error " + err))
+		//this.axios.get(`photos/`)
+			//.then(response => vm.photos = response.data)
+			//.catch(err => console.error("error " + err))
+			
+		function createPlaceholder() {
+			const w = chance.integer({ min: 150, max: 300 })
+			return {url: `http://via.placeholder.com/${w}x200`}
+		}
+
+		vm.photos = _.times(2000, createPlaceholder)
 	},
 
 	methods: {

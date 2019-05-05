@@ -13,10 +13,31 @@ const db = require('../app_api/models/db')
 // connect database and models
 console.log("START TEST")
 
-const chance = require('chance').Chance()
-var w = chance.integer({ min: 100, max: 350 })
-var dim = `http://via.placeholder.com/${w}x200`
-console.log(`chance: ${dim}`)
+function cycle([input, output, count]) {
+	if (count <= 0 || input.length <= 0) return [input, output, count]
+	output.push(input.shift())
+	cycle([input, output, count-1])
+}
+
+const A = [1,2,3]
+const B = [3,4,5]
+
+console.log([A,B])
+cycle([A,B,6])
+console.log([A,B])
+
+//const chance = require('chance').Chance()
+//var w = chance.integer({ min: 100, max: 350 })
+//var dim = `http://via.placeholder.com/${w}x200`
+//console.log(`chance: ${dim}`)
+
+//function createPlaceholder() {
+	//const w = chance.integer({ min: 100, max: 350 })
+	//return {url: `http://via.placeholder.com/${w}x200`}
+//}
+
+//var x = _.times(20, createPlaceholder)
+//console.log(x)
 
 //const path = "./pluto.jpg"
 //fsp.readFile(path)

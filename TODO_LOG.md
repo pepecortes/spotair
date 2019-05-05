@@ -1,3 +1,5 @@
+PROBLEM: the select list (in admin) does not work with a large number of entries
+
 When using REMOTE: validation takes a long time: add icon for waiting
 In validation: why can I select an immat that does not correspond to the avion?
 In pictadd, we can try to skip avion if immat is selected from list (instead of free text)

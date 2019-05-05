@@ -1,2 +1,100 @@
 Procedure to migrate current database content into new spotair
 
+export legacy database (from PHPMYADMIN)
+
+	EXPORT METHOD
+		CUSTOM (display all possible options)
+	FORMAT
+		SQL
+	TABLES
+		ALL SELECTED
+	OUTPUT
+		RENAME EXPORTED DATABASE to spotair_legacy
+	FORMAT SPECIFIC OPTIONS
+		EXPORT VIEWS AS TABLES = FALSE
+		OBJECT CREATION OPTIONS
+			ADD CREATE DATABASE / USE STATEMENT = TRUE
+			ADD CREATE VIEW = FALSE
+			ADD CREATE PROCEDURE / FUNCTION / EVENT statement = FALSE
+			ADD CREATE TRIGGER statement = FALSE
+			
+
+-- clear all spotair data
+	DELETE FROM spotair.photoUploads;
+	DELETE FROM spotair.photos;
+	DELETE FROM spotair.galeries;
+	DELETE FROM spotair.aerodromes;
+	DELETE FROM spotair.annees;
+	DELETE FROM spotair.appareils;
+	DELETE FROM spotair.compagnies;
+	DELETE FROM spotair.avions;
+	DELETE FROM spotair.modeles;
+	DELETE FROM spotair.constructeurs;
+	DELETE FROM spotair.themes;
+
+-- import AERODROME
+	
+	INSERT INTO spotair.aerodromes
+	(id, nom, lieu, latitude, longitude)
+	SELECT id, nom, lieu, latitude, longitude
+	FROM spotair_legacy.AERODROME;
+
+-- import ANNEE
+	
+	INSERT INTO spotair.annees
+	(id, annee)
+	SELECT id, annee
+	FROM spotair_legacy.ANNEE;
+	
+-- import APPAREIL
+	
+	INSERT INTO spotair.appareils
+	(id, immat, serial, commentaire)
+	SELECT id, immat, serial, commentaire
+	FROM spotair_legacy.APPAREIL;
+	
+-- import COMPAGNIE
+	
+	INSERT INTO spotair.compagnies
+	(id, nom, flotille)
+	SELECT id, nom, flotille
+	FROM spotair_legacy.COMPAGNIE;
+
+-- import CONSTRUCTEUR
+	
+	INSERT INTO spotair.constructeurs
+	(id, nom)
+	SELECT id, constructeur
+	FROM spotair_legacy.CONSTRUCTEUR;
+
+-- import THEMES
+	
+	INSERT INTO spotair.themes
+	(id, theme)
+	SELECT id, sujet
+	FROM spotair_legacy.THEME;
+
+-- import MODELE
+	
+	INSERT INTO spotair.modeles
+	(id, nom, surnom, constructeurId)
+	SELECT id, modele, surnom, refconstructeur
+	FROM spotair_legacy.MODELE;
+
+-- import AVION
+	
+	INSERT INTO spotair.avions
+	(id, version, modeleId)
+	SELECT id, version, refmodele
+	FROM spotair_legacy.AVION;
+
+-- import GALLERIE
+	
+	INSERT INTO spotair.galeries
+	(id, isSpotair, commentaire, anneeId, themeId, aerodromeId)
+	SELECT id, isSpotAir, Commentaire, RefAnnee, RefTheme, refaerodrome
+	FROM spotair_legacy.GALLERIE;
+	
+
+
+	

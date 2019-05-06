@@ -1,3 +1,6 @@
+DATABASE MIGRATION
+	find a way to create a username for those photographes lacking it
+
 PROBLEM: the select list (in admin) does not work with a large number of entries
 
 When using REMOTE: validation takes a long time: add icon for waiting

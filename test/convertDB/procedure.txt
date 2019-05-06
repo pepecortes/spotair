@@ -1,5 +1,9 @@
 Procedure to migrate current database content into new spotair
 
+TO BE COMPLETED
+	How to deal with photographes without mail (so without user account)
+
+
 export legacy database (from PHPMYADMIN)
 
 	EXPORT METHOD
@@ -31,6 +35,8 @@ export legacy database (from PHPMYADMIN)
 	DELETE FROM spotair.modeles;
 	DELETE FROM spotair.constructeurs;
 	DELETE FROM spotair.themes;
+	DELETE FROM spotair.users;
+	DELETE FROM spotair.photographes;
 
 -- import AERODROME
 	
@@ -94,6 +100,27 @@ export legacy database (from PHPMYADMIN)
 	(id, isSpotair, commentaire, anneeId, themeId, aerodromeId)
 	SELECT id, isSpotAir, Commentaire, RefAnnee, RefTheme, refaerodrome
 	FROM spotair_legacy.GALLERIE;
+
+-- import PHOTOGRAPHE
+-- CAUTION: correct duplicate emails first
+-- TO BE COMPLETED
+
+	SELECT eMail, count(eMail) AS count
+	FROM PHOTOGRAPHE
+	GROUP BY eMail
+	HAVING count > 1 AND count < 10;
+	
+	INSERT INTO spotair.photographes
+	(id, nom, prenom, actif)
+	SELECT id, nom, prenom, 1
+	FROM spotair_legacy.PHOTOGRAPHE;
+	
+	INSERT INTO spotair.users
+	(id, mail, photographeId)
+	SELECT id, eMail, id
+	FROM spotair_legacy.PHOTOGRAPHE
+	WHERE eMail != ""  AND eMail <> "-";
+
 	
 
 

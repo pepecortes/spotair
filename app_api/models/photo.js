@@ -56,7 +56,7 @@ module.exports = function(sequelize, DataTypes) {
 		},
 		
 		commentaire: {
-			type: DataTypes.STRING,
+			type: DataTypes.STRING(256),
 			allowNull: true,		
 			defaultValue: null,		
 		},

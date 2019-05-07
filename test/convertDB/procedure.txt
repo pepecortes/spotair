@@ -1,7 +1,7 @@
 Procedure to migrate current database content into new spotair
 
 TO BE COMPLETED
-	How to deal with photographes without mail (so without user account)
+	Import INFO, JOURNAL, LIKES, LOG
 
 
 export legacy database (from PHPMYADMIN)
@@ -22,6 +22,72 @@ export legacy database (from PHPMYADMIN)
 			ADD CREATE PROCEDURE / FUNCTION / EVENT statement = FALSE
 			ADD CREATE TRIGGER statement = FALSE
 			
+-- check and repair broken references (repair: refer them to item 1)
+
+	-- CONSTRUCTEUR
+		UPDATE spotair_legacy.MODELE
+		SET refconstructeur = 1
+		WHERE refconstructeur NOT IN
+		(SELECT id FROM spotair_legacy.CONSTRUCTEUR);
+		
+	-- MODELE
+		UPDATE spotair_legacy.AVION
+		SET refmodele = 1
+		WHERE refmodele NOT IN
+		(SELECT id FROM spotair_legacy.MODELE);
+		
+	-- AVION
+		UPDATE spotair_legacy.APPAREIL
+		SET refavion = 1
+		WHERE refavion NOT IN
+		(SELECT id FROM spotair_legacy.AVION);
+		
+	-- APPAREIL
+		UPDATE spotair_legacy.PHOTO
+		SET refappareil = 1
+		WHERE refappareil NOT IN
+		(SELECT id FROM spotair_legacy.APPAREIL);
+		
+	-- ANNEE
+		UPDATE spotair_legacy.GALLERIE
+		SET refannee = 1
+		WHERE refannee NOT IN
+		(SELECT id FROM spotair_legacy.ANNEE);
+		
+	-- THEME
+		UPDATE spotair_legacy.GALLERIE
+		SET reftheme = 1
+		WHERE reftheme NOT IN
+		(SELECT id FROM spotair_legacy.THEME);
+	
+	-- AERODROME
+		UPDATE spotair_legacy.GALLERIE
+		SET refaerodrome = 1
+		WHERE refaerodrome NOT IN
+		(SELECT id FROM spotair_legacy.AERODROME);	
+		
+	-- GALLERIE
+		UPDATE spotair_legacy.PHOTO
+		SET refgallerie = 1
+		WHERE refgallerie NOT IN
+		(SELECT id FROM spotair_legacy.GALLERIE);
+		
+	-- PHOTOGRAPHE
+		UPDATE spotair_legacy.PHOTO
+		SET refphotographe = 1
+		WHERE refphotographe NOT IN
+		(SELECT id FROM spotair_legacy.PHOTOGRAPHE);		
+		
+	-- COMPAGNIE
+		UPDATE spotair_legacy.PHOTO
+		SET refcompagnie = 1
+		WHERE refcompagnie NOT IN
+		(SELECT id FROM spotair_legacy.COMPAGNIE);	
+	
+-- Correct dates on PHOTOS: no date before 1999
+	UPDATE spotair_legacy.PHOTO
+	SET DateValidate = Date("1999-01-01 00:00:00")
+	WHERE DateValidate < '1999-01-01';
 
 -- clear all spotair data
 	DELETE FROM spotair.photoUploads;
@@ -39,7 +105,7 @@ export legacy database (from PHPMYADMIN)
 	DELETE FROM spotair.photographes;
 
 -- import AERODROME
-	
+
 	INSERT INTO spotair.aerodromes
 	(id, nom, lieu, latitude, longitude)
 	SELECT id, nom, lieu, latitude, longitude
@@ -51,13 +117,6 @@ export legacy database (from PHPMYADMIN)
 	(id, annee)
 	SELECT id, annee
 	FROM spotair_legacy.ANNEE;
-	
--- import APPAREIL
-	
-	INSERT INTO spotair.appareils
-	(id, immat, serial, commentaire)
-	SELECT id, immat, serial, commentaire
-	FROM spotair_legacy.APPAREIL;
 	
 -- import COMPAGNIE
 	
@@ -80,6 +139,13 @@ export legacy database (from PHPMYADMIN)
 	SELECT id, sujet
 	FROM spotair_legacy.THEME;
 
+-- import GALLERIE
+	
+	INSERT INTO spotair.galeries
+	(id, isSpotair, commentaire, anneeId, themeId, aerodromeId)
+	SELECT id, isSpotAir, Commentaire, RefAnnee, RefTheme, refaerodrome
+	FROM spotair_legacy.GALLERIE;
+
 -- import MODELE
 	
 	INSERT INTO spotair.modeles
@@ -93,20 +159,20 @@ export legacy database (from PHPMYADMIN)
 	(id, version, modeleId)
 	SELECT id, version, refmodele
 	FROM spotair_legacy.AVION;
-
--- import GALLERIE
 	
-	INSERT INTO spotair.galeries
-	(id, isSpotair, commentaire, anneeId, themeId, aerodromeId)
-	SELECT id, isSpotAir, Commentaire, RefAnnee, RefTheme, refaerodrome
-	FROM spotair_legacy.GALLERIE;
+-- import APPAREIL
+	
+	INSERT INTO spotair.appareils
+	(id, immat, serial, commentaire, avionId)
+	SELECT id, immat, serial, commentaire, refavion
+	FROM spotair_legacy.APPAREIL;
 
 -- import PHOTOGRAPHE
 -- CAUTION: correct duplicate emails first
--- TO BE COMPLETED
+-- CATUION: update your password after ADMIN creation
 
 	SELECT eMail, count(eMail) AS count
-	FROM PHOTOGRAPHE
+	FROM spotair_legacy.PHOTOGRAPHE
 	GROUP BY eMail
 	HAVING count > 1 AND count < 10;
 	
@@ -117,9 +183,25 @@ export legacy database (from PHPMYADMIN)
 	
 	INSERT INTO spotair.users
 	(id, mail, photographeId)
-	SELECT id, eMail, id
-	FROM spotair_legacy.PHOTOGRAPHE
-	WHERE eMail != ""  AND eMail <> "-";
+	SELECT id, IF((eMail = ""  OR eMail = "-"), CONCAT(prenom,".",nom,"@nomail.com"), eMail), id
+	FROM spotair_legacy.PHOTOGRAPHE;
+	
+	UPDATE spotair.users
+	SET isAdmin = 1
+	WHERE mail = "webmaster@spotair.org";
+	
+-- import PHOTOS
+
+	INSERT INTO spotair.photos
+	(id, dateUpload, commentaire, createdAt, updatedAt, photographeId, compagnieId, appareilId, galerieId)
+	SELECT id, DateValidate, Commentaire, DateValidate, DateValidate, RefPhotographe, RefCompagnie, RefAppareil, RefGallerie
+	FROM spotair_legacy.PHOTO
+	WHERE isValidate = 1;
+	
+	INSERT INTO spotair.photoUploads
+	(id, validated, createdAt, updatedAt, photographeId, photoId)
+	SELECT id, 1, dateUpload, dateUpload, photographeId, id
+	FROM spotair.photos;
 
 	
 

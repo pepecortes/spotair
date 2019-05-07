@@ -1,7 +1,12 @@
 DATABASE MIGRATION
-	find a way to create a username for those photographes lacking it
+	after the migration, many users will have a username xxx@nomail.com. how to manage this?
+	
+LIKES
+	we have not created a LIKES system. once done, ensure that the database migration takes it into account
+	perhaps you should remove the field 'views' from the photos Model
 
-PROBLEM: the select list (in admin) does not work with a large number of entries
+ADMIN
+	the select list (in admin) does not work with a large number of entries
 
 When using REMOTE: validation takes a long time: add icon for waiting
 In validation: why can I select an immat that does not correspond to the avion?

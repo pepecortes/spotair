@@ -15,7 +15,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     url: {
 			type: DataTypes.STRING,
-			allowNull: false,
+			allowNull: true,
 			defaultValue: "",
 		},			
     createdAt: {

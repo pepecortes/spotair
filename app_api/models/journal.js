@@ -44,6 +44,13 @@ module.exports = function(sequelize, DataTypes) {
 		},
     
   }, {
+		tableName: "journaux",
+		
+		name: {
+			singular: "journal",
+			plural: "journaux"
+		},
+		
 		indexes: [
 				{type: 'FULLTEXT', name: 'text_search', fields: ['url']}
 		],

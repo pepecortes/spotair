@@ -42,6 +42,9 @@ const Avion = sequelize.import('./avion')
 const Appareil = sequelize.import('./appareil')
 const Photo = sequelize.import('./photo')
 const PhotoUpload = sequelize.import('./photoupload')
+const Info = sequelize.import('./info')
+const Journal = sequelize.import('./journal')
+const Like = sequelize.import('./like')
 
 // then, build all the relationships between Models
 Galerie.belongsTo(Annee, {onDelete: 'RESTRICT'})
@@ -57,6 +60,7 @@ Photo.belongsTo(Galerie, {onDelete: 'RESTRICT'})
 User.belongsTo(Photographe, {onDelete: 'RESTRICT'})
 PhotoUpload.belongsTo(Photographe, {onDelete: 'RESTRICT'})
 PhotoUpload.belongsTo(Photo, {onDelete: 'RESTRICT'})
+Like.belongsTo(Photo, {onDelete: 'CASCADE'})
 
 // export sequelize object (a handler to the db) and the Models
 module.exports.sequelize = sequelize
@@ -73,6 +77,9 @@ module.exports.Avion = Avion
 module.exports.Appareil = Appareil
 module.exports.Photo = Photo
 module.exports.PhotoUpload = PhotoUpload
+module.exports.Info = Info
+module.exports.Journal = Journal
+module.exports.Like = Like
 
 // synchro with the mysql server
 // disable or enable logs for dev

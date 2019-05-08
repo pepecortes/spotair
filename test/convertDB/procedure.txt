@@ -1,9 +1,5 @@
 Procedure to migrate current database content into new spotair
 
-TO BE COMPLETED
-	Import INFO, JOURNAL, LIKES, LOG
-
-
 export legacy database (from PHPMYADMIN)
 
 	EXPORT METHOD
@@ -82,7 +78,12 @@ export legacy database (from PHPMYADMIN)
 		UPDATE spotair_legacy.PHOTO
 		SET refcompagnie = 1
 		WHERE refcompagnie NOT IN
-		(SELECT id FROM spotair_legacy.COMPAGNIE);	
+		(SELECT id FROM spotair_legacy.COMPAGNIE);
+		
+	-- LIKES
+		DELETE FROM spotair_legacy.LIKES
+		WHERE refphoto NOT IN
+		(SELECT id FROM spotair_legacy.PHOTO);	
 	
 -- Correct dates on PHOTOS: no date before 1999
 	UPDATE spotair_legacy.PHOTO
@@ -103,6 +104,9 @@ export legacy database (from PHPMYADMIN)
 	DELETE FROM spotair.themes;
 	DELETE FROM spotair.users;
 	DELETE FROM spotair.photographes;
+	DELETE FROM spotair.infos;
+	DELETE FROM spotair.journaux;
+	DELETE FROM spotair.likes;
 
 -- import AERODROME
 
@@ -168,27 +172,11 @@ export legacy database (from PHPMYADMIN)
 	FROM spotair_legacy.APPAREIL;
 
 -- import PHOTOGRAPHE
--- CAUTION: correct duplicate emails first
--- CATUION: update your password after ADMIN creation
-
-	SELECT eMail, count(eMail) AS count
-	FROM spotair_legacy.PHOTOGRAPHE
-	GROUP BY eMail
-	HAVING count > 1 AND count < 10;
 	
 	INSERT INTO spotair.photographes
 	(id, nom, prenom, actif)
 	SELECT id, nom, prenom, 1
 	FROM spotair_legacy.PHOTOGRAPHE;
-	
-	INSERT INTO spotair.users
-	(id, mail, photographeId)
-	SELECT id, IF((eMail = ""  OR eMail = "-"), CONCAT(prenom,".",nom,"@nomail.com"), eMail), id
-	FROM spotair_legacy.PHOTOGRAPHE;
-	
-	UPDATE spotair.users
-	SET isAdmin = 1
-	WHERE mail = "webmaster@spotair.org";
 	
 -- import PHOTOS
 
@@ -203,6 +191,41 @@ export legacy database (from PHPMYADMIN)
 	SELECT id, 1, dateUpload, dateUpload, photographeId, id
 	FROM spotair.photos;
 
+-- import JOURNAL
+	INSERT INTO spotair.journaux
+	(id, url)
+	SELECT id, url
+	FROM spotair_legacy.JOURNAL;
+	
+-- import INFO
+	INSERT INTO spotair.infos
+	(id, titre, info)
+	SELECT id, titre, info
+	FROM spotair_legacy.INFO;
+	
+-- import LIKE
+	INSERT INTO spotair.likes
+	(id, photoId)
+	SELECT id, refphoto
+	FROM spotair_legacy.LIKES;
+
+-- create users table
+-- CAUTION: correct duplicate emails first
+-- CAUTION: update your password after ADMIN creation
+
+	SELECT eMail, count(eMail) AS count
+	FROM spotair_legacy.PHOTOGRAPHE
+	GROUP BY eMail
+	HAVING count > 1 AND count < 10;
+	
+	INSERT INTO spotair.users
+	(id, mail, photographeId)
+	SELECT id, IF((eMail = ""  OR eMail = "-"), CONCAT(prenom,".",nom,"@nomail.com"), eMail), id
+	FROM spotair_legacy.PHOTOGRAPHE;
+	
+	UPDATE spotair.users
+	SET isAdmin = 1
+	WHERE mail = "webmaster@spotair.org";
 	
 
 

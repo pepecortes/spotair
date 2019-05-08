@@ -14,7 +14,12 @@ const sequelize = new Sequelize({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
   operatorsAliases: false,
-  define: {timestamp:true, engine: 'InnoDB', underscored:false},
+  define: {
+		charset: 'utf8',
+    collate: 'utf8_general_ci',
+    timestamp:true, engine: 'InnoDB', 
+    underscored:false
+  },
   dialect: 'mysql'
 });
 

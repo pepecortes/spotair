@@ -1,0 +1,4 @@
+Number of pictures > 44800
+Size > 22 GB
+Current repository: http://repupload/original/*.jpg
+

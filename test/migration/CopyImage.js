@@ -8,9 +8,9 @@ require('dotenv').config({path: '../../.env'})
 const fetch = require('node-fetch')
 const Sharp = require('sharp')
 const db = require('../../app_api/models/db')
-const OVH = require('../../app_lib/OVH')
+const LocalStorage = require('../../app_lib/LocalStorage')
 
-const container = new OVH()
+//const container = new OVH()
 
 class CopyImage {
 	
@@ -18,12 +18,12 @@ class CopyImage {
 		//return `/${process.env.CONTAINER_NAME}/`
 	//}
 	
-	constructor(id) {
+	constructor(id, container = new LocalStorage()) {
 		this.ID = id
 		this.STREAM = null
 		this.METADATA = {}
 		this.RECORD = {}
-		//super(config)
+		this.container = container
 	}
 	
 	/**  @desc Read image from url. Extract metadata */
@@ -51,9 +51,10 @@ class CopyImage {
 		const me = this
 		console.log(`id: ${me.ID}. Updating database`)
 		const update = me.METADATA
-		db.Photo
+		return db.Photo
 			.findByPk(me.ID)
 			.then(record => {
+				if (!record) throw Error(`id: ${me.ID}. No record in database`)
 				record = Object.assign(record, update);
 				return record.save();
 			})
@@ -63,56 +64,25 @@ class CopyImage {
 				console.log(`id: ${me.ID}. Updating done`)
 				return me
 			})
-		return me
 	}
 	
 	/** @desc Copy image to OVH */
-	async copyToOVH() {
+	async copyToContainer() {
 		const me = this
-		return me
+		
+		console.log(`id: ${me.ID}. Copy to container`)
+		const remotepath = `uploads/${me.ID}.jpg`
+		console.log("ME.STREAM " + (me.STREAM == null))
+		return me.container.write(me.STREAM, remotepath)
+			.then(output => {
+				console.log(JSON.stringify(output))
+				console.log(`id: ${me.ID}. Copied`)
+				return me
+			})
 	}
 	
 	
 }
-	
-
-//const _ = require('lodash');
-//const fs = require('fs');
-//const fsp = require('fs').promises
-//const pickObject = require('lodash').pick;
-//const Sharp = require('sharp')
-//const db = require('../app_api/models/db')
-//const path = require('path')
-//const formidable = require('formidable')
-//const SpotairPict = require('../app_lib/SpotairPict')
-
-//const OVH = require('../app_lib/OVH')
-//const LocalStorage = require('../app_lib/LocalStorage')
-
-//console.log("START TEST")
-//console.log("path " + readUploadedImage(1))
-
-////const container = new LocalStorage()
-//const containerOVH = new OVH()
-//const containerLocal = new LocalStorage()
-////var buffer = fs.readFileSync(readUploadedImage(1))
-////const filepath = "/pictures/koko.jpg"
-//containerOVH.readUploaded("10")
-	//.then(buffer => new SpotairPict(buffer).thumbnail().toThumbnailFile("666"))
-	////.then(spotairpict => containerLocal.writeThumbnail(spotairpict, 666))
-	////.then(spotairpict => containerOVH.writeThumbnail(spotairpict, 666))
-	////.then(buffer => debug("result is buffer " + (buffer instanceof Buffer)))
-	//.then(output => console.log(JSON.stringify(output)))
-	//.catch(err => console.log("error " + err))	
-	
-
-	
-	
-//function readUploadedImage(id) {
-	//console.log("READING IMAGE " + id)
-	//const dir = path.resolve('../', process.env.LOCAL_STORAGE_LOCATION, process.env.UPLOAD_LOCATION, id + ".jpg")
-	//return dir
-//}
 
 module.exports = CopyImage
 

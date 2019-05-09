@@ -1,5 +1,6 @@
 // Sandbox for testing image migration 
 require('dotenv').config({path: '../../.env'})
+const OVH = require('../../app_lib/OVH')
 
 const CopyImage = require('./CopyImage')
 
@@ -17,9 +18,10 @@ const CopyImage = require('./CopyImage')
 //const LocalStorage = require('../app_lib/LocalStorage')
 
 console.log("START TEST")
-const img = new CopyImage("3")
+const img = new CopyImage("666", new OVH())
 img.readImage()
 	.then(img => img.updateDatabase())
+	.then(img => img.copyToContainer())
 	//.then(img => console.log(img.METADATA))
 	.catch(err => console.error("CATCH ERROR " + err))
 

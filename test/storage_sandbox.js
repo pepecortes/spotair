@@ -25,13 +25,13 @@ const container = new LocalStorage()
 //var buffer = fs.readFileSync(readUploadedImage(1))
 //const filepath = "/pictures/koko.jpg"
 
-const id = 10
+const id = 666
 const url = `http://spotair.org/repupload/original/${id}.jpg`
-const remotepath = 'pictures/koko.jpg'
+const remotepath = `uploads/${id}.jpg`
 fetch(url)
 	.then(res => res.body)
 	.then(stream => container.write(stream, remotepath))
-	.then(output => console.log(JSON.stringify(output)))
+	.then(output => console.log("output: " + JSON.stringify(output)))
 	.catch(err => console.log("error " + err))	
 
 //containerOVH.readUploaded("10")

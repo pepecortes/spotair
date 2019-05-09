@@ -5,6 +5,7 @@
 const debug = require('debug')('app:lib:LocalStorage')
 const path = require('path')
 const fs = require('fs')
+const Readable = require('stream').Readable
 const fsp = require('fs').promises
 const imgType = require('./helpers').imgType
 
@@ -56,16 +57,29 @@ class LocalStorage {
 	}
 	
 	/**
+	 * @desc convert a stream to a Promise. Return a promise
+	 */
+	async streamToPromise(stream) {
+		return new Promise(function(resolve, reject) {
+			stream.on("end", () => resolve(stream.dests[0].path))
+			stream.on("error", reject)
+		})
+	}
+		
+	/**
 	 * @function write
 	 * @desc Copy a local file to the container
-	 * @param {String | Buffer} source	- filepath
+	 * @param {String | Buffer | Stream} source
 	 * @param {String} destination			- filepath
 	 */
 	async write(source, destination) {
 		var destPath = path.resolve(LocalStorage.rootPath, destination)
 		if (typeof source === 'string') {
 			const srcPath = path.resolve(LocalStorage.rootPath, source)	
-			return fsp.copyFile(srcPath, destPath)		
+			return fsp.copyFile(srcPath, destPath)	
+		} else if (source instanceof Readable) {
+			const writable = fs.createWriteStream(destPath)
+			return this.streamToPromise(source.pipe(writable))
 		} else {
 			return fsp.writeFile(destPath, source)
 		}

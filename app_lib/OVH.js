@@ -115,19 +115,22 @@ class OVH extends OVHStorage {
 	/**
 	 * @function write
 	 * @desc Copy a local file to the container
-	 * @param {String | Buffer} source	- path on the local filesystem or a buffer
+	 * @param {String | Buffer | Readable stream} source	- path on the local filesystem or a buffer
 	 * @param {String} remotepath
 	 */
 	async write(source, remotepath) {
+		var stream = null
 		var remotepath = OVH.absolutePath(remotepath)
 		if (typeof source === 'string') {
 			return this.connect().then(() => this.putFileAsync(source, remotepath))
-		} else {
-			const stream = new Readable()
+		} else if (source instanceof Readable) {
+			stream = source
+		}	else {
+			stream = new Readable()
 			stream.push(source)
 			stream.push(null)
-			return this.connect().then(() => this.putStreamAsync(stream, remotepath))
 		}
+		return this.connect().then(() => this.putStreamAsync(stream, remotepath))
 	}
 	
 	/**

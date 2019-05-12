@@ -48,13 +48,12 @@ storageController._storeImage = async function(srcId, destId) {
 	// create both picture and thumbnail and store into the container
 	return container.readUploaded(srcId)
 		.then(buffer => {
-			p1 = (new SpotairPict(buffer)).normalize().toPictureFile(destId)
-			p2 = (new SpotairPict(buffer)).thumbnail().toThumbnailFile(destId)
+			p1 = (new SpotairPict(buffer)).normalize().then(img => img.toPictureFile(destId))
+			p2 = (new SpotairPict(buffer)).thumbnail().then(img => img.toThumbnailFile(destId))
 			return Promise.all([p1, p2])
 		})
-		.then(([r1, r2]) => Object.assign({id: destId}, r1))
-		
-	
+		.then(([r1, r2]) => r1.dimensions())
+		.then(data => Object.assign({id: destId}, data))
 }
 
 storageController.postFile = function(req, res) {

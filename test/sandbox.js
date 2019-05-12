@@ -9,22 +9,23 @@ const helpers = require('../app_lib/helpers')
 const SpotairPict = require('../app_lib/SpotairPict')
 const Sharp = require('sharp')
 const db = require('../app_api/models/db')
+const probe = require('probe-image-size')
 
 // connect database and models
 console.log("START TEST")
 
-function cycle([input, output, count]) {
-	if (count <= 0 || input.length <= 0) return [input, output, count]
-	output.push(input.shift())
-	cycle([input, output, count-1])
-}
+//function cycle([input, output, count]) {
+	//if (count <= 0 || input.length <= 0) return [input, output, count]
+	//output.push(input.shift())
+	//cycle([input, output, count-1])
+//}
 
-const A = [1,2,3]
-const B = [3,4,5]
+//const A = [1,2,3]
+//const B = [3,4,5]
 
-console.log([A,B])
-cycle([A,B,6])
-console.log([A,B])
+//console.log([A,B])
+//cycle([A,B,6])
+//console.log([A,B])
 
 //const chance = require('chance').Chance()
 //var w = chance.integer({ min: 100, max: 350 })
@@ -39,7 +40,8 @@ console.log([A,B])
 //var x = _.times(20, createPlaceholder)
 //console.log(x)
 
-//const path = "./pluto.jpg"
+const path = "./pluto.jpg"
+const pathResized = "./pluto_resized.jpg"
 //fsp.readFile(path)
 	//.then(buffer => {
 		//const x = new SpotairPict(buffer)
@@ -50,12 +52,16 @@ console.log([A,B])
 	//.catch(err => console.log("Error: " + err))
 
 
-//fsp.readFile(path)
-	//.then(buffer => new Sharp(buffer).withMetadata().resize(500).toFile(pathResized))
+fsp.readFile(path)
+	.then(buffer => (new SpotairPict(buffer)).normalize())
+	.then(img => img.dimensions())
+	.then(data => console.log(data))
+	//.then(img => {console.log("img is Sharp " + (img instanceof Sharp)); return img})
+	//.then(img => img.toFile(pathResized))
+	//.then(result => console.log(JSON.stringify(result)))
 	//.catch(err => {console.log("ERROR: " + err)})
 
 //const exifParser = require('exif-parser')
-//const pathResized = "./pluto_resized.jpg"
 //const pathThumb = "./pluto_thumb.jpg"
 
 //var x = helpers.jpegMetadataSync(path)

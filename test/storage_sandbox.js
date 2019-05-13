@@ -19,8 +19,8 @@ const LocalStorage = require('../app_lib/LocalStorage')
 
 console.log("START TEST")
 
-//const container = new OVH()
-const container = new LocalStorage()
+const container = new OVH()
+//const container = new LocalStorage()
 
 //var buffer = fs.readFileSync(readUploadedImage(1))
 //const filepath = "/pictures/koko.jpg"
@@ -28,11 +28,21 @@ const container = new LocalStorage()
 const id = 666
 const url = `http://spotair.org/repupload/original/${id}.jpg`
 const remotepath = `uploads/${id}.jpg`
-fetch(url)
-	.then(res => res.body)
-	.then(stream => container.write(stream, remotepath))
-	.then(output => console.log("output: " + JSON.stringify(output)))
+
+var img = new SpotairPict()
+img.readFromURL(url)
+	.then(img => img.metadata())
+	.then(output => console.log(output))
 	.catch(err => console.log("error " + err))	
+	
+	
+//fetch(url)
+	//.then(res => {res.body.pipe(img); return img})
+	//.then(img => img.metadata())
+	//.then(output => console.log(output))
+	//.then(stream => container.write(stream, remotepath))
+	//.then(output => console.log("output: " + JSON.stringify(output)))
+	//.catch(err => console.log("error " + err))	
 
 //containerOVH.readUploaded("10")
 	//.then(buffer => new SpotairPict(buffer).thumbnail().toThumbnailFile("666"))

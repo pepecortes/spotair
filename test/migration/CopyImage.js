@@ -21,14 +21,10 @@ class CopyImage extends SpotairPict {
 		const url = `http://spotair.org/repupload/original/${this.id}.jpg`
 		return fetch(url)
 			.then(res => {res.body.pipe(this); return this})
-			//.then(res => res.body.pipe(this))
-			//.then(() => this.metadata())
-			//.then(data => {this._metadata = data; return this})
 	}
 	
 	/** @desc Update the pictures database with the image dimensions */
 	async updateDatabase() {
-		console.log(`id: ${this.id}. Updating database`)
 		var p1 = this.dimensions()
 		var p2 = db.Photo.findByPk(this.id)
 		Promise.all([p1, p2])
@@ -38,12 +34,34 @@ class CopyImage extends SpotairPict {
 				return record.save()
 			})
 			.then(record => db.Photo.findByPk(record.id))
-			.then(record => {
-				console.log(`id: ${this.id}. Updating done`)
-				return this
-			})
+			.then(record => this)
 	}
 	
+	/** @desc migrate image and data to spotair
+	 * copy img to uploaded
+	 * normalize img
+	 * copy to pictures
+	 * update database
+	 * create thumbnail
+	 * copy to thumbnails
+	 */
+	async migrate() {
+		const p1 = this.toUploadsFile(this.id)
+		
+		const p2 = (new CopyImage(this.id))
+			.then(img => img.normalize())
+			.then(img => img.toPictureFile(this.id))
+			.then(img => img.updateDatabase())
+	
+		const p3 = (new CopyImage(this.id))
+			.then(img => img.thumbnail())
+			.then(img => img.toThumbnailFile(this.id))
+	
+		return Promise.all([p1, p2, p3])
+			.then(() => this)
+	}
+	 
+	 	
 	///** @desc Copy image to OVH */
 	//async copyToContainer(container = new LocalStorage()) {
 		//console.log(`id: ${me.ID}. Copy to container`)

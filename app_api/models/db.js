@@ -50,6 +50,7 @@ const PhotoUpload = sequelize.import('./photoupload')
 const Info = sequelize.import('./info')
 const Journal = sequelize.import('./journal')
 const Like = sequelize.import('./like')
+const LogMigration = sequelize.import('./logMigration')
 
 // then, build all the relationships between Models
 Galerie.belongsTo(Annee, {onDelete: 'RESTRICT'})
@@ -85,6 +86,7 @@ module.exports.PhotoUpload = PhotoUpload
 module.exports.Info = Info
 module.exports.Journal = Journal
 module.exports.Like = Like
+module.exports.LogMigration = LogMigration
 
 // synchro with the mysql server
 // disable or enable logs for dev

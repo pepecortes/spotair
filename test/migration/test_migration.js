@@ -10,7 +10,7 @@ const CopyImage = require('./CopyImage')
 //const fsp = require('fs').promises
 //const pickObject = require('lodash').pick;
 //const Sharp = require('sharp')
-//const db = require('../app_api/models/db')
+const db = require('../../app_api/models/db')
 //const path = require('path')
 //const formidable = require('formidable')
 //const SpotairPict = require('../app_lib/SpotairPict')
@@ -24,24 +24,18 @@ const Sharp = require('sharp')
 const id = 666
 const url = `http://spotair.org/repupload/original/${id}.jpg`
 
-Promise.all([
-	(new CopyImage(id)),
-	(new CopyImage(id)),
-	(new CopyImage(id))
-])
-//var img1 = new CopyImage(id)
-	.then(([i1, i2, i3]) => Promise.all([i1.toUploadsFile(id), i2.normalize(), i3.thumbnail()]))
-	.then(([uploaded, picture, thumbnail]) => {
-		p1 = picture.updateDatabase()
-		p2 = picture.toPictureFile(id)
-		p3 = thumbnail.toThumbnailFile(id)
-		return Promise.all([p1, p2, p3])
-	})
-	.then(() => console.log("OK"))
-	.catch(err => console.log("error " + err))	
+const img = new CopyImage(id)
+	.then(img => img.migrate(id))
+			
+
+//async function log(id, message="") {
+	//const record = {idOrigin: id, log: message}
+	//return db.LogMigration.create(record)
+//}
 	
 /**
  * create img
+ * check if id has been already processed
  * copy img to uploaded
  * normalize img
  * copy to pictures

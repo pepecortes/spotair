@@ -24,14 +24,26 @@ const Sharp = require('sharp')
 const id = 666
 const url = `http://spotair.org/repupload/original/${id}.jpg`
 
-const img = new CopyImage(id)
+db.LogMigration.count({where: {idOrigin: id}})
+	.then(count => {
+		if(count > 0) throw "ALREADY DONE"
+		else return true
+	})
+	.then(() => new CopyImage(id))
 	.then(img => img.migrate(id))
+	.catch(err => {
+		if (err == "ALREADY DONE") console.error(err)
+		else log(id, err.toString())
+	})
+
+//const img = new CopyImage(id)
+	//.then(img => img.migrate(id))
 			
 
-//async function log(id, message="") {
-	//const record = {idOrigin: id, log: message}
-	//return db.LogMigration.create(record)
-//}
+async function log(id, message="") {
+	const record = {idOrigin: id, log: message}
+	return db.LogMigration.create(record)
+}
 	
 /**
  * create img

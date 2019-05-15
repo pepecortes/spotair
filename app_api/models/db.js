@@ -20,7 +20,8 @@ const sequelize = new Sequelize({
     timestamp:true, engine: 'InnoDB', 
     underscored:false
   },
-  dialect: 'mysql'
+  dialect: 'mysql',
+  logging: false,
 });
 
 // try to connect to database */

@@ -203,11 +203,19 @@ export legacy database (from PHPMYADMIN)
 	SELECT id, titre, info
 	FROM spotair_legacy.INFO;
 	
--- import LIKE
+-- import LIKE + update photos views column
 	INSERT INTO spotair.likes
 	(id, photoId)
 	SELECT id, refphoto
 	FROM spotair_legacy.LIKES;
+	
+	UPDATE spotair.photos A
+	JOIN 	(
+				SELECT photoId, count(*) AS count
+				FROM spotair.likes
+				GROUP BY photoId
+				) B ON (B.photoId = A.id)
+	SET A.views = B.count;
 
 -- create users table
 -- CAUTION: correct duplicate emails first

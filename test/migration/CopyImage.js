@@ -11,14 +11,14 @@ const db = require('../../app_api/models/db')
 const LocalStorage = require('../../app_lib/LocalStorage')
 const SpotairPict = require('../../app_lib/SpotairPict')
 
-//const container = new OVH()
-
 class CopyImage extends SpotairPict {
 	
-	constructor(id) {
+	constructor(id, source, container = new LocalStorage()) {
 		super()
 		this.id = id
-		const url = `http://spotair.org/repupload/original/${this.id}.jpg`
+		this.container = container
+		this.source = source
+		const url = source + this.id + '.jpg'
 		return fetch(url)
 			.then(res => {res.body.pipe(this); return this})
 	}
@@ -46,34 +46,20 @@ class CopyImage extends SpotairPict {
 	 * copy to thumbnails
 	 */
 	async migrate() {
-		const p1 = this.toUploadsFile(this.id)
+		const p1 = this.toUploadsFile(this.id, this.container)
 		
-		const p2 = (new CopyImage(this.id))
+		const p2 = (new CopyImage(this.id, this.source, this.container))
 			.then(img => img.normalize())
-			.then(img => img.toPictureFile(this.id))
+			.then(img => img.toPictureFile(this.id, this.container))
 			.then(img => img.updateDatabase())
 	
-		const p3 = (new CopyImage(this.id))
+		const p3 = (new CopyImage(this.id, this.source, this.container))
 			.then(img => img.thumbnail())
-			.then(img => img.toThumbnailFile(this.id))
+			.then(img => img.toThumbnailFile(this.id, this.container))
 	
 		return Promise.all([p1, p2, p3])
 			.then(() => this)
 	}
-	 
-	 	
-	///** @desc Copy image to OVH */
-	//async copyToContainer(container = new LocalStorage()) {
-		//console.log(`id: ${me.ID}. Copy to container`)
-		//const remotepath = `uploads/${this.id}.jpg`
-
-		//return container.write(me.STREAM, remotepath)
-			//.then(output => {
-				//console.log(JSON.stringify(output))
-				//console.log(`id: ${me.ID}. Copied`)
-				//return me
-			//})
-	//}
 	
 	
 }

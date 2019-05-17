@@ -2,3 +2,6 @@ Number of pictures > 44800
 Size > 22 GB
 Current repository: http://repupload/original/*.jpg
 
+Estimated time for (just) reading legacy pictures: 1000 photos/min
+
+

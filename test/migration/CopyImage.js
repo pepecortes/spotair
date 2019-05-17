@@ -48,13 +48,11 @@ class CopyImage extends SpotairPict {
 	async migrate() {
 		const p1 = this.toUploadsFile(this.id, this.container)
 		
-		const p2 = (new CopyImage(this.id, this.source, this.container))
-			.then(img => img.normalize())
+		const p2 = this.normalize()
 			.then(img => img.toPictureFile(this.id, this.container))
 			.then(img => img.updateDatabase())
 	
-		const p3 = (new CopyImage(this.id, this.source, this.container))
-			.then(img => img.thumbnail())
+		const p3 = this.thumbnail()
 			.then(img => img.toThumbnailFile(this.id, this.container))
 	
 		return Promise.all([p1, p2, p3])

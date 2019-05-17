@@ -13,6 +13,7 @@ const Sharp = require('sharp')
 const _ = require('lodash')
 const OVH = require('../../app_lib/OVH')
 const LocalStorage = require('../../app_lib/LocalStorage')
+const asyncPool = require('tiny-async-pool')
 
 var argv = require('minimist')(process.argv.slice(2), {
   string: [ 'source', 'container' ],
@@ -26,14 +27,31 @@ var argv = require('minimist')(process.argv.slice(2), {
 const ids = (argv.id)? [argv.id] : _.range(argv.fromId, argv.toId + 1)
 const source = argv.source
 const container = (argv.container === "OVH")? new OVH() : new LocalStorage()
-ids.map(id => migrateAndLog(id))
+
+var started = new Date()
+asyncPool(2, ids, migrateAndLog)
+	.then(() => console.log("\nFINISHED"))
+
+console.timestamp = function () {
+  var now = new Date();
+  var args = Array.prototype.slice.call(arguments, 0);
+  args.unshift((now - started), 'ms');
+  process.stdout.write('\n' + args.join(' '));
+}
+
+function delay(ms) {
+	return new Promise((resolve, reject) =>	setTimeout(() => resolve(ms), ms))	
+}
 
 async function migrateAndLog(id) {
-	migrate(id)
-		.then(() => console.log(`${id}: OK`))
+	console.timestamp(`${id}: start`)
+	return migrate(id)
+		.then(() => console.timestamp(`${id}: end`))
 		.catch(err => {
-			if (err == "ALREADY DONE") console.error(`${id}: ERROR: ${err}`)
-			else log(id, err.toString())
+			console.timestamp(`${id}: ERROR: ${err}`)
+			if (err != "ALREADY DONE") log(id, err.toString())
+			if (err == "429 Too Many Requests") return delay(10000)
+			return true
 		})
 }
 	
@@ -52,5 +70,6 @@ async function log(id, message="") {
 	const record = {idOrigin: id, log: message}
 	return db.LogMigration.upsert(record)
 }
+
 
 

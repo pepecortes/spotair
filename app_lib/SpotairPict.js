@@ -29,17 +29,17 @@ class SpotairPict extends Sharp {
 	/** 
 	 * @function thumbnail
 	 * @desc Resize the given picture to the height defined for thumbnails
-	 * @return {SpotairPict} this
+	 * @return {SpotairPict} resized picture with updated metadata
 	 */
 	async thumbnail() {
 		const resizeDim = {height: parseInt(process.env.THUMBNAIL_HEIGHT_PX)}
-		return this.withMetadata().resize(resizeDim)
+		return this._resize(resizeDim)
 	}
 	
 	/** 
 	 * @function normalize
 	 * @desc Resize the given picture to the maximum dimension defined for spotair pictures
-	 * @return {SpotairPict} this
+	 * @return {SpotairPict} resized picture with updated metadata
 	 */
 	async normalize() {
 		return this.metadata()
@@ -49,12 +49,36 @@ class SpotairPict extends Sharp {
 				resizeDim[largestDimension] = parseInt(process.env.PICTURE_MAX_LENGTH_PX)
 				return resizeDim
 			})
-			.then(resizeDim => this.withMetadata().resize(resizeDim))
+			.then(resizeDim => this._resize(resizeDim))
+	}
+	
+	/**
+	 * @desc Blend a watermark into this image
+	 */
+	async watermark() {
+		const waterImg = {input: 'spotair_logo.jpg'} 
+		return this.metadata()
+			.then(data => {
+				waterImg.top = data.height - 80
+				waterImg.left = data.width - 257
+				return this.withMetadata().composite([waterImg])
+		  })
+		  .then(img => img.toBuffer())
+		  .then(buffer => new SpotairPict(buffer))
+	}
+	
+	/**
+	 * @function a Sharp resize function that ensures that metadata is
+	 * correctly considered (in particular height and width)
+	 */
+	async _resize(dim) {
+		const resized = this.withMetadata().resize(dim)
+		return resized.toBuffer().then(buffer => new SpotairPict(buffer))
 	}
 	
 	/** 
 	 * @function size
-	 * @desc Returns the dimensions of the image
+	 * @desc Returns the dimensions of the image after probing it (instead of metadata)
 	 * @return {Promise} {height: px, width: px}
 	 */
 	async dimensions() {

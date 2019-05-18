@@ -13,6 +13,7 @@
     "bcrypt": "^3.0.3",
     "body-parser": "^1.18.3",
     "bootstrap-vue": "^2.0.0-rc.19",
+    "canvas": "^2.5.0",
     "chance": "^1.0.18",
     "connect-flash": "^0.1.1",
     "connect-redis": "^3.4.0",

@@ -24,8 +24,6 @@ API_USER=APIuser
 
 STORAGE=LOCAL
 	// use a local storage (use for development only)
-STORAGE_URL=http://localhost:3000/localStorage/
-	// remote alternate: STORAGE_URL=http://static.spotair.org/
 LOCAL_STORAGE_LOCATION=dev_localstorage/
 UPLOAD_LOCATION=uploads/
 PICTURE_LOCATION=pictures/
@@ -44,5 +42,7 @@ OVH_REGION=GRA5
 
 WEB_URL=http://localhost:3000/
 API_URL=http://localhost:3000/api/
+STORAGE_URL=http://localhost:3000/localStorage/
+	// remote alternate: STORAGE_URL=http://static.spotair.org/
 
 MEMBRES_DEFAULT_PASSWORD="membres!"

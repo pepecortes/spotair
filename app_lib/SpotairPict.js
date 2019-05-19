@@ -9,6 +9,47 @@ const OVH = require('./OVH')
 const LocalStorage = require('./LocalStorage')
 const stream = require('stream')
 const probe = require('probe-image-size')
+var fs = require('fs')
+const { registerFont, createCanvas } = require('canvas')
+
+// Define the watermark height (as a factor of the total image height)
+const watermark_height = 0.025
+
+// Create the source logo image as a Sharp object
+const logoBuffer = fs.readFileSync(`${process.env.APP_ROOT}app_lib/media/watermark_logo.jpg`)
+const watermarkImg = new Sharp(logoBuffer)
+
+// Register font for later use
+	//registerFont( 'watermarkFont.ttf', { family: "WatermarkFont" } )
+
+function createWatermarkText(dim, text) {
+	const h = (watermark_height * dim.height) | 0 // convert to integer
+  var canvas = createCanvas(dim.width, h);
+	var ctx = canvas.getContext( '2d' );
+	ctx.fillStyle = '#ffffff';
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
+	ctx.font = `${h}px WatermarkFont`
+	ctx.fillStyle = '#000000';
+	ctx.fillText(text, 10, h)
+	return {input: canvas.toBuffer(), top: (dim.height - 80), left: 0}
+}
+
+/**
+ * @desc Creates the watermark spotair logo. Returns an object like
+ * {input: buffer, top: integer, left: integer}
+ * that is ready to be 'composited' with the main image
+ * The logo height is a fraction of the main image height
+ * The logo is resized, so the left location has to be computed to
+ * with the new logo width if you want to push it to the far right
+ * of the main image
+ */
+async function createWatermarkLogo(dim) {
+	const h = (watermark_height * dim.height) | 0 // convert to integer
+	const top = dim.height - h
+	const resized = watermarkImg.resize({ height: h })
+	return resized.toBuffer({ resolveWithObject: true })
+		.then(({data, info}) => ({input: data, top: top, left: (dim.width - info.width)}))
+}
 
 const container = (process.env.STORAGE === "LOCAL")? new LocalStorage() : new OVH()
 
@@ -56,15 +97,35 @@ class SpotairPict extends Sharp {
 	 * @desc Blend a watermark into this image
 	 */
 	async watermark() {
-		const waterImg = {input: 'spotair_logo.jpg'} 
 		return this.metadata()
 			.then(data => {
-				waterImg.top = data.height - 80
-				waterImg.left = data.width - 257
-				return this.withMetadata().composite([waterImg])
-		  })
+				const x = createWatermarkLogo(data)
+				return [x]
+			})
+			
+			//[, createWatermarkText(data, "HOLA KARAKOLA con golf")])
+			.then(w => console.log(w))
+			.then(w => this.withMetadata().composite(w))
 		  .then(img => img.toBuffer())
 		  .then(buffer => new SpotairPict(buffer))
+		
+		
+		
+		//var text = null
+		//var logo = null
+		//return this.metadata()
+			//.then(data => {
+				//text = createWatermarkText(data)
+				//return createWatermarkLogo(data)
+			//})
+			//.then(x => {
+				//logo = x				
+				//return this.withMetadata().composite([logo, text])
+		  //})
+		  //.then(img => img.toBuffer())
+		  //.then(buffer => new SpotairPict(buffer))
+		  
+		  
 	}
 	
 	/**

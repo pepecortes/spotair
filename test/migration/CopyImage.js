@@ -15,11 +15,19 @@ class CopyImage extends SpotairPict {
 	
 	constructor(id, source, container = new LocalStorage()) {
 		super()
+		
 		this.id = id
 		this.container = container
 		this.source = source
+		this.photo = null
+		
 		const url = source + this.id + '.jpg'
-		return fetch(url)
+		return db.Photo.findByPk(this.id)
+			.then(instance => {
+				if (!instance) throw new Error(`No record in database`)
+				else this.photo = instance
+			})
+			.then(() => fetch(url))
 			.then(res => {res.body.pipe(this); return this})
 	}
 	
@@ -46,16 +54,21 @@ class CopyImage extends SpotairPict {
 	 * copy to thumbnails
 	 */
 	async migrate() {
+		
+		// MIGRATE IS FAILED: normalize and thumbnail produce the
+		// side effect on the main image
+		
 		const p1 = this.toUploadsFile(this.id, this.container)
 		
-		const p2 = this.normalize()
-			.then(img => img.toPictureFile(this.id, this.container))
-			.then(img => img.updateDatabase())
+		//const p2 = this.normalize()
+			//.then(img => img.toPictureFile(this.id, this.container))
+			////.then(img => img.updateDatabase())
 	
 		const p3 = this.thumbnail()
 			.then(img => img.toThumbnailFile(this.id, this.container))
 	
-		return Promise.all([p1, p2, p3])
+		return Promise.all([p1, p3])
+		//return Promise.all([p1, p2, p3])
 			.then(() => this)
 	}
 	

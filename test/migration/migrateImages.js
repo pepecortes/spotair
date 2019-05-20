@@ -48,17 +48,19 @@ async function migrateAndLog(id) {
 	return migrate(id)
 		.then(() => console.timestamp(`${id}: end`))
 		.catch(err => {
-			console.timestamp(`${id}: ERROR: ${err}`)
-			if (err != "ALREADY DONE") log(id, err.toString())
-			if (err == "429 Too Many Requests") return delay(10000)
-			return true
+			console.timestamp(`${id}: ${err.name}: ${err.message}`)
+			if (err.message == "ALREADY DONE") return
+			if (err.message == "No record in database") return
+			if (err.message == "429 Too Many Requests") return delay(10000)
+			log(id, err.toString())
+			return
 		})
 }
 	
 async function migrate(id) {
 	return db.LogMigration.count({where: {idOrigin: id, log: ""}})
 		.then(count => {
-			if(count > 0) throw "ALREADY DONE"
+			if(count > 0) throw new Error("ALREADY DONE")
 			else return true
 		})
 		.then(() => new CopyImage(id, source, container))
@@ -67,6 +69,8 @@ async function migrate(id) {
 }
 	
 async function log(id, message="") {
+	console.log("I AM NOT LOGGING")
+	return true
 	const record = {idOrigin: id, log: message}
 	return db.LogMigration.upsert(record)
 }

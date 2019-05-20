@@ -16,8 +16,9 @@ console.log("START TEST")
 const path = "./pluto.jpg"
 const pathResized = "./pluto_resized.jpg"
 
+const text = "En un lugar de La Mancha de cuyo nombre no quiero acordarme, no ha mucho que vivía un hidalgo"
 fsp.readFile(path)
-	.then(buffer => (new SpotairPict(buffer)).watermark())
+	.then(buffer => (new SpotairPict(buffer)).watermark(text))
 	.then(img => img.toFile(pathResized))
 	.then(data => console.log(data))
 

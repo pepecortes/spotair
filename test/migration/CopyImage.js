@@ -55,20 +55,20 @@ class CopyImage extends SpotairPict {
 	 */
 	async migrate() {
 		
-		// MIGRATE IS FAILED: normalize and thumbnail produce the
-		// side effect on the main image
-		
 		const p1 = this.toUploadsFile(this.id, this.container)
 		
-		//const p2 = this.normalize()
-			//.then(img => img.toPictureFile(this.id, this.container))
-			////.then(img => img.updateDatabase())
+		const p2 = this.toBuffer()
+			.then(buffer => new SpotairPict(buffer))
+			.then(img => img.normalize())
+			.then(img => img.toPictureFile(this.id, this.container))
+			//.then(img => img.updateDatabase())
 	
-		const p3 = this.thumbnail()
+		const p3 = this.toBuffer()
+			.then(buffer => new SpotairPict(buffer))
+			.then(img => img.thumbnail())
 			.then(img => img.toThumbnailFile(this.id, this.container))
 	
-		return Promise.all([p1, p3])
-		//return Promise.all([p1, p2, p3])
+		return Promise.all([p1, p2, p3])
 			.then(() => this)
 	}
 	

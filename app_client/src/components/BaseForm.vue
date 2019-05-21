@@ -4,6 +4,7 @@
 
 <script>
 import VueSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css'
 import pluralize from 'pluralize'
 import { validationMixin } from 'vuelidate'
 import { confirmDialog } from '../lib/common'

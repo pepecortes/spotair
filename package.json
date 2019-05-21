@@ -49,7 +49,7 @@
     "vue-loader": "^15.4.2",
     "vue-picture-swipe": "^1.0.0",
     "vue-router": "^3.0.2",
-    "vue-select": "^2.5.1",
+    "vue-select": "^3.1.0",
     "vue-session": "^1.0.0",
     "vuelidate": "^0.7.4"
   },

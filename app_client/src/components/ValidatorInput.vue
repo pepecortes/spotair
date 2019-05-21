@@ -11,7 +11,7 @@
 					:options="options",
 					label="text",
 					v-model="mutableValue",
-					@change='vselectChanged',
+					@input='vselectChanged',
 				)
 				p(v-if="mutableValidated") {{ mutableValue.text }}
 				b-input-group-append
@@ -36,6 +36,7 @@
 <script>
 
 import VueSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css'
 
 export default {
 		

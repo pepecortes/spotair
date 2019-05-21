@@ -110,6 +110,7 @@
 
 <script>
 import VueSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css'
 import {FormWizard, TabContent} from 'vue-form-wizard'
 import HeadOrTail from './HeadOrTail.vue'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'

@@ -12,27 +12,19 @@ const probe = require('probe-image-size')
 var fs = require('fs')
 const { registerFont, createCanvas } = require('canvas')
 
-// Define the watermark height (as a factor of the total image height)
-const watermark_height = 0.025
+/** Define watermark constants ****************************************/
+// Watermark height (as a fraction of the total image height)
+const watermark_height = 0.025 // (2.5%)
 
 // Create the source logo image as a Sharp object
 const logoBuffer = fs.readFileSync(`${process.env.APP_ROOT}app_lib/media/watermark_logo.jpg`)
 const watermarkImg = new Sharp(logoBuffer)
 
-// Register font for later use
-	//registerFont( 'watermarkFont.ttf', { family: "WatermarkFont" } )
-
-function createWatermarkText(dim, text) {
-	const h = (watermark_height * dim.height) | 0 // convert to integer
-  var canvas = createCanvas(dim.width, h);
-	var ctx = canvas.getContext( '2d' );
-	ctx.fillStyle = '#ffffff';
-	ctx.fillRect(0, 0, canvas.width, canvas.height);
-	ctx.font = `${h}px WatermarkFont`
-	ctx.fillStyle = '#000000';
-	ctx.fillText(text, 10, h)
-	return {input: canvas.toBuffer(), top: (dim.height - 80), left: 0}
-}
+// Register watermark font and colors
+registerFont(`${process.env.APP_ROOT}app_lib/media/watermark_font.ttf`, {family: "WatermarkFont"})
+const watermarkBackgroundColor = '#0f1b63'
+const watermarkForegroundColor = '#feff5f'
+/**********************************************************************/
 
 /**
  * @desc Creates the watermark spotair logo. Returns an object like
@@ -46,9 +38,27 @@ function createWatermarkText(dim, text) {
 async function createWatermarkLogo(dim) {
 	const h = (watermark_height * dim.height) | 0 // convert to integer
 	const top = dim.height - h
-	const resized = watermarkImg.resize({ height: h })
+	const resized = watermarkImg.resize({height: h})
 	return resized.toBuffer({ resolveWithObject: true })
 		.then(({data, info}) => ({input: data, top: top, left: (dim.width - info.width)}))
+}
+/**
+ * @desc Creates the watermark text
+ * Note that some fine tuning is needed to adjust the font size
+ * and the vertical location of the text within the strip
+ */
+function createWatermarkText(dim, text) {
+	const h = (watermark_height * dim.height) | 0 // convert to integer
+	const fontSize = (0.65 * h) | 0
+	const verticalOffset = (0.70 * h) | 0
+  var canvas = createCanvas(dim.width, h);
+	var ctx = canvas.getContext( '2d' );
+	ctx.fillStyle = watermarkBackgroundColor
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
+	ctx.font = `${fontSize}px WatermarkFont`
+	ctx.fillStyle = watermarkForegroundColor
+	ctx.fillText(text, 10, verticalOffset)
+	return {input: canvas.toBuffer(), top: (dim.height - h), left: 0}
 }
 
 const container = (process.env.STORAGE === "LOCAL")? new LocalStorage() : new OVH()
@@ -96,36 +106,16 @@ class SpotairPict extends Sharp {
 	/**
 	 * @desc Blend a watermark into this image
 	 */
-	async watermark() {
+	async watermark(text) {
 		return this.metadata()
 			.then(data => {
-				const x = createWatermarkLogo(data)
-				return [x]
+				const p1 = createWatermarkText(data, text)
+				const p2 = createWatermarkLogo(data)
+				return Promise.all([p1, p2])
 			})
-			
-			//[, createWatermarkText(data, "HOLA KARAKOLA con golf")])
-			.then(w => console.log(w))
 			.then(w => this.withMetadata().composite(w))
 		  .then(img => img.toBuffer())
 		  .then(buffer => new SpotairPict(buffer))
-		
-		
-		
-		//var text = null
-		//var logo = null
-		//return this.metadata()
-			//.then(data => {
-				//text = createWatermarkText(data)
-				//return createWatermarkLogo(data)
-			//})
-			//.then(x => {
-				//logo = x				
-				//return this.withMetadata().composite([logo, text])
-		  //})
-		  //.then(img => img.toBuffer())
-		  //.then(buffer => new SpotairPict(buffer))
-		  
-		  
 	}
 	
 	/**

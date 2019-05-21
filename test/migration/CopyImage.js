@@ -22,7 +22,7 @@ class CopyImage extends SpotairPict {
 		this.photo = null
 		
 		const url = source + this.id + '.jpg'
-		return db.Photo.findByPk(this.id)
+		return db.Photo.findByPk(this.id, {include: [{all:true, nested:true}]})
 			.then(instance => {
 				if (!instance) throw new Error(`No record in database`)
 				else this.photo = instance
@@ -31,18 +31,22 @@ class CopyImage extends SpotairPict {
 			.then(res => {res.body.pipe(this); return this})
 	}
 	
-	/** @desc Update the pictures database with the image dimensions */
-	async updateDatabase() {
-		var p1 = this.dimensions()
-		var p2 = db.Photo.findByPk(this.id)
-		Promise.all([p1, p2])
-			.then(([dimensions, record]) => {
-				if (!record) throw Error(`id: ${this.id}. No record in database`)
-				record = Object.assign(record, dimensions)
-				return record.save()
-			})
-			.then(record => db.Photo.findByPk(record.id))
-			.then(record => this)
+	/** @desc Update the photos database with the given dimensions */
+	async updateDatabase(dim) {
+		this.photo.height = dim.height
+		this.photo.width = dim.width
+		return this.photo.save()
+	}
+	
+	/**
+	 * @desc Returns a string out of the photo information
+	 * ready to be used as watermark caption
+	 */
+	caption() {
+	 const photographe = this.photo.photographe.text
+	 const aerodrome = this.photo.galerie.aerodrome.text
+	 const avion = this.photo.appareil.avion.text
+	 return `Photo : ${photographe} - Spotair.org, réalisée à ${aerodrome}, ${avion}`
 	}
 	
 	/** @desc migrate image and data to spotair
@@ -60,8 +64,9 @@ class CopyImage extends SpotairPict {
 		const p2 = this.toBuffer()
 			.then(buffer => new SpotairPict(buffer))
 			.then(img => img.normalize())
-			.then(img => img.toPictureFile(this.id, this.container))
-			//.then(img => img.updateDatabase())
+			.then(img => img.watermark(this.caption()))
+			.then(img => Promise.all([img.dimensions(), img.toPictureFile(this.id, this.container)]))
+			.then(([dim, x]) => this.updateDatabase(dim))
 	
 		const p3 = this.toBuffer()
 			.then(buffer => new SpotairPict(buffer))
@@ -71,7 +76,6 @@ class CopyImage extends SpotairPict {
 		return Promise.all([p1, p2, p3])
 			.then(() => this)
 	}
-	
 	
 }
 

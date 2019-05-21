@@ -69,8 +69,6 @@ async function migrate(id) {
 }
 	
 async function log(id, message="") {
-	console.log("I AM NOT LOGGING")
-	return true
 	const record = {idOrigin: id, log: message}
 	return db.LogMigration.upsert(record)
 }

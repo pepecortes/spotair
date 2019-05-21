@@ -3,5 +3,8 @@ Size > 22 GB
 Current repository: http://repupload/original/*.jpg
 
 Estimated time for (just) reading legacy pictures: 1000 photos/min
+Esimated time for migration (include watermark, thumbnail, db): 55 photos/min
+Estimated time for total migration > 13 hours
+
 
 

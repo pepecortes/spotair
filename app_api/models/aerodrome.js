@@ -52,7 +52,7 @@ module.exports = function(sequelize, DataTypes) {
 		
 		text: {
 			type: DataTypes.VIRTUAL,
-			get: function() {return this.nom + ", " + this.lieu}
+			get: function() {return this.lieu + ", " + this.nom}
 		},
 		
 		invalid: {

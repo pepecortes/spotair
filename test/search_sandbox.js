@@ -8,28 +8,27 @@ const db = require('../app_api/models/db')
 
 
 console.log("START TEST")
-const FuzzySearch = require('fuzzy-search')
+const lunr = require('lunr')
  
-const people = [{
-  name: {
-    firstName: 'Jesse',
-    lastName: 'Bowen',
-  },
-  state: 'Seattle',
-}];
+const lookup = "gah"
 
+function lnrIndex(documents) {
+	return function() {
+		const me = this
+		me.ref('text')
+		me.field('text')
+		documents.forEach(doc => me.add(doc), me)
+	}
+}
 
 db.Appareil
 	.findAll({include: [{all:true, nested:true}]})
-		.then(record => {
-				const searcher = new FuzzySearch(record, ['text'], {caseSensitive: false, sort: true})
-				const result = searcher.search('PGV')
-				console.log(result.length)
-				result.forEach((value, index, arr) => console.log(value.text))
+		.then(records => {
+				var idx = lunr(lnrIndex(records))
+				var result = idx.search(lookup)
+				console.log(result)
+				console.log("LOOKUP: " + lookup)
 		})
- 
-
-
 
 
 

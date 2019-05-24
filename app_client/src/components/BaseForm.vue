@@ -34,6 +34,7 @@ export default {
 			fusionTarget: null, // self-explanatory
 			validations: {}, // overriden by each form validations object
 			tabIndex: this.initialTab, // the index of the selected tab (0-based)
+			isLoading: false, // while the ajax call is in progress...
 		}
 	},
 	
@@ -98,11 +99,19 @@ export default {
 		
 		// Get all the available options for the SELECT control
 		getSelectOptions(preselected) {
+			var start = new Date()
+			console.log("START")
 			var vm = this
+			vm.selection = null
+			vm.isLoading = true
 			this.axios.get(vm.apiURL)
 				.then((response) => {
+					//vm.selectOptions = response.data.slice(0,100)
 					vm.selectOptions = response.data
 					vm.selection = (preselected)? preselected : null
+					vm.isLoading = false
+					var end = new Date() - start
+					console.log("END: " + end)
 				})
 				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},  

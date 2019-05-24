@@ -8,19 +8,39 @@ const pickObject = require('lodash').pick;
 const helpers = require('../app_lib/helpers')
 const SpotairPict = require('../app_lib/SpotairPict')
 const Sharp = require('sharp')
-//const db = require('../app_api/models/db')
+const db = require('../app_api/models/db')
 const probe = require('probe-image-size')
 
-console.log("START TEST")
 
-const path = "./pluto.jpg"
-const pathResized = "./pluto_resized.jpg"
 
-const text = "En un lugar de La Mancha de cuyo nombre no quiero acordarme, no ha mucho que vivía un hidalgo"
-fsp.readFile(path)
-	.then(buffer => (new SpotairPict(buffer)).watermark(text))
-	.then(img => img.toFile(pathResized))
-	.then(data => console.log(data))
+const LIMIT = 1000
+//result = [1,2,3]
+//var l = result.length
+//console.log(l - LIMIT)
+//return
+
+partialQuery(LIMIT, 0)
+	.then(result => console.log(result.length))
+
+async function partialQuery(limit, offset) {
+	return db.Appareil.findAll({limit: limit, offset: offset, include: [{all:true, nested:true}]})
+		.then(result => {
+			console.log(`offset: ${offset}, result: ${result.length}`)
+			if (result.length < limit) return false
+			else return partialQuery(limit, offset + limit)
+		})
+}
+
+
+
+//const path = "./pluto.jpg"
+//const pathResized = "./pluto_resized.jpg"
+
+//const text = "En un lugar de La Mancha de cuyo nombre no quiero acordarme, no ha mucho que vivía un hidalgo"
+//fsp.readFile(path)
+	//.then(buffer => (new SpotairPict(buffer)).watermark(text))
+	//.then(img => img.toFile(pathResized))
+	//.then(data => console.log(data))
 
 
 //const { registerFont, createCanvas } = require('canvas');

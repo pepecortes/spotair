@@ -11,7 +11,13 @@ div.baseForm
 		) {{ alert.text }}
 	
 		b-tab(title="Modifier", v-on:click="modifyClicked")
-			v-select(:options="selectOptions", label="text", @input="initForm", v-model="selection")
+			v-select(
+				:options="selectOptions",
+				label="text",
+				@input="initForm",
+				v-model="selection",
+				:loading='isLoading',
+			)
 			b-form(v-if="selection")
 				block input
 				block additionalModifyActions
@@ -26,7 +32,13 @@ div.baseForm
 				b-button(type="button", variant="outline-success", v-on:click="resetButtonClicked") Reset
 
 		b-tab(title="Fusioner", v-on:click="fusionClicked")
-			v-select(:options="selectOptions", label="text", @input="initForm", v-model="selection")
+			v-select(
+				:options="selectOptions",
+				label="text",
+				@input="initForm",
+				v-model="selection",
+				:loading='isLoading',
+			)
 			b-form(v-if="selection")
 				b-form-group(
 					label="Fusioner avec :",
@@ -40,6 +52,7 @@ div.baseForm
 						label="text",
 						v-model="fusionTarget",
 						:state="checkValidityState($v.fusionTarget)",
+						:loading='isLoading',
 					)
 				b-button(type="button", variant="outline-danger", v-on:click="fusionButtonClicked") Fusion
 				b-button(type="button", variant="outline-success", v-on:click="resetButtonClicked") Reset

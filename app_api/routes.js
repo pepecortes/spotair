@@ -50,6 +50,7 @@ module.exports = function(passport) {
 	function standardRouteFactory(urlString, controller) {
 		const url = '/' + urlString
 		router.get(url,	(req, res) => controller.all(req, res))
+		router.get(url + '/partial/:limit(\\d+)/:offset(\\d+)',	(req, res) => controller.partial(req, res))
 		router.get(url + '/:id(\\d+)', (req, res) => controller.byId(req, res))
 		router.get(url + '/fresh', (req, res) => controller.fresh(req, res))	
 		router.post(url, (req, res) => controller.create(req, res))

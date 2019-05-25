@@ -99,19 +99,26 @@ export default {
 		
 		// Get all the available options for the SELECT control
 		getSelectOptions(preselected) {
-			var start = new Date()
-			console.log("START")
 			var vm = this
+			vm.selectOptions = []
 			vm.selection = null
 			vm.isLoading = true
-			this.axios.get(vm.apiURL)
-				.then((response) => {
-					//vm.selectOptions = response.data.slice(0,100)
-					vm.selectOptions = response.data
-					vm.selection = (preselected)? preselected : null
+			const partialStep = 5000 // split the api call to 5000 records each time
+			
+			async function partialQuery(limit, offset) {
+				return vm.axios.get(`${vm.apiURL}partial/${limit}/${offset}`)
+					.then(response => {
+						const result = response.data
+						vm.selectOptions.push.apply(vm.selectOptions, result)
+						if (result.length < limit) return false
+						else return partialQuery(limit, offset + limit)
+					})
+			}
+			
+			partialQuery(partialStep, 0)
+				.then(() => {
+					vm.selection = (preselected)? preselected : vm.selection
 					vm.isLoading = false
-					var end = new Date() - start
-					console.log("END: " + end)
 				})
 				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},  

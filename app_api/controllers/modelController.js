@@ -46,6 +46,16 @@ ModelController.prototype.all = function(req, res) {
 		.then(record => sendJSON.ok(res, record))
 		.catch(err => sendJSON.serverError(res, err));
 }
+	
+ModelController.prototype.partial = function(req, res) {
+	const limit = parseInt(req.params.limit)
+	const offset = parseInt(req.params.offset)
+	const options = Object.assign({limit: limit, offset: offset}, this.includeOption)
+	this.Model
+		.findAll(options)
+		.then(record => sendJSON.ok(res, record))
+		.catch(err => sendJSON.serverError(res, err))
+}
 
 ModelController.prototype._byId = async function(id) {
 	return this.Model.findByPk(id, this.includeOption)

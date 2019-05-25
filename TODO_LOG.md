@@ -1,3 +1,6 @@
+VALIDATE PHOTO
+	following the replacement of vue-select (vue-multiselect now) the page has lost functionality
+
 WATERMARK FUNCTION (SpotairPict.js)
 	needs improvement (i.e. when data is NIL)
 	suggestion: make a 'caption' virtual getter in the model

@@ -51,5 +51,12 @@ Notes for a new local installation
 	docker-compose exec web bash & npm run watch (this will create the client-side javascript)
 	Navigate to localhost:3001, then Admin, and create some database entries
 	
+#### May 2019
+Full Text search function
+Strategy: create a MYSQL table every 1 hour (for instance) that will link photo ids to text (all related text fields)
+Create a FULLTEXT index on the text field
+(automatic: MYSQL stored procedure + schedule)
+
+	
 
 

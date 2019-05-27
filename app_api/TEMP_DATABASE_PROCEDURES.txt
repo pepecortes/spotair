@@ -1,33 +1,18 @@
+-- create stored procedure
+DROP PROCEDURE IF EXISTS CreateSearchTable;
+
+DELIMITER //
+CREATE PROCEDURE CreateSearchTable()
+BEGIN
 DROP TABLE IF EXISTS photoSearch;
 
 CREATE TABLE photoSearch
-
-SELECT  photos.id,
-				CONCAT_WS(
-					', ',
-					photos.commentaire,
-					photographes.nom, photographes.prenom,
-					compagnies.nom, compagnies.flotille,
-					appareils.immat, appareils.serial, appareils.commentaire,
-					avions.version,
-					modeles.nom, modeles.surnom,
-					constructeurs.nom,
-					galeries.commentaire,
-					annees.annee,
-					themes.theme,
-					aerodromes.nom, aerodromes.lieu
-				) AS text,
-				photos.commentaire,
-				photographeId, photographes.nom, photographes.prenom,
-				compagnieId, compagnies.nom AS nom_compagnie, compagnies.flotille,
-				appareilId, appareils.immat, appareils.serial, appareils.commentaire AS commentaire_appareil,
-				appareils.avionId, avions.version,
-				avions.modeleId, modeles.nom AS nom_modele, modeles.surnom,
-				modeles.constructeurId, constructeurs.nom AS nom_constructeur,
-				galerieId, galeries.commentaire AS nom_galerie,
-				galeries.anneeId, annees.annee,
-				galeries.themeId, themes.theme,
-				galeries.aerodromeId, aerodromes.nom AS nom_aerodrome, aerodromes.lieu
+SELECT photos.id, CONCAT_WS(', ', photos.commentaire,	photographes.nom,
+	photographes.prenom, compagnies.nom, compagnies.flotille,
+	appareils.immat, appareils.serial, appareils.commentaire,
+	avions.version,	modeles.nom, modeles.surnom,	constructeurs.nom,
+	galeries.commentaire,	annees.annee,	themes.theme,	aerodromes.nom,
+	aerodromes.lieu) AS text
 FROM photos
 LEFT JOIN photographes ON photos.photographeId = photographes.id
 LEFT JOIN compagnies ON photos.compagnieId = compagnies.id
@@ -40,36 +25,23 @@ LEFT JOIN annees ON galeries.anneeId = annees.id
 LEFT JOIN themes ON galeries.themeId = themes.id
 LEFT JOIN aerodromes ON galeries.aerodromeId = aerodromes.id;
 
-CREATE FULLTEXT INDEX fts ON photoSearch (text)
+CREATE FULLTEXT INDEX fts ON photoSearch (text);
+END //
+DELIMITER ;
 
+-- create event
+DROP EVENT IF EXISTS CreateSearchTableEvent;
+CREATE EVENT CreateSearchTableEvent
+ON SCHEDULE EVERY 1 HOUR
+ON COMPLETION PRESERVE
+DO CALL CreateSearchTable;
 
-
+-- How to call it?
+CALL CreateSearchTable;
 
 -- check EVEN SCHEDULER:
 SHOW PROCESSLIST;
 
--- activate scheduler
+-- activate scheduler (caution: can be done in docker when starting mysql server)
 SET GLOBAL event_scheduler = ON;
 
--- create event ???
-CREATE
-    [DEFINER = user]
-    EVENT
-    [IF NOT EXISTS]
-    event_name
-    ON SCHEDULE schedule
-    [ON COMPLETION [NOT] PRESERVE]
-    [ENABLE | DISABLE | DISABLE ON SLAVE]
-    [COMMENT 'string']
-    DO event_body;
-
-schedule:
-    AT timestamp [+ INTERVAL interval] ...
-  | EVERY interval
-    [STARTS timestamp [+ INTERVAL interval] ...]
-    [ENDS timestamp [+ INTERVAL interval] ...]
-
-interval:
-    quantity {YEAR | QUARTER | MONTH | DAY | HOUR | MINUTE |
-              WEEK | SECOND | YEAR_MONTH | DAY_HOUR | DAY_MINUTE |
-              DAY_SECOND | HOUR_MINUTE | HOUR_SECOND | MINUTE_SECOND}

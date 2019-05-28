@@ -33,6 +33,9 @@ const ctrlLikes = require('./controllers/likes')
 // Import the storage controllers
 const ctrlStorage = require('./controllers/storage')
 
+// Import the search controllers
+const ctrlSearch = require('./controllers/search')
+
 module.exports = function(passport) {
 
 	// Start the router
@@ -96,6 +99,10 @@ module.exports = function(passport) {
 	router.post('/storage/putFile', (req, res) => ctrlStorage.postFile(req, res))
 	router.post('/storage/storeImage/srcId/:srcId(\\d+)/destId/:destId(\\d+)', (req, res) => ctrlStorage.storeImage(req, res))
 	router.get('/storage/list', (req, res) => ctrlStorage.list(req, res))
+	
+	// Routes for search functions
+	router.get('/search/fts', (req, res) => {debug("CHEKC"); return ctrlSearch.fts(req, res)})
+	//router.get('/search/fts', (req, res) => {debug("CHEKC"); return ctrlAerodromes.all(req, res)})
 
 	// Not found
 	router.all('/*', ctrlNotFound);

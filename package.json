@@ -28,6 +28,7 @@
     "lodash": "^4.17.11",
     "minimist": "^1.2.0",
     "morgan": "^1.9.1",
+    "multilingual-stemmer": "^1.0.2",
     "mysql2": "^1.6.4",
     "node-ovh-storage": "^0.1.8",
     "openstack-swift-client": "^2.1.0",

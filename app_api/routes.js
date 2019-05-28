@@ -101,8 +101,7 @@ module.exports = function(passport) {
 	router.get('/storage/list', (req, res) => ctrlStorage.list(req, res))
 	
 	// Routes for search functions
-	router.get('/search/fts', (req, res) => {debug("CHEKC"); return ctrlSearch.fts(req, res)})
-	//router.get('/search/fts', (req, res) => {debug("CHEKC"); return ctrlAerodromes.all(req, res)})
+	router.get('/search/fts', (req, res) => ctrlSearch.fts(req, res))
 
 	// Not found
 	router.all('/*', ctrlNotFound);

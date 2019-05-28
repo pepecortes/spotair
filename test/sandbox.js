@@ -2,35 +2,27 @@
 require('dotenv').config({path: '../.env'})
 
 const _ = require('lodash');
-const fs = require('fs');
-const fsp = require('fs').promises
-const pickObject = require('lodash').pick;
-const helpers = require('../app_lib/helpers')
-const SpotairPict = require('../app_lib/SpotairPict')
-const Sharp = require('sharp')
-const db = require('../app_api/models/db')
-const probe = require('probe-image-size')
+//const fs = require('fs');
+//const fsp = require('fs').promises
+//const pickObject = require('lodash').pick;
+//const helpers = require('../app_lib/helpers')
+//const SpotairPict = require('../app_lib/SpotairPict')
+//const Sharp = require('sharp')
+//const db = require('../app_api/models/db')
+//const probe = require('probe-image-size')
 
+const Stemmer = require('multilingual-stemmer').Stemmer
+const Languages = require('multilingual-stemmer').Languages
 
+console.log("START")
 
-const LIMIT = 1000
-//result = [1,2,3]
-//var l = result.length
-//console.log(l - LIMIT)
-//return
-
-partialQuery(LIMIT, 0)
-	.then(result => console.log(result.length))
-
-async function partialQuery(limit, offset) {
-	return db.Appareil.findAll({limit: limit, offset: offset, include: [{all:true, nested:true}]})
-		.then(result => {
-			console.log(`offset: ${offset}, result: ${result.length}`)
-			if (result.length < limit) return false
-			else return partialQuery(limit, offset + limit)
-		})
-}
-
+const stemmer1 = new Stemmer(Languages.English)
+const stemmerf = new Stemmer(Languages.French)
+var str = "je suis un petit chien experimenté and I am a little ExpeRienced dog"
+var out = str.split(' ').map(w => stemmer1.stem(w) + '*').join(' ')
+var outf = str.split(' ').map(w => stemmerf.stem(w) + '*').join(' ')
+console.log(out)
+console.log(outf)
 
 
 //const path = "./pluto.jpg"

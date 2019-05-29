@@ -38,17 +38,6 @@ class CopyImage extends SpotairPict {
 		return this.photo.save()
 	}
 	
-	/**
-	 * @desc Returns a string out of the photo information
-	 * ready to be used as watermark caption
-	 */
-	caption() {
-	 const photographe = this.photo.photographe.text
-	 const aerodrome = this.photo.galerie.aerodrome.text
-	 const avion = this.photo.appareil.avion.text
-	 return `Photo : ${photographe} - Spotair.org, réalisée à ${aerodrome}, ${avion}`
-	}
-	
 	/** @desc migrate image and data to spotair
 	 * copy img to uploaded
 	 * normalize img
@@ -64,7 +53,7 @@ class CopyImage extends SpotairPict {
 		const p2 = this.toBuffer()
 			.then(buffer => new SpotairPict(buffer))
 			.then(img => img.normalize())
-			.then(img => img.watermark(this.caption()))
+			.then(img => img.watermark(this.photo.caption))
 			.then(img => Promise.all([img.dimensions(), img.toPictureFile(this.id, this.container)]))
 			.then(([dim, x]) => this.updateDatabase(dim))
 	

@@ -97,7 +97,7 @@ module.exports = function(passport) {
 	
 	// Routes for object storage
 	router.post('/storage/putFile', (req, res) => ctrlStorage.postFile(req, res))
-	router.post('/storage/storeImage/srcId/:srcId(\\d+)/destId/:destId(\\d+)', (req, res) => ctrlStorage.storeImage(req, res))
+	router.post('/storage/storeImage/srcId/:srcId(\\d+)/destId/:destId(\\d+)/caption/:caption', (req, res) => ctrlStorage.storeImage(req, res))
 	router.get('/storage/list', (req, res) => ctrlStorage.list(req, res))
 	
 	// Routes for search functions

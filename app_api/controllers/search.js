@@ -19,8 +19,7 @@ const stem_fr = new Stemmer(Languages.French)
 SearchController.fts = function(req, res) {
 	// example http://localhost:3000/api/search/fts?q=iberia-meeting
 	translateQueryString(req.query.q)
-		//.then(search_expression => buildSQL(search_expression))
-		.then(search_expression => {debug(search_expression); return buildSQL(search_expression)})
+		.then(search_expression => buildSQL(search_expression))
 		.then(sql => db.sequelize.query(sql))
 		.then(result => sendJSON.ok(res, result))
 		.catch(err => sendJSON.serverError(res, err))
@@ -29,22 +28,24 @@ SearchController.fts = function(req, res) {
 /**
  * @function queryTranslator
  * @description Translates a search query string into something
- * meaningful so send to the search engine
+ * meaningful so send to the search engine. Uses a stemmer to extract
+ * the stem of each word (both in English and in French)
+ * Use AND (instead of OR) for multiple serch terms
  */
 async function translateQueryString(queryString) {
 	
-	function stem(word) {
+	const stem = (word => {
 		const en = stem_en.stem(word)
 		const fr = stem_fr.stem(word)
-		return `${en}* ${fr}*`
-	}
+		return `+${en}* +${fr}*`
+	})
 	
-	var out = queryString.split(' ').map(w => stem(w)).join(' ')
-	return out
+	return queryString.split(' ').map(w => stem(w)).join(' ')
 }
 
 /**
- * @description Return a SQL ready to be sent as a raw query
+ * @description Return a SQL ready to be sent as a raw query. Use
+ * MySQL full text search in BOOLEAN MODE
  */
 function buildSQL(expr) {
 	return  `

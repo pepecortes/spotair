@@ -11,18 +11,10 @@ const _ = require('lodash');
 //const db = require('../app_api/models/db')
 //const probe = require('probe-image-size')
 
-const Stemmer = require('multilingual-stemmer').Stemmer
-const Languages = require('multilingual-stemmer').Languages
 
 console.log("START")
 
-const stemmer1 = new Stemmer(Languages.English)
-const stemmerf = new Stemmer(Languages.French)
-var str = "je suis un petit chien experimenté and I am a little ExpeRienced dog"
-var out = str.split(' ').map(w => stemmer1.stem(w) + '*').join(' ')
-var outf = str.split(' ').map(w => stemmerf.stem(w) + '*').join(' ')
-console.log(out)
-console.log(outf)
+
 
 
 //const path = "./pluto.jpg"

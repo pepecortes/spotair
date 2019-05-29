@@ -39,17 +39,24 @@ var storageController = {}
 storageController.storeImage = function(req, res) {
 	const srcId = req.params.srcId
 	const destId = req.params.destId
-	this._storeImage(srcId, destId)
+	const caption = req.params.caption
+	this._storeImage(srcId, destId, caption)
 		.then(output => sendJSON.ok(res, output))
 		.catch(err => sendJSON.serverError(res, err))
 }
 
-storageController._storeImage = async function(srcId, destId) {
+storageController._storeImage = async function(srcId, destId, caption) {
 	// create both picture and thumbnail and store into the container
+	// watermark the caption
 	return container.readUploaded(srcId)
 		.then(buffer => {
-			p1 = (new SpotairPict(buffer)).normalize().then(img => img.toPictureFile(destId))
-			p2 = (new SpotairPict(buffer)).thumbnail().then(img => img.toThumbnailFile(destId))
+			const p1 = (new SpotairPict(buffer)).normalize()
+				.then(img => img.watermark(caption))
+				.then(img => img.toPictureFile(destId))
+				
+			const p2 = (new SpotairPict(buffer)).thumbnail()
+				.then(img => img.toThumbnailFile(destId))
+				
 			return Promise.all([p1, p2])
 		})
 		.then(([r1, r2]) => r1.dimensions())

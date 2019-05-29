@@ -1,5 +1,9 @@
 VALIDATE PHOTO
-	following the replacement of vue-select (vue-multiselect now) the page has lost functionality
+	photos controller. validate upload: I need photo caption, but it does
+	not work (possible cause: the creation of a new photo instance does
+	not produce xxx.text -> photo.caption
+	
+HOW TO DEAL WITH NIL?
 
 WATERMARK FUNCTION (SpotairPict.js)
 	needs improvement (i.e. when data is NIL)
@@ -8,10 +12,6 @@ WATERMARK FUNCTION (SpotairPict.js)
 DATABASE MIGRATION
 	after the migration, many users will have a username xxx@nomail.com. how to manage this?
 	
-ADMIN
-	the select list (in admin) does not work with a large number of entries
-	(i.e. Appareils)
-
 When using REMOTE: validation takes a long time: add icon for waiting
 In validation: why can I select an immat that does not correspond to the avion?
 In pictadd, we can try to skip avion if immat is selected from list (instead of free text)

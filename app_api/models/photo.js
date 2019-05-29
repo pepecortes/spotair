@@ -75,6 +75,16 @@ module.exports = function(sequelize, DataTypes) {
 			}
 		},
 		
+		caption: {
+			type: DataTypes.VIRTUAL,
+			get: function() {
+				const photographe = this.photographe.text
+				const aerodrome = this.galerie.aerodrome.text
+				const avion = this.appareil.avion.text
+				return `Photo : ${photographe} - Spotair.org, réalisée à ${aerodrome}, ${avion}`
+			}
+		},
+		
 		invalid: {
 			type: DataTypes.VIRTUAL,
 			get() {

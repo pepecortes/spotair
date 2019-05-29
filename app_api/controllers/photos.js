@@ -69,13 +69,10 @@ controller.validateUpload = async function(req, res) {
 	photoUploadController._byId(srcId)
 		.then(upload => (upload.validated == null)? upload : Promise.reject(new Error('Photo already validated or rejected')))
 		.then(() => controller._create(req.body))
-		.then(photoCreated => photoCreated[0])
 		.then(photo => storageController._storeImage(srcId, photo.id, photo.caption))
-		//.then(photo => {debug(photo); throw (new Error("STOP"))})
 		.then(info => controller._update(info.id, {height: info.height, width: info.width}))
 		.then(photo => photoUploadController._update(srcId, {photo: photo, validated: true}))
 		.then(upload => sendJSON.ok(res, upload))
-		.catch(err => sendJSON.serverError(res, err))
 }
 
 module.exports = controller

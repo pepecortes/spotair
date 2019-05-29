@@ -53,10 +53,8 @@ storageController._storeImage = async function(srcId, destId, caption) {
 			const p1 = (new SpotairPict(buffer)).normalize()
 				.then(img => img.watermark(caption))
 				.then(img => img.toPictureFile(destId))
-				
 			const p2 = (new SpotairPict(buffer)).thumbnail()
 				.then(img => img.toThumbnailFile(destId))
-				
 			return Promise.all([p1, p2])
 		})
 		.then(([r1, r2]) => r1.dimensions())

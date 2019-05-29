@@ -79,7 +79,8 @@ ModelController.prototype.fresh = function(req, res) {
 
 ModelController.prototype._create = function(data) {
 	const record = createInstanceFromQuery(data, this.Model.metadata.fieldNames)
-	return this.Model.findOrCreate({where: record})
+	const options = Object.assign({where: record}, this.includeOption)
+	return this.Model.findOrCreate(options)
 }
 
 ModelController.prototype.create = function(req, res) {

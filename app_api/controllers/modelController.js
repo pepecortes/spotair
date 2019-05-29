@@ -81,11 +81,14 @@ ModelController.prototype._create = function(data) {
 	const record = createInstanceFromQuery(data, this.Model.metadata.fieldNames)
 	const options = Object.assign({where: record}, this.includeOption)
 	return this.Model.findOrCreate(options)
+		.then(([instance, created]) => instance.reload())
+		// a workaround: we need to reload the instance to ensure that
+		// the associated models are "eager-loaded"
 }
 
 ModelController.prototype.create = function(req, res) {
 	this._create(req.body)
-		.spread((record, created) => sendJSON.ok(res, record))
+		.then(([record, created]) => sendJSON.ok(res, record))
 		.catch(err => {sendJSON.serverError(res, err)});
 }
 

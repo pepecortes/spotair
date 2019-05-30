@@ -235,6 +235,9 @@ export legacy database (from PHPMYADMIN)
 	SET isAdmin = 1
 	WHERE mail = "webmaster@spotair.org";
 	
+	DELETE FROM spotair.users
+	WHERE id = 1;
+	
 
 
 	

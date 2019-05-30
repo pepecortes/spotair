@@ -13,14 +13,18 @@ module.exports = function(sequelize, DataTypes) {
       autoIncrement: true,
       unique: true,
     },
+    
     annee: {
 			type: DataTypes.STRING,
 			allowNull: false,
 			defaultValue: "",
 		},
+    
 		text: {
 			type: DataTypes.VIRTUAL,
-			get: function() {return this.annee}
+			get: function() {
+				return (this.id == 1)? "(aucune année)" : this.annee
+			}
 		},
 		
 		invalid: {
@@ -46,6 +50,16 @@ module.exports = function(sequelize, DataTypes) {
 		indexes: [
 				{type: 'FULLTEXT', name: 'text_search', fields: ['annee']}
 		],
+		
+		hooks: {
+				beforeValidate(instance, options) {
+					if (instance.id == 1) throw new Error('NIL instance is READONLY')
+				},
+				beforeDestroy(instance, options) {
+					if (instance.id == 1) throw new Error('NIL instance is READONLY')
+				},
+		},
+		
   }
   );
   

@@ -30,17 +30,17 @@ module.exports = function(sequelize, DataTypes) {
 				allowNull: true,		
 				defaultValue: null,		
 			},
+			
 			text: {
 				type: DataTypes.VIRTUAL,
 				get: function() {
+					if (this.id == 1) return "(aucune galerie)"
 					// you need to check for null before using the values of the
 					// associated Models because they will not be resolved under
 					// certain circumstances (i.e. when using requesting a fresh model)
 					const annee = (this.annee)? this.annee.text : null
 					const theme = (this.theme)? this.theme.text : null
-					const aerodrome = (this.aerodrome)? this.aerodrome.text : null
-					const isspotair = (this.isSpotair)? "associative" : null
-					return [annee, theme, aerodrome, isspotair, this.commentaire].filter(Boolean).join(', ')
+					return [theme, annee].filter(Boolean).join(', ')
 				}
 			},
 		
@@ -78,6 +78,15 @@ module.exports = function(sequelize, DataTypes) {
 				isspotair: {
 					where: {isSpotair: true}
 				}
+			},
+		
+			hooks: {
+					beforeValidate(instance, options) {
+						if (instance.id == 1) throw new Error('NIL instance is READONLY')
+					},
+					beforeDestroy(instance, options) {
+						if (instance.id == 1) throw new Error('NIL instance is READONLY')
+					},
 			},
 			
 		}

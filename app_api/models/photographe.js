@@ -37,7 +37,10 @@ module.exports = function(sequelize, DataTypes) {
 		
 		text: {
 			type: DataTypes.VIRTUAL,
-			get() {return this.prenom + " " + this.nom}
+			get() {
+				if (this.id == 1) return "(anonyme)"
+				return `${this.prenom} ${this.nom}`
+			}
 		},
 		
 		invalid: {
@@ -73,6 +76,15 @@ module.exports = function(sequelize, DataTypes) {
 			actifs: {
 				where: {actif: true}
 			}
+		},
+		
+		hooks: {
+				beforeValidate(instance, options) {
+					if (instance.id == 1) throw new Error('NIL instance is READONLY')
+				},
+				beforeDestroy(instance, options) {
+					if (instance.id == 1) throw new Error('NIL instance is READONLY')
+				},
 		},
   }
 

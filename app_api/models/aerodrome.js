@@ -52,7 +52,10 @@ module.exports = function(sequelize, DataTypes) {
 		
 		text: {
 			type: DataTypes.VIRTUAL,
-			get: function() {return this.lieu + ", " + this.nom}
+			get: function() {
+				if (this.id == 1) return "(sans localisation)"
+				return (this.lieu == "")?  this.nom : `${this.lieu}, ${this.nom}`
+			}
 		},
 		
 		invalid: {
@@ -78,16 +81,28 @@ module.exports = function(sequelize, DataTypes) {
 			allowNull: false,
     },
   }, {
+		
 		indexes: [
 				{type: 'FULLTEXT', name: 'text_search', fields: ['nom', 'lieu']}
 		],
-		validate: {
+		
+		validate: {			
 			bothCoordsOrNone() {
 				if ((this.latitude === null) !== (this.longitude === null)) {
 					throw new Error('Require either both latitude and longitude or neither')
 				}
 			}
-		}
+		},
+		
+		hooks: {
+				beforeValidate(instance, options) {
+					if (instance.id == 1) throw new Error('NIL instance is READONLY')
+				},
+				beforeDestroy(instance, options) {
+					if (instance.id == 1) throw new Error('NIL instance is READONLY')
+				},
+		},
+		
   }
   );
   

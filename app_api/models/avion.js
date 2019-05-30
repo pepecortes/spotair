@@ -27,8 +27,9 @@ module.exports = function(sequelize, DataTypes) {
 		text: {
 			type: DataTypes.VIRTUAL,
 			get: function() {
+				if (this.id == 1) return "(aucun avion)"
 				const modele = (this.modele)? this.modele.text : null
-				return [modele, this.version].filter(Boolean).join(', ')
+				return [modele, this.version].filter(Boolean).join('-')
 			}
 		},
 		
@@ -59,6 +60,15 @@ module.exports = function(sequelize, DataTypes) {
 		indexes: [
 			{type: 'FULLTEXT', name: 'text_search', fields: ['version']}
 		],
+	
+		hooks: {
+				beforeValidate(instance, options) {
+					if (instance.id == 1) throw new Error('NIL instance is READONLY')
+				},
+				beforeDestroy(instance, options) {
+					if (instance.id == 1) throw new Error('NIL instance is READONLY')
+				},
+		},
 			
 		}
   );

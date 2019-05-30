@@ -31,7 +31,9 @@ module.exports = function(sequelize, DataTypes) {
     
 		text: {
 			type: DataTypes.VIRTUAL,
-			get: function() {return this.theme}
+			get: function() {
+				return (this.id == 1)? "(aucun thème)" : this.theme
+			}
 		},
 		
 		invalid: {
@@ -47,6 +49,16 @@ module.exports = function(sequelize, DataTypes) {
 		indexes: [
 				{type: 'FULLTEXT', name: 'text_search', fields: ['theme']}
 		],
+		
+		hooks: {
+				beforeValidate(instance, options) {
+					if (instance.id == 1) throw new Error('NIL instance is READONLY')
+				},
+				beforeDestroy(instance, options) {
+					if (instance.id == 1) throw new Error('NIL instance is READONLY')
+				},
+		},
+		
   });
   
 	Model.metadata = {

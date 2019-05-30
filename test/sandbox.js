@@ -8,11 +8,14 @@ const _ = require('lodash');
 //const helpers = require('../app_lib/helpers')
 //const SpotairPict = require('../app_lib/SpotairPict')
 //const Sharp = require('sharp')
-//const db = require('../app_api/models/db')
+const db = require('../app_api/models/db')
 //const probe = require('probe-image-size')
 
 
 console.log("START")
+db.Photo.findByPk(5404, {include: [{all:true, nested:true}]})
+	//.then(output => output.slice(30000, 30500))
+	.then(e => console.log(e.caption))
 
 
 

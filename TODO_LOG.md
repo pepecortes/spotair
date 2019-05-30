@@ -1,7 +1,3 @@
-WATERMARK FUNCTION (SpotairPict.js)
-	Check watermark after the recent changes on TEXT model attributes
-	needs improvement (i.e. when data is NIL)
-
 DATABASE MIGRATION
 	after the migration, many users will have a username xxx@nomail.com. how to manage this?
 	in galeries, many comments appear as "-": erase them (after migration, or add a SQL to do it automatically upon migration)

@@ -78,10 +78,10 @@ module.exports = function(sequelize, DataTypes) {
 		caption: {
 			type: DataTypes.VIRTUAL,
 			get: function() {
-				const photographe = this.photographe.text
-				const aerodrome = this.galerie.aerodrome.text
-				const avion = this.appareil.avion.text
-				return `Photo : ${photographe} - Spotair.org, réalisée à ${aerodrome}, ${avion}`
+				const photographe = (this.photographe.id == 1)? `Photo Spotair.org` : `Photo : ${this.photographe.text} - Spotair.org`
+				const aerodrome = (this.galerie.aerodrome.id == 1)? null : `réalisée à ${this.galerie.aerodrome.text}`
+				const avion = (this.appareil.id == 1)? null : this.appareil.avion.text
+				return [photographe, aerodrome, avion].filter(Boolean).join(', ')
 			}
 		},
 		

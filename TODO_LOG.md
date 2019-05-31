@@ -3,6 +3,7 @@ CAROUSEL / SLIDER
 		vue-agile
 		hooper
 		vue-awesome-swiper
+	ensure cleaning npm all unused components
 
 DATABASE MIGRATION
 	after the migration, many users will have a username xxx@nomail.com. how to manage this?

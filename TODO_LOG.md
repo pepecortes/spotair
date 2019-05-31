@@ -1,3 +1,9 @@
+CAROUSEL / SLIDER
+	might test the following
+		vue-agile
+		hooper
+		vue-awesome-swiper
+
 DATABASE MIGRATION
 	after the migration, many users will have a username xxx@nomail.com. how to manage this?
 	in galeries, many comments appear as "-": erase them (after migration, or add a SQL to do it automatically upon migration)

@@ -8,13 +8,9 @@
 			@dismissed="alert.show=false"
 			) {{ alert.text }}
 		h1 This is the cover page
-		hooper()
-			slide
-				img(draggable="false", src='http://via.placeholder.com/500x500')
-			slide
-				img(draggable="false", src='http://via.placeholder.com/1000x500')
-			slide
-				img(draggable="false", src='http://via.placeholder.com/500x1000')
+		carousel(v-if='activeCarousel', v-on:slide='check')
+			slide(v-for="(item, indx) in items", :key="indx", :index="indx")
+				img(:draggable="false", :src='getImgSource(item)')
 </template>
 
 <script>
@@ -25,30 +21,51 @@ import 'hooper/dist/hooper.css'
 import { photoToImgData } from '../lib/common'
 import { alertMixin } from './AlertMixin'
 
+// TEST
+const chance = require('chance').Chance()
+const _ = require('lodash')
+
 export default {
 	
 	components: {
-		'hooper': Hooper,
+		'carousel': Hooper,
 		'slide': Slide
 	},
 	
 	mixins: [alertMixin],
 
-	//mounted () {this.getLatestPhotos()},
+	mounted () {this.getLatestPhotos()},
 	
 	data() {
 		return {
 			items: [],
+			activeCarousel: false,
 		}
 	},
 	
 	methods: {
 		
+		check(payload) {
+			console.log(JSON.stringify(payload) + "  " + this.items.length)
+			if (payload.currentSlide >= (this.items.length - 2)) {
+				this.items.push(2)
+				console.log("new lenght " + this.items.length)
+			}
+		},
+		
+		getImgSource(k) {			
+			const w = chance.integer({ min: 200, max: 800 })
+			const h = chance.integer({ min: 200, max: 800 })
+			return `http://via.placeholder.com/${w}x${h}`
+		},
+		
 		getLatestPhotos() {
 			var vm = this
-			this.axios.get('/photos/recent')
-				.then(response =>  vm.items = response.data.map(photoToImgData))
-				.catch(err => vm.showAxiosAlert(err))
+			vm.items = [0,8,5,15]
+			vm.activeCarousel = true
+			//this.axios.get('/photos/recent')
+				//.then(response =>  vm.items = response.data.map(photoToImgData))
+				//.catch(err => vm.showAxiosAlert(err))
 		},
 		
 	},

@@ -1,3 +1,6 @@
+PICTADD
+	"TypeError: undefined is not a function" when uploading form
+
 CAROUSEL / SLIDER
 	might test the following
 		vue-agile

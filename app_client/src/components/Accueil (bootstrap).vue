@@ -1,27 +1,45 @@
 <template lang="pug">
 	div(id='cover')
-
+		b-alert(
+			:variant="alert.type",
+			v-model='slide',
+			dismissible,
+			fade,
+			:show="alert.show",
+			@dismissed="alert.show=false"
+			) {{ alert.text }}
 		h1 This is the cover page
-		
-		swiper(:options="swiperOption", ref="mySwiper")
-		
-			swiper-slide()
-				b-img(src="https://picsum.photos/1000/375/?image=28")
-			swiper-slide()
-				b-img(src="https://picsum.photos/1200/675/?image=47")
-			swiper-slide()
-				b-img(src="https://picsum.photos/1000/675/?image=23")
-			swiper-slide()
-				b-img(src="https://picsum.photos/1000/375/?image=25")
+		div(id='carousel')
+			b-carousel(
+				v-if='activeCarousel',
+				id="carousel-1",
+				:interval="400000",
+				controls,
+				indicators,
+				background='white',
+				style="text-shadow: 1px 1px 2px #333;",
+				img-width='16px',
+				img-height='9px'
+			)
+				b-carousel-slide(
+					img-src="https://picsum.photos/1200/675/?image=47",
+					caption="CAPTION",
+					text="TEXT"
+				)
+				b-carousel-slide(
+					img-src="https://picsum.photos/1000/675/?image=2",
+					caption="CAPTION",
+					text="TEXT"
+				)
 			
 		h1 This is the end
+
+
+
 
 </template>
 
 <script>
-
-import 'swiper/dist/css/swiper.css'
-import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
 import { photoToImgData } from '../lib/common'
 import { alertMixin } from './AlertMixin'
@@ -40,22 +58,15 @@ const _ = require('lodash')
 
 export default {
 	
-	components: {    
-		swiper,
-    swiperSlide
+	components: {
 	},
 	
-	//mixins: [alertMixin],
+	mixins: [alertMixin],
 
-	mounted () {this.getLatestPhotos()},
+	//mounted () {this.getLatestPhotos()},
 	
 	data() {
 		return {
-			
-			swiperOption: {
-					autoHeight: true,
-			},
-			
 			items: [
 				{id:0, caption:'caption0', text:'text0', src:`http://via.placeholder.com/100x100?text=start`},
 				{id:1, caption:'caption1', text:'text1', src:`http://via.placeholder.com/100x100?text=1`},
@@ -63,12 +74,6 @@ export default {
 			activeCarousel: true,
 			slide: 1,
 		}
-	},
-	
-	computed: {
-		swiper() {
-			return this.$refs.mySwiper.swiper
-		},
 	},
 	
 	methods: {
@@ -83,16 +88,11 @@ export default {
 		},
 		
 		getLatestPhotos() {
-			
 			var vm = this
-			
-      //vm.swiper.slideTo(1, 1000, false)
-      
-			//vm.items = [
-				//{id:0, caption:'caption0', text:'text0', src:`http://via.placeholder.com/400x400?text=start`},
-				//{id:1, caption:'caption1', text:'text1', src:`http://via.placeholder.com/400x400?text=1`},
-			//]
-			
+			vm.items = [
+				{id:0, caption:'caption0', text:'text0', src:`http://via.placeholder.com/400x400?text=start`},
+				{id:1, caption:'caption1', text:'text1', src:`http://via.placeholder.com/400x400?text=1`},
+			]
 			vm.activeCarousel = true
 			//this.axios.get('/photos/recent')
 				//.then(response =>  vm.items = response.data.map(photoToImgData))

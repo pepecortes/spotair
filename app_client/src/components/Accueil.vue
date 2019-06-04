@@ -6,13 +6,17 @@
 		swiper(:options="swiperOption", ref="mySwiper")
 		
 			swiper-slide()
-				b-img(src="https://picsum.photos/1000/375/?image=28")
+				div(class='test')
+					b-img(src="https://picsum.photos/1000/375/?image=28")
 			swiper-slide()
-				b-img(src="https://picsum.photos/1200/675/?image=47")
+				div(class='test')
+					b-img(src="https://picsum.photos/1200/675/?image=47")
 			swiper-slide()
-				b-img(src="https://picsum.photos/1000/675/?image=23")
+				div(class='test')
+					b-img(src="https://picsum.photos/1000/675/?image=23")
 			swiper-slide()
-				b-img(src="https://picsum.photos/1000/375/?image=25")
+				div(class='test')
+					b-img(src="https://picsum.photos/1100/275/?image=25")
 			
 		h1 This is the end
 
@@ -38,6 +42,14 @@ const _ = require('lodash')
 	//return `http://via.placeholder.com/${w}x${h}?text=${text}`
 //}
 
+/**
+ * CLUE for img dimension
+ * div containing the img: text-align center
+ * img when w/h > W/H => 
+ * 	width = 100%
+ * 	padding-top (px) = (W/2) * (1/r -h/w) ex: r = 16/9
+ */
+
 export default {
 	
 	components: {    
@@ -53,7 +65,8 @@ export default {
 		return {
 			
 			swiperOption: {
-					autoHeight: true,
+				autoHeight: false,
+				
 			},
 			
 			items: [
@@ -106,10 +119,13 @@ export default {
 </script>
 
 <style lang="scss">
+imgx {
+	width: 100%;
+}
 
-img {
-	padding-left: 8%;
-	padding-right: 8%;
+.test {
+	text-align: center;
+	background-color: black;
 }
 
 </style>

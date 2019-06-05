@@ -7,7 +7,10 @@
 		
 			swiper-slide()
 				div(class='test')
-					b-img(src="https://picsum.photos/1000/375/?image=28")
+					b-img(
+						src="https://picsum.photos/1000/375/?image=28",
+						v-bind:style="imgStyle(1000, 375)"
+					)
 			swiper-slide()
 				div(class='test')
 					b-img(src="https://picsum.photos/1200/675/?image=47")
@@ -16,7 +19,10 @@
 					b-img(src="https://picsum.photos/1000/675/?image=23")
 			swiper-slide()
 				div(class='test')
-					b-img(src="https://picsum.photos/1100/275/?image=25")
+					b-img(
+						src="https://picsum.photos/1100/275/?image=25",
+						v-bind:style="imgStyle(1100, 275)"
+					)
 			
 		h1 This is the end
 
@@ -59,10 +65,15 @@ export default {
 	
 	//mixins: [alertMixin],
 
-	mounted () {this.getLatestPhotos()},
+	mounted () {
+		this.carouselWidth = this.$refs.mySwiper.$el.offsetWidth
+		this.getLatestPhotos()
+	},
 	
 	data() {
 		return {
+			
+			carouselWidth: 0,
 			
 			swiperOption: {
 				autoHeight: false,
@@ -79,20 +90,20 @@ export default {
 	},
 	
 	computed: {
+		
 		swiper() {
 			return this.$refs.mySwiper.swiper
 		},
+		
 	},
 	
 	methods: {
-		
-		check(payload) {
-			console.log(JSON.stringify(payload) + "  " + this.items.length)
-			if (payload.currentSlide >= (this.items.length - 2)) {
-				this.items.push(this.counter)
-				this.counter + this.counter + 1
-				console.log("new lenght " + this.items.length)
-			}
+			
+		imgStyle: function(w, h) {
+			const W = this.carouselWidth
+			const pTop = (W/2) * (0.563 - h/w)
+			if ((w/h) > (16/9)) return {paddingTop: pTop + 'px', width: '100%'}
+			else return {width: 'auto'}
 		},
 		
 		getLatestPhotos() {
@@ -119,13 +130,9 @@ export default {
 </script>
 
 <style lang="scss">
-imgx {
-	width: 100%;
-}
 
 .test {
 	text-align: center;
-	background-color: black;
 }
 
 </style>

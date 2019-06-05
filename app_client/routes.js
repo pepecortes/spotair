@@ -99,6 +99,13 @@ module.exports = function(passport) {
 		(req, res) => res.sendFile(path.join(__dirname, 'pictadd.html'))
 	)
 	
+	// TEST pages
+	router.all('/test*',
+		//setRedirect,
+		//requireLogin,
+		(req, res) => res.sendFile(path.join(__dirname, 'test.html'))
+	)
+	
 	// public pages
 	router.all('/*',
 		(req, res) => res.sendFile(path.join(__dirname, 'index.html'))

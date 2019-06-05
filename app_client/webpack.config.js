@@ -12,6 +12,8 @@ module.exports = {
 		app: path.resolve(__dirname, 'src/index.js'),
 		adminApp: path.resolve(__dirname, 'src/admin.js'),
 		pictaddApp: path.resolve(__dirname, 'src/pictadd.js'),
+		// TEST
+		testApp: path.resolve(__dirname, 'src/test.js'),
 	},
 	
   output: {

@@ -1,12 +1,15 @@
 <template lang="pug">
-	div(id='carouselTest')
-		h1 CAROUSEL TEST
-			
-		div(id='carousel', style="background-color:gray;width:100%;")
-			h1 en un lugar de la mancha de cyuyo nombre no quiero acordarme
-			swiper(:options="swiperOption", ref="mySwiper")
-				swiper-slide()
-					b-img(src="https://picsum.photos/1000/375/?image=28")
+	div(id='carousel', style="background-color:gray;width:100%;")
+		swiper(:options="swiperOption", ref="mySwiper")
+			swiper-slide()
+				b-img(
+					src="https://picsum.photos/1000/375/?image=28",
+					v-bind:style="imgStyle(1000, 375)"
+				)
+			swiper-slide()
+				b-img(src="https://picsum.photos/800/475/?image=22",
+					v-bind:style="imgStyle(800, 475)"
+				)
 			
 </template>
 
@@ -30,15 +33,35 @@ export default {
     swiperSlide
 	},
 	
+	watch: {
+		aspectRatio(newRatio) {
+			console.log(`ratio: ${newRatio}`)
+		},
+	},
+	
+	beforeCreate() {
+		this.aspectRatio = window.innerWidth / window.innerHeight
+	},
+	
 	mounted () {
+		
+		this.$nextTick(() => {
+			window.addEventListener('resize', () => {
+				this.aspectRatio = (window.innerWidth / window.innerHeight)
+			})
+    })
+    
+		
 		//this.carouselWidth = this.$refs.mySwiper.$el.offsetWidth
+		//this.carouselHeight = this.$refs.mySwiper.$el.offsetHeight
+		//console.log({w: this.carouselWidth, h: this.carouselHeight})
 		//this.getLatestPhotos()
 	},
 	
 	data() {
 		return {
 			
-			//carouselWidth: 0,
+			aspectRatio: 1000,
 			
 			swiperOption: {
 				autoHeight: false,
@@ -63,12 +86,12 @@ export default {
 	
 	methods: {
 			
-		//imgStyle: function(w, h) {
-			//const W = this.carouselWidth
-			//const pTop = (W/2) * (0.563 - h/w)
-			//if ((w/h) > (16/9)) return {paddingTop: pTop + 'px', width: '100%'}
-			//else return {width: 'auto'}
-		//},
+		imgStyle: function(w, h) {
+			const W = this.carouselWidth
+			const pTop = (W/2) * ((1/this.aspectRatio) - h/w)
+			if ((w/h) > this.aspectRatio) return {paddingTop: pTop + 'px', width: '100%'}
+			else return {width: 'auto'}
+		},
 		
 		//getLatestPhotos() {
 			
@@ -94,5 +117,9 @@ export default {
 </script>
 
 <style lang="scss">
+
+img {
+	width: 100%;
+}
 
 </style>

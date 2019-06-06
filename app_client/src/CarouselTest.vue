@@ -1,16 +1,17 @@
 <template lang="pug">
-	div(ref="carousel", id='carousel', style="background-color:gray;width:1000px;height:500px")
-		button(@click="clickedButton") Click Me!
+	div(ref="carousel", id='carousel', style="background-color:gray;width:100%;height:800px")
 		swiper(:options="swiperOption", ref="mySwiper")
 			swiper-slide()
-				b-img(
-					src="https://picsum.photos/2000/375/?image=28",
-					v-bind:style="imgStyle(2000, 375)"
-				)
+				div(class='test')
+					b-img(
+						src="https://picsum.photos/2000/375/?image=28",
+						v-bind:style="imgStyle(2000, 375)"
+					)
 			swiper-slide()
-				b-img(src="https://picsum.photos/800/475/?image=22",
-					v-bind:style="imgStyle(800, 475)"
-				)
+				div(class='test')
+					b-img(src="https://picsum.photos/800/475/?image=22",
+						v-bind:style="imgStyle(800, 475)"
+					)
 			
 </template>
 
@@ -35,12 +36,12 @@ export default {
 	},
 	
 	watch: {
-		W(newW) {
-			console.log(`W: ${newW}`)
-		},
+		
 	},
 	
 	mounted () {
+		
+		this.test = {x: 1}
 		
 		//this.clickedButton()
 		
@@ -51,12 +52,11 @@ export default {
 		//console.log(this.containerDimension)
 		//console.log({W: this.W, H: this.H})
 		
-		//this.$nextTick(() => {
-			//window.addEventListener('resize', () => {
-				//this.aspectRatio = (window.innerWidth / window.innerHeight)
-				//console.log("aspectRatio : " + this.aspectRatio)
-			//})
-    //})
+		this.$nextTick(() => {
+			window.addEventListener('resize', () => {
+				this.test = {x: 1}
+			})
+    })
 	},
 	
 	data() {
@@ -91,27 +91,29 @@ export default {
 	methods: {
 		
 		clickedButton: function() {
-			console.log("CHECK")
-			if (!this.$refs.carousel) return
-			const dim = this.containerDimension
-			const H = dim.H
-			const W = dim.W
-			const r = W/H
-			const pTop = (W/2) * (H/W - 375/2000)
-			this.test = {paddingTop: pTop + 'px', width: '100%'}
-			//this.test = {width: '100%'}
-		},
-			
-		imgStyle: function(w, h) {
-			return this.test
+			//console.log("CHECK")
+			//if (!this.$refs.carousel) return
 			//const dim = this.containerDimension
 			//const H = dim.H
 			//const W = dim.W
 			//const r = W/H
-			//const pTop = (W/2) * ((1/r) - h/w)
-			////console.log(`w: ${w}, h: ${h}, w/h: ${w/h}, ratio: ${this.aspectRatio}, cond: ${((w/h) > this.aspectRatio)}, pTop: ${pTop}`)
-			//if (w/h > W/H) return {paddingTop: pTop + 'px', width: '100%'}
-			//else return {height: `${H}px`}
+			//const pTop = (W/2) * (H/W - 375/2000)
+			//this.test = {paddingTop: pTop + 'px', width: '100%'}
+			////this.test = {width: '100%'}
+		},
+			
+		imgStyle: function(w, h) {
+			console.log("imgStyle ")
+			const a = this.test // KEEP THIS FOR THE TIME BEING
+			if (!this.$refs.carousel) return false
+			const dim = this.containerDimension
+			const H = dim.H
+			const W = dim.W
+			const r = W/H
+			const pTop = (W/2) * ((1/r) - h/w)
+			console.log(`w: ${w}, h: ${h}, w/h: ${w/h}, ratio: ${this.aspectRatio}, cond: ${((w/h) > this.aspectRatio)}, pTop: ${pTop}`)
+			if (w/h > W/H) return {paddingTop: pTop + 'px', width: '100%'}
+			else return {height: `${H}px`}
 		},
 		
 	},

@@ -1,10 +1,11 @@
 <template lang="pug">
-	div(id='carousel', style="background-color:gray;width:100%;")
+	div(ref="carousel", id='carousel', style="background-color:gray;width:1000px;height:500px")
+		button(@click="clickedButton") Click Me!
 		swiper(:options="swiperOption", ref="mySwiper")
 			swiper-slide()
 				b-img(
-					src="https://picsum.photos/1000/375/?image=28",
-					v-bind:style="imgStyle(1000, 375)"
+					src="https://picsum.photos/2000/375/?image=28",
+					v-bind:style="imgStyle(2000, 375)"
 				)
 			swiper-slide()
 				b-img(src="https://picsum.photos/800/475/?image=22",
@@ -34,49 +35,52 @@ export default {
 	},
 	
 	watch: {
-		aspectRatio(newRatio) {
-			console.log(`ratio: ${newRatio}`)
+		W(newW) {
+			console.log(`W: ${newW}`)
 		},
-	},
-	
-	beforeCreate() {
-		this.aspectRatio = window.innerWidth / window.innerHeight
 	},
 	
 	mounted () {
 		
-		this.$nextTick(() => {
-			window.addEventListener('resize', () => {
-				this.aspectRatio = (window.innerWidth / window.innerHeight)
-			})
-    })
-    
+		//this.clickedButton()
 		
 		//this.carouselWidth = this.$refs.mySwiper.$el.offsetWidth
-		//this.carouselHeight = this.$refs.mySwiper.$el.offsetHeight
-		//console.log({w: this.carouselWidth, h: this.carouselHeight})
-		//this.getLatestPhotos()
+		//this.W = this.$refs.carousel.offsetWidth
+		//this.H = this.$refs.carousel.offsetHeight
+		
+		//console.log(this.containerDimension)
+		//console.log({W: this.W, H: this.H})
+		
+		//this.$nextTick(() => {
+			//window.addEventListener('resize', () => {
+				//this.aspectRatio = (window.innerWidth / window.innerHeight)
+				//console.log("aspectRatio : " + this.aspectRatio)
+			//})
+    //})
 	},
 	
 	data() {
 		return {
 			
-			aspectRatio: 1000,
+			W: 0,
+			H: 0,
+			
+			test: {width: '50%'},
 			
 			swiperOption: {
 				autoHeight: false,
 			},
-			
-			//items: [
-				//{id:0, caption:'caption0', text:'text0', src:`http://via.placeholder.com/100x100?text=start`},
-				//{id:1, caption:'caption1', text:'text1', src:`http://via.placeholder.com/100x100?text=1`},
-			//],
-			//activeCarousel: true,
-			//slide: 1,
 		}
 	},
 	
 	computed: {
+		
+		containerDimension() {
+			return {W: this.$refs.carousel.offsetWidth, H: this.$refs.carousel.offsetHeight}
+			//if (this.$refs.carousel)
+				//return {W: this.$refs.carousel.offsetWidth, H: this.$refs.carousel.offsetHeight}
+			//else return {W:0, H:0}
+		},
 		
 		swiper() {
 			return this.$refs.mySwiper.swiper
@@ -85,30 +89,30 @@ export default {
 	},
 	
 	methods: {
+		
+		clickedButton: function() {
+			console.log("CHECK")
+			if (!this.$refs.carousel) return
+			const dim = this.containerDimension
+			const H = dim.H
+			const W = dim.W
+			const r = W/H
+			const pTop = (W/2) * (H/W - 375/2000)
+			this.test = {paddingTop: pTop + 'px', width: '100%'}
+			//this.test = {width: '100%'}
+		},
 			
 		imgStyle: function(w, h) {
-			const W = this.carouselWidth
-			const pTop = (W/2) * ((1/this.aspectRatio) - h/w)
-			if ((w/h) > this.aspectRatio) return {paddingTop: pTop + 'px', width: '100%'}
-			else return {width: 'auto'}
+			return this.test
+			//const dim = this.containerDimension
+			//const H = dim.H
+			//const W = dim.W
+			//const r = W/H
+			//const pTop = (W/2) * ((1/r) - h/w)
+			////console.log(`w: ${w}, h: ${h}, w/h: ${w/h}, ratio: ${this.aspectRatio}, cond: ${((w/h) > this.aspectRatio)}, pTop: ${pTop}`)
+			//if (w/h > W/H) return {paddingTop: pTop + 'px', width: '100%'}
+			//else return {height: `${H}px`}
 		},
-		
-		//getLatestPhotos() {
-			
-			//var vm = this
-			
-      ////vm.swiper.slideTo(1, 1000, false)
-      
-			////vm.items = [
-				////{id:0, caption:'caption0', text:'text0', src:`http://via.placeholder.com/400x400?text=start`},
-				////{id:1, caption:'caption1', text:'text1', src:`http://via.placeholder.com/400x400?text=1`},
-			////]
-			
-			//vm.activeCarousel = true
-			////this.axios.get('/photos/recent')
-				////.then(response =>  vm.items = response.data.map(photoToImgData))
-				////.catch(err => vm.showAxiosAlert(err))
-		//},
 		
 	},
 	
@@ -118,8 +122,12 @@ export default {
 
 <style lang="scss">
 
-img {
+imgx {
 	width: 100%;
+}
+
+.test {
+	text-align: center;
 }
 
 </style>

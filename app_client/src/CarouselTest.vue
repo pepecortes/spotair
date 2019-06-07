@@ -1,17 +1,8 @@
 <template lang="pug">
-	div(ref="carousel", id='carousel', style="background-color:gray;width:100%;height:800px")
+	div(ref="carousel", id='carousel', style="width:100vw;height:80vh")
 		swiper(:options="swiperOption", ref="mySwiper")
-			swiper-slide()
-				div(class='test')
-					b-img(
-						src="https://picsum.photos/2000/375/?image=28",
-						v-bind:style="imgStyle(2000, 375)"
-					)
-			swiper-slide()
-				div(class='test')
-					b-img(src="https://picsum.photos/800/475/?image=22",
-						v-bind:style="imgStyle(800, 475)"
-					)
+			swiper-slide(v-for='img in items')
+				b-img(:src='getImgSrc(img)', v-bind:style='imgStyle(img.w, img.h)')
 			
 </template>
 
@@ -20,13 +11,9 @@
 import 'swiper/dist/css/swiper.css'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
-/**
- * CLUE for img dimension
- * div containing the img: text-align center
- * img when w/h > W/H => 
- * 	width = 100%
- * 	padding-top (px) = (W/2) * (1/r -h/w) ex: r = 16/9
- */
+//TEST
+const chance = require('chance').Chance()
+const _ = require('lodash')
 
 export default {
 	
@@ -35,83 +22,57 @@ export default {
     swiperSlide
 	},
 	
-	watch: {
-		
-	},
-	
 	mounted () {
-		
-		this.test = {x: 1}
-		
-		//this.clickedButton()
-		
-		//this.carouselWidth = this.$refs.mySwiper.$el.offsetWidth
-		//this.W = this.$refs.carousel.offsetWidth
-		//this.H = this.$refs.carousel.offsetHeight
-		
-		//console.log(this.containerDimension)
-		//console.log({W: this.W, H: this.H})
-		
-		this.$nextTick(() => {
-			window.addEventListener('resize', () => {
-				this.test = {x: 1}
-			})
-    })
-	},
+		this.getLatestPhotos()
+		window.addEventListener('resize', this.handleResize)
+		this.handleResize()
+	},  
+	
+	beforeDestroy: function () {
+    window.removeEventListener('resize', this.handleResize)
+  },
 	
 	data() {
 		return {
-			
-			W: 0,
-			H: 0,
-			
-			test: {width: '50%'},
-			
-			swiperOption: {
-				autoHeight: false,
-			},
+			carouselDimensions: {W:0, H:0},
+			swiperOption: {autoHeight: false},
+			items: [
+				//{id:28, w: 2000, h:375},
+				//{id:22, w: 800, h:475},
+				//{id:11, w: 1000, h:1375},
+				//{id:5, w: 850, h:275},
+				//{id:38, w: 700, h:675},
+				//{id:42, w: 2100, h:800},
+			],
 		}
 	},
 	
 	computed: {
-		
-		containerDimension() {
-			return {W: this.$refs.carousel.offsetWidth, H: this.$refs.carousel.offsetHeight}
-			//if (this.$refs.carousel)
-				//return {W: this.$refs.carousel.offsetWidth, H: this.$refs.carousel.offsetHeight}
-			//else return {W:0, H:0}
-		},
-		
-		swiper() {
-			return this.$refs.mySwiper.swiper
-		},
-		
+		swiper() {return this.$refs.mySwiper.swiper},
 	},
 	
-	methods: {
+	methods: {		
 		
-		clickedButton: function() {
-			//console.log("CHECK")
-			//if (!this.$refs.carousel) return
-			//const dim = this.containerDimension
-			//const H = dim.H
-			//const W = dim.W
-			//const r = W/H
-			//const pTop = (W/2) * (H/W - 375/2000)
-			//this.test = {paddingTop: pTop + 'px', width: '100%'}
-			////this.test = {width: '100%'}
+		getLatestPhotos() {
+			this.items = this.randomPictures(60)
+		},
+
+		randomPictures(n) {
+			const ids = _.range(n)
+			return ids.map(id => ({id: id, w:2000, h:1500}))
+		},
+		
+		getImgSrc(img) {
+			return `https://picsum.photos/${img.w}/${img.h}/?image=${img.id}`
+		},
+		
+		handleResize() {
+			this.carouselDimensions = {W: this.$refs.carousel.offsetWidth, H: this.$refs.carousel.offsetHeight}
 		},
 			
 		imgStyle: function(w, h) {
-			console.log("imgStyle ")
-			const a = this.test // KEEP THIS FOR THE TIME BEING
-			if (!this.$refs.carousel) return false
-			const dim = this.containerDimension
-			const H = dim.H
-			const W = dim.W
-			const r = W/H
-			const pTop = (W/2) * ((1/r) - h/w)
-			console.log(`w: ${w}, h: ${h}, w/h: ${w/h}, ratio: ${this.aspectRatio}, cond: ${((w/h) > this.aspectRatio)}, pTop: ${pTop}`)
+			const {W: W, H: H} = this.carouselDimensions
+			const pTop = (W/2) * ((H/W) - h/w)
 			if (w/h > W/H) return {paddingTop: pTop + 'px', width: '100%'}
 			else return {height: `${H}px`}
 		},
@@ -124,11 +85,7 @@ export default {
 
 <style lang="scss">
 
-imgx {
-	width: 100%;
-}
-
-.test {
+.swiper-slide {
 	text-align: center;
 }
 

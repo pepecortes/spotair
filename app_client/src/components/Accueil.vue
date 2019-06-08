@@ -1,7 +1,10 @@
 <template lang="pug">
 	div(id='cover')
 		h1 This is the cover page
-		carousel
+		carousel(
+			:options='options',
+			style="width:100%; height:80vh"
+		)
 </template>
 
 <script>
@@ -23,7 +26,9 @@ export default {
 	
 	data() {
 		return {
-			
+			options: {					
+				autoplay: {delay: 2500, disableOnInteraction: true},
+			}
 		}
 	},
 	

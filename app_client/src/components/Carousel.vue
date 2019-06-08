@@ -1,6 +1,6 @@
 <template lang="pug">
-	div(ref="carousel", id='carousel', style="width:100vw;height:80vh")
-		swiper(:options="swiperOption", ref="mySwiper")
+	div(ref="carousel")
+		swiper(:options="swiperOptions", ref="mySwiper")
 			swiper-slide(v-for='photo in items')
 				b-img(:src='getImgSrc(photo)', v-bind:style='imgStyle(photo)')
 		div(class="swiper-button-next")
@@ -11,18 +11,22 @@
 import 'swiper/dist/css/swiper.css'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
-/** 
- * TEST
- * const chance = require('chance').Chance()
- * const _ = require('lodash')
- * `https://picsum.photos/${img.w}/${img.h}/?image=${img.id}`
- */
-
 export default {
 	
-	components: {    
-		swiper,
-    swiperSlide
+	components: {swiper, swiperSlide},
+	
+	props: {
+		
+		options: {type: Object},
+		
+		photos: {
+			type: Array,
+			default: () => []
+		},
+	},
+	
+	beforeMount() {
+		this.loadedPhotos = this.photos
 	},
 	
 	mounted () {
@@ -31,15 +35,16 @@ export default {
 		this.handleResize()
 	},  
 	
-	beforeDestroy: function () {
+	beforeDestroy () {
     window.removeEventListener('resize', this.handleResize)
   },
 	
 	data() {
 		return {
+			loadedPhotos: [],
+			items: [],
 			carouselDimensions: {W:0, H:0},
-			
-			swiperOption: {
+			defaultOptions: {
 					lazy: true,
 					freeMode: true,
 					freeModeSticky: true,
@@ -49,27 +54,29 @@ export default {
 					},
 					grabCursor: true,
 					keyboard: {enabled: true},
-					autoplay: {
-						delay: 2500,
-						disableOnInteraction: true,
-					},
 			},
-			
-			items: [],
 		}
 	},
 	
 	computed: {
 		swiper() {return this.$refs.mySwiper.swiper},
+		swiperOptions() {return Object.assign(this.defaultOptions, this.options)},
 	},
 	
 	methods: {
 		
-		//addTestImages() {
-			//console.log("adding images")
-			//const moreImages = this.randomPictures(10)
-			//this.items.push.apply(this.items, moreImages)
-		//},
+		handleResize() {
+			this.carouselDimensions = {W: this.$refs.carousel.offsetWidth, H: this.$refs.carousel.offsetHeight}
+		},
+		
+		imgStyle(photo) {
+			const {W: W, H: H} = this.carouselDimensions
+			const w = photo.width
+			const h = photo.height
+			const pTop = (W/2) * ((H/W) - h/w)
+			if (w/h > W/H) return {paddingTop: pTop + 'px', width: '100%'}
+			else return {height: `${H}px`}
+		},
 		
 		getLatestPhotos() {
 			const vm = this
@@ -77,32 +84,10 @@ export default {
 				.then(response =>  vm.items = response.data)
 				//.catch(err => vm.showAxiosAlert(err))
 		},
-
-		randomPictures(n) {
-			const ids = _.range(n)
-			return ids.map(id => ({
-				id: chance.integer({min: 0, max: 1000}),
-				w: chance.integer({min: 1000, max: 2500}),
-				h: chance.integer({min: 500, max: 1500})
-			}))
-		},
 		
 		getImgSrc(photo) {
 			const fileLocation = process.env.STORAGE_URL + process.env.PICTURE_LOCATION
 			return  `${fileLocation}${photo.id}.jpg`
-		},
-		
-		handleResize() {
-			this.carouselDimensions = {W: this.$refs.carousel.offsetWidth, H: this.$refs.carousel.offsetHeight}
-		},
-		
-		imgStyle: function(photo) {
-			const {W: W, H: H} = this.carouselDimensions
-			const w = photo.width
-			const h = photo.height
-			const pTop = (W/2) * ((H/W) - h/w)
-			if (w/h > W/H) return {paddingTop: pTop + 'px', width: '100%'}
-			else return {height: `${H}px`}
 		},
 		
 	},

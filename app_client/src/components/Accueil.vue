@@ -1,8 +1,23 @@
 <template lang="pug">
 	div(id='cover')
-		h1 This is the cover page
+
+		b-alert(
+			:variant="alert.type",
+			dismissible,
+			fade,
+			:show="alert.show",
+			@dismissed="alert.show=false",
+		) {{ alert.text }}
+		
+		button(v-on:click="goto") goto
+		p value: {{ photo.id }}
+		
 		carousel(
+			v-if='carouselActive',
 			:options='options',
+			:photos='photos',
+			v-model='photo',
+			v-on:input='photoSelected',
 			style="width:100%; height:80vh"
 		)
 </template>
@@ -21,13 +36,16 @@ export default {
 	mixins: [alertMixin],
 
 	mounted () {
-		
+		this.getLatestPhotos()
 	},
 	
 	data() {
 		return {
-			options: {					
-				autoplay: {delay: 2500, disableOnInteraction: true},
+			carouselActive: false,
+			photos: [],
+			photo: {},
+			options: {
+				autoplay: {delay: 3500, disableOnInteraction: true},
 			}
 		}
 	},
@@ -37,6 +55,32 @@ export default {
 	},
 	
 	methods: {
+		
+		// TEST
+		goto() {
+			this.photo = this.photos[5]
+		},
+		
+		photoSelected(photo) {
+			console.log('photo Selected ' + photo.id)
+		},
+		
+		photoToCarouselData(photo) {
+			var output = photo
+			const fileLocation = process.env.STORAGE_URL + process.env.PICTURE_LOCATION
+			output.src = `${fileLocation}${photo.id}.jpg`
+			return output
+		},
+		
+		getLatestPhotos() {
+			const vm = this
+			this.axios.get('/photos/recent')
+				.then(response =>  {
+					vm.photos = response.data.map(this.photoToCarouselData)
+					vm.carouselActive = true
+				})
+				.catch(err => vm.showAxiosAlert(err))
+		},
 			
 	},
 	

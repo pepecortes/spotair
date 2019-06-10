@@ -35,7 +35,7 @@ export default {
 	
 	mixins: [alertMixin],
 
-	mounted () {
+	beforeMount () {
 		this.getLatestPhotos()
 	},
 	
@@ -46,12 +46,9 @@ export default {
 			photo: {},
 			options: {
 				autoplay: {delay: 3500, disableOnInteraction: true},
-			}
+			},
+			fileLocation: process.env.STORAGE_URL + process.env.PICTURE_LOCATION
 		}
-	},
-	
-	computed: {
-		
 	},
 	
 	methods: {
@@ -67,8 +64,7 @@ export default {
 		
 		photoToCarouselData(photo) {
 			var output = photo
-			const fileLocation = process.env.STORAGE_URL + process.env.PICTURE_LOCATION
-			output.src = `${fileLocation}${photo.id}.jpg`
+			output.url = `${this.fileLocation}${photo.id}.jpg`
 			return output
 		},
 		

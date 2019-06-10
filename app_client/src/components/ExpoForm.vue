@@ -1,15 +1,13 @@
 <template lang="pug">
-
-	div(class='flexbox')
+	div(ref='expoform', class='expobox')
 		div(v-for='photo in loadedPhotos', v-on:click='clicked(photo)')
 			b-img-lazy(
 				blank: true,
 				blankColor: '#bbb',
 				rounded,
-				:src='getSrc(photo)',
-				height='imgHeight'
+				:src='photo.url',
+				:height="imgHeight"
 			)
-
 </template>
 
 <script>
@@ -20,23 +18,16 @@ export default {
 	
 	props: {
 		
-		value: {
-			default: null
-		},
+		value: {default: null},
 		
 		photos: {
 			type: Array,
 			default: () => []
 		},
 		
-		fileLocation: {
-			type: String,
-			default: process.env.THUMBNAIL_LOCATION
-		},
-		
 		imgHeight: {
 			type: String,
-			default: process.env.THUMBNAIL_HEIGHT_PX
+			default: `${process.env.THUMBNAIL_HEIGHT_PX}px`
 		},
 		
 	},
@@ -47,10 +38,6 @@ export default {
 			loadedPhotos: [],
 			bufferPhotos: [],
 		}
-	},
-	
-	computed: {
-		
 	},
 	
 	beforeMount() {
@@ -64,16 +51,11 @@ export default {
 		window.addEventListener('scroll', this.scrolling)
 	},
 	
-	destroy() {
+	beforeDestroy() {
 		window.removeEventListener('scroll', this.scrolling)
 	},
 	
 	methods: {
-		
-		getSrc(photo) {
-			if (photo.url) return photo.url
-			return `${process.env.STORAGE_URL}${this.fileLocation}${photo.id}.jpg`
-		},
 		
 		clicked: function(photo) {
 			this.mutableValue = photo
@@ -101,14 +83,14 @@ export default {
 
 <style lang="scss">
 
-	.flexbox {
+	.expobox {
 		display: flex;
 		flex-flow: row wrap;
 		align-items: flex-start;
 		justify-content: flex-start;
 	}
 	
-	.flexbox img {
+	.expobox img {
 		margin-right: 0.4em;
 		margin-bottom: 0.4em;
 	}

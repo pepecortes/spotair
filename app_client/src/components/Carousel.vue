@@ -2,7 +2,7 @@
 	div(ref="carousel")
 		swiper(:options="swiperOptions", ref="mySwiper", v-on:doubleTap='doubleTap', v-on:slideChange='slideChange')
 			swiper-slide(v-for='photo in photos')
-				b-img(:src='photo.src', v-bind:style='imgStyle(photo)')
+				b-img(:src='photo.url', v-bind:style='imgStyle(photo)')
 		div(class="swiper-button-next")
 		div(class="swiper-button-prev")
 </template>

@@ -29,6 +29,7 @@ import Accueil from './components/Accueil.vue'
 
 // TEST
 import ExpoTest from './components/ExpoTest.vue'
+import ExpoGalerie from './components/ExpoGalerie.vue'
 
 // Define the routes
 const routes = [
@@ -36,6 +37,7 @@ const routes = [
   
   //TEST
   { path: '/exposition', component: ExpoTest },
+  { path: '/galeries/:id(\\d+)?', component: ExpoGalerie },
   
 ]
 

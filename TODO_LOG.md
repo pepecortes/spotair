@@ -1,13 +1,6 @@
 PICTADD
 	"TypeError: undefined is not a function" when uploading form
 
-CAROUSEL / SLIDER
-	might test the following
-		vue-agile
-		hooper
-		vue-awesome-swiper
-	ensure cleaning npm all unused components
-
 DATABASE MIGRATION
 	after the migration, many users will have a username xxx@nomail.com. how to manage this?
 	in galeries, many comments appear as "-": erase them (after migration, or add a SQL to do it automatically upon migration)

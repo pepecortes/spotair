@@ -57,6 +57,10 @@ Strategy: create a MYSQL table every 1 hour (for instance) that will link photo 
 Create a FULLTEXT index on the text field
 (automatic: MYSQL stored procedure + schedule)
 
+#### June 2019
+After several tests of different carousel (sliders) I keep vue-awesome-swiper
+Tested: vue-agile, hooper, bootstrap carousel component
+
 	
 
 

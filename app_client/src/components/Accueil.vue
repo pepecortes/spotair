@@ -9,9 +9,6 @@
 			@dismissed="alert.show=false",
 		) {{ alert.text }}
 		
-		button(v-on:click="goto") goto
-		p value: {{ photo.id }}
-		
 		carousel(
 			v-if='carouselActive',
 			:options='options',
@@ -53,13 +50,9 @@ export default {
 	
 	methods: {
 		
-		// TEST
-		goto() {
-			this.photo = this.photos[5]
-		},
-		
 		photoSelected(photo) {
-			console.log('photo Selected ' + photo.id)
+			const galerieId = photo.galerie.id
+			this.$router.push({ path: `/galeries/${galerieId}` })
 		},
 		
 		photoToCarouselData(photo) {

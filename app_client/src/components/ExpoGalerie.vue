@@ -11,10 +11,16 @@
 		div(v-if='galerieActive')
 			h4 {{ galerie.text }}
 			expo-form(
-				:photos='photos',
+				:photos='thumbnails',
 				v-model='selected',
 				@input='inputChange',
-				:fileLocation='fileLocation',
+			)
+			
+		div(v-if='carouselActive')
+			carousel(
+				style="width:100%; height:80vh",
+				:photos='photos',
+				v-model='selected',
 			)
 </template>
 
@@ -22,11 +28,13 @@
 
 import { alertMixin } from './AlertMixin'
 import ExpoForm from './ExpoForm.vue'
+import Carousel from './Carousel.vue'
 
 export default {
 	
 	components: {
-		'expo-form': ExpoForm
+		'expo-form': ExpoForm,
+		'carousel': Carousel,
 	},
 	
 	mixins: [alertMixin],
@@ -34,35 +42,39 @@ export default {
 	data() {
 		return {
 			galerieActive: false,
+			carouselActive: false,
 			id: null,
 			photos: [],
+			thumbnails: [],
 			galerie: {},
 			selected: null,
-			fileLocation: process.env.STORAGE_URL + process.env.THUMBNAIL_LOCATION
+			thumbnailLocation: process.env.STORAGE_URL + process.env.THUMBNAIL_LOCATION,
+			photoLocation: process.env.STORAGE_URL + process.env.PICTURE_LOCATION,
 		}
 	},	
 		
 	beforeMount() {
 		this.id = this.$route.params.id
-		// TEST
-		this.id = (this.$route.params.id == null)? 1351 : this.$route.params.id
 		this.getGaleriePhotos(this.id)
 	},
 
 	methods: {
 		
-		photoToGalerieData(photo) {
+		photoToGalerieData(fileLocation) {return function(photo) {
 			var output = photo
-			output.url = `${this.fileLocation}${photo.id}.jpg`
+			output.url = `${fileLocation}${photo.id}.jpg`
 			return output
-		},
+		}},
 		
 		getGaleriePhotos(galerieId) {
 			const vm = this
 			vm.axios.get(`photos/byGalerie/${galerieId}`)
 				.then(response => {
 					if (response.data.length == 0) throw new Error("Aucune photo dans la galerie")
-					vm.photos = response.data.map(this.photoToGalerieData)
+					var photos = JSON.parse(JSON.stringify(response.data))
+					var thumbnails = JSON.parse(JSON.stringify(response.data))
+					vm.photos = photos.map(this.photoToGalerieData(vm.photoLocation))
+					vm.thumbnails = thumbnails.map(this.photoToGalerieData(vm.thumbnailLocation))
 					vm.galerie = vm.photos[0].galerie
 					vm.galerieActive = true
 				})
@@ -70,8 +82,12 @@ export default {
 		},
 		
 		// TEST
+		// DOES NOT WORK: how to go to the selected photo in the carousel?
 		inputChange(event) {
-			console.log("value " + JSON.stringify(this.selected))
+			console.log("event "+ JSON.stringify(event))
+			this.selected = this.photos[5]
+			this.galerieActive = false
+			this.carouselActive = true
 		},
 		
 	},

@@ -47,9 +47,20 @@ export default {
   },
   
   watch: {
-		currentPhoto: function(val) {
-			const i = this.photos.indexOf(val)
-			this.swiper.slideTo(i, 0, false)
+		currentPhoto: function(oldValue, newValue) {
+			//console.log("IN CURRENTPHOTO WATCH: " + val.id) 
+			//console.log("...: " + this.photos[2].id) 
+			//console.log("this.photos.lenght " + this.photos.length)
+			//console.log("2ND ELEMENT: " + this.photos[2].id)
+			//console.log("val: " + val.id)
+			//console.log("val2: " + val2.id)
+			
+			//this.photos.map(photo => console.log(photo.id))
+			const i = this.photos.indexOf(newValue)
+			//console.log("i: " + i)
+			console.log(`old: ${oldValue.id}, new: ${newValue.id}`)
+			//if (oldValue == newValue) {console.log("STOP"); return}
+			//this.swiper.slideTo(i, 0, false)
 		}
 	},
   

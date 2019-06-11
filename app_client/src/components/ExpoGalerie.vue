@@ -71,10 +71,10 @@ export default {
 			vm.axios.get(`photos/byGalerie/${galerieId}`)
 				.then(response => {
 					if (response.data.length == 0) throw new Error("Aucune photo dans la galerie")
-					var photos = JSON.parse(JSON.stringify(response.data))
-					var thumbnails = JSON.parse(JSON.stringify(response.data))
-					vm.photos = photos.map(this.photoToGalerieData(vm.photoLocation))
-					vm.thumbnails = thumbnails.map(this.photoToGalerieData(vm.thumbnailLocation))
+					vm.photos = JSON.parse(JSON.stringify(response.data))
+					vm.thumbnails = JSON.parse(JSON.stringify(response.data))
+					vm.photos.map(this.photoToGalerieData(vm.photoLocation))
+					vm.thumbnails.map(this.photoToGalerieData(vm.thumbnailLocation))
 					vm.galerie = vm.photos[0].galerie
 					vm.galerieActive = true
 				})
@@ -84,8 +84,15 @@ export default {
 		// TEST
 		// DOES NOT WORK: how to go to the selected photo in the carousel?
 		inputChange(event) {
-			console.log("event "+ JSON.stringify(event))
-			this.selected = this.photos[5]
+			//console.log("event "+ JSON.stringify(event))
+			this.selected = this.photos[2]
+			
+			//TEST
+			//const i = this.photos.indexOf(this.selected)
+			//console.log("selected: " + this.selected.id)
+			//console.log("photos in galerie: " + this.photos.length)
+			//this.photos.map(photo => console.log(photo.id))
+			
 			this.galerieActive = false
 			this.carouselActive = true
 		},

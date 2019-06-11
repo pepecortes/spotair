@@ -56,11 +56,11 @@ export default {
 			//console.log("val2: " + val2.id)
 			
 			//this.photos.map(photo => console.log(photo.id))
-			const i = this.photos.indexOf(newValue)
-			//console.log("i: " + i)
 			console.log(`old: ${oldValue.id}, new: ${newValue.id}`)
-			//if (oldValue == newValue) {console.log("STOP"); return}
-			//this.swiper.slideTo(i, 0, false)
+			//const i = this.photos.indexOf(newValue)
+			const i = this.photos.findIndex(photo => (photo.id == newValue.id))
+			console.log("i: " + i)
+			this.swiper.slideTo(i, 0, false)
 		}
 	},
   

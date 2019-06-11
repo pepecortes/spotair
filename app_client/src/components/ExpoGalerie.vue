@@ -20,7 +20,7 @@
 			carousel(
 				style="width:100%; height:80vh",
 				:photos='photos',
-				v-model='selected',
+				v-model='xelected',
 			)
 </template>
 
@@ -48,6 +48,7 @@ export default {
 			thumbnails: [],
 			galerie: {},
 			selected: null,
+			xelected: {},
 			thumbnailLocation: process.env.STORAGE_URL + process.env.THUMBNAIL_LOCATION,
 			photoLocation: process.env.STORAGE_URL + process.env.PICTURE_LOCATION,
 		}
@@ -83,12 +84,12 @@ export default {
 		
 		// TEST
 		// DOES NOT WORK: how to go to the selected photo in the carousel?
-		inputChange(event) {
-			//console.log("event "+ JSON.stringify(event))
-			this.selected = this.photos[2]
+		inputChange() {
+			console.log("SELECTED: " + this.selected.id)
+			this.xelected = JSON.parse(JSON.stringify(this.selected))
+			console.log("XELECTED: " + this.xelected.id)
 			
 			//TEST
-			//const i = this.photos.indexOf(this.selected)
 			//console.log("selected: " + this.selected.id)
 			//console.log("photos in galerie: " + this.photos.length)
 			//this.photos.map(photo => console.log(photo.id))

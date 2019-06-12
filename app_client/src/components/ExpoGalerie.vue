@@ -8,19 +8,23 @@
 			@dismissed="alert.show=false",
 		) {{ alert.text }}
 		
-		div(v-if='galerieActive')
-			h4 {{ galerie.text }}
+		h4(v-if='galerieAvailable') {{ galerie.text }}
+		h3 carouselAvail {{carouselAvailable}}
+		
+		div(v-if='galerieAvailable', v-show='showGalerie')
 			expo-form(
 				:photos='thumbnails',
 				v-model='selected',
-				@input='inputChange',
+				v-on:input='photoSelected',
 			)
 			
-		div(v-if='carouselActive')
+		div(v-if='carouselAvailable', v-show='showCarousel')
 			carousel(
+				ref='xxx',
 				style="width:100%; height:80vh",
 				:photos='photos',
-				v-model='xelected',
+				v-model='selected',
+				v-on:input='displayGalerie',
 			)
 </template>
 
@@ -29,6 +33,8 @@
 import { alertMixin } from './AlertMixin'
 import ExpoForm from './ExpoForm.vue'
 import Carousel from './Carousel.vue'
+
+const _ = require('lodash')
 
 export default {
 	
@@ -41,61 +47,59 @@ export default {
 	
 	data() {
 		return {
-			galerieActive: false,
-			carouselActive: false,
-			id: null,
+			showGalerie: false,
+			galerieId: null,
 			photos: [],
 			thumbnails: [],
 			galerie: {},
-			selected: null,
-			xelected: {},
+			selected: {},
 			thumbnailLocation: process.env.STORAGE_URL + process.env.THUMBNAIL_LOCATION,
 			photoLocation: process.env.STORAGE_URL + process.env.PICTURE_LOCATION,
 		}
-	},	
+	},
+	
+	computed: {
+		showCarousel() {return !this.showGalerie},
+		galerieAvailable() {return !_.isEmpty(this.galerie)},
+		carouselAvailable() {
+			return (this.galerieAvailable && !_.isEmpty(this.selected))
+		},
+	},
 		
 	beforeMount() {
-		this.id = this.$route.params.id
-		this.getGaleriePhotos(this.id)
+		this.galerieId = this.$route.params.id
+		this.buildGalerie(this.galerieId)
 	},
 
 	methods: {
 		
-		photoToGalerieData(fileLocation) {return function(photo) {
-			var output = photo
-			output.url = `${fileLocation}${photo.id}.jpg`
-			return output
-		}},
+		addURL: function(fileLocation) {
+			return (photo) => photo.url = `${fileLocation}${photo.id}.jpg`
+		},
 		
-		getGaleriePhotos(galerieId) {
+		buildGalerie(galerieId) {
 			const vm = this
 			vm.axios.get(`photos/byGalerie/${galerieId}`)
 				.then(response => {
 					if (response.data.length == 0) throw new Error("Aucune photo dans la galerie")
-					vm.photos = JSON.parse(JSON.stringify(response.data))
-					vm.thumbnails = JSON.parse(JSON.stringify(response.data))
-					vm.photos.map(this.photoToGalerieData(vm.photoLocation))
-					vm.thumbnails.map(this.photoToGalerieData(vm.thumbnailLocation))
+					vm.photos = _.cloneDeep(response.data)
+					vm.thumbnails = _.cloneDeep(response.data)
+					vm.photos.map(this.addURL(vm.photoLocation))
+					vm.thumbnails.map(this.addURL(vm.thumbnailLocation))
 					vm.galerie = vm.photos[0].galerie
-					vm.galerieActive = true
+					vm.showGalerie = true
 				})
 				.catch(err => vm.showAxiosAlert(err))			
 		},
 		
-		// TEST
-		// DOES NOT WORK: how to go to the selected photo in the carousel?
-		inputChange() {
-			console.log("SELECTED: " + this.selected.id)
-			this.xelected = JSON.parse(JSON.stringify(this.selected))
-			console.log("XELECTED: " + this.xelected.id)
-			
-			//TEST
-			//console.log("selected: " + this.selected.id)
-			//console.log("photos in galerie: " + this.photos.length)
-			//this.photos.map(photo => console.log(photo.id))
-			
-			this.galerieActive = false
-			this.carouselActive = true
+		photoSelected(photo) {
+			this.showGalerie = false
+			// TEST
+			this.$refs.xxx.swiper.update()
+		},
+		
+		displayGalerie() {
+			this.showGalerie = true
 		},
 		
 	},

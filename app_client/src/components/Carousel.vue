@@ -39,7 +39,11 @@ export default {
 	mounted () {
 		window.addEventListener('resize', this.handleResize)
 		this.handleResize()
-		this.$emit('slideChange', this.photos[this.swiper.params.initialSlide])
+		if (this.currentPhoto && this.currentPhoto.id) this.gotoCurrentPhoto()
+		else {
+			const i = this.swiper.params.initialSlide
+			this.$emit('slideChange', this.photos[i])
+		}
 	},  
 	
 	beforeDestroy () {
@@ -47,20 +51,9 @@ export default {
   },
   
   watch: {
-		currentPhoto: function(oldValue, newValue) {
-			//console.log("IN CURRENTPHOTO WATCH: " + val.id) 
-			//console.log("...: " + this.photos[2].id) 
-			//console.log("this.photos.lenght " + this.photos.length)
-			//console.log("2ND ELEMENT: " + this.photos[2].id)
-			//console.log("val: " + val.id)
-			//console.log("val2: " + val2.id)
-			
-			//this.photos.map(photo => console.log(photo.id))
-			console.log(`old: ${oldValue.id}, new: ${newValue.id}`)
-			//const i = this.photos.indexOf(newValue)
-			const i = this.photos.findIndex(photo => (photo.id == newValue.id))
-			console.log("i: " + i)
-			this.swiper.slideTo(i, 0, false)
+		currentPhoto: function(newValue, oldValue) {
+			if (newValue.id == oldValue.id) return
+			this.gotoCurrentPhoto()
 		}
 	},
   
@@ -89,6 +82,14 @@ export default {
 	},
 	
 	methods: {
+		/**
+		 * Force the carousel to slide to the photo given by this.currentPhoto
+		 */
+		gotoCurrentPhoto() {
+			const photoId = this.currentPhoto.id
+			const i = this.photos.findIndex(photo => (photo.id == photoId))
+			this.swiper.slideTo(i, 0, false)
+		},
 		
 		/**
 		 * The user wants you to react on the current active photo

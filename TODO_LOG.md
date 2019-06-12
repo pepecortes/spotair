@@ -1,3 +1,9 @@
+EXPOGALERIE
+	Carousel does not display if coming from a resize
+
+SMARTPHONE
+	" Server error: no response" when accessing by smartphone
+
 PICTADD
 	"TypeError: undefined is not a function" when uploading form
 

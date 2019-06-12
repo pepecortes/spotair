@@ -9,7 +9,6 @@
 		) {{ alert.text }}
 		
 		h4(v-if='galerieAvailable') {{ galerie.text }}
-		h3 carouselAvail {{carouselAvailable}}
 		
 		div(v-if='galerieAvailable', v-show='showGalerie')
 			expo-form(
@@ -18,9 +17,8 @@
 				v-on:input='photoSelected',
 			)
 			
-		div(v-if='carouselAvailable', v-show='showCarousel')
+		div(v-if='carouselAvailable && showCarousel')
 			carousel(
-				ref='xxx',
 				style="width:100%; height:80vh",
 				:photos='photos',
 				v-model='selected',
@@ -94,8 +92,6 @@ export default {
 		
 		photoSelected(photo) {
 			this.showGalerie = false
-			// TEST
-			this.$refs.xxx.swiper.update()
 		},
 		
 		displayGalerie() {

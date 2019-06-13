@@ -93,6 +93,7 @@ export default {
 	.expobox img {
 		margin-right: 0.4em;
 		margin-bottom: 0.4em;
+    cursor: pointer;
 	}
 	
 </style>

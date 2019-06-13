@@ -1,8 +1,13 @@
-EXPOGALERIE
-	Carousel does not display if coming from a resize
+ONE STEP BEYOND AUTHENTICATION
+	The problem to solve is how to protect CRUD routes involving database update while keeping GET routes public
+	Other approach is to protect the whole API with JWT token, but how public users will use this? (and what is the sense of transmitting the token to public users?)
 
 SMARTPHONE
-	" Server error: no response" when accessing by smartphone
+	"Server error: no response" when accessing by smartphone
+		several problems together:
+			- passport.config.js, api strategy only allows localhost or JWT token
+			- problem: axios.defaults.baseURL = process.env.API_URL (localhost?)
+			- you will have a similar problem with .env (everywhere where you have localhost)
 
 PICTADD
 	"TypeError: undefined is not a function" when uploading form
@@ -26,6 +31,9 @@ https://www.npmjs.com/package/node-ovh-storage
 
 local container:
 	document in README
+	
+WHEN IN PROD:
+	Monitor size of javascript sources: can be compressed
 	
 
 

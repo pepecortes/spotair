@@ -1,12 +1,10 @@
-ONE STEP BEYOND AUTHENTICATION
-	The problem to solve is how to protect CRUD routes involving database update while keeping GET routes public
-	Other approach is to protect the whole API with JWT token, but how public users will use this? (and what is the sense of transmitting the token to public users?)
+it takes ages to start in home. why?
 
 SMARTPHONE
 	"Server error: no response" when accessing by smartphone
 		several problems together:
 			- passport.config.js, api strategy only allows localhost or JWT token
-			- problem: axios.defaults.baseURL = process.env.API_URL (localhost?)
+			- problem: axios.defaults.baseURL = process.env.API_URL (localhost?). SOLUTION: replace localhost by the server ip or domain name
 			- you will have a similar problem with .env (everywhere where you have localhost)
 
 PICTADD
@@ -34,6 +32,9 @@ local container:
 	
 WHEN IN PROD:
 	Monitor size of javascript sources: can be compressed
+	
+LATER:
+	Reinforce security using expiring JWT tokens (ref: https://www.techynovice.com/setting-up-JWT-token-refresh-mechanism-with-axios/)
 	
 
 

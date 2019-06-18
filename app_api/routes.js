@@ -42,7 +42,7 @@ module.exports = function(passport) {
 	var router = express.Router()
 	
 	// allow localhost or token (Authorization: Bearer eyJ0... in http headers key and value)
-	router.use(passport.authenticate(['api', 'jwt'], {session: false}))
+	router.use(passport.authenticate(['jwt', 'api'], {session: false}))
 	
 	/**
 	 * @desc: DRY: most of the routes look the same. This function creates

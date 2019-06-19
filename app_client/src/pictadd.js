@@ -12,6 +12,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 var axios = Axios.create()
 axios.defaults.baseURL = process.env.API_URL
 axios.defaults.timeout = 10000 // wait 10 seconds before giving out
+axios.defaults.headers.common['Authorization'] = `Bearer ${process.env.JWT_API_KEY}`
 
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)

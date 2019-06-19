@@ -78,7 +78,10 @@ ModelController.prototype.fresh = function(req, res) {
 }
 
 ModelController.prototype._create = function(data) {
+	//TEST
+	debug("debugging: " + JSON.stringify(data))
 	const record = createInstanceFromQuery(data, this.Model.metadata.fieldNames)
+	debug("record: " + JSON.stringify(record))
 	const options = Object.assign({where: record}, this.includeOption)
 	return this.Model.findOrCreate(options)
 		.then(([instance, created]) => instance.reload())
@@ -89,7 +92,7 @@ ModelController.prototype._create = function(data) {
 ModelController.prototype.create = function(req, res) {
 	this._create(req.body)
 		.then(([record, created]) => sendJSON.ok(res, record))
-		.catch(err => {sendJSON.serverError(res, err)});
+		//.catch(err => {sendJSON.serverError(res, err)});
 }
 
 ModelController.prototype._update = function(id, data) {

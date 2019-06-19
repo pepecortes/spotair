@@ -1,13 +1,6 @@
-it takes ages to start in home. why?
-
-SMARTPHONE
-	"Server error: no response" when accessing by smartphone
-		several problems together:
-			- passport.config.js, api strategy only allows localhost or JWT token
-			- problem: axios.defaults.baseURL = process.env.API_URL (localhost?). SOLUTION: replace localhost by the server ip or domain name
-			- you will have a similar problem with .env (everywhere where you have localhost)
-
 PICTADD
+	UNAUTHORIZED when POST for uploading data (from outside)
+	MULTIPLE errors in PICTADD (from localhost) ("CORS header ‘Access-Control-Allow-Origin’ missing")
 	"TypeError: undefined is not a function" when uploading form
 
 DATABASE MIGRATION

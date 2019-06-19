@@ -272,9 +272,6 @@ export default {
 			const FormData = require('form-data')
 			var fileData = new FormData()
 			
-			//TEST
-			console.log(JSON.stringify(data))
-			
 			vm.axios.post("photouploads/", data)
 				.then(output => output.data.id)
 				.then(id => {

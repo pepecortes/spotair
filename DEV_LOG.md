@@ -61,6 +61,12 @@ Create a FULLTEXT index on the text field
 After several tests of different carousel (sliders) I keep vue-awesome-swiper
 Tested: vue-agile, hooper, bootstrap carousel component
 
+#### July 2019
+API authorization: all GET calls are public (except 'users' and 'photographes')
+All POST, PUT... are restricted (via a JWT token, obtained after login)
+CORS (cross-origin resource sharing) is not allowed
+
+
 	
 
 

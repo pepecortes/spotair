@@ -26,7 +26,6 @@ import FileUploadForm from './components/FileUpload.vue'
 // Define the routes
 const routes = [
   { path: '/pictadd/profile', component: ProfileForm },
-  //TEST
   { path: '/pictadd/fileUpload', component: FileUploadForm },
 ]
 

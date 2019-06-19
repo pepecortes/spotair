@@ -1,5 +1,6 @@
+NODEMON should not reload upon changes on /dev_localstorage
+
 PICTADD
-	UNAUTHORIZED when POST for uploading data (from outside)
 	MULTIPLE errors in PICTADD (from localhost) ("CORS header ‘Access-Control-Allow-Origin’ missing")
 	"TypeError: undefined is not a function" when uploading form
 

@@ -1,9 +1,3 @@
-NODEMON should not reload upon changes on /dev_localstorage
-
-PICTADD
-	MULTIPLE errors in PICTADD (from localhost) ("CORS header ‘Access-Control-Allow-Origin’ missing")
-	"TypeError: undefined is not a function" when uploading form
-
 DATABASE MIGRATION
 	after the migration, many users will have a username xxx@nomail.com. how to manage this?
 	in galeries, many comments appear as "-": erase them (after migration, or add a SQL to do it automatically upon migration)

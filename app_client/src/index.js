@@ -4,6 +4,7 @@ import BootstrapVue from 'bootstrap-vue'
 import Axios from 'axios'
 import VueAxios from 'vue-axios'
 import Home from './Home.vue'
+import * as VueGoogleMaps from "vue2-google-maps"
 
 // Import bootstrap style
 import 'bootstrap/dist/css/bootstrap.css'
@@ -26,19 +27,15 @@ Vue.use(VueAxios, axios)
 
 // Define or input route components
 import Accueil from './components/Accueil.vue'
-
-// TEST
-import ExpoTest from './components/ExpoTest.vue'
+import Map from './components/Map.vue'
 import ExpoGalerie from './components/ExpoGalerie.vue'
 
 // Define the routes
 const routes = [
   { path: '/cover', component: Accueil },
-  
+  { path: '/map', component: Map },
   //TEST
-  { path: '/exposition', component: ExpoTest },
   { path: '/galeries/:id(\\d+)?', component: ExpoGalerie },
-  
 ]
 
 // Create the router

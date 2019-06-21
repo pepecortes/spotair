@@ -46,4 +46,4 @@ STORAGE_URL=http://localhost:3000/localStorage/
 	// remote alternate: STORAGE_URL=http://static.spotair.org/
 
 MEMBRES_DEFAULT_PASSWORD="membres!"
-GOOGLE_API_KEY=AIzaSyD3guQGCbdTzSCgvqeKpGnmBznpprAaEBc
+GOOGLE_API_KEY=do_not_commit_the_google_api_key!

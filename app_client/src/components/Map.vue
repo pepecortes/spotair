@@ -10,6 +10,15 @@
 		
 		h4 Map tests
 		
+		label
+			gmap-autocomplete(@place_changed='setPlace')
+			button(@click='addMarker') Add
+		
+		br
+		
+		gmap-map(:center="center", :zoom="12", style="width:100%;  height: 400px;")
+			gmap-marker(:key="index", v-for="(m, index) in markers", :position="m.position", @click="center=m.position")
+		
 </template>
 
 <script>
@@ -26,15 +35,13 @@ export default {
 	
 	data() {
 		return {
-			//showGalerie: false,
-			//galerieId: null,
-			//photos: [],
-			//thumbnails: [],
-			//galerie: {},
-			//selected: {},
-			//thumbnailLocation: process.env.STORAGE_URL + process.env.THUMBNAIL_LOCATION,
-			//photoLocation: process.env.STORAGE_URL + process.env.PICTURE_LOCATION,
-		}
+      // default to Montreal to keep it simple
+      // change this to whatever makes sense
+      center: { lat: 45.508, lng: -73.587 },
+      markers: [],
+      places: [],
+      currentPlace: null
+    }
 	},
 	
 	computed: {
@@ -52,34 +59,34 @@ export default {
 
 	methods: {
 		
-		//addURL: function(fileLocation) {
-			//return (photo) => photo.url = `${fileLocation}${photo.id}.jpg`
-		//},
-		
-		//buildGalerie(galerieId) {
-			//const vm = this
-			//vm.axios.get(`photos/byGalerie/${galerieId}`)
-				//.then(response => {
-					//if (response.data.length == 0) throw new Error("Aucune photo dans la galerie")
-					//vm.photos = _.cloneDeep(response.data)
-					//vm.thumbnails = _.cloneDeep(response.data)
-					//vm.photos.map(this.addURL(vm.photoLocation))
-					//vm.thumbnails.map(this.addURL(vm.thumbnailLocation))
-					//vm.galerie = vm.photos[0].galerie
-					//vm.showGalerie = true
-				//})
-				//.catch(err => vm.showAxiosAlert(err))			
-		//},
-		
-		//photoSelected(photo) {
-			//this.showGalerie = false
-		//},
-		
-		//displayGalerie() {
-			//this.showGalerie = true
-		//},
-		
-	},
+		// receives a place object via the autocomplete component
+    setPlace(place) {
+      this.currentPlace = place;
+    },
+    
+    addMarker() {
+      if (this.currentPlace) {
+        const marker = {
+          lat: this.currentPlace.geometry.location.lat(),
+          lng: this.currentPlace.geometry.location.lng()
+        };
+        this.markers.push({ position: marker });
+        this.places.push(this.currentPlace);
+        this.center = marker;
+        this.currentPlace = null;
+      }
+    },
+    
+    geolocate: function() {
+      navigator.geolocation.getCurrentPosition(position => {
+        this.center = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+      });
+    },
+    
+  }
 	
 }
 </script>

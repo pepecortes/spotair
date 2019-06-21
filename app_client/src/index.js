@@ -21,6 +21,14 @@ var axios = Axios.create()
 axios.defaults.baseURL = process.env.API_URL
 axios.defaults.timeout = 10000 // wait 10 seconds before giving out
 
+//TEST: GOOGLE MAPS API
+Vue.use(VueGoogleMaps, {
+	load: {
+		key: process.env.GOOGLE_API_KEY,
+		libraries: 'places'
+	}
+})
+
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
 Vue.use(VueAxios, axios)

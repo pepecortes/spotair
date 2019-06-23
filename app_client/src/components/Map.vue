@@ -16,7 +16,7 @@
 		
 		br
 		
-		gmap-map(:center="center", :zoom="12", style="width:100%;  height: 400px;")
+		gmap-map(:center='center', :options='options')
 			gmap-marker(:key="index", v-for="(m, index) in markers", :position="m.position", @click="center=m.position")
 		
 </template>
@@ -24,6 +24,7 @@
 <script>
 
 import { alertMixin } from './AlertMixin'
+import {gmapApi} from 'vue2-google-maps'
 
 export default {
 	
@@ -40,11 +41,14 @@ export default {
       center: { lat: 45.508, lng: -73.587 },
       markers: [],
       places: [],
-      currentPlace: null
+      currentPlace: null,
+      options:  {zoom: 12, style: "width:100%; height: 400px;"},
+      //center: new this.google.maps.LatLng(40, 20),
     }
 	},
 	
 	computed: {
+		google: gmapApi,
 		//showCarousel() {return !this.showGalerie},
 		//galerieAvailable() {return !_.isEmpty(this.galerie)},
 		//carouselAvailable() {

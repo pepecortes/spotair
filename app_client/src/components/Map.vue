@@ -8,7 +8,7 @@
 			@dismissed="alert.show=false",
 		) {{ alert.text }}
 		
-		h4 Map tests
+		h4 Map tests {{ testPosition }}
 		
 		label
 			gmap-autocomplete(@place_changed='setPlace')
@@ -16,7 +16,13 @@
 		
 		br
 		
-		gmap-map(:center='center', :options='options')
+		gmap-map(
+			ref='mapRef',
+			:center="{lat:10, lng:10}",
+			:zoom="7",
+			map-type-id="terrain",
+			style="width: 500px; height: 300px"
+		)
 			gmap-marker(:key="index", v-for="(m, index) in markers", :position="m.position", @click="center=m.position")
 		
 </template>
@@ -24,7 +30,7 @@
 <script>
 
 import { alertMixin } from './AlertMixin'
-import {gmapApi} from 'vue2-google-maps'
+import { gmapApi } from 'vue2-google-maps'
 
 export default {
 	
@@ -36,8 +42,6 @@ export default {
 	
 	data() {
 		return {
-      // default to Montreal to keep it simple
-      // change this to whatever makes sense
       center: { lat: 45.508, lng: -73.587 },
       markers: [],
       places: [],
@@ -49,6 +53,7 @@ export default {
 	
 	computed: {
 		google: gmapApi,
+		testPosition() {return (this.google && new this.google.maps.LatLng(20,40))},
 		//showCarousel() {return !this.showGalerie},
 		//galerieAvailable() {return !_.isEmpty(this.galerie)},
 		//carouselAvailable() {
@@ -59,6 +64,14 @@ export default {
 	beforeMount() {
 		//this.galerieId = this.$route.params.id
 		//this.buildGalerie(this.galerieId)
+	},
+	
+	mounted() {
+		this.mapAvailable = true
+		var vm = this
+		this.$refs.mapRef.$mapPromise.then(
+			map => console.log("gmapapi " + new vm.google.maps.LatLng(20,40))
+		)
 	},
 
 	methods: {

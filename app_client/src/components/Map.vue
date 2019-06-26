@@ -8,8 +8,6 @@
 			@dismissed="alert.show=false",
 		) {{ alert.text }}
 		
-		h4 Map tests {{ testPosition }}
-		
 		label
 			gmap-autocomplete(@place_changed='setPlace')
 			button(@click='addMarker') Add
@@ -18,7 +16,7 @@
 		
 		gmap-map(
 			ref='mapRef',
-			:center="{lat:10, lng:10}",
+			:center="center",
 			:zoom="7",
 			map-type-id="terrain",
 			style="width: 500px; height: 300px"
@@ -35,42 +33,37 @@ import { gmapApi } from 'vue2-google-maps'
 export default {
 	
 	components: {
-		//'expo-form': ExpoForm,
 	},
 	
 	mixins: [alertMixin],
 	
 	data() {
 		return {
-      center: { lat: 45.508, lng: -73.587 },
+      center: {lat:0, lng:0},
       markers: [],
       places: [],
       currentPlace: null,
       options:  {zoom: 12, style: "width:100%; height: 400px;"},
-      //center: new this.google.maps.LatLng(40, 20),
     }
 	},
 	
 	computed: {
 		google: gmapApi,
-		testPosition() {return (this.google && new this.google.maps.LatLng(20,40))},
-		//showCarousel() {return !this.showGalerie},
-		//galerieAvailable() {return !_.isEmpty(this.galerie)},
-		//carouselAvailable() {
-			//return (this.galerieAvailable && !_.isEmpty(this.selected))
-		//},
+    //center() {return (this.google)? (new this.google.maps.LatLng(45.508, -73.587)) : {lat:0, lng:0}},
 	},
 		
 	beforeMount() {
-		//this.galerieId = this.$route.params.id
-		//this.buildGalerie(this.galerieId)
 	},
 	
 	mounted() {
 		this.mapAvailable = true
 		var vm = this
-		this.$refs.mapRef.$mapPromise.then(
-			map => console.log("gmapapi " + new vm.google.maps.LatLng(20,40))
+		this.$refs.mapRef.$mapPromise.then(map => {
+			vm.center = new vm.google.maps.LatLng(45.508, -73.587)
+			const m1 = new vm.google.maps.Marker({position: vm.center})
+			vm.markers.push(m1)
+		}
+			
 		)
 	},
 

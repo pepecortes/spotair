@@ -1,4 +1,4 @@
-REMOVE ALL SECRETS FROM env_example
+CHECK NEW VERSION OF SEQUELIZE (should be v6)
 
 DATABASE MIGRATION
 	after the migration, many users will have a username xxx@nomail.com. how to manage this?

@@ -14,12 +14,12 @@
 		
 		br
 		
-		div(id="gmapFilter")
-			button(@click='centerClicked') Recentrer
-			button() Reset
+		div(v-show='mapAvailable', ref='gmapFilter', id='gmapFilter')
+			button(class='btn btn-primary', @click='centerClicked') Recentrer
+			button(class='btn btn-link', @click='resetClicked') Reset
 		
 		gmap-map(
-			style="width: 500px; height: 300px",
+			style="width: 100%; height: 300px",
 			ref='mapRef',
 			:center='center',
 			:zoom='zoom',
@@ -48,6 +48,7 @@ export default {
       markers: [],
       places: [],
       MAP: null,
+      mapAvailable: false,
       currentPlace: null,
     }
 	},
@@ -69,6 +70,7 @@ export default {
 		this.mapAvailable = true
 		var vm = this
 		this.$refs.mapRef.$mapPromise.then(map => {
+			this.mapAvailable = true
 			this.MAP = map
 			this.initializeMap()
 			//vm.center = new vm.google.maps.LatLng(45.508, -73.587)
@@ -81,44 +83,24 @@ export default {
 
 	methods: {
 		
-			
-		customControl(controlDiv, text, customFunction) {
-
-			// Set CSS for the control border.
-			var controlUI = document.createElement('div');
-			controlUI.className = "gMapControlBorder";
-			controlUI.title = text;
-			controlDiv.appendChild(controlUI);
-
-			// Set CSS for the control interior.
-			var controlText = document.createElement('div');
-			controlText.className = "gMapControlInterior";
-			controlText.innerHTML = text;
-			controlUI.appendChild(controlText);
-
-			// Setup the click event listeners
-			//controlUI.addEventListener('click', customFunction);
-			
-			return controlDiv
-		},
-		
 		initializeMap() {
-			var testDiv = document.createElement('div')
-			var newContent = document.getElementById('gmapFilter');
-			
-			var searchControlDiv = document.createElement('div')
-			var searchControl = this.customControl(searchControlDiv, "Recherche", null)
-			newContent = searchControl
-			
-			
-			//this.GMAP.addCustomControl(dom);
-			testDiv.appendChild(newContent)
-			this.MAP.controls[this.google.maps.ControlPosition.TOP_LEFT].push(testDiv);
+			this.addCustomControl(this.$refs.gmapFilter)
 			this.zoomAndCenter()			
 		},
 		
 		centerClicked() {
 			this.zoomAndCenter()
+		},
+		
+		resetClicked() {
+			console.log("RESET CLICKED")
+		},
+		
+		addCustomControl(dom) {
+			var borderDiv = document.createElement('div')
+			borderDiv.className = "gMapControlBorder"
+			borderDiv.appendChild(dom);
+			this.MAP.controls[this.google.maps.ControlPosition.TOP_LEFT].push(borderDiv)
 		},
 		
 		zoomAndCenter(zoom=3, lat=15, long=15) {
@@ -130,7 +112,6 @@ export default {
 			 this.MAP.panTo(center)
 			 this.MAP.setZoom(zoom)
 		},
-		
 		
 		// receives a place object via the autocomplete component
     setPlace(place) {
@@ -165,4 +146,24 @@ export default {
 </script>
 
 <style lang="scss">
+
+.gMapControlBorder {
+    background-color: #ffffff;
+    border-radius: 3px;
+    cursor: pointer;
+    margin: 10px;
+    text-align: center;
+}
+
+#gmapFilter {
+    background-color: #ffffff;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-bottom-left-radius: 2px;
+    border-top-left-radius: 2px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+}
+
 </style>

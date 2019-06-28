@@ -34,9 +34,6 @@
 import { alertMixin } from './AlertMixin'
 import { gmapApi } from 'vue2-google-maps'
 
-const MarkerClusterer = require('node-js-marker-clusterer')
-//const OverlappingMarkerSpiderfier = require('overlapping-marker-spiderfier')
-
 export default {
 	
 	components: {
@@ -92,18 +89,21 @@ export default {
 			this.addCustomControl(this.$refs.gmapFilter)
 			this.zoomAndCenter()
 			const clusterOptions = {gridSize: 40, maxZoom: 12}
+			
+			const MarkerClusterer = require('node-js-marker-clusterer')
+			const OverlappingMarkerSpiderfier = require('overlapping-marker-spiderfier')
 			this.markerClusterer = new MarkerClusterer(this.MAP, [], clusterOptions)
-				
-			//this.spiderfier = new OverlappingMarkerSpiderfier(this.MAP, {
-				//markersWontMove: true,
-				//markersWontHide: true,
-				//keepSpiderfied: true,
-				//basicFormatEvents: true,
-				//spiralFootSeparation: 30,
-				//spiralLengthFactor: 4,
-				//spiralLengthStart: 20,
-				//legWeight: 0.2
-			//});
+			this.spiderfier = new OverlappingMarkerSpiderfier(this.MAP, {
+				markersWontMove: true,
+				markersWontHide: true,
+				keepSpiderfied: true,
+				basicFormatEvents: true,
+				spiralFootSeparation: 30,
+				spiralLengthFactor: 4,
+				spiralLengthStart: 20,
+				legWeight: 0.2
+			})
+			
 			
 		},
 		

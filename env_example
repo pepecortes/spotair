@@ -44,6 +44,7 @@ WEB_URL=http://localhost:3000/
 API_URL=http://localhost:3000/api/
 STORAGE_URL=http://localhost:3000/localStorage/
 	// remote alternate: STORAGE_URL=http://static.spotair.org/
+ASSETS_URL=http://localhost:3000/static/
 
 MEMBRES_DEFAULT_PASSWORD="membres!"
 GOOGLE_API_KEY=do_not_commit_the_google_api_key!

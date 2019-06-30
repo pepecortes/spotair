@@ -8,10 +8,6 @@
 			@dismissed="alert.show=false",
 		) {{ alert.text }}
 		
-		label
-			gmap-autocomplete(@place_changed='setPlace')
-			button(@click='addMarker') Add
-		
 		br
 		
 		div(v-show='mapAvailable', ref='gmapFilter', id='gmapFilter')
@@ -51,6 +47,7 @@ export default {
       mapAvailable: false,
       markerClusterer: null,
       spiderfier: null,
+      infoWindow: null,
       currentPlace: null,
     }
 	},
@@ -66,34 +63,30 @@ export default {
 	},
 		
 	beforeMount() {
+		
+		//console.log("beforemount " + process.env.ASSETS_URL)
 	},
 	
 	mounted() {
-		this.mapAvailable = true
 		var vm = this
 		this.$refs.mapRef.$mapPromise.then(map => {
-			this.mapAvailable = true
 			this.MAP = map
 			this.initializeMap()
-			//vm.center = new vm.google.maps.LatLng(45.508, -73.587)
-			//const m1 = new vm.google.maps.Marker({position: vm.center})
-			//vm.markers.push(m1)
-		}
-			
-		)
+			this.mapAvailable = true
+		})
 	},
 
 	methods: {
 		
 		initializeMap() {
-			this.addCustomControl(this.$refs.gmapFilter)
-			this.zoomAndCenter()
-			const clusterOptions = {gridSize: 40, maxZoom: 12}
-			
-			const MarkerClusterer = require('node-js-marker-clusterer')
-			const OverlappingMarkerSpiderfier = require('overlapping-marker-spiderfier')
-			this.markerClusterer = new MarkerClusterer(this.MAP, [], clusterOptions)
-			this.spiderfier = new OverlappingMarkerSpiderfier(this.MAP, {
+			const vm = this
+			vm.addCustomControl(vm.$refs.gmapFilter)
+			const clusterOptions = {
+				gridSize: 40,
+				maxZoom: 12,
+				imagePath: `${process.env.ASSETS_URL}icons/markercluster`
+			}
+			const spiderfierOptions = {
 				markersWontMove: true,
 				markersWontHide: true,
 				keepSpiderfied: true,
@@ -102,9 +95,24 @@ export default {
 				spiralLengthFactor: 4,
 				spiralLengthStart: 20,
 				legWeight: 0.2
+			}
+			const MarkerClusterer = require('node-js-marker-clusterer')
+			const OverlappingMarkerSpiderfier = require('overlapping-marker-spiderfier')
+			vm.markerClusterer = new MarkerClusterer(vm.MAP, [], clusterOptions)
+			vm.infoWindow = new vm.google.maps.InfoWindow()
+			vm.spiderfier = new OverlappingMarkerSpiderfier(vm.MAP, spiderfierOptions)
+			
+			// set events on each marker, so as to change between
+			// overlapped and isolated marker labels
+			this.MAP.addListener('idle', function() {
+				const spiderable = vm.spiderfier.markersNearAnyOtherMarker()
+				spiderable.forEach(m => {if (!m._omsData) m.stackMe()})
+				// 'm._omsData' says whether or not the marker is spiderfied
+				// do not set the overlapped icon if it is spiderfied
 			})
-			
-			
+			vm.spiderfier.addListener('unspiderfy', markers =>	markers.forEach(m => m.stackMe()))
+			vm.spiderfier.addListener('spiderfy', markers => markers.forEach(m => m.unstackMe()))
+			vm.zoomAndCenter()
 		},
 		
 		centerClicked() {
@@ -112,7 +120,12 @@ export default {
 		},
 		
 		resetClicked() {
-			console.log("RESET CLICKED")
+			const vm = this
+			console.log("TEST: RESET CLICKED")
+			vm.axios.get(`galeries`)
+				.then(response => {
+					vm.updateMarkers(response.data)
+				})
 		},
 		
 		addCustomControl(dom) {
@@ -132,32 +145,95 @@ export default {
 			 this.MAP.setZoom(zoom)
 		},
 		
-		// receives a place object via the autocomplete component
-    setPlace(place) {
-      this.currentPlace = place;
-    },
-    
-    addMarker() {
-      if (this.currentPlace) {
-        const marker = {
-          lat: this.currentPlace.geometry.location.lat(),
-          lng: this.currentPlace.geometry.location.lng()
-        };
-        this.markers.push({ position: marker });
-        this.places.push(this.currentPlace);
-        this.center = marker;
-        this.currentPlace = null;
-      }
-    },
-    
-    geolocate: function() {
-      navigator.geolocation.getCurrentPosition(position => {
-        this.center = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-      });
-    },
+		updateMarkers(dataArray) {
+			// Update all markers using the dataArray provided
+			const vm = this
+			
+			function handleInfoWindow(marker) {
+				console.log("handling infoWindow")
+				var gallery = marker.data
+				//const url = "/index.php?call=gallery&id=" + gallery.id;
+				//const str = `
+					//<div class="infoWindow galleryGMarker">
+					//<a title="${gallery.text}" href="${url}">${gallery.sujet}</a>
+					//<br>
+					//${gallery.annee}, ${gallery.aerodrome}
+					//<br>
+					//${gallery.commentaire}
+					//</div>
+				//`.trim();
+				// ATTENTION THIS IS JQUERY
+				//const dom = $.parseHTML(str)[0];
+				vm.infoWindow.close()
+				//vm.infoWindow.setContent(dom)
+				vm.infoWindow.setContent("INFOWINDOW TEXT")
+				vm.infoWindow.open(null, marker)
+			}
+			
+			function galleryToMarker(galerie) {
+					/** 
+					 * translate a JSON object 'galerie' into a google.maps.Marker
+					 * note the property 'realLabel' added to the Marker object
+					 * it will be used by the spiderfy-unspiderfy function
+					 */
+
+				
+				var markerOptions = {
+					zIndex: (Math.random() * 1000),// this will avoid overlapping
+					position: new vm.google.maps.LatLng(galerie.aerodrome.latitude, galerie.aerodrome.longitude),
+					title: galerie.text
+				}
+												
+				var marker = new vm.google.maps.Marker(markerOptions)
+				marker.data = galerie
+				// define icons and labels for both spiderfied and unspiderfied states
+				marker.stackedIcon = {url: `${process.env.ASSETS_URL}icons/geoloc_marker_stacked.png`}
+				marker.unstackedIcon = {labelOrigin: new vm.google.maps.Point(19, 15)}
+				marker.unstackedLabel = ""
+					
+				switch(galerie.annee.annee) {
+					case "Musées":
+						marker.unstackedIcon.url = `${process.env.ASSETS_URL}icons/geoloc_marker_musees.png`
+						break;
+					case "Collectors":
+						marker.unstackedIcon.url = `${process.env.ASSETS_URL}icons/geoloc_marker_collectors.png`
+						break;
+					case "-NIL":
+						marker.unstackedIcon.url = `${process.env.ASSETS_URL}icons/geoloc_marker_empty.png`
+						break;
+					default:
+						marker.unstackedIcon.url = (galerie.isSpotair)?
+							`${process.env.ASSETS_URL}icons/geoloc_marker_empty_spotair.png` :
+							`${process.env.ASSETS_URL}icons/geoloc_marker_empty.png`
+						const labelText = "'" + galerie.annee.annee.substr(2,2)
+						marker.unstackedLabel = {text: labelText, fontSize: "10px", fontWeight: "bold"}
+				}
+					
+				marker.stackMe = function() {
+					this.setIcon(this.stackedIcon)
+					this.setLabel("")
+				}
+					
+				marker.unstackMe = function() {
+					this.setIcon(marker.unstackedIcon)
+					this.setLabel(this.unstackedLabel)
+				}
+
+				// set marker in unstacked state first
+				marker.unstackMe()
+				return marker
+			}
+			
+			vm.markerClusterer.clearMarkers()
+			const markers = dataArray
+				.filter(data => (data.aerodrome.latitude !== null) && (data.aerodrome.longitude !== null))
+				.map(galleryToMarker)
+			// add markers to spiderfier, then to markercluster
+			markers.map(m => vm.spiderfier.addMarker(m))
+			vm.markerClusterer.addMarkers(markers)
+			// set global event listener on spiderfier
+			vm.spiderfier.addListener('click', (marker, event) => handleInfoWindow(marker))
+		},
     
   }
 	

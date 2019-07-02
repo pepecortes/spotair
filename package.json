@@ -41,7 +41,7 @@
     "pluralize": "^7.0.0",
     "probe-image-size": "^4.0.0",
     "pug": "^2.0.3",
-    "sequelize": "^4.41.2",
+    "sequelize": "^5.9.0",
     "serve-favicon": "^2.5.0",
     "serve-index": "^1.9.1",
     "sharp": "^0.22.1",

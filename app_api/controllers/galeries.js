@@ -31,6 +31,18 @@ controller.byAerodrome = function(req, res) {
 		.catch(err => sendJSON.serverError(res, err));
 }
 
+// filter by annee id
+controller.byAnnee = function(req, res) {
+	const id = req.params.id;
+	db.Galerie
+		.findAll({where: {anneeId: id}, include: [{all:true, nested:true}]})
+		.then((record) => {
+			if (record) sendJSON.ok(res, record);
+			else sendJSON.notFound(res, "Not found");
+		})
+		.catch(err => sendJSON.serverError(res, err));
+}
+
 // fusion
 controller.fusion = ModelController.buildFusionController('galerieId', db.Galerie, db.Photo)
 

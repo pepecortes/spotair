@@ -1,7 +1,7 @@
 <template lang="pug">
 	div(ref="carousel", id='carousel', style="width:100vw;height:80vh")
 		swiper(:options="swiperOption", ref="mySwiper")
-			swiper-slide(v-for='photo in items')
+			swiper-slide(v-for='photo in items', v-bind:key='photo.id')
 				b-img(:src='getImgSrc(photo)', v-bind:style='imgStyle(photo)')
 		div(class="swiper-button-next")
 		div(class="swiper-button-prev")

@@ -1,7 +1,7 @@
 <template lang="pug">
 	div(ref="carousel")
 		swiper(:options="swiperOptions", ref="mySwiper", v-on:doubleTap='doubleTap', v-on:slideChange='slideChange')
-			swiper-slide(v-for='photo in photos')
+			swiper-slide(v-for='photo in photos', v-bind:key='photo.id')
 				b-img(:src='photo.url', v-bind:style='imgStyle(photo)')
 		div(class="swiper-button-next")
 		div(class="swiper-button-prev")

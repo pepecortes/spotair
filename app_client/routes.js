@@ -52,7 +52,11 @@ module.exports = function(passport) {
 	)
 	
 	router.get('/logout*',
-		(req, res) => {req.logout(); res.redirect('/')}
+		(req, res) => {
+			req.logout()
+			req.session.destroy()
+			res.redirect('/')
+		}
 	)
 	
 	router.post('/login*',
@@ -61,7 +65,10 @@ module.exports = function(passport) {
 			failureRedirect: '/login',
 			failureFlash: true
 		}),
-		(req, res) => res.redirect(req.session.redirect)
+		(req, res) => {
+			const redirect = (req.session.redirect)? req.session.redirect : "/"
+			return res.redirect(redirect)
+		}
 	)
 	
 	// returns the currently logged user

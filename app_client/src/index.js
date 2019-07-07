@@ -37,11 +37,15 @@ Vue.use(VueAxios, axios)
 import Accueil from './components/Accueil.vue'
 import Map from './components/Map.vue'
 import ExpoGalerie from './components/ExpoGalerie.vue'
+import FileUploadForm from './components/FileUpload.vue'
+import ProfileForm from './components/ProfileForm.vue'
 
 // Define the routes
 const routes = [
-  { path: '/cover', component: Accueil },
+  { path: '/', component: Accueil },
   { path: '/map', component: Map },
+  { path: '/pictadd', component: FileUploadForm },
+  { path: '/profileForm', component: ProfileForm },
   //TEST
   { path: '/galeries/:id(\\d+)?', component: ExpoGalerie },
 ]

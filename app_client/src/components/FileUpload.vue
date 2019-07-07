@@ -271,14 +271,16 @@ export default {
 			var data = {jsonData: vm.photoData, photographe: vm.photographe}
 			const FormData = require('form-data')
 			var fileData = new FormData()
-			
-			vm.axios.post("photouploads/", data)
+			let headers = {'Authorization': `Bearer ${process.env.JWT_API_KEY}`}
+			// POST to API is restricted: use a key
+			vm.axios.post("photouploads/", data, {'headers': headers})
 				.then(output => output.data.id)
 				.then(id => {
 					const filename = `${id}.jpg`
 					fileData.append('file', vm.filex, filename)
 					fileData.append('path', process.env.UPLOAD_LOCATION)
-					return vm.axios.post("storage/putFile/", fileData, {headers: {'Content-Type': 'multipart/form-data'}})
+					headers['Content-Type'] = 'multipart/form-data'
+					return vm.axios.post("storage/putFile/", fileData, {'headers': headers})
 				})
 				.then(output => {
 					vm.showAlert("Photo envoyée pour validation", "success")

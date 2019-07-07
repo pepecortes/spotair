@@ -1,5 +1,6 @@
 <template lang="pug">
 	div(id='admin')
+	
 		b-nav(fill, tabs)
 			b-nav-item(href="/") Home
 			b-nav-item(to="/admin/validatePhoto") Validate
@@ -20,7 +21,34 @@
 </template>
 
 <script>
-export default {}
+export default {	
+	
+	data () {
+		return {
+			user: null,
+		}
+	},
+	
+	computed: {
+		loggedIn() {return this.user && this.user.id},
+		isAdmin() {return this.user && this.user.isAdmin},
+	},
+	
+	beforeMount() {this.getCurrentUser()},
+	
+	methods: {
+		
+		getCurrentUser() {
+			var vm = this
+			vm.axios.get(process.env.WEB_URL + 'profile') 
+				// note that the call is NOT an API call
+				.then(response => vm.user = response.data)
+				.catch(err => vm.showAxiosAlert(err, "danger"))
+		},
+	}
+	
+}
+
 </script>
 
 <style lang="scss">

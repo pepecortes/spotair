@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import AsyncComputed from 'vue-async-computed'
 import BootstrapVue from 'bootstrap-vue'
 import Axios from 'axios'
 import VueAxios from 'vue-axios'
@@ -15,6 +16,9 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 // on each module
 
 Vue.config.productionTip = false
+
+// To be able to use async computed properties
+Vue.use(AsyncComputed)
 
 // Create an axios instance and set some defaults for authorization...
 var axios = Axios.create()
@@ -39,6 +43,7 @@ import Map from './components/Map.vue'
 import ExpoGalerie from './components/ExpoGalerie.vue'
 import FileUploadForm from './components/FileUpload.vue'
 import ProfileForm from './components/ProfileForm.vue'
+import Search from './components/Search.vue'
 
 // Define the routes
 const routes = [
@@ -46,6 +51,7 @@ const routes = [
   { path: '/map', component: Map },
   { path: '/pictadd', component: FileUploadForm },
   { path: '/profileForm', component: ProfileForm },
+  { path: '/search', component: Search },
   //TEST
   { path: '/galeries/:id(\\d+)?', component: ExpoGalerie },
 ]

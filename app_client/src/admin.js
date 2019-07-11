@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import AsyncComputed from 'vue-async-computed'
 import BootstrapVue from 'bootstrap-vue'
 import Axios from 'axios'
 import VueAxios from 'vue-axios'
@@ -14,6 +15,9 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 // on each module
 
 Vue.config.productionTip = false
+
+// To be able to use async computed properties
+Vue.use(AsyncComputed)
 
 // Create an axios instance and set some defaults for authorization...
 var axios = Axios.create()

@@ -103,6 +103,7 @@ module.exports = function(passport) {
 	
 	// Routes for search functions
 	router.get('/search/fts', (req, res) => ctrlSearch.fts(req, res))
+	router.get('/search/fts/partial/:limit(\\d+)/:offset(\\d+)', (req, res) => ctrlSearch.ftsPartial(req, res))
 
 	// Not found
 	router.all('/*', ctrlNotFound);

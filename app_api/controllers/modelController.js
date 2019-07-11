@@ -6,6 +6,8 @@ const sendJSON = helpers.sendJSON
 const createInstanceFromQuery = helpers.createInstanceFromQuery
 const dbReplaceReference = helpers.dbReplaceReference
 
+const Op = db.sequelize.Op
+
 /**
  * @Object
  * @desc Create a controller for the given Model.
@@ -39,20 +41,33 @@ ModelController.buildFusionController =  function(idField, targetModel, parentMo
 			.catch(err => sendJSON.serverError(res, err))
 	}
 }
-	
-ModelController.prototype.all = function(req, res) {
-	this.Model
-		.findAll(this.includeOption)
-		.then(record => sendJSON.ok(res, record))
-		.catch(err => sendJSON.serverError(res, err));
+
+/**
+ * @description: Query the Model, with different options. When all 
+ * parameters are omitted, just find all
+ * @param {Array[Integer]} ids - Filter results by given ids
+ * @param {Integer} limit - Max number of results to return
+ * @param {Integer} offset - Return instance starting from offset
+ * @return {[Model]} All matching instances of Model
+ */	
+ModelController.prototype._findAll = function(ids=false, limit=false, offset=false) {
+	const options = this.includeOption
+	if (ids) Object.assign(options, { where: { id: { [Op.in]: ids } } })
+	if (limit) Object.assign(options, { limit: limit })
+	if (offset) Object.assign(options, { offset: offset })
+	return this.Model.findAll(options)
 }
 	
+ModelController.prototype.all = function(req, res) {
+	this._findAll()
+		.then(record => sendJSON.ok(res, record))
+		.catch(err => sendJSON.serverError(res, err))
+}
+
 ModelController.prototype.partial = function(req, res) {
 	const limit = parseInt(req.params.limit)
 	const offset = parseInt(req.params.offset)
-	const options = Object.assign({limit: limit, offset: offset}, this.includeOption)
-	this.Model
-		.findAll(options)
+	this._findAll(false, limit, offset)
 		.then(record => sendJSON.ok(res, record))
 		.catch(err => sendJSON.serverError(res, err))
 }

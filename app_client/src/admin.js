@@ -39,6 +39,7 @@ import AvionForm from './components/AvionForm.vue'
 import AppareilForm from './components/AppareilForm.vue'
 import PhotoForm from './components/PhotoForm.vue'
 import ValidateSinglePhoto from './components/ValidateSinglePhoto.vue'
+import ProfileForm from './components/ProfileForm.vue'
 
 
 // Define the routes
@@ -56,6 +57,7 @@ const routes = [
   { path: '/admin/photos/:tab?', component: PhotoForm },
   { path: '/admin/users/:tab?', component: UserForm },
   { path: '/admin/validatePhoto/:id(\\d+)?', component: ValidateSinglePhoto },
+  { path: '/admin/profileForm', component: ProfileForm },
 ]
 
 // Create the router

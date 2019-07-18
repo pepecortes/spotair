@@ -8,51 +8,38 @@ const _ = require('lodash');
 //const helpers = require('../app_lib/helpers')
 //const SpotairPict = require('../app_lib/SpotairPict')
 //const Sharp = require('sharp')
-const db = require('../app_api/models/db')
+//const db = require('../app_api/models/db')
 //const probe = require('probe-image-size')
 
 
 console.log("START")
-db.Photo.findByPk(5404, {include: [{all:true, nested:true}]})
-	//.then(output => output.slice(30000, 30500))
-	.then(e => console.log(e.caption))
 
+function centeredSlice(array, center=0, radius=1) {
 
+	function concatNTimes(array, n, output = []) {
+		if (n <= 0) return output
+		const x = output.concat(array)
+		return concatNTimes(array, n-1, x)
+	}
+	
+	radius = Math.abs(radius)
+	const l = array.length
+	center = center % l
+	const n_float = _.max([(radius-center)/l, (radius+center)/l])
+	const n = _.ceil(n_float)
+	const extendedArray = concatNTimes(array, (2*n + 1))
+	let LH = center - radius + n*l
+	let RH = center + radius + 1 + n*l
+	return extendedArray.slice(LH, RH)
+}
+ 
 
-
-//const path = "./pluto.jpg"
-//const pathResized = "./pluto_resized.jpg"
-
-//const text = "En un lugar de La Mancha de cuyo nombre no quiero acordarme, no ha mucho que vivía un hidalgo"
-//fsp.readFile(path)
-	//.then(buffer => (new SpotairPict(buffer)).watermark(text))
-	//.then(img => img.toFile(pathResized))
-	//.then(data => console.log(data))
-
-
-//const { registerFont, createCanvas } = require('canvas');
-
-////registerFont( 'watermarkFont.ttf', { family: "WatermarkFont" } );
-////registerFont( 'AGaramondPro-Italic.otf', { family: "AGaramondPro" } );
-
-//const H = 1200
-//const rate = 0.05
-//const h = rate * H
-
-//var canvas = createCanvas( 900, h );
-//var ctx = canvas.getContext( '2d' );
-
-//ctx.fillStyle = '#ffffff';
-//ctx.fillRect( 0, 0, canvas.width, canvas.height );
-
-//ctx.font = `${h}px WatermarkFont`
-////ctx.font = "100px WatermarkFont"
-//console.log(ctx.font)
-//ctx.fillStyle = '#000000';
-//ctx.fillText( "Now is the time for all good men.", 10, h );
-
-//const buffer = canvas.toBuffer()
-//const img = new SpotairPict(buffer)
-//img.toFile("koko.jpg")
-
-
+const c = 8
+const r = 10
+//const A = [0,1,2,3,4,5,6]
+const A = [...Array(150).keys()]
+let output = centeredSlice(A, c, r)
+console.log(A)
+console.log(output)
+output =  centeredSlice(A, c+10, r)
+console.log(output)

@@ -41,9 +41,7 @@ export default {
 			carouselActive: false,
 			photos: [],
 			photo: {},
-			options: {
-				autoplay: {delay: 3500, disableOnInteraction: true},
-			},
+			options: {autoplay: {delay: 3500, disableOnInteraction: false}},
 			fileLocation: process.env.STORAGE_URL + process.env.PICTURE_LOCATION
 		}
 	},

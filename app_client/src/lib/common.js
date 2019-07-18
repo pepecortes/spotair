@@ -38,4 +38,31 @@ export function pictureURLs(photo) {
 	urls.thumbnail = `${process.env.STORAGE_URL}thumbnails/${photo.id}.jpg`
 	return urls
 }
+
+/**
+ * @function centeredSlice
+ * @desc Slice the array returning a copy symmetrically centered on
+ * the given element. Consider the given array as circular
+ * @param {Integer} center	-	index to be the center of the new array
+ * @param {Integer} radius	- number of elements to take, both left and right
+ * @returns {Array} A copy of the original array
+ */
+export function centeredSlice(array, center=0, radius=1) {
+
+	function concatNTimes(array, n, output = []) {
+		if (n <= 0) return output
+		const x = output.concat(array)
+		return concatNTimes(array, n-1, x)
+	}
+	
+	radius = Math.abs(radius)
+	const l = array.length
+	center = center % l
+	const n_float = _.max([(radius-center)/l, (radius+center)/l])
+	const n = _.ceil(n_float)
+	const extendedArray = concatNTimes(array, (2*n + 1))
+	let LH = center - radius + n*l
+	let RH = center + radius + 1 + n*l
+	return extendedArray.slice(LH, RH)
+}
  

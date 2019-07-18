@@ -1,8 +1,9 @@
 <template lang="pug">
 	div(ref="carousel")
-		swiper(:options="swiperOptions", ref="mySwiper", v-on:doubleTap='doubleTap', v-on:slideChange='slideChange')
-			swiper-slide(v-for='photo in photos', v-bind:key='photo.id')
-				b-img(:src='photo.url', v-bind:style='imgStyle(photo)')
+		p displayedSlide {{displayedSlide.id}}
+		swiper(:options="swiperOptions", ref="mySwiper", v-on:doubleTap='doubleTap', v-on:slideChangeTransitionEnd='slideChange')
+			swiper-slide(v-for='slide in viewSlides', v-bind:key='slide.id')
+				b-img(:src='slide.url', v-bind:style='imgStyle(slide)')
 		div(class="swiper-button-next")
 		div(class="swiper-button-prev")
 </template>
@@ -10,18 +11,23 @@
 <script>
 import 'swiper/dist/css/swiper.css'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
+import { centeredSlice } from '../lib/common'
+
+const RANGE = 5
+// The size of the view port (viewSlides): keeping it reduced should
+// improve usability
 
 export default {
 	
 	components: {swiper, swiperSlide},
 	
 	model: {
-		prop: 'currentPhoto',
+		prop: 'value',
 		event: 'slideChange'
 	},
 	
 	props: {
-		currentPhoto: {type: Object},
+		value: {type: Object},
 		options: {type: Object},
 		
 		/**
@@ -35,37 +41,22 @@ export default {
 			default: () => []
 		},
 	},
-	
-	mounted () {
-		window.addEventListener('resize', this.handleResize)
-		this.handleResize()
-		if (this.currentPhoto && this.currentPhoto.id) this.gotoCurrentPhoto()
-		else {
-			const i = this.swiper.params.initialSlide
-			this.$emit('slideChange', this.photos[i])
-		}
-	},  
-	
-	beforeDestroy () {
-    window.removeEventListener('resize', this.handleResize)
-  },
-  
-  watch: {
-		currentPhoto: function(newValue, oldValue) {
-			if (newValue.id == oldValue.id) return
-			this.gotoCurrentPhoto()
-		}
-	},
   
 	data() {
 		return {
 			
 			carouselDimensions: {W:0, H:0},
 			
-			defaultOptions: {				
+			bufferSlides: null,
+			viewSlides: null,
+			displayedSlide: null,
+			
+			defaultOptions: {
+				// TEST
+				freeMode: false,
+				
+				initialSlide: RANGE,
 				lazy: true,
-				freeMode: true,
-				freeModeSticky: true,
 			  navigation: {
 					nextEl: '.swiper-button-next',
 					prevEl: '.swiper-button-prev',
@@ -75,20 +66,53 @@ export default {
 			},
 		}
 	},
-	
-	computed: {
-		swiper() {return this.$refs.mySwiper.swiper},
-		swiperOptions() {return Object.assign(this.defaultOptions, this.options)},
+  
+  watch: {
+		
+		photos: function(newValue, oldValue) {
+			console.log("carousel, photos changed")
+		},
+		
 	},
 	
+	computed: {
+		
+		swiper() {return this.$refs.mySwiper.swiper},
+		
+		swiperOptions() {return Object.assign(this.defaultOptions, this.options)},
+		
+	},
+	
+	beforeMount() {
+		this.bufferSlides = this.photos.map(photo => Object.assign({}, photo))
+		this.viewSlides = centeredSlice(this.bufferSlides, 0, RANGE)
+		this.displayedSlide = this.viewSlides[RANGE]
+	},
+	
+	mounted () {
+		window.addEventListener('resize', this.handleResize)
+		this.handleResize()
+		if (this.value.id) {
+			this.centerAroundPhotoId(this.value.id)
+			this.updateDisplayedSlide()
+		}
+	},
+	
+	beforeDestroy () {
+    window.removeEventListener('resize', this.handleResize)
+  },
+	
 	methods: {
-		/**
-		 * Force the carousel to slide to the photo given by this.currentPhoto
-		 */
-		gotoCurrentPhoto() {
-			const photoId = this.currentPhoto.id
-			const i = this.photos.findIndex(photo => (photo.id == photoId))
-			this.swiper.slideTo(i, 0, false)
+		
+		updateDisplayedSlide() {
+			// Synchro the information of the currently displayed slide
+			this.displayedSlide = this.viewSlides[this.swiper.realIndex]
+		},
+		
+		centerAroundPhotoId(idPhoto=false) {
+			const index = (idPhoto)? this.bufferSlides.findIndex(e => (e.id == idPhoto)) : 0
+			this.viewSlides = centeredSlice(this.bufferSlides, index, RANGE)
+			this.swiper.slideTo(RANGE, 0, false)
 		},
 		
 		/**
@@ -96,12 +120,20 @@ export default {
 		 */
 		doubleTap() {
 			const activePhotoIndex = this.swiper.activeIndex
+			// HERE IS WHERE VALUE GETS UPDATED!!!
 			this.$emit('input', this.photos[activePhotoIndex])
 		},
 		
+		nearBoundaries() {
+			// Return true if the carousel is reaching the boundaries of the viewSlides
+			try {return (this.swiper.realIndex >= 2*RANGE-1) || (this.swiper.realIndex <= 2)}
+			catch(e) {return false}
+		},
+		
 		slideChange() {
-			const activePhotoIndex = this.swiper.activeIndex
-			this.$emit('slideChange', this.photos[activePhotoIndex])
+			// If reaching boundaries of the viewSlides, recenter
+			this.updateDisplayedSlide()
+			if (this.nearBoundaries()) this.centerAroundPhotoId(this.displayedSlide.id)
 		},
 		
 		handleResize() {

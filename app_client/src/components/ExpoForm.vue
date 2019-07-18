@@ -12,8 +12,6 @@
 
 <script>
 	
-const _ = require('lodash')
-
 export default {
 	
 	props: {
@@ -32,7 +30,7 @@ export default {
 		
 	},
 	
-	data () {
+	data() {
 		return {
 			mutableValue: null,
 			loadedPhotos: [],
@@ -40,14 +38,16 @@ export default {
 		}
 	},
 	
-	beforeMount() {
-		this.bufferPhotos = this.photos
-		this.transfer([this.bufferPhotos, this.loadedPhotos, 50])
+	watch: {
+		photos: function(newValue, oldValue) {
+			this.initPhotos()
+			document.body.scrollTop = document.documentElement.scrollTop = 0
+		},
 	},
+	beforeMount() {this.initPhotos()},
 	
 	mounted() {
-		// scroll to top and attach the scroll monitoring
-		document.body.scrollTop = document.documentElement.scrollTop = 0
+		// attach the scroll monitoring
 		window.addEventListener('scroll', this.scrolling)
 	},
 	
@@ -56,6 +56,14 @@ export default {
 	},
 	
 	methods: {
+		
+		initPhotos() {
+			this.loadedPhotos = []
+			this.bufferPhotos = this.photos.map(photo => Object.assign({}, photo))
+			// clone photos into bufferPhotos
+			this.transfer([this.bufferPhotos, this.loadedPhotos, 50])
+			document.body.scrollTop = document.documentElement.scrollTop = 0
+		},
 		
 		clicked: function(photo) {
 			this.mutableValue = photo

@@ -84,8 +84,13 @@ export default {
       const vm = this
       newValue = newValue.replace('%', '')
       const apiCall = `search/fts?q=${newValue}`
+			vm.$loading(true)
       vm.axios.get(apiCall)
-				.then(response => {vm.searchResults = response.data; this.showExpo = true})
+				.then(response => {
+					vm.searchResults = response.data
+					this.showExpo = true
+					this.$loading(false)
+				})
 				.catch(err => vm.showAxiosAlert(err))	
     },
 	},
@@ -121,4 +126,5 @@ export default {
 </script>
 
 <style lang="scss">
+
 </style>

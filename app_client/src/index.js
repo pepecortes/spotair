@@ -6,6 +6,7 @@ import Axios from 'axios'
 import VueAxios from 'vue-axios'
 import Home from './Home.vue'
 import * as VueGoogleMaps from "vue2-google-maps"
+import VueLoading from 'vuejs-loading-plugin'
 
 // Import bootstrap style
 import 'bootstrap/dist/css/bootstrap.css'
@@ -25,7 +26,6 @@ var axios = Axios.create()
 axios.defaults.baseURL = process.env.API_URL
 axios.defaults.timeout = 10000 // wait 10 seconds before giving out
 
-//TEST: GOOGLE MAPS API
 Vue.use(VueGoogleMaps, {
 	load: {
 		key: process.env.GOOGLE_API_KEY,
@@ -36,6 +36,7 @@ Vue.use(VueGoogleMaps, {
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
 Vue.use(VueAxios, axios)
+Vue.use(VueLoading)
 
 // Define or input route components
 import Accueil from './components/Accueil.vue'

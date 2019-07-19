@@ -52,9 +52,7 @@ export default {
 			displayedSlide: null,
 			
 			defaultOptions: {
-				// TEST
 				freeMode: false,
-				
 				initialSlide: RANGE,
 				lazy: true,
 			  navigation: {
@@ -69,9 +67,9 @@ export default {
   
   watch: {
 		
-		photos: function(newValue, oldValue) {
-			console.log("carousel, photos changed")
-		},
+		//photos: function(newValue, oldValue) {
+			//console.log("carousel, photos changed")
+		//},
 		
 	},
 	
@@ -81,12 +79,16 @@ export default {
 		
 		swiperOptions() {return Object.assign(this.defaultOptions, this.options)},
 		
+		// Define the characteristics of the viewSlides dimension
+		visibleRange() {return (this.bufferSlides.length >= 2*RANGE+1)? RANGE : Math.floor(this.bufferSlides.length/2)},
+		centralIndex() {return Math.floor(this.viewSlides.length / 2)},
+		
 	},
 	
 	beforeMount() {
 		this.bufferSlides = this.photos.map(photo => Object.assign({}, photo))
-		this.viewSlides = centeredSlice(this.bufferSlides, 0, RANGE)
-		this.displayedSlide = this.viewSlides[RANGE]
+		this.viewSlides = centeredSlice(this.bufferSlides, 0, this.visibleRange)
+		this.displayedSlide = this.viewSlides[this.centralIndex]
 	},
 	
 	mounted () {
@@ -111,8 +113,8 @@ export default {
 		
 		centerAroundPhotoId(idPhoto=false) {
 			const index = (idPhoto)? this.bufferSlides.findIndex(e => (e.id == idPhoto)) : 0
-			this.viewSlides = centeredSlice(this.bufferSlides, index, RANGE)
-			this.swiper.slideTo(RANGE, 0, false)
+			this.viewSlides = centeredSlice(this.bufferSlides, index, this.visibleRange)
+			this.swiper.slideTo(this.centralIndex, 0, false)
 		},
 		
 		/**
@@ -126,7 +128,9 @@ export default {
 		
 		nearBoundaries() {
 			// Return true if the carousel is reaching the boundaries of the viewSlides
-			try {return (this.swiper.realIndex >= 2*RANGE-1) || (this.swiper.realIndex <= 2)}
+			const minLeft = 1
+			const maxRight = this.viewSlides.length - 2
+			try {return (this.swiper.realIndex >= maxRight) || (this.swiper.realIndex <= minLeft)}
 			catch(e) {return false}
 		},
 		

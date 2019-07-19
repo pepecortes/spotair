@@ -1,9 +1,6 @@
 LOADING ICON
 	Is implemented in index.js & Search.vue: extend
-
-EXPOFORM
-	Duplicate keys problem (example, search with Jose)
-	scroll works with mouse but not with the slider bar
+	Ensure that it is reset when going back home
 	
 CAROUSEL - ACCUEIL
 	 Why cannot I use the freemode upon initialization: check if there is some bug

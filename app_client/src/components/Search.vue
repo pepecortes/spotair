@@ -82,16 +82,18 @@ export default {
 	watch: {
 		searchString: function(newValue, oldValue) {
       const vm = this
+			vm.resetAlert()
       newValue = newValue.replace('%', '')
       const apiCall = `search/fts?q=${newValue}`
 			vm.$loading(true)
       vm.axios.get(apiCall)
 				.then(response => {
 					vm.searchResults = response.data
+					if (vm.searchResults.length == 0)	vm.showAlert("Aucun résultat")
 					this.showExpo = true
 					this.$loading(false)
 				})
-				.catch(err => vm.showAxiosAlert(err))	
+				.catch(err => {vm.showAxiosAlert(err); this.$loading(false)})	
     },
 	},
 	

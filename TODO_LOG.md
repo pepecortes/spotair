@@ -1,6 +1,5 @@
 LOADING ICON
 	Is implemented in index.js & Search.vue: extend
-	Ensure that it is reset when going back home
 	
 CAROUSEL - ACCUEIL
 	 Why cannot I use the freemode upon initialization: check if there is some bug
@@ -13,14 +12,6 @@ EXPOGALERIE
 
 SEARCH and GALERIES
 	Could I do one single component?
-
-SEARCH PAGE
-	"no results" management is missing
-	should we limit the number of results (perhaps with a flag on the API call)
-	does not recover from error (example: try with "no results")
-
-SLIDER
-	could we slide with the mouse roller?
 
 DATABASE MIGRATION
 	after the migration, many users will have a username xxx@nomail.com. how to manage this?

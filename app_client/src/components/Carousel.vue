@@ -61,6 +61,7 @@ export default {
 				},
 				grabCursor: true,
 				keyboard: {enabled: true},
+				mousewheel: true,
 			},
 		}
 	},

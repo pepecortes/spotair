@@ -1,17 +1,12 @@
-LOADING ICON
-	Is implemented in index.js & Search.vue: extend
-	
-CAROUSEL - ACCUEIL
-	 Why cannot I use the freemode upon initialization: check if there is some bug
-
-NPM
-	webpack seems to create vulnerabilities
-
 EXPOGALERIE
 	If not a single component (with Search.vue) then inspire to remove deepclone
 
-SEARCH and GALERIES
-	Could I do one single component?
+LOADING ICON
+	Is implemented in index.js & Search.vue: extend
+	VALIDATION: When using REMOTE: validation takes a long time: add icon for waiting
+	
+CAROUSEL - ACCUEIL
+	 Why cannot I use the freemode upon initialization: check if there is some bug
 
 DATABASE MIGRATION
 	after the migration, many users will have a username xxx@nomail.com. how to manage this?
@@ -20,9 +15,6 @@ DATABASE MIGRATION
 	some text fields have trailing spaces: should be removed
 	in appareils: some of the initial ones (id 3, 7) do not make sense
 	
-VALIDATION
-	When using REMOTE: validation takes a long time: add icon for waiting
-
 http://static.spotair.org
 	document
 	(doc https://docs.ovh.com/fr/storage/)

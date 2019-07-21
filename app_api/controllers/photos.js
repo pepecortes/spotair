@@ -39,11 +39,12 @@ controller.byGalerie = function(req, res) {
 
 /**
  * @function recent
- * @desc Returns the last 50 recently createdf photos
+ * @desc Returns the last 'limit' (default=50) recently created photos
  */
 controller.recent = async function(req, res) {
+	const limit = (req.params.limit)? parseInt(req.params.limit) : 50
 	db.Photo.findAll({
-										limit: 50,
+										limit: limit,
 										order:[['createdAt', 'DESC']],
 										include: [{all:true, nested:true}]
 										})

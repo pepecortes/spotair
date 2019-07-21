@@ -8,9 +8,15 @@
 				:src='photo.url',
 				:height="imgHeight"
 			)
+		b-button(v-if='bufferAvailable', variant="primary", v-on:click='loadMore') &raquo;
 </template>
 
 <script>
+
+const TRANSFER_SIZE = 50
+// Number of items to load each time
+
+const _ = require('lodash')
 	
 export default {
 	
@@ -44,6 +50,11 @@ export default {
 			document.body.scrollTop = document.documentElement.scrollTop = 0
 		},
 	},
+	
+	computed: {
+		bufferAvailable() {return (this.bufferPhotos.length > 0)}
+	},
+	
 	beforeMount() {this.initPhotos()},
 	
 	mounted() {
@@ -61,7 +72,7 @@ export default {
 			this.loadedPhotos = []
 			this.bufferPhotos = this.photos.map(photo => Object.assign({}, photo))
 			// clone photos into bufferPhotos
-			this.transfer([this.bufferPhotos, this.loadedPhotos, 50])
+			this.transfer([this.bufferPhotos, this.loadedPhotos, TRANSFER_SIZE])
 			document.body.scrollTop = document.documentElement.scrollTop = 0
 		},
 		
@@ -81,8 +92,12 @@ export default {
 			// need to lodash.throttle to avoid firing the event too often
 			let windowRelativeBottom = document.documentElement.getBoundingClientRect().bottom
 			if (windowRelativeBottom > document.documentElement.clientHeight + 800) return
-			this.transfer([this.bufferPhotos, this.loadedPhotos, 50])		
+			this.loadMore(TRANSFER_SIZE)
 			}, 1000, {'trailing': false}),
+			
+		loadMore: function(n) {
+			this.transfer([this.bufferPhotos, this.loadedPhotos, n])
+		}
 		
 	},
 	

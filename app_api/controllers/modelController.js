@@ -6,7 +6,7 @@ const sendJSON = helpers.sendJSON
 const createInstanceFromQuery = helpers.createInstanceFromQuery
 const dbReplaceReference = helpers.dbReplaceReference
 
-const Op = db.sequelize.Op
+const Op = require('sequelize').Op
 
 /**
  * @Object

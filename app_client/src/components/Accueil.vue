@@ -61,7 +61,7 @@ export default {
 		
 		getLatestPhotos() {
 			const vm = this
-			this.axios.get('/photos/recent')
+			this.axios.get('/photos/recent/')
 				.then(response =>  {
 					vm.photos = response.data.map(this.photoToCarouselData)
 					vm.carouselActive = true

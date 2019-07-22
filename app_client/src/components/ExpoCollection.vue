@@ -1,9 +1,10 @@
 <template lang="pug">
 	div
-		expo-form(
-			:photos='thumbnails',
-			v-model='selected',
-		)
+		div(f-if: 'collectionAvailable', v-show='showThumbs')
+			expo-form(
+				:photos='thumbnails',
+				v-model='thumbSelected',
+			)
 			
 </template>
 
@@ -24,9 +25,7 @@ export default {
 	
 	props: {
 		
-		value: {default: null},
-		
-		photos: {
+		collection: {
 			type: Array,
 			default: () => []
 		},
@@ -35,47 +34,52 @@ export default {
 	
 	data() {
 		return {
-			selected: {},
+			thumbSelected: {},
 			thumbnailLocation: process.env.STORAGE_URL + process.env.THUMBNAIL_LOCATION,
 			photoLocation: process.env.STORAGE_URL + process.env.PICTURE_LOCATION,
 		}
 	},
 	
 	watch: {
-		photos: function(newValue, oldValue) {
-			console.log(`ExpoCollection has photos: ${newValue.length}`) 
-			console.log(`photosAvailable: ${this.photosAvailable}`) 
-			console.log(`thumbnails: ${this.thumbnails.length}`) 
+		collection: function(newValue, oldValue) {
+			//console.log(`ExpoCollection has photos: ${newValue.length}`) 
+			//console.log(`photosAvailable: ${this.photosAvailable}`) 
+			//console.log(`thumbnails: ${this.thumbnails.length}`) 
 		},
 	},
 	
 	computed: {
-		photosAvailable() {return !_.isEmpty(this.photos)},
+		collectionAvailable() {return !_.isEmpty(this.collection)},
+		
+		showThumbs() {return _.isEmpty(this.thumbSelected)},
+		
+		showCarousel() {return !this.showThumbs},
+		
+		//carouselAvailable() {
+			//return (this.collectionAvailable && !_.isEmpty(this.selected))
+		//},
 		
 		thumbnails() {
-			if (!this.photosAvailable) return []
-			return this.photos.map(photo => {
+			if (!this.collectionAvailable) return []
+			return this.collection.map(photo => {
 				return Object.assign({url: `${this.thumbnailLocation}${photo.id}.jpg`}, photo)
 			})
 		},
 		
 	},
 	
-	beforeMount() {
-		console.log(`photos: ${this.photos.length}`)
-		console.log(`photosAvailable: ${this.photosAvailable}`)
-	},
+	//beforeMount() {},
 	
-	//mounted() {
-		//// attach the scroll monitoring
-		//window.addEventListener('scroll', this.scrolling)
-	//},
+	mounted() {
+		// attach the scroll monitoring
+		window.addEventListener('scroll', this.scrolling)
+	},
 	
 	//beforeDestroy() {
 		//window.removeEventListener('scroll', this.scrolling)
 	//},
 	
-	//methods: {
+	methods: {
 		
 		//initPhotos() {
 			//this.loadedPhotos = []
@@ -108,7 +112,7 @@ export default {
 			//this.transfer([this.bufferPhotos, this.loadedPhotos, n])
 		//}
 		
-	//},
+	},
 	
 }
 </script>

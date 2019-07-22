@@ -2,7 +2,7 @@
 	div
 		b-button(v-on:click='test') TEST
 		expo-collection(
-			:photos='photos'
+			:collection='photos',
 		)
 </template>
 
@@ -17,7 +17,7 @@ export default {
 		
 	beforeMount() {
 		this.axios.get("/photos/recent/1000")
-			.then(response => this.photos = response.data)
+			.then(response => {this.photos = response.data; this.photoSelected = response.data[1]})
 			.catch(err => console.error(err))
 	},
 	
@@ -40,7 +40,7 @@ export default {
 			this.axios.get("/photos/recent/1000")
 				.then(response => this.photos = response.data.slice(500,600))
 				.catch(err => console.error(err))
-			}
+		}
 			
 	},
 	

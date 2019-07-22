@@ -1,5 +1,6 @@
 EXPOGALERIE
 	If not a single component (with Search.vue) then inspire to remove deepclone
+	There is something wrong with the use of the button to ask for more photos in galerie (search Maxime)
 
 LOADING ICON
 	Is implemented in index.js & Search.vue: extend

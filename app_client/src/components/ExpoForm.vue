@@ -91,12 +91,13 @@ export default {
 		scrolling: _.throttle(function() {
 			// need to lodash.throttle to avoid firing the event too often
 			let windowRelativeBottom = document.documentElement.getBoundingClientRect().bottom
-			if (windowRelativeBottom > document.documentElement.clientHeight + 800) return
-			this.loadMore(TRANSFER_SIZE)
-			}, 1000, {'trailing': false}),
+			if (windowRelativeBottom > document.documentElement.clientHeight + 400) return
+			this.loadMore()
+			}, 500, {'trailing': false}),
 			
-		loadMore: function(n) {
-			this.transfer([this.bufferPhotos, this.loadedPhotos, n])
+		loadMore: function() {
+			console.log("loading more ")
+			this.transfer([this.bufferPhotos, this.loadedPhotos, TRANSFER_SIZE])
 		}
 		
 	},

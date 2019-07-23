@@ -1,6 +1,5 @@
 <template lang="pug">
 	div(ref="carousel")
-		p displayedSlide {{displayedSlide.id}}
 		swiper(:options="swiperOptions", ref="mySwiper", v-on:doubleTap='doubleTap', v-on:slideChangeTransitionEnd='slideChange')
 			swiper-slide(v-for='slide in viewSlides', v-bind:key='slide.id')
 				b-img(:src='slide.url', v-bind:style='imgStyle(slide)')
@@ -65,14 +64,6 @@ export default {
 			},
 		}
 	},
-  
-  watch: {
-		
-		//photos: function(newValue, oldValue) {
-			//console.log("carousel, photos changed")
-		//},
-		
-	},
 	
 	computed: {
 		
@@ -124,7 +115,7 @@ export default {
 		doubleTap() {
 			const activePhotoIndex = this.swiper.activeIndex
 			// HERE IS WHERE VALUE GETS UPDATED!!!
-			this.$emit('input', this.photos[activePhotoIndex])
+			this.$emit('input', this.viewSlides[activePhotoIndex])
 		},
 		
 		nearBoundaries() {

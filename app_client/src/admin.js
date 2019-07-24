@@ -4,6 +4,7 @@ import AsyncComputed from 'vue-async-computed'
 import BootstrapVue from 'bootstrap-vue'
 import Axios from 'axios'
 import VueAxios from 'vue-axios'
+import VueLoading from 'vuejs-loading-plugin'
 import Admin from './Admin.vue'
 
 // Import bootstrap style
@@ -28,6 +29,7 @@ axios.defaults.headers.common['Authorization'] = `Bearer ${process.env.JWT_API_K
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
 Vue.use(VueAxios, axios)
+Vue.use(VueLoading)
 
 // Define or input route components
 import AerodromeForm from './components/AerodromeForm.vue'

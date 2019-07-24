@@ -1,5 +1,4 @@
 LOADING ICON
-	Is implemented in index.js & Search.vue: extend
 	VALIDATION: When using REMOTE: validation takes a long time: add icon for waiting
 	
 CAROUSEL - ACCUEIL

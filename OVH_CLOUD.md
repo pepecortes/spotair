@@ -26,5 +26,12 @@ Add ssh key to github and clone spotair
 	do not forget .env
 	docker-compose up
 	
+Configure the instance to use a fixed IP
+	Associate FAILOVER IP to the running instance
+	Configure instance
+		(in progress) https://www.howtoforge.com/linux-basics-set-a-static-ip-on-ubuntu
+		(check whether or not this is really persistent...)
+
 next: create webserver. do not forget https
 next: create database spotair
+

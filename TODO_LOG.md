@@ -1,3 +1,6 @@
+SEARCH
+	Check that a call to search overrides current page (try: do a search, go to carousel, do another search)
+
 LOADING ICON
 	VALIDATION: When using REMOTE: validation takes a long time: add icon for waiting
 	

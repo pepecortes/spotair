@@ -18,6 +18,9 @@ services:
       - db
       - adminer
       - redis
+      - reverse-proxy
+    labels:
+      - "traefik.frontend.rule=Host:web.docker.localhost"
   
   redis:
     image: "redis:alpine"
@@ -36,3 +39,14 @@ services:
     restart: always
     ports:
       - "$PORT_DB_ADMIN:8080"
+      
+  reverse-proxy:
+    image: traefik
+    command: --api --docker --logLevel=DEBUG
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "$PWD/traefik.toml:/traefik.toml"
+      

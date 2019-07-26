@@ -29,9 +29,18 @@ Add ssh key to github and clone spotair
 Configure the instance to use a fixed IP
 	Associate FAILOVER IP to the running instance
 	Configure instance
-		(in progress) https://www.howtoforge.com/linux-basics-set-a-static-ip-on-ubuntu
-		(check whether or not this is really persistent...)
+		https://community.ovh.com/t/configuration-ip-failover-avec-netplan-ubuntu-17-10/6157/9
+
+spotairApp
+	create .env (note: set database password before running docker-compose)
+	run docker-compose
+	create spotair database (collation: utf8-general-ci)
+	
+next: how to proxy port 80 to port 3000 (or something like this: check ip firewall)
 
 next: create webserver. do not forget https
+
 next: create database spotair
+
+next: SSL certificate and HTTPS server
 

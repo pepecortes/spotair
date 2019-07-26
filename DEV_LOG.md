@@ -66,6 +66,10 @@ API authorization: all GET calls are public (except 'users' and 'photographes')
 All POST, PUT... are restricted (via a JWT token, obtained after login)
 CORS (cross-origin resource sharing) is not allowed
 
+#### August 2019
+Start deploying on OVH PUBLIC CLOUD: Ubuntu instance and then docker + docker-compose installation
+Using TRAEFIK as a reverse proxy. It will be configured to serve everything over HTTPS using Let's Encrypt
+
 
 	
 

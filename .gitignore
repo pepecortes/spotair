@@ -57,6 +57,9 @@ typings/
 # dotenv environment variables file
 .env
 
+# proxy configuration file
+traefik.toml
+
 # next.js build output
 .next
 

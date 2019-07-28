@@ -30,11 +30,15 @@ Configure the instance to use a fixed IP
 	Associate FAILOVER IP to the running instance
 	Configure instance
 		https://community.ovh.com/t/configuration-ip-failover-avec-netplan-ubuntu-17-10/6157/9
+		
+Create a persistent volume and attach it to the instance
 
-spotairApp
+spotair
+	create spotair folder in the persistent volume
 	create .env (note: set database password before running docker-compose)
 	run docker-compose
 	create spotair database (collation: utf8-general-ci)
+	
 	
 next: how to proxy port 80 to port 3000 (or something like this: check ip firewall)
 

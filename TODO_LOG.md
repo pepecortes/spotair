@@ -26,6 +26,7 @@ local container:
 	
 WHEN IN PROD:
 	Monitor size of javascript sources: can be compressed
+	Ensure traefik api is off (see "command" in docker-compose.yml)
 	
 LATER:
 	Reinforce security using expiring JWT tokens (ref: https://www.techynovice.com/setting-up-JWT-token-refresh-mechanism-with-axios/)

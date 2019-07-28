@@ -3,8 +3,10 @@ version: "3.2"
 services:
   web:
     build: .
-    ports:
-      - "$PORT:$PORT"
+    container_name: spotair
+    restart: always
+    expose:
+      - 3000
     volumes:
       - ./app_api:/app/app_api
       - ./app_client:/app/app_client
@@ -16,17 +18,23 @@ services:
       - ./$LOCAL_STORAGE_LOCATION:/app/$LOCAL_STORAGE_LOCATION
     depends_on:
       - db
-      - adminer
       - redis
       - reverse-proxy
     labels:
-      - "traefik.frontend.rule=Host:web.docker.localhost"
+      - "traefik.enable=true"
+      - "traefik.frontend.entryPoints=http"
+      - "traefik.frontend.rule=Host:localhost"
+      - "traefik.backend=spotair"
+      - "traefik.port=3000"
   
   redis:
     image: "redis:alpine"
+    container_name: redis
+    restart: always
     
   db:
     image: "mysql:5.7"
+    container_name: mysql
     command: --default-authentication-plugin=mysql_native_password --event-scheduler=ON
     restart: always
     environment:
@@ -36,17 +44,29 @@ services:
       
   adminer:
     image: adminer
+    container_name: adminer
     restart: always
-    ports:
-      - "$PORT_DB_ADMIN:8080"
+    expose:
+      - 8080
+    depends_on:
+      - db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.entryPoints=dbadmin"
+      - "traefik.frontend.rule=Host:localhost"
+      - "traefik.backend=dbAdmin"
+      - "traefik.port=8080"
       
   reverse-proxy:
     image: traefik
-    command: --api --docker --logLevel=DEBUG
+    container_name: traefik
+    command: --api
+    restart: always
     ports:
       - "80:80"
       - "8080:8080"
+      - "$PORT_DB_ADMIN:8081"
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-      - "$PWD/traefik.toml:/traefik.toml"
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.toml:/etc/traefik/traefik.toml
       

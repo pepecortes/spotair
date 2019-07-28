@@ -1,7 +1,6 @@
 APP_ROOT=/app/
 ENV=development
-PORT=3000
-PORT_DB_ADMIN=3001
+PORT_DB_ADMIN=3000
 
 DB_HOST=db
 DB_USER=root
@@ -40,11 +39,11 @@ OVH_AUTH_URL=https://auth.cloud.ovh.net/v2.0/
 OVH_TENTANT_ID=204701acb74a4804903a0a7699535282
 OVH_REGION=GRA5
 
-WEB_URL=http://localhost:3000/
-API_URL=http://localhost:3000/api/
-STORAGE_URL=http://localhost:3000/localStorage/
+WEB_URL=http://localhost/
+API_URL=http://localhost/api/
+STORAGE_URL=http://localhost/localStorage/
 	// remote alternate: STORAGE_URL=http://static.spotair.org/
-ASSETS_URL=http://localhost:3000/static/
+ASSETS_URL=http://localhost/static/
 
 MEMBRES_DEFAULT_PASSWORD="membres!"
 GOOGLE_API_KEY=do_not_commit_the_google_api_key!

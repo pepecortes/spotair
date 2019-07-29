@@ -35,6 +35,7 @@ Create a persistent volume and attach it to the instance
 
 spotair
 	create spotair folder in the persistent volume
+	create home in the volume and change spotair home there
 	create .env (note: set database password before running docker-compose)
 	run docker-compose
 	create spotair database (collation: utf8-general-ci)

@@ -57,6 +57,9 @@ typings/
 # dotenv environment variables file
 .env
 
+# docker-compose configuration file
+docker-compose.yml
+
 # proxy configuration file
 traefik.toml
 

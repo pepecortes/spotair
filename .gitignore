@@ -1,3 +1,10 @@
+# CONFIGURATION FILES
+.env
+docker-compose.yml
+traefik.toml
+webpack.config.js
+app_client/webpack.config.js
+
 # Logs
 logs
 *.log
@@ -53,15 +60,6 @@ typings/
 
 # Yarn Integrity file
 .yarn-integrity
-
-# dotenv environment variables file
-.env
-
-# docker-compose configuration file
-docker-compose.yml
-
-# proxy configuration file
-traefik.toml
 
 # next.js build output
 .next

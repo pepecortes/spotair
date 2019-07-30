@@ -2,8 +2,6 @@
 .env
 docker-compose.yml
 traefik.toml
-webpack.config.js
-app_client/webpack.config.js
 
 # Logs
 logs

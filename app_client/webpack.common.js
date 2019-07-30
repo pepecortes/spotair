@@ -1,33 +1,29 @@
 /**
- * Webpack configuration file xxx
+ * Webpack COMMON configuration file
  */
-let path = require('path');
-let Dotenv = require('dotenv-webpack');
-let VueLoaderPlugin = require('vue-loader/lib/plugin');
+let path = require('path')
+let Dotenv = require('dotenv-webpack')
+let VueLoaderPlugin = require('vue-loader/lib/plugin')
+let { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = {
-  mode: 'development',
-  
+
   entry: {
 		app: path.resolve(__dirname, 'src/index.js'),
 		adminApp: path.resolve(__dirname, 'src/admin.js'),
-		// TEST
-		testApp: path.resolve(__dirname, 'src/test.js'),
 	},
 	
   output: {
-    path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
-   },
-  
-	devtool: 'eval-source-map',
-	 
+    path: path.resolve(__dirname, 'dist'),
+  },
+	
 	resolve: {
     alias: {
-      'vue$': 'vue/dist/vue.esm.js' // 'full vue + compiler for development: consider runtime only for production
+      'vue$': 'vue/dist/vue.esm.js'
     }
   },
-  
+   
   module: {
     rules: [
       {
@@ -55,6 +51,7 @@ module.exports = {
   
   plugins: [
     new Dotenv(),
-    new VueLoaderPlugin()
+    new VueLoaderPlugin(),
+    new CleanWebpackPlugin(),
   ]
 };

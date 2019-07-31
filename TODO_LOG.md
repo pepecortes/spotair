@@ -1,7 +1,4 @@
 ENVIRONMENT
-	Do you use mocha?
-	There are config files everywhere. Could we rationalize all that?
-	Dockerfile starts nodemon. How to do it in production?
 	Let's Encrypt?
 
 SEARCH
@@ -29,10 +26,6 @@ https://www.npmjs.com/package/node-ovh-storage
 
 local container:
 	document in README
-	
-WHEN IN PROD:
-	Monitor size of javascript sources: can be compressed
-	Ensure traefik api is off (see "command" in docker-compose.yml)
 	
 LATER:
 	Reinforce security using expiring JWT tokens (ref: https://www.techynovice.com/setting-up-JWT-token-refresh-mechanism-with-axios/)

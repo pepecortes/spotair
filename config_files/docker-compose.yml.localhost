@@ -11,8 +11,8 @@ services:
       - ./app_api:/app/app_api
       - ./app_client:/app/app_client
       - ./app_lib:/app/app_lib
-      - ./bin:/app/bin
-      - ./config:/app/config
+      - ./www:/app/www
+      - ./passport.config.js:/app/passport.config.js
       - ./doc:/app/doc
       - ./test:/app/test
       - ./$LOCAL_STORAGE_LOCATION:/app/$LOCAL_STORAGE_LOCATION

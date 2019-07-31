@@ -4,7 +4,7 @@ const LocalStrategy  = require('passport-local').Strategy
 const JWTStrategy = require("passport-jwt").Strategy
 const ExtractJwt = require("passport-jwt").ExtractJwt
 
-const User = require('../app_api/models/db').User
+const User = require('./app_api/models/db').User
 
 const jwtStrategy = new JWTStrategy(
 	{

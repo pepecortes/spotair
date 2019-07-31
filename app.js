@@ -16,7 +16,7 @@ const { exec } = require('child_process')
 
 const passport = require('passport')
 const flash    = require('connect-flash')
-require('./config/passport.config')(passport)
+require('./passport.config')(passport)
 
 // start debugging
 const debug = require('debug')('app:main');

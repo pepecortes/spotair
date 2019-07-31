@@ -1,3 +1,9 @@
+ENVIRONMENT
+	Do you use mocha?
+	There are config files everywhere. Could we rationalize all that?
+	Dockerfile starts nodemon. How to do it in production?
+	Let's Encrypt?
+
 SEARCH
 	Check that a call to search overrides current page (try: do a search, go to carousel, do another search)
 

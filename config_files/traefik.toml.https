@@ -1,0 +1,28 @@
+debug = true
+
+[entryPoints]
+  [entryPoints.http]
+  address = ":80"
+    [entryPoints.http.redirect]
+    entryPoint = "https"
+  [entryPoints.https]
+  address = ":443"
+  [entryPoints.https.tls]
+  [entryPoints.dbadmin]
+    address = ":8081"
+
+[retry]
+
+[docker]
+endpoint = "unix:///var/run/docker.sock"
+domain = "cloud.spotair.org"
+watch = true
+exposedByDefault = false
+
+[acme]
+email = "webmaster@spotair.org"
+storage = "acme.json"
+entryPoint = "https"
+onHostRule = true
+[acme.httpChallenge]
+entryPoint = "http"

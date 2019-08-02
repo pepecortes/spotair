@@ -29,6 +29,7 @@ local container:
 	
 LATER:
 	Reinforce security using expiring JWT tokens (ref: https://www.techynovice.com/setting-up-JWT-token-refresh-mechanism-with-axios/)
+	SSL certificates in acme.json: backup and store off-premises
 	
 
 

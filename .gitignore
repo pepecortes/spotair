@@ -1,9 +1,9 @@
 # CONFIGURATION FILES
-.env
-Dockerfile
-docker-compose.yml
-traefik.toml
-traefik.acme.json
+/.env
+/Dockerfile
+/docker-compose.yml
+/traefik.toml
+/traefik.acme.json
 
 # Logs
 logs

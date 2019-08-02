@@ -69,8 +69,7 @@ services:
       - ./traefik.toml:/etc/traefik/traefik.toml
       - ./traefik.acme.json:/acme.json
     environment:
-			- OVH_ENDPOINT=ovh-eu
-			- OVH_APPLICATION_KEY=mdzHnqWG5ylemMZ8
-			- OVH_APPLICATION_SECRET=iaT75ceCBFAKWepJOFjKWsUedtVyOnle
-			- OVH_CONSUMER_KEY=WfRsP7UrYw7C6ULtnesZEqAm1owhrA3l
-      
+      - OVH_ENDPOINT=ovh-eu
+      - OVH_APPLICATION_KEY=mdzHnqWG5ylemMZ8
+      - OVH_APPLICATION_SECRET=iaT75ceCBFAKWepJOFjKWsUedtVyOnle
+      - OVH_CONSUMER_KEY=WfRsP7UrYw7C6ULtnesZEqAm1owhrA3l

@@ -11,11 +11,8 @@ import Admin from './Admin.vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-// CHECK require.context https://vuejs.org/v2/guide/components-registration.html
-// so that common components are imported without need for additional imports
-// on each module
-
 Vue.config.productionTip = false
+Vue.config.devtools = false
 
 // To be able to use async computed properties
 Vue.use(AsyncComputed)

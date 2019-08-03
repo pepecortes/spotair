@@ -2,7 +2,7 @@ ENVIRONMENT
 	Let's Encrypt?
 
 SEARCH
-	Check that a call to search overrides current page (try: do a search, go to carousel, do another search)
+	How does search work in admin?
 
 LOADING ICON
 	VALIDATION: When using REMOTE: validation takes a long time: add icon for waiting

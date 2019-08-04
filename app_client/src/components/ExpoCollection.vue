@@ -66,6 +66,10 @@ export default {
 		},
 		
 	},
+		
+	watch: {
+		collection: function() {this.showThumbs = true},
+	},
 	
 	methods: {
 		

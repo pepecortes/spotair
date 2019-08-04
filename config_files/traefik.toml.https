@@ -23,7 +23,7 @@ exposedByDefault = false
 email = "webmaster@spotair.org"
 storage = "acme.json"
 entryPoint = "https"
-acmeLogging = true
+acmeLogging = false
 onHostRule = true
 
 # CA server to use.
@@ -33,11 +33,12 @@ onHostRule = true
 # Optional
 # Default: "https://acme-v02.api.letsencrypt.org/directory"
 #
-caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
+#caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
 
 # OVH variables...
 # OVH_ENDPOINT, OVH_APPLICATION_KEY, OVH_APPLICATION_SECRET, OVH_CONSUMER_KEY
 # tutorial ovh traefik: https://medium.com/nephely/configure-traefik-for-the-dns-01-challenge-with-ovh-as-dns-provider-c737670c0434
+# where to create tokens: https://eu.api.ovh.com/createToken/
 # where to create keys: https://eu.api.ovh.com/createApp/
 # info: https://certbot-dns-ovh.readthedocs.io/en/stable/
 # info: https://go-acme.github.io/lego/dns/ovh/

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./www",
-    "build": "webpack --config ./app_client/webpack.prod.js",
+    "build": "npm install --only=dev && webpack --config ./app_client/webpack.prod.js",
     "watch": "webpack --config ./app_client/webpack.dev.js --watch"
   },
   "nodemonConfig": {

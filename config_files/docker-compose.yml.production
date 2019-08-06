@@ -21,7 +21,7 @@ services:
       - reverse-proxy
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.entryPoints=http"
+      - "traefik.frontend.entryPoints=https"
       - "traefik.frontend.rule=Host:cloud.spotair.org"
       - "traefik.backend=spotair"
       - "traefik.port=3000"

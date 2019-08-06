@@ -1,5 +1,14 @@
+BUG
+	the thumbnails that are created when copying images to CONTAINER do not respect the HEIGHT = 200 px 
+
+PACKAGES
+	remove CORS if not used; if it is used: allow to some routes only
+
+BUILD
+	Document somewhere how to build the app_client sources in production (install dependencies, launch webpack...)
+
 ENVIRONMENT
-	Let's Encrypt?
+	Once HTTPS works, ensure that API credentials are definitive, create good names for images, projects, use env variables... you know
 
 SEARCH
 	How does search work in admin?
@@ -30,6 +39,7 @@ local container:
 LATER:
 	Reinforce security using expiring JWT tokens (ref: https://www.techynovice.com/setting-up-JWT-token-refresh-mechanism-with-axios/)
 	SSL certificates in acme.json: backup and store off-premises
+	Should we protect the images object server?
 	
 
 

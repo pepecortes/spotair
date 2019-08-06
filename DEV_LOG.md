@@ -71,7 +71,11 @@ Start deploying on **OVH PUBLIC CLOUD**: Ubuntu instance and then docker + docke
 Using **TRAEFIK** as a reverse proxy. It will be configured to serve everything over HTTPS using Let's Encrypt
 Remove **mocha** and **chai** as test facilities (never used)
 
-
+Using TRAEFIK and Let's Encrypt to create and manage SSL certificates. Principles
 	
+https://letsencrypt.org is a certificate authority that provides free X.509 certificates for TLS. It works automatically. Basically, when you apply for a certificate, you need to demonstrate that you have control over the DNS of the domain you are trying to certify. Traefik is capable to automate the task of applying to letsencrypt, but it needs to make API calls to add and remove information to the DNS servers (this demonstrate that you are in control over it for your domain).
+
+OVH documentation is poor. Use https://eu.api.ovh.com/createToken/ to create the following variables: OVH_ENDPOINT, OVH_APPLICATION_KEY, OVH_APPLICATION_SECRET, OVH_CONSUMER_KEY
+You need to allow the following API calls: POST: /domain/zone/<my_domain>/record, POST: /domain/zone/<my_domain>/refresh, DELETE: /domain/zone/<my_domain>/record/*
 
 

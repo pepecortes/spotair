@@ -22,7 +22,7 @@ services:
       - reverse-proxy
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.entryPoints=http"
+      - "traefik.frontend.entryPoints=https"
       - "traefik.frontend.rule=Host:localhost"
       - "traefik.backend=spotair"
       - "traefik.port=3000"
@@ -65,6 +65,7 @@ services:
     ports:
       - "80:80"
       - "8080:8080"
+      - "443:443"
       - "$PORT_DB_ADMIN:8081"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock

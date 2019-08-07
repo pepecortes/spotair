@@ -1,16 +1,17 @@
-BUG
-	the thumbnails that are created when copying images to CONTAINER do not respect the HEIGHT = 200 px 
+.ENV
+	Change .env OVH user: DO NOT COMMIT
 
-PACKAGES
-	remove CORS if not used; if it is used: allow to some routes only
+ENVIRONMENT
+	Once HTTPS works, ensure that API credentials are definitive, create good names for images, projects, use env variables... you know
+	
+BUG
+	the thumbnails that are created when copying images to CONTAINER do not respect the HEIGHT = 200 px
 
 BUILD
 	Document somewhere how to build the app_client sources in production (install dependencies, launch webpack...)
 
-ENVIRONMENT
-	Once HTTPS works, ensure that API credentials are definitive, create good names for images, projects, use env variables... you know
-
 SEARCH
+	Have you tried long searchs in the cloud?
 	How does search work in admin?
 
 LOADING ICON
@@ -40,6 +41,8 @@ LATER:
 	Reinforce security using expiring JWT tokens (ref: https://www.techynovice.com/setting-up-JWT-token-refresh-mechanism-with-axios/)
 	SSL certificates in acme.json: backup and store off-premises
 	Should we protect the images object server?
+	You might need to backup SPOTAIR BLOCK STORAGE VOLUMEs
+	You might need to configure the FAILOVER IP firewall
 	
 
 

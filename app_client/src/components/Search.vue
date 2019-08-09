@@ -40,15 +40,11 @@ export default {
       const vm = this
 			vm.resetAlert()
       newValue = newValue.replace('%', '')
-      
-      console.log(process.env.THUMBNAIL_HEIGHT_PX)
       const apiCall = `search/fts/partial/${process.env.LIMIT_SEARCH_RESULTS}/0?q=${newValue}`
-      //const apiCall = `search/fts?q=${newValue}`
 			vm.$loading(true)
       vm.axios.get(apiCall)
 				.then(response => {
 					vm.photos = response.data
-					console.log("SEARCH RESULTS: " + response.data.length)
 					if (vm.photos.length == 0) vm.showAlert("Aucun résultat")
 					vm.$loading(false)
 				})

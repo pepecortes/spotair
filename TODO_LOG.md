@@ -1,11 +1,9 @@
+COMPOSE
+	Can we ensure that mysql is ready before launching web?
+
 .ENV
 	Change .env OVH user: DO NOT COMMIT
-
-ENVIRONMENT
-	Once HTTPS works, ensure that API credentials are definitive, create good names for images, projects, use env variables... you know
-	
-BUG
-	the thumbnails that are created when copying images to CONTAINER do not respect the HEIGHT = 200 px
+	Checkr IMG_HEIGHT 200 PX in .env0
 
 BUILD
 	Document somewhere how to build the app_client sources in production (install dependencies, launch webpack...)

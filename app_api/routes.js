@@ -30,6 +30,9 @@ const ctrlInfos = require('./controllers/infos')
 const ctrlJournaux = require('./controllers/journaux')
 const ctrlLikes = require('./controllers/likes')
 
+// TEST
+const testController = require('./controllers/testController')
+
 // Import the storage controllers
 const ctrlStorage = require('./controllers/storage')
 
@@ -91,6 +94,7 @@ module.exports = function(passport) {
 	router.get('/photos/recent/:limit(\\d{0,})', (req, res) => ctrlPhotos.recent(req, res))
 	router.get('/photos/byGalerie/:id(\\d+)', (req, res) => ctrlPhotos.byGalerie(req, res))
 	router.post('/photos/validateUpload/:id(\\d+)', (req, res) => ctrlPhotos.validateUpload(req, res))
+	router.post('/photos/byIds', (req, res) => ctrlPhotos.byIds(req, res))
 	router.get('/photouploads/pending', (req, res) => ctrlPhotoUploads.pending(req, res))
 	router.get('/photouploads/validated', (req, res) => ctrlPhotoUploads.validated(req, res))
 	router.get('/photouploads/rejected', (req, res) => ctrlPhotoUploads.rejected(req, res))
@@ -104,6 +108,10 @@ module.exports = function(passport) {
 	// Routes for search functions
 	router.get('/search/fts', (req, res) => ctrlSearch.fts(req, res))
 	router.get('/search/fts/partial/:limit(\\d+)/:offset(\\d+)', (req, res) => ctrlSearch.ftsPartial(req, res))
+
+	// TEST ROUTE
+	router.get('/test', (req, res) => testController.test1(req, res))
+	router.get('/search/ftsIdsOnly', (req, res) => ctrlSearch.ftsIdsOnly(req, res))
 
 	// Not found
 	router.all('/*', ctrlNotFound);

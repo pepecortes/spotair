@@ -26,6 +26,13 @@ SearchController.fts = function(req, res) {
 		.catch(err => sendJSON.serverError(res, err))
 }
 
+// TEST
+SearchController.ftsIdsOnly = function(req, res) {
+	search(req.query.q)
+		.then(result => sendJSON.ok(res, result))
+		.catch(err => sendJSON.serverError(res, err))
+}
+
 /**
  * @function ftsPartial
  * @description Like fts, but limit the number of results

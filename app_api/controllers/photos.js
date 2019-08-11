@@ -76,6 +76,22 @@ controller.validateUpload = async function(req, res) {
 		.then(upload => sendJSON.ok(res, upload))
 }
 
+/**
+ * @function byIds
+ * @desc Returns an array of photo objects from the given arrays of ids
+ * @params {Array(Integer)} req.body.ids	-	array of photo ids
+ * @return {Array(Photos)}
+ */
+controller.byIds= function(req, res) {
+	const ids = req.body.ids
+	db.Photo.findAll({
+										where: {id: ids},
+										include: [{all:true, nested:true}]
+									})
+		.then(records => sendJSON.ok(res, records))
+		.catch(err => sendJSON.serverError(res, err))
+}
+
 module.exports = controller
 
 

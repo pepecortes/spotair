@@ -40,9 +40,14 @@ export default {
       const vm = this
 			vm.resetAlert()
       newValue = newValue.replace('%', '')
-      const apiCall = `search/fts/partial/${process.env.LIMIT_SEARCH_RESULTS}/0?q=${newValue}`
+      const apiCall = `search/fts/idsOnly?q=${newValue}`
 			vm.$loading(true)
       vm.axios.get(apiCall)
+				.then(response => {
+					const searchResults = response.data
+					const data = {ids: searchResults.slice(0,process.env.LIMIT_SEARCH_RESULTS)}
+					return vm.axios.post("photos/byIds", data)
+				})
 				.then(response => {
 					vm.photos = response.data
 					if (vm.photos.length == 0) vm.showAlert("Aucun résultat")

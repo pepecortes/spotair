@@ -12,6 +12,9 @@ LOADING ICON
 	
 CAROUSEL - ACCUEIL
 	 Why cannot I use the freemode upon initialization: check if there is some bug
+	 
+VALIDATION
+	Could de user update his picture (i.e. remove) before it is validated?
 
 DATABASE MIGRATION
 	before migration; choose IMG_HEIGHT in .env, because thubnails size depends on it

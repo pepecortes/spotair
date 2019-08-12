@@ -26,7 +26,10 @@ SearchController.fts = function(req, res) {
 		.catch(err => sendJSON.serverError(res, err))
 }
 
-// TEST
+/**
+ * @function ftsIdsOnly
+ * @description Like fts, return an array of photo ids only
+ */
 SearchController.ftsIdsOnly = function(req, res) {
 	search(req.query.q)
 		.then(result => sendJSON.ok(res, result))

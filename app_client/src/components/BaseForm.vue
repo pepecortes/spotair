@@ -49,7 +49,7 @@ export default {
 	},
 	
 	beforeMount () {
-		if (this.$route.params.tab) this.tabIndex = localRouter[this.$route.params.tab]
+		if (this.$route && this.$route.params.tab) this.tabIndex = localRouter[this.$route.params.tab]
 		switch(this.tabIndex) {
 			case 1:
 				this.newClicked()

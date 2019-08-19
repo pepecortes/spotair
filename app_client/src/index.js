@@ -21,7 +21,7 @@ Vue.use(AsyncComputed)
 // Create an axios instance and set some defaults for authorization...
 var axios = Axios.create()
 axios.defaults.baseURL = process.env.API_URL
-axios.defaults.timeout = 10000 // wait 10 seconds before giving out
+axios.defaults.timeout = 10000 // wait 10 seconds before giving up
 
 Vue.use(VueGoogleMaps, {
 	load: {

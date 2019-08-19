@@ -120,7 +120,7 @@ export default {
 			const url = vm.apiCall + '/'
 			vm.axios.get(url)
 				.then(response => vm.setOptions(response.data))
-				.catch(err => vm.showAxiosAlert(err, "danger"))
+				.catch(err => console.error(err))
 		},
 		
 		recordAddedOrUpdated(record) {
@@ -138,15 +138,20 @@ export default {
 			this.$refs.adminComponent.resetAlert()
 		},
 		
-		setInitialValue(val) {
+		/**
+		 * Set the control initial value. Can be set in "validated" condition
+		 */
+		setInitialValue(val, validated=false) {
 			var vm = this
 			vm.mutableValue = val // improve user experience
 			this.lookupInitialValue(val)
 				.then (response => {
 					vm.initial = response.data
-					vm.reset()
+					vm.mutableValue = response.data
+					if (validated) vm.validate()
+					else vm.invalidate()
 				})
-				.catch(err => vm.showAxiosAlert(err, "danger"))
+				.catch(err => console.error(err))
 		},
 		
 		async lookupInitialValue(val) {

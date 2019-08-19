@@ -81,7 +81,7 @@ import { alertMixin } from './AlertMixin'
 import { validationMixin } from 'vuelidate'
 import { required } from 'vuelidate/lib/validators'
 
-import ValidatorInput from './ValidatorInput.vue'
+import EditorInput from './EditorInput.vue'
 
 import AvionForm from './AvionForm.vue'
 import AppareilForm from './AppareilForm.vue'
@@ -107,7 +107,7 @@ export default {
 	},
 	
 	components: {
-		'validator-input': ValidatorInput,
+		'validator-input': EditorInput,
 	},	
 	
 	data() {

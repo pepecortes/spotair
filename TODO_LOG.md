@@ -4,8 +4,12 @@
 BUILD
 	Document somewhere how to build the app_client sources in production (install dependencies, launch webpack...)
 
-SEARCH
-	How does search work in admin?
+PHOTO EDIT
+	Define a component to display/edit photo information (perhaps based on validatesinglephoto)
+	Develop ModifySinglePhoto (based on ValidateSinglePhoto.vue). Think if you can refactor both
+
+EXPOCOLLECTION
+	Customize action when clicking in picture. Implement custom in admin search, for instance
 
 LOADING ICON
 	VALIDATION: When using REMOTE: validation takes a long time: add icon for waiting

@@ -2,60 +2,118 @@
 	div
 		b-button(v-on:click='test') TEST
 		b-button(v-on:click='test2') TEST2
-		expo-collection(
-			:collection='photos',
-		)
+		div(class='testelement')
+			editor-input(
+				ref='photographeInput',
+				title="Photographe",
+				apiCall="photographes",
+				v-model="mutablePhoto.photographe",
+				:adminForm='admin.photographe',
+				:state='!$v.mutablePhoto.photographe.$invalid',
+			)
+			editor-input(
+				ref='compagnieInput',
+				title="Compagnie",
+				apiCall="compagnies",
+				v-model="mutablePhoto.compagnie",
+				:adminForm='admin.compagnie',
+				:state='!$v.mutablePhoto.compagnie.$invalid',
+			)
+			editor-input(
+				ref='appareilInput',
+				title="Appareil",
+				apiCall="appareils",
+				v-model='mutablePhoto.appareil',
+				:adminForm='admin.appareil',
+				:state='!$v.mutablePhoto.appareil.$invalid',
+			)
+			editor-input(
+				ref='galerieInput',
+				title="Galerie",
+				apiCall="galeries",
+				v-model="mutablePhoto.galerie",
+				:adminForm='admin.galerie',
+				:state='!$v.mutablePhoto.galerie.$invalid',
+			)
 </template>
 
 <script>
-import ExpoCollection from './components/ExpoCollection.vue'
+import { validationMixin } from 'vuelidate'
+import { required } from 'vuelidate/lib/validators'
+
+import EditorInput from './components/EditorInput.vue'
+import AppareilForm from './components/AppareilForm.vue'
+import GalerieForm from './components/GalerieForm.vue'
+import CompagnieForm from './components/CompagnieForm.vue'
+import PhotographeForm from './components/PhotographeForm.vue'
 
 export default {
 	
 	components: {
-		'expo-collection': ExpoCollection,
+		'editor-input': EditorInput,
 	},
 		
-	//beforeMount() {
-		//this.axios.get("/photos/recent/1000")
-			//.then(response => {this.photos = response.data; this.photoSelected = response.data[1]})
-			//.catch(err => console.error(err))
-	//},
+	beforeMount() {},
 	
-	mounted () {
-
-	},
+	mounted () {},
 	
 	data() {
 		return {
-			photos: [],
+			photo: {},
+			mutablePhoto: {},
+			admin: {appareil: AppareilForm, galerie: GalerieForm, compagnie: CompagnieForm, photographe: PhotographeForm},
 		}
+	},
+	
+	watch: {
+    photo() {
+			this.mutablePhoto = this.photo
+			this.$refs.photographeInput.setInitialValue(this.photo.photographe, true)
+			this.$refs.compagnieInput.setInitialValue(this.photo.compagnie, true)
+			this.$refs.appareilInput.setInitialValue(this.photo.appareil, true)
+			this.$refs.galerieInput.setInitialValue(this.photo.galerie, true)
+			},
 	},
 	
 	computed: {
 	},
 	
+	mixins: [validationMixin],
+	
 	methods: {
 		
 		test() {
-			this.axios.get("/test")
-				.then(response => alert(`data length: ${response.data.length}, element 3000: ${response.data[3000]}`))
+			this.axios.get("/photos/12")
+				.then(response => this.photo = response.data)
 				.catch(err => console.error(err))
 		},
 		
 		test2() {
-			var data = {ids: [1,2,3,4,5,6]}
-			this.axios.post("/photos/byIds", data)
-				.then(response => console.log(JSON.stringify(response.data)))
-				.catch(err => console.error(err))
+			console.log("NEW CONTENT: " + JSON.stringify(this.mutablePhoto.photographe))
 		},
 		
-	}
+	}, 
+	
+	validations() {
+		return {mutablePhoto: 
+			{
+				photographe: {required},
+				compagnie: {required},
+				appareil: {required},
+				galerie: {required},
+			}
+		}
+	},
 	
 }
 
 </script>
 
 <style lang="scss">
+
+.testelement {
+	width: 500px;
+	background-color: blanchedalmond;
+}
 
 </style>

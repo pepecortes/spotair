@@ -10,6 +10,7 @@
 			carousel(
 				style="width:100%; height:80vh",
 				:photos='photos',
+				:action='action',
 				v-model='photoSelected',
 				v-on:input='showThumbs = true',
 			)
@@ -34,6 +35,9 @@ export default {
 			type: Array,
 			default: () => []
 		},
+		
+		// Whether or not there will be an 'action' button in the carousel
+		action: {type: Boolean, default: false},
 		
 	},
 	

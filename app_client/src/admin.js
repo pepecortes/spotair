@@ -43,6 +43,7 @@ import AppareilForm from './components/AppareilForm.vue'
 import PhotoForm from './components/PhotoForm.vue'
 import ValidateSinglePhoto from './components/ValidateSinglePhoto.vue'
 import ProfileForm from './components/ProfileForm.vue'
+import Search from './components/Search.vue'
 
 
 // Define the routes
@@ -61,6 +62,7 @@ const routes = [
   { path: '/admin/users/:tab?', component: UserForm },
   { path: '/admin/validatePhoto/:id(\\d+)?', component: ValidateSinglePhoto },
   { path: '/admin/profileForm', component: ProfileForm },
+  { path: '/admin/search', component: Search, props: { adminSearch: true } },
 ]
 
 // Create the router

@@ -8,7 +8,7 @@
 			@dismissed="alert.show=false",
 		) {{ alert.text }}
 		
-		expo-collection(:collection='photos')
+		expo-collection(:collection='photos', :action='action')
 </template>
 
 <script>
@@ -22,6 +22,10 @@ export default {
 		'expo-collection': ExpoCollection,
 	},
 	
+	props: {
+		adminSearch: {type: Boolean, default: false},
+	},
+	
 	mixins: [alertMixin],
 	
 	data() {
@@ -32,6 +36,10 @@ export default {
 	},
 	
 	computed: {
+		
+		action() {
+			return this.adminSearch
+		}
 		
 	},
 	

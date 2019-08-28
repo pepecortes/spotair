@@ -32,7 +32,7 @@ export default {
 		},
 		
 		test2() {
-			console.log("PHOTO: " + JSON.stringify(this.photo.photographe))
+			console.log("this: " + JSON.stringify(this.photo.photographe))
 		},
 		
 	},

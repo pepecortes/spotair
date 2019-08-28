@@ -56,14 +56,9 @@ export default {
 	components: {
 		'editor-input': EditorInput,
 	},
-		
-	beforeMount() {},
-	
-	mounted () {},
 	
 	data() {
 		return {
-			photo: {},
 			mutablePhoto: {},
 			admin: {
 				appareil: AppareilForm,
@@ -74,30 +69,22 @@ export default {
 		}
 	},
 	
+	mounted() {
+		//this.mutablePhoto = this.value
+	},
+	
 	watch: {
     value() {
+			console.log("value changed")
 			this.mutablePhoto = this.value
 			this.$refs.photographeInput.setInitialValue(this.value.photographe, true)
 			this.$refs.compagnieInput.setInitialValue(this.value.compagnie, true)
 			this.$refs.appareilInput.setInitialValue(this.value.appareil, true)
 			this.$refs.galerieInput.setInitialValue(this.value.galerie, true)
 			},
-			
-		mutablePhoto(newValue, oldValue) {
-			console.log("mutablePhoto changed: " + newValue.photographe.text)
-		},
-		
-	},	
-	
-	computed: {
-		KOKO() {
-			return (this.$refs.photographeInput.selectionIsLegal)
-		},
 	},
 	
 	mixins: [validationMixin],
-	
-	methods: {}, 
 	
 	validations() {
 		return {mutablePhoto: 

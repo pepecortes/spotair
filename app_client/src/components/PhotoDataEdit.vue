@@ -82,6 +82,19 @@ export default {
 			this.$refs.appareilInput.setInitialValue(this.value.appareil, true)
 			this.$refs.galerieInput.setInitialValue(this.value.galerie, true)
 			},
+			
+		mutablePhoto: {
+			handler(val) {
+				console.log("MUTABLEPHOTO")
+			},
+			deep: true
+		},
+	},
+	
+	computed: {
+		KOKO: function() {
+			return this.mutablePhoto.photographe.text
+		},
 	},
 	
 	mixins: [validationMixin],

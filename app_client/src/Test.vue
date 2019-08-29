@@ -33,6 +33,7 @@ export default {
 		
 		test2() {
 			console.log("this: " + JSON.stringify(this.photo.photographe))
+			//console.log("KOKO: " + this.$refs.TEST.KOKO)
 		},
 		
 	},

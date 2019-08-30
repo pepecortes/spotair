@@ -69,33 +69,41 @@ export default {
 		}
 	},
 	
-	mounted() {
-		//this.mutablePhoto = this.value
-	},
-	
-	watch: {
-    value() {
-			console.log("value changed")
-			//this.mutablePhoto = this.value
-			this.$refs.photographeInput.setInitialValue(this.value.photographe, true)
-			this.$refs.compagnieInput.setInitialValue(this.value.compagnie, true)
-			this.$refs.appareilInput.setInitialValue(this.value.appareil, true)
-			this.$refs.galerieInput.setInitialValue(this.value.galerie, true)
-			},
-			
-		mutablePhoto: {
-			handler(val) {
-				if (!this.mutablePhoto) return
-				console.log("MUTABLEPHOTO: " + val.photographe.text)
-				if (val.photographe) this.$emit('input', this.mutablePhoto)
-			},
-			deep: true
+	computed: {
+		selectionIsValid() {
+			// Return true only if all the fields are validated by the user
+			if (!this.mutablePhoto.photographe || 
+					!this.mutablePhoto.compagnie ||
+					!this.mutablePhoto.appareil ||
+					!this.mutablePhoto.galerie)
+				return false
+			return true
 		},
 	},
 	
-	computed: {
-		KOKO: function() {
-			return this.mutablePhoto.photographe.text
+	watch: {
+		
+    value(val) {
+			if (!val) return
+			this.setInitialValue(val)
+		},
+			
+		mutablePhoto: {
+			handler(val) {
+				if (this.selectionIsValid) this.$emit('input', val)
+				else this.$emit('input', null)
+			},
+			deep: true
+		},
+		
+	},
+	
+	methods: {
+		setInitialValue(value) {
+			this.$refs.photographeInput.setInitialValue(value.photographe, true)
+			this.$refs.compagnieInput.setInitialValue(value.compagnie, true)
+			this.$refs.appareilInput.setInitialValue(value.appareil, true)
+			this.$refs.galerieInput.setInitialValue(value.galerie, true)
 		},
 	},
 	

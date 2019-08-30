@@ -76,7 +76,7 @@ export default {
 	watch: {
     value() {
 			console.log("value changed")
-			this.mutablePhoto = this.value
+			//this.mutablePhoto = this.value
 			this.$refs.photographeInput.setInitialValue(this.value.photographe, true)
 			this.$refs.compagnieInput.setInitialValue(this.value.compagnie, true)
 			this.$refs.appareilInput.setInitialValue(this.value.appareil, true)
@@ -85,7 +85,9 @@ export default {
 			
 		mutablePhoto: {
 			handler(val) {
-				console.log("MUTABLEPHOTO")
+				if (!this.mutablePhoto) return
+				console.log("MUTABLEPHOTO: " + val.photographe.text)
+				if (val.photographe) this.$emit('input', this.mutablePhoto)
 			},
 			deep: true
 		},

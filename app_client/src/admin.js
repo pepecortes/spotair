@@ -45,6 +45,9 @@ import ValidateSinglePhoto from './components/ValidateSinglePhoto.vue'
 import ProfileForm from './components/ProfileForm.vue'
 import Search from './components/Search.vue'
 
+//TEST
+import TestEditPhoto from './components/TestEditPhoto.vue'
+
 
 // Define the routes
 const routes = [
@@ -63,6 +66,9 @@ const routes = [
   { path: '/admin/validatePhoto/:id(\\d+)?', component: ValidateSinglePhoto },
   { path: '/admin/profileForm', component: ProfileForm },
   { path: '/admin/search', component: Search, props: { adminSearch: true } },
+  
+  // TEST
+  { path: '/admin/editPhoto/:id(\\d+)?', component: TestEditPhoto },
 ]
 
 // Create the router

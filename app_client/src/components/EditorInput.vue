@@ -98,7 +98,7 @@ export default {
 		},
 	},
 		
-	created() {
+	beforeMount() {
 		this.getOptions()
 	},
 
@@ -143,13 +143,16 @@ export default {
 		 */
 		setInitialValue(val, validated=false) {
 			var vm = this
-			vm.mutableValue = val // improve user experience
+			
+			// improve user experience
+			vm.mutableValue = val
+			if (validated) vm.validate()
+			
 			this.lookupInitialValue(val)
 				.then (response => {
 					vm.initial = response.data
 					vm.mutableValue = response.data
-					if (validated) vm.validate()
-					else vm.invalidate()
+					if (!validated) vm.invalidate()
 				})
 				.catch(err => console.error(err))
 		},

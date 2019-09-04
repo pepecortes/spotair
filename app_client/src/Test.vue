@@ -26,7 +26,7 @@ export default {
 	methods: {
 		
 		test() {
-			this.axios.get("/photos/12")
+			this.axios.get("/photos/54260")
 				.then(response => this.photo = response.data)
 				.catch(err => console.error(err))
 		},

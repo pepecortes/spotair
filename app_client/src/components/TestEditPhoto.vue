@@ -10,7 +10,7 @@
 			@dismissed="alert.show=false",
 		) {{ alert.text }}
 		
-		single-photo-edit(id='id')
+		single-photo-edit(:id='id')
 		
 </template>
 

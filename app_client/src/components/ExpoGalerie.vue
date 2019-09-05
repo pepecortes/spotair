@@ -17,12 +17,12 @@
 <script>
 
 import { alertMixin } from './AlertMixin'
-import ExpoCollection from './ExpoCollection.vue'
+import BaseExpoCollection from './BaseExpoCollection.vue'
 
 export default {
 	
 	components: {
-		'expo-collection': ExpoCollection,
+		'expo-collection': BaseExpoCollection,
 	},
 	
 	mixins: [alertMixin],

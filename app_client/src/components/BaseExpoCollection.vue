@@ -1,19 +1,5 @@
 <template lang="pug">
-	div
-		div(v-if='collectionAvailable', v-show='showThumbs')
-			expo-form(
-				:photos='thumbnails',
-				v-model='photoSelected',
-				v-on:input='showThumbs = false',
-			)
-		div(v-if='collectionAvailable && showCarousel')
-			carousel(
-				style="width:100%; height:80vh",
-				:photos='photos',
-				:action='action',
-				v-model='photoSelected',
-				v-on:input='showThumbs = true',
-			)
+	include BaseExpoCollection.pug
 </template>
 
 <script>
@@ -35,9 +21,6 @@ export default {
 			type: Array,
 			default: () => []
 		},
-		
-		// Whether or not there will be an 'action' button in the carousel
-		action: {type: Boolean, default: false},
 		
 	},
 	
@@ -73,10 +56,6 @@ export default {
 		
 	watch: {
 		collection: function() {this.showThumbs = true},
-	},
-	
-	methods: {
-		
 	},
 	
 }

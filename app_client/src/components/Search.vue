@@ -8,18 +8,21 @@
 			@dismissed="alert.show=false",
 		) {{ alert.text }}
 		
-		expo-collection(:collection='photos', :action='action')
+		expo-collection(v-if='!adminSearch', :collection='photos')
+		admin-expo-collection(v-if='adminSearch', :collection='photos')
 </template>
 
 <script>
 
 import { alertMixin } from './AlertMixin'
-import ExpoCollection from './ExpoCollection.vue'
+import BaseExpoCollection from './BaseExpoCollection.vue'
+import AdminExpoCollection from './AdminExpoCollection.vue'
 
 export default {
 	
 	components: {
-		'expo-collection': ExpoCollection,
+		'expo-collection': BaseExpoCollection,
+		'admin-expo-collection': AdminExpoCollection,
 	},
 	
 	props: {
@@ -33,14 +36,6 @@ export default {
 			searchString: null,
 			photos: [],
 		}
-	},
-	
-	computed: {
-		
-		action() {
-			return this.adminSearch
-		}
-		
 	},
 	
 	watch: {

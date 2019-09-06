@@ -5,33 +5,33 @@
 				ref='photographeInput',
 				title="Photographe",
 				apiCall="photographes",
-				v-model="mutablePhoto.photographe",
+				v-model="photo.photographe",
 				:adminForm='admin.photographe',
-				:state='!$v.mutablePhoto.photographe.$invalid',
+				:state='!$v.photo.photographe.$invalid',
 			)
 			editor-input(
 				ref='compagnieInput',
 				title="Compagnie",
 				apiCall="compagnies",
-				v-model="mutablePhoto.compagnie",
+				v-model="photo.compagnie",
 				:adminForm='admin.compagnie',
-				:state='!$v.mutablePhoto.compagnie.$invalid',
+				:state='!$v.photo.compagnie.$invalid',
 			)
 			editor-input(
 				ref='appareilInput',
 				title="Appareil",
 				apiCall="appareils",
-				v-model='mutablePhoto.appareil',
+				v-model='photo.appareil',
 				:adminForm='admin.appareil',
-				:state='!$v.mutablePhoto.appareil.$invalid',
+				:state='!$v.photo.appareil.$invalid',
 			)
 			editor-input(
 				ref='galerieInput',
 				title="Galerie",
 				apiCall="galeries",
-				v-model="mutablePhoto.galerie",
+				v-model="photo.galerie",
 				:adminForm='admin.galerie',
-				:state='!$v.mutablePhoto.galerie.$invalid',
+				:state='!$v.photo.galerie.$invalid',
 			)
 </template>
 
@@ -47,20 +47,11 @@ import PhotographeForm from './PhotographeForm.vue'
 
 export default {
 	
-	beforeMount() {
-		this.initialize()
- 	},
-	
 	props: {
-		
 		id: {
-			type: String,
+			type: Number,
 			default: null,
 		},
-		
-		//value: {
-			//default: null
-		//},
 	},
 	
 	components: {
@@ -69,7 +60,7 @@ export default {
 	
 	data() {
 		return {
-			mutablePhoto: {},
+			photo: {},
 			admin: {
 				appareil: AppareilForm,
 				galerie: GalerieForm,
@@ -82,10 +73,10 @@ export default {
 	computed: {
 		selectionIsValid() {
 			// Return true only if all the fields are validated by the user
-			if (!this.mutablePhoto.photographe || 
-					!this.mutablePhoto.compagnie ||
-					!this.mutablePhoto.appareil ||
-					!this.mutablePhoto.galerie)
+			if (!this.photo.photographe || 
+					!this.photo.compagnie ||
+					!this.photo.appareil ||
+					!this.photo.galerie)
 				return false
 			return true
 		},
@@ -93,11 +84,9 @@ export default {
 	
 	watch: {
 		
-		id() {
-			this.initialize()
-		},
+		id() {this.initialize()},
 			
-		mutablePhoto: {
+		photo: {
 			handler(photo) {
 				if (this.selectionIsValid) this.$emit('input', photo)
 				else this.$emit('input', null)
@@ -107,31 +96,38 @@ export default {
 		
 	},
 	
+	//mounted() {
+		//console.log("mount id: " + this.id)
+		//this.initialize()
+	//},
+	
 	methods: {
 		
 		initialize() {
+			console.log("INITIALIZING")
 			if (!this.id) return
 			this.axios.get(`photos/${this.id}`)
 				.then(response => {
-					this.mutablePhoto = response.data
+					console.log("I HAVE DATA")
+					this.photo = response.data
 					this.setInitialValue()
+					console.log("END INIT")
 				})
 				.catch(err => console.err(err))
 		},
 		
 		setInitialValue() {
-			const value = this.mutablePhoto
-			this.$refs.photographeInput.setInitialValue(value.photographe, true)
-			this.$refs.compagnieInput.setInitialValue(value.compagnie, true)
-			this.$refs.appareilInput.setInitialValue(value.appareil, true)
-			this.$refs.galerieInput.setInitialValue(value.galerie, true)
+			this.$refs.photographeInput.setInitialValue(this.photo.photographe, true)
+			this.$refs.compagnieInput.setInitialValue(this.photo.compagnie, true)
+			this.$refs.appareilInput.setInitialValue(this.photo.appareil, true)
+			this.$refs.galerieInput.setInitialValue(this.photo.galerie, true)
 		},
 	},
 	
 	mixins: [validationMixin],
 	
 	validations() {
-		return {mutablePhoto: 
+		return {photo: 
 			{
 				photographe: {required},
 				compagnie: {required},

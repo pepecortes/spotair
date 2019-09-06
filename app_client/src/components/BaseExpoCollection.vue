@@ -27,10 +27,10 @@ export default {
 	data() {
 		return {
 			photoSelected: {},
+			currentPhoto: {},
 			showThumbs: true,
 			thumbnailLocation: process.env.STORAGE_URL + process.env.THUMBNAIL_LOCATION,
 			photoLocation: process.env.STORAGE_URL + process.env.PICTURE_LOCATION,
-			currentPhoto: {},
 		}
 	},
 	
@@ -61,11 +61,7 @@ export default {
 	},
 	
 	methods: {
-		
-		slideUpdatedEvent(slide) {
-			this.currentPhoto = slide
-		},
-		
+		slideUpdatedEvent(slide) {this.currentPhoto = slide},
 	},
 	
 }

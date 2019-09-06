@@ -1,6 +1,6 @@
 PHOTO-DATA-EDIT
-	v-model should be a photo element (now is only a quartet of photographe, compagnie...)
-		ensure that the input event sends the whole photo information (check AdminExpoCollection)
+	Too long between INITIALIZING and I HAVE DATA. Why?
+	Why are there new API calls to populate the controls?
 	Define a component to display/edit photo information (perhaps based on validatesinglephoto)
 	Think if you can refactor ModifySinglePhoto
 	

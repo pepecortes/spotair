@@ -2,9 +2,7 @@
 	extends BaseExpoCollection.pug
 	
 	block admin
-		p currentPhoto properties {{ Object.keys(currentPhoto) }}
-		photo-data-edit(v-model='currentPhotox')
-		
+		photo-data-edit(:id='currentPhoto.id')
 		
 </template>
 

@@ -30,10 +30,12 @@ export default {
 			showThumbs: true,
 			thumbnailLocation: process.env.STORAGE_URL + process.env.THUMBNAIL_LOCATION,
 			photoLocation: process.env.STORAGE_URL + process.env.PICTURE_LOCATION,
+			currentPhoto: {},
 		}
 	},
 	
 	computed: {
+		
 		collectionAvailable() {return !_.isEmpty(this.collection)},
 		
 		showCarousel() {return !this.showThumbs},
@@ -56,6 +58,14 @@ export default {
 		
 	watch: {
 		collection: function() {this.showThumbs = true},
+	},
+	
+	methods: {
+		
+		slideUpdatedEvent(slide) {
+			this.currentPhoto = slide
+		},
+		
 	},
 	
 }

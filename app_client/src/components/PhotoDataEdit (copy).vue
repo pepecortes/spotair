@@ -47,20 +47,10 @@ import PhotographeForm from './PhotographeForm.vue'
 
 export default {
 	
-	beforeMount() {
-		this.initialize()
- 	},
-	
 	props: {
-		
-		id: {
-			type: String,
-			default: null,
+		value: {
+			default: null
 		},
-		
-		//value: {
-			//default: null
-		//},
 	},
 	
 	components: {
@@ -93,13 +83,14 @@ export default {
 	
 	watch: {
 		
-		id() {
-			this.initialize()
+    value(val) {
+			if (!val) return
+			this.setInitialValue(val)
 		},
 			
 		mutablePhoto: {
-			handler(photo) {
-				if (this.selectionIsValid) this.$emit('input', photo)
+			handler(val) {
+				if (this.selectionIsValid) this.$emit('input', val)
 				else this.$emit('input', null)
 			},
 			deep: true
@@ -107,20 +98,12 @@ export default {
 		
 	},
 	
+	mount() {
+		this.mutablePhoto = Object.assign({}, this.value)
+	},
+	
 	methods: {
-		
-		initialize() {
-			if (!this.id) return
-			this.axios.get(`photos/${this.id}`)
-				.then(response => {
-					this.mutablePhoto = response.data
-					this.setInitialValue()
-				})
-				.catch(err => console.err(err))
-		},
-		
-		setInitialValue() {
-			const value = this.mutablePhoto
+		setInitialValue(value) {
 			this.$refs.photographeInput.setInitialValue(value.photographe, true)
 			this.$refs.compagnieInput.setInitialValue(value.compagnie, true)
 			this.$refs.appareilInput.setInitialValue(value.appareil, true)

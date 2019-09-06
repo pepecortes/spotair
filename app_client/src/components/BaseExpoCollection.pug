@@ -13,5 +13,6 @@ div.baseExpoCollection
 				:photos='photos',
 				v-model='photoSelected',
 				v-on:input='showThumbs = true',
+				v-on:slide-updated='slideUpdatedEvent',
 			)
 			block admin

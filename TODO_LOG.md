@@ -1,15 +1,14 @@
+PHOTO-DATA-EDIT
+	v-model should be a photo element (now is only a quartet of photographe, compagnie...)
+		ensure that the input event sends the whole photo information (check AdminExpoCollection)
+	Define a component to display/edit photo information (perhaps based on validatesinglephoto)
+	Think if you can refactor ModifySinglePhoto
+	
 .ENV
 	Change .env OVH user: DO NOT COMMIT
 
 BUILD
 	Document somewhere how to build the app_client sources in production (install dependencies, launch webpack...)
-
-PHOTO EDIT
-	Define a component to display/edit photo information (perhaps based on validatesinglephoto)
-	Develop ModifySinglePhoto (based on ValidateSinglePhoto.vue). Think if you can refactor both
-
-EXPOCOLLECTION
-	Customize action when clicking in picture. Implement custom in admin search, for instance
 
 LOADING ICON
 	VALIDATION: When using REMOTE: validation takes a long time: add icon for waiting
@@ -18,7 +17,7 @@ CAROUSEL - ACCUEIL
 	 Why cannot I use the freemode upon initialization: check if there is some bug
 	 
 VALIDATION
-	Could de user update his picture (i.e. remove) before it is validated?
+	Could the user update his picture (i.e. remove) before it is validated?
 
 DATABASE MIGRATION
 	before migration; choose IMG_HEIGHT in .env, because thubnails size depends on it

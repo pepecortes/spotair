@@ -19,11 +19,6 @@ export default {
 	
 	components: {swiper, swiperSlide},
 	
-	model: {
-		prop: 'value',
-		event: 'slideChange'
-	},
-	
 	props: {
 		value: {type: Object},
 		options: {type: Object},
@@ -97,6 +92,8 @@ export default {
 		updateDisplayedSlide() {
 			// Synchro the information of the currently displayed slide
 			this.displayedSlide = this.viewSlides[this.swiper.realIndex]
+			// Emit event to inform that a new slide is displayed
+			this.$emit('slide-updated', this.displayedSlide)
 		},
 		
 		centerAroundPhotoId(idPhoto=false) {

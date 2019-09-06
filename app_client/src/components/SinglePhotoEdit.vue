@@ -10,7 +10,7 @@
 		) {{ alert.text }}
 		
 		img(:src="photoURL", width="400")
-		photo-data-edit(v-model='photo')
+		photo-data-edit(:id='id')
 		
 		b-button(type="button", variant="outline-success", v-on:click="validateButtonClicked") Valider
 		b-button(type="button", variant="outline-danger", v-on:click="rejectButtonClicked") Rejeter
@@ -34,9 +34,9 @@ export default {
 		const url = `photos/${vm.id}`
 		const fileLocation = process.env.STORAGE_URL + process.env.PICTURE_LOCATION
 		vm.photoURL =  `${fileLocation}${vm.id}.jpg`
-		vm.axios.get(url)
-			.then(response => vm.photo = response.data)
-			.catch(err => vm.showAxiosAlert(err, "danger"))
+		//vm.axios.get(url)
+			//.then(response => vm.photo = response.data)
+			//.catch(err => vm.showAxiosAlert(err, "danger"))
 	},
 	
 	components: {

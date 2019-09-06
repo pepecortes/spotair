@@ -2,8 +2,9 @@
 	extends BaseExpoCollection.pug
 	
 	block admin
-		h1 THIS IS ADMIN: {{ photoSelected.id }}
-		photo-data-edit(v-model='photoSelected')
+		p currentPhoto properties {{ Object.keys(currentPhoto) }}
+		photo-data-edit(v-model='currentPhotox')
+		
 		
 </template>
 

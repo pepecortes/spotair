@@ -96,22 +96,14 @@ export default {
 		
 	},
 	
-	//mounted() {
-		//console.log("mount id: " + this.id)
-		//this.initialize()
-	//},
-	
 	methods: {
 		
 		initialize() {
-			console.log("INITIALIZING")
 			if (!this.id) return
 			this.axios.get(`photos/${this.id}`)
 				.then(response => {
-					console.log("I HAVE DATA")
 					this.photo = response.data
 					this.setInitialValue()
-					console.log("END INIT")
 				})
 				.catch(err => console.err(err))
 		},

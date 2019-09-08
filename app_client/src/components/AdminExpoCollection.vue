@@ -16,7 +16,7 @@ export default {
 	
 	components: {
 		'photo-data-edit': PhotoDataEdit,
-	},	
+	},
 	
 }
 </script>

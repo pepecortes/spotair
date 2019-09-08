@@ -34,9 +34,6 @@ export default {
 		const url = `photos/${vm.id}`
 		const fileLocation = process.env.STORAGE_URL + process.env.PICTURE_LOCATION
 		vm.photoURL =  `${fileLocation}${vm.id}.jpg`
-		//vm.axios.get(url)
-			//.then(response => vm.photo = response.data)
-			//.catch(err => vm.showAxiosAlert(err, "danger"))
 	},
 	
 	components: {
@@ -53,15 +50,6 @@ export default {
 	mixins: [alertMixin],
 	
 	methods: {
-		
-		//setInitialValue(data) {
-			//this.$refs.avionValidator.setInitialValue(data.avion)
-			//this.$refs.appareilValidator.setInitialValue(data.appareil)
-			//this.$refs.galerieValidator.setInitialValue(data.galerie)
-			//this.$refs.compagnieValidator.setInitialValue(data.compagnie)
-			//this.$refs.aerodromeValidator.setInitialValue(data.aerodrome)
-			//this.value.commentUpload = data.commentaire
-		//},
 			
 		validateButtonClicked() {
 			var vm = this

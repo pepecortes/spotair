@@ -125,10 +125,12 @@ const SQLquery =`
 	END;
 	
 	CREATE EVENT CreateSearchTableEvent
-	ON SCHEDULE EVERY 1 HOUR
+	ON SCHEDULE EVERY 1 HOUR STARTS CURRENT_TIMESTAMP + INTERVAL 10 MINUTE
 	ON COMPLETION PRESERVE
 	DO CALL CreateSearchTable;
 `;
+
+ 
 
 sequelize.query(SQLquery)
 	.then(([results, metadata]) =>  debug("CreateSearchTable: " + JSON.stringify(results)))

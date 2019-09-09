@@ -33,6 +33,11 @@
 				:adminForm='admin.galerie',
 				:state='!$v.photo.galerie.$invalid',
 			)
+			
+			b-button(v-show='initialPhotoModified', type="button", variant="outline-warning", v-on:click="updateButtonClicked") Update
+			b-button(type="button", variant="outline-danger") Delete
+			b-button(type="button", variant="outline-success") Reset
+			
 </template>
 
 <script>
@@ -61,6 +66,7 @@ export default {
 	data() {
 		return {
 			photo: {},
+			initialPhoto: {},
 			admin: {
 				appareil: AppareilForm,
 				galerie: GalerieForm,
@@ -71,6 +77,7 @@ export default {
 	},
 	
 	computed: {
+		
 		selectionIsValid() {
 			// Return true only if all the fields are validated by the user
 			if (!this.photo.photographe || 
@@ -80,6 +87,17 @@ export default {
 				return false
 			return true
 		},
+		
+		initialPhotoModified() {
+			if (!this.selectionIsValid) return false
+			const modified = false
+				|| (this.photo.photographe.id != this.initialPhoto.photographe.id)
+				|| (this.photo.compagnie.id != this.initialPhoto.compagnie.id)
+				|| (this.photo.appareil.id != this.initialPhoto.appareil.id)
+				|| (this.photo.galerie.id != this.initialPhoto.galerie.id)
+			return modified
+		},
+		
 	},
 	
 	watch: {
@@ -103,6 +121,7 @@ export default {
 			this.axios.get(`photos/${this.id}`)
 				.then(response => {
 					this.photo = response.data
+					this.initialPhoto = JSON.parse(JSON.stringify(response.data))
 					this.setInitialValue()
 				})
 				.catch(err => console.err(err))
@@ -114,6 +133,11 @@ export default {
 			this.$refs.appareilInput.setInitialValue(this.photo.appareil, true)
 			this.$refs.galerieInput.setInitialValue(this.photo.galerie, true)
 		},
+		
+		updateButtonClicked() {
+			alert("click")
+		},
+		
 	},
 	
 	mixins: [validationMixin],

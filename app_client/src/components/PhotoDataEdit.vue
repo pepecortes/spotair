@@ -1,5 +1,13 @@
 <template lang="pug">
 	div
+	
+		b-modal(
+			title='Update photo',
+			id='updateModal',
+			v-on:ok='updateRecord',
+		)
+			b-form-checkbox(v-model="removeWatermark") Remove the watermark
+	
 		div(class='testelement')
 			editor-input(
 				ref='photographeInput',
@@ -34,7 +42,11 @@
 				:state='!$v.photo.galerie.$invalid',
 			)
 			
-			b-button(v-show='initialPhotoModified', type="button", variant="outline-warning", v-on:click="updateButtonClicked") Update
+			b-button(
+				type="button", variant="outline-warning",
+				v-show='initialPhotoModified', 
+				v-b-modal.updateModal,
+			) Update
 			b-button(type="button", variant="outline-danger") Delete
 			b-button(type="button", variant="outline-success") Reset
 			
@@ -67,6 +79,7 @@ export default {
 		return {
 			photo: {},
 			initialPhoto: {},
+			removeWatermark: false,
 			admin: {
 				appareil: AppareilForm,
 				galerie: GalerieForm,
@@ -128,14 +141,16 @@ export default {
 		},
 		
 		setInitialValue() {
+			this.removeWatermark = false
 			this.$refs.photographeInput.setInitialValue(this.photo.photographe, true)
 			this.$refs.compagnieInput.setInitialValue(this.photo.compagnie, true)
 			this.$refs.appareilInput.setInitialValue(this.photo.appareil, true)
 			this.$refs.galerieInput.setInitialValue(this.photo.galerie, true)
 		},
 		
-		updateButtonClicked() {
-			alert("click")
+		updateRecord() {
+			console.log("trying to update: " + this.photo.photographe.id)
+			console.log("watermark: " + this.removeWatermark)
 		},
 		
 	},

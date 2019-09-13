@@ -92,6 +92,21 @@ controller.byIds= function(req, res) {
 		.catch(err => sendJSON.serverError(res, err))
 }
 
+/**
+ * @function watermark
+ * @desc Set or remove the photo watermark
+ * @params {Integer} req.params.id - id of the existing photo
+ * @params {String} req.body.label - watermark text
+ * 		If null, watermark with data from the photo object
+ * 		If empty, remove watermark
+ * @return {Object} photo object???
+ */
+controller.watermark = async function(req, res) {
+	debug("TESTING WATERMARK API: id " + req.params.id)
+	debug("req.body.label: " + JSON.stringify(req.body.label))
+	sendJSON.ok(res, "ALL OK")
+}
+
 module.exports = controller
 
 

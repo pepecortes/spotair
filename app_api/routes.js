@@ -91,10 +91,14 @@ module.exports = function(passport) {
 	router.get('/photographes/actifs', (req, res) => ctrlPhotographes.onlyActives(req, res))
 	router.put('/users/setPassword/:id(\\d+)', (req, res) => ctrlUsers.setPassword(req, res))
 	router.get('/users/byLogin/:username', (req, res) => ctrlUsers.byLogin(req, res))
+	
+	// Routes for managing visible & uploaded photos
 	router.get('/photos/recent/:limit(\\d{0,})', (req, res) => ctrlPhotos.recent(req, res))
 	router.get('/photos/byGalerie/:id(\\d+)', (req, res) => ctrlPhotos.byGalerie(req, res))
 	router.post('/photos/validateUpload/:id(\\d+)', (req, res) => ctrlPhotos.validateUpload(req, res))
 	router.post('/photos/byIds', (req, res) => ctrlPhotos.byIds(req, res))
+	router.put('/photos/watermark/:id(\\d+)', (req, res) => ctrlPhotos.watermark(req, res))
+	
 	router.get('/photouploads/pending', (req, res) => ctrlPhotoUploads.pending(req, res))
 	router.get('/photouploads/validated', (req, res) => ctrlPhotoUploads.validated(req, res))
 	router.get('/photouploads/rejected', (req, res) => ctrlPhotoUploads.rejected(req, res))

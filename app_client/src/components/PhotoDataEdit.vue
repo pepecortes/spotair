@@ -3,10 +3,16 @@
 	
 		b-modal(
 			title='Update photo',
-			id='updateModal',
-			v-on:ok='updateRecord',
+			id='confirmUpdate',
+			v-on:ok='updatePhoto',
 		)
 			b-form-checkbox(v-model="removeWatermark") Remove the watermark
+			
+		b-modal(
+			title='Delete photo',
+			id='confirmDelete',
+			v-on:ok='deletePhoto',
+		)
 	
 		div(class='testelement')
 			editor-input(
@@ -45,10 +51,12 @@
 			b-button(
 				type="button", variant="outline-warning",
 				v-show='initialPhotoModified', 
-				v-b-modal.updateModal,
+				v-b-modal.confirmUpdate,
 			) Update
-			b-button(type="button", variant="outline-danger") Delete
-			b-button(type="button", variant="outline-success") Reset
+			b-button(
+				type="button", variant="outline-danger",
+				v-b-modal.confirmDelete,
+			) Delete
 			
 </template>
 
@@ -148,9 +156,22 @@ export default {
 			this.$refs.galerieInput.setInitialValue(this.photo.galerie, true)
 		},
 		
-		updateRecord() {
-			console.log("trying to update: " + this.photo.photographe.id)
+		updatePhoto() {
+			console.log("trying to update: " + this.photo.id)
 			console.log("watermark: " + this.removeWatermark)
+			const vm = this
+			vm.axios.put(`photos/${this.photo.id}`, vm.photo)
+				.then(function(response) {		
+					vm.$emit('record-updated', response.data)
+					//vm.showAlert("Updated: " + response.data.text, "success")
+					//vm.getSelectOptions(response.data)
+				})
+				.catch(err => console.log(err))
+			
+		},
+		
+		deletePhoto() {
+			console.log("trying to delete: " + this.photo.id)
 		},
 		
 	},

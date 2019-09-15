@@ -117,6 +117,12 @@ module.exports = function(sequelize, DataTypes) {
 					// TO BE COMPLETED return the number of views per year 
 					return this.getDataValue('views') / 2
 				},
+				
+				async original() {
+					// Returns the originally uploaded photo data
+					// Note that it returns a promise!
+					return db.PhotoUpload.findByPk(this.id)
+				},
 		},
 		
 		setterMethods: {

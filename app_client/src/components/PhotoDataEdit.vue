@@ -142,13 +142,13 @@ export default {
 			this.axios.get(`photos/${this.id}`)
 				.then(response => {
 					this.photo = response.data
-					this.initialPhoto = JSON.parse(JSON.stringify(response.data))
 					this.setInitialValue()
 				})
 				.catch(err => console.err(err))
 		},
 		
 		setInitialValue() {
+			this.initialPhoto = JSON.parse(JSON.stringify(this.photo))
 			this.removeWatermark = false
 			this.$refs.photographeInput.setInitialValue(this.photo.photographe, true)
 			this.$refs.compagnieInput.setInitialValue(this.photo.compagnie, true)
@@ -157,17 +157,18 @@ export default {
 		},
 		
 		updatePhoto() {
-			console.log("trying to update: " + this.photo.id)
-			console.log("watermark: " + this.removeWatermark)
-			const vm = this
-			vm.axios.put(`photos/${this.photo.id}`, vm.photo)
-				.then(function(response) {		
-					vm.$emit('record-updated', response.data)
-					//vm.showAlert("Updated: " + response.data.text, "success")
-					//vm.getSelectOptions(response.data)
+			var vm = this
+			// PUT to API is restricted: use a key
+			let headers = {'Authorization': `Bearer ${process.env.JWT_API_KEY}`}
+			const data = (this.removeWatermark)? {caption: ""} : null
+			vm.axios.put(`photos/${this.photo.id}`, vm.photo, {'headers': headers})
+				.then(response => {
+					vm.photo = response.data
+					vm.setInitialValue()
+					return vm.axios.put(`photos/watermark/${vm.photo.id}`, data, {'headers': headers})
 				})
-				.catch(err => console.log(err))
-			
+				.then(response => vm.$emit('input', vm.photo))
+				.catch(err => this.$bvModal.msgBoxOk("Server error: " + err.message))
 		},
 		
 		deletePhoto() {

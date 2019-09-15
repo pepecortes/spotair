@@ -96,15 +96,22 @@ controller.byIds= function(req, res) {
  * @function watermark
  * @desc Set or remove the photo watermark
  * @params {Integer} req.params.id - id of the existing photo
- * @params {String} req.body.label - watermark text
+ * @params {String} req.body.caption - watermark text
  * 		If null, watermark with data from the photo object
  * 		If empty, remove watermark
  * @return {Object} photo object???
  */
 controller.watermark = async function(req, res) {
-	debug("TESTING WATERMARK API: id " + req.params.id)
-	debug("req.body.label: " + JSON.stringify(req.body.label))
-	sendJSON.ok(res, "ALL OK")
+	const photoId = req.params.id
+	let caption = req.body.caption
+	db.Photo.findByPk(photoId, {include: [{all:true, nested:true}]})
+		.then(photo => {
+			caption = (typeof caption === 'string')? caption : photo.caption
+			return photo.original
+		})
+		.then(original => storageController._storeImage(original.id, photoId, caption))
+		.then(result => sendJSON.ok(res, result))
+		.catch(err => sendJSON.serverError(res, err))
 }
 
 module.exports = controller

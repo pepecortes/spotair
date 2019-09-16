@@ -2,14 +2,14 @@
 	div
 	
 		b-modal(
-			title='Update photo',
+			title='Confirm photo update?',
 			id='confirmUpdate',
 			v-on:ok='updatePhoto',
 		)
 			b-form-checkbox(v-model="removeWatermark") Remove the watermark
 			
 		b-modal(
-			title='Delete photo',
+			title='Confirm photo delete?',
 			id='confirmDelete',
 			v-on:ok='deletePhoto',
 		)
@@ -69,6 +69,9 @@ import AppareilForm from './AppareilForm.vue'
 import GalerieForm from './GalerieForm.vue'
 import CompagnieForm from './CompagnieForm.vue'
 import PhotographeForm from './PhotographeForm.vue'
+
+// API is restricted: use a key
+let headers = {'Authorization': `Bearer ${process.env.JWT_API_KEY}`}
 
 export default {
 	
@@ -157,9 +160,7 @@ export default {
 		},
 		
 		updatePhoto() {
-			var vm = this
-			// PUT to API is restricted: use a key
-			let headers = {'Authorization': `Bearer ${process.env.JWT_API_KEY}`}
+			const vm = this
 			const data = (this.removeWatermark)? {caption: ""} : null
 			vm.axios.put(`photos/${this.photo.id}`, vm.photo, {'headers': headers})
 				.then(response => {
@@ -167,12 +168,22 @@ export default {
 					vm.setInitialValue()
 					return vm.axios.put(`photos/watermark/${vm.photo.id}`, data, {'headers': headers})
 				})
-				.then(response => vm.$emit('input', vm.photo))
-				.catch(err => this.$bvModal.msgBoxOk("Server error: " + err.message))
+				.then(response => {
+					vm.$bvModal.msgBoxOk("Photo updated")
+					vm.$emit('input', vm.photo)
+				})
+				.catch(err => vm.$bvModal.msgBoxOk("Server error: " + err.message))
 		},
 		
 		deletePhoto() {
-			console.log("trying to delete: " + this.photo.id)
+			const vm = this
+			/**
+			 * Remove photo from photos
+			 * Invalidate photo from photoUploads
+			 * Remove photo from likes
+			 * Remove images
+			 * Build FTS again
+			 */
 		},
 		
 	},

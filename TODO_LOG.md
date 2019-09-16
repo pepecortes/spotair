@@ -1,7 +1,6 @@
 PHOTO-DATA-EDIT
-	Too long between INITIALIZING and I HAVE DATA. Why?
-	Why are there new API calls to populate the controls?
-	Define a component to display/edit photo information (perhaps based on validatesinglephoto)
+	Think: should the PUT photo API call deal with the watermark management? (even if you leave the watermark API call)
+	Should the DELETE API call manage all the tasks linked to deletion?
 	Think if you can refactor ModifySinglePhoto
 	
 .ENV

@@ -93,6 +93,21 @@ controller.byIds= function(req, res) {
 }
 
 /**
+ * @function photoUpdate
+ * @desc Update a photo and watermark
+ * @params {Integer} req.params.id - id of the existing photo
+ * @params {String} req.body.caption - watermark text
+ * 		If null, watermark with data from the photo object
+ * 		If empty, remove watermark
+ * @return {Object} photo object
+ */
+controller.photoUpdate = async function(req, res) {
+	return controller._update(req.params.id, req.body)
+		.then(record => sendJSON.ok(res, record))
+		.catch(err => sendJSON.serverError(res, err))
+}
+
+/**
  * @function watermark
  * @desc Set or remove the photo watermark
  * @params {Integer} req.params.id - id of the existing photo
@@ -112,6 +127,10 @@ controller.watermark = async function(req, res) {
 		.then(original => storageController._storeImage(original.id, photoId, caption))
 		.then(result => sendJSON.ok(res, result))
 		.catch(err => sendJSON.serverError(res, err))
+}
+
+controller._watermark = async function() {
+	// TO BE COMPLETED
 }
 
 module.exports = controller

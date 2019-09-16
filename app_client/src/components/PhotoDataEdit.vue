@@ -162,7 +162,8 @@ export default {
 		updatePhoto() {
 			const vm = this
 			const data = (this.removeWatermark)? {caption: ""} : null
-			vm.axios.put(`photos/${this.photo.id}`, vm.photo, {'headers': headers})
+			//vm.axios.put(`photos/${this.photo.id}`, vm.photo, {'headers': headers})
+			vm.axios.put(`photos/photoUpdate/${this.photo.id}`, vm.photo, {'headers': headers})
 				.then(response => {
 					vm.photo = response.data
 					vm.setInitialValue()

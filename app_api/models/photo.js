@@ -121,7 +121,10 @@ module.exports = function(sequelize, DataTypes) {
 				async original() {
 					// Returns the originally uploaded photo data
 					// Note that it returns a promise!
-					return db.PhotoUpload.findByPk(this.id)
+					return db.PhotoUpload.findOne({
+						where: {photoId: this.id},
+						include: [{all:true, nested:true}],
+					})
 				},
 		},
 		

@@ -150,9 +150,8 @@ controller._watermark = async function(photo, caption=null) {
  * @params {Integer} photoId	- id the existing Photo
  * @return {Object} photoUpload object that has been invalidated
  */
-controller._invalidate = async function(photoId) {
-	return db.Photo.findByPk(photoId, {include: [{all:true, nested:true}]})
-		.then(photo => photo.original)
+controller._invalidate = async function(photo) {
+	photo.original
 		.then(original => {
 			original.validated = false
 			return original.save()
@@ -171,12 +170,17 @@ controller.photoDelete = async function(req, res) {
 	// Remove images
 	// Remove photo from photos
 	// Build FTS again
-	
 	const id = req.params.id
-	this._invalidate(id)
-		.then(() =>	sendJSON.ok(res, "ALL OK"))
+	let photo = null
+	db.Photo.findByPk(id, {include: [{all:true, nested:true}]})
+		.then(result => {photo = result; return photo.original})
+		.then(original => {original.validated = false; return original.save()})
+		.then(() => photo.likes)
+		.then(likes => likes.map(e => e.destroy()))
+		.then(() => storageController._deletePicture(photo.id))
+		.then(() => db.updateFTSindex())
+		.then(() =>	sendJSON.ok(res, photo))
 		.catch(err => sendJSON.serverError(res, err))
-		
 }
 
 module.exports = controller

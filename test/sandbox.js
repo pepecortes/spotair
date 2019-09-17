@@ -13,14 +13,24 @@ const _ = require('lodash');
 const db = require('../app_api/models/db')
 const storageController = require('../app_api/controllers/storage.js')
 const photoUploadController = require('../app_api/controllers/photouploads.js')
+const photoController = require('../app_api/controllers/photos.js')
 
 console.log("START")
 
 
-const idPhoto = 1
-photoUploadController._invalidate(idPhoto)
-	.then(result => console.log(result))
+db.updateFTSindex()
+
+//const id = 40000
+//var photo = null
 	
+//db.Photo.findByPk(id, {include: [{all:true, nested:true}]})
+	//.then(result => {photo = result; return result})
+	//.then(photo => photo.likes)
+	//.then(likes => likes.map(like => like.destroy()))
+
+
+//storageController._deletePicture(id)
+		//.then(result => console.log(result))
 
 
 

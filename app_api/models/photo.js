@@ -126,6 +126,19 @@ module.exports = function(sequelize, DataTypes) {
 						include: [{all:true, nested:true}],
 					})
 				},
+				
+				async likes() {
+					// Returns the array of likes linked to this photo
+					return db.Like.findAll({
+						where: {photoId: this.id},
+						include: [{all:true, nested:true}],
+					})
+				},
+				
+				async likeRank() {
+					// Returns the rank of the photo based on the likes info
+					return 0
+				},
 		},
 		
 		setterMethods: {

@@ -160,31 +160,22 @@ export default {
 		},
 		
 		updatePhoto() {
-			const vm = this
-			const data = (this.removeWatermark)? {caption: ""} : null
-			//vm.axios.put(`photos/${this.photo.id}`, vm.photo, {'headers': headers})
-			vm.axios.put(`photos/photoUpdate/${this.photo.id}`, vm.photo, {'headers': headers})
+			const url = `photos/photoUpdate/${this.photo.id}/${this.removeWatermark}`
+			this.axios.put(url, this.photo, {'headers': headers})	
 				.then(response => {
-					vm.photo = response.data
-					vm.setInitialValue()
-					return vm.axios.put(`photos/watermark/${vm.photo.id}`, data, {'headers': headers})
+					this.photo = response.data
+					this.setInitialValue()
+					this.$bvModal.msgBoxOk("Photo updated")
+					this.$emit('input', this.photo)
 				})
-				.then(response => {
-					vm.$bvModal.msgBoxOk("Photo updated")
-					vm.$emit('input', vm.photo)
-				})
-				.catch(err => vm.$bvModal.msgBoxOk("Server error: " + err.message))
+				.catch(err => this.$bvModal.msgBoxOk("Server error: " + err.message))
 		},
 		
 		deletePhoto() {
-			const vm = this
-			/**
-			 * Remove photo from photos
-			 * Invalidate photo from photoUploads
-			 * Remove photo from likes
-			 * Remove images
-			 * Build FTS again
-			 */
+			const url = `photos/photoDelete/${this.photo.id}`
+			this.axios.delete(url, {'headers': headers})
+				.then(response => this.$bvModal.msgBoxOk("Photo updated: " + response.data))
+				.catch(err => this.$bvModal.msgBoxOk("Server error: " + err.message))
 		},
 		
 	},

@@ -96,14 +96,17 @@ controller.byIds= function(req, res) {
  * @function photoUpdate
  * @desc Update a photo and watermark
  * @params {Integer} req.params.id - id of the existing photo
- * @params {String} req.body.caption - watermark text
- * 		If null, watermark with data from the photo object
- * 		If empty, remove watermark
+ * @params {Object} req.body.* - data to update the object
+ * @params {String} req.params.removeWatermark - true / false
  * @return {Object} photo object
  */
 controller.photoUpdate = async function(req, res) {
+	const photoId = req.params.id
+	const removeWatermark = (/true/i).test(req.params.removeWatermark) // convert to Boolean
+	const caption = (removeWatermark)? "" : null
 	return controller._update(req.params.id, req.body)
-		.then(record => sendJSON.ok(res, record))
+		.then(photo => this._watermark(photo, caption))
+		.then(photo => sendJSON.ok(res, photo))
 		.catch(err => sendJSON.serverError(res, err))
 }
 
@@ -114,23 +117,66 @@ controller.photoUpdate = async function(req, res) {
  * @params {String} req.body.caption - watermark text
  * 		If null, watermark with data from the photo object
  * 		If empty, remove watermark
- * @return {Object} photo object???
+ * @return {Object} photo object
  */
 controller.watermark = async function(req, res) {
 	const photoId = req.params.id
 	let caption = req.body.caption
 	db.Photo.findByPk(photoId, {include: [{all:true, nested:true}]})
-		.then(photo => {
-			caption = (typeof caption === 'string')? caption : photo.caption
-			return photo.original
-		})
-		.then(original => storageController._storeImage(original.id, photoId, caption))
+		.then(photo => this._watermark(photo, caption))
 		.then(result => sendJSON.ok(res, result))
 		.catch(err => sendJSON.serverError(res, err))
 }
 
-controller._watermark = async function() {
-	// TO BE COMPLETED
+/**
+ * @function _watermark
+ * @desc Set or remove the photo watermark
+ * @params {Photo} photo - photo to watermark
+ * @params {String} caption - watermark text
+ * 		default = null: watermark with data from the photo object
+ * 		If empty string, remove watermark
+ * @return {Object} the photo object
+ */
+controller._watermark = async function(photo, caption=null) {
+	const caption_str = (typeof caption === 'string')? caption : photo.caption
+	return photo.original
+		.then(original => storageController._storeImage(original.id, photo.id, caption_str))
+		.then(() => photo)
+}
+
+/**
+ * @function _invalidate
+ * @desc Invalidate a photo that was previously validated
+ * @params {Integer} photoId	- id the existing Photo
+ * @return {Object} photoUpload object that has been invalidated
+ */
+controller._invalidate = async function(photoId) {
+	return db.Photo.findByPk(photoId, {include: [{all:true, nested:true}]})
+		.then(photo => photo.original)
+		.then(original => {
+			original.validated = false
+			return original.save()
+		})
+}
+
+/**
+ * @function photoDelete
+ * @desc Delete a photo and manage all dependencies
+ * @params {Integer} req.params.id - id of an existing photo
+ * @return {Photo} the deleted photo object
+ */
+controller.photoDelete = async function(req, res) {
+	// Invalidate photo from photoUploads
+	// Remove photo from likes
+	// Remove images
+	// Remove photo from photos
+	// Build FTS again
+	
+	const id = req.params.id
+	this._invalidate(id)
+		.then(() =>	sendJSON.ok(res, "ALL OK"))
+		.catch(err => sendJSON.serverError(res, err))
+		
 }
 
 module.exports = controller

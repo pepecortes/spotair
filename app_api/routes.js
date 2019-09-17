@@ -97,8 +97,9 @@ module.exports = function(passport) {
 	router.get('/photos/byGalerie/:id(\\d+)', (req, res) => ctrlPhotos.byGalerie(req, res))
 	router.post('/photos/validateUpload/:id(\\d+)', (req, res) => ctrlPhotos.validateUpload(req, res))
 	router.post('/photos/byIds', (req, res) => ctrlPhotos.byIds(req, res))
-	router.put('/photos/photoUpdate/:id(\\d+)', (req, res) => ctrlPhotos.photoUpdate(req, res))
-	router.put('/photos/watermark/:id(\\d+)', (req, res) => ctrlPhotos.watermark(req, res))
+	router.put('/photos/photoUpdate/:id(\\d+)/:removeWatermark?', (req, res) => ctrlPhotos.photoUpdate(req, res))
+	router.delete('/photos/photoDelete/:id(\\d+)', (req, res) => ctrlPhotos.photoDelete(req, res))
+	router.put('/photos/watermark/:id(\\d+)/:caption?', (req, res) => ctrlPhotos.watermark(req, res))
 	
 	router.get('/photouploads/pending', (req, res) => ctrlPhotoUploads.pending(req, res))
 	router.get('/photouploads/validated', (req, res) => ctrlPhotoUploads.validated(req, res))

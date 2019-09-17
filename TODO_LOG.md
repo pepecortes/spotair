@@ -1,6 +1,5 @@
 PHOTO-DATA-EDIT
-	Think: should the PUT photo API call deal with the watermark management? (even if you leave the watermark API call)
-	Should the DELETE API call manage all the tasks linked to deletion?
+	DELETE API call manage all the tasks linked to deletion?
 	Think if you can refactor ModifySinglePhoto
 	
 .ENV

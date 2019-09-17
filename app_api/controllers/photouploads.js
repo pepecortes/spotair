@@ -34,14 +34,14 @@ function filterValidation(req, res, scopeString = "pending") {
  * @params {Integer} req.params.id - id of the uploaded photo
  */
 controller.reject = async function(req, res) {
-       const id = req.params.id
-       controller._byId(id)
-               .then(record => {
-                       if (record.validated != null) return Promise.reject(new Error('status is not pending'))
-                       else return controller._update(id, {validated: false})
-               })
-               .then(record => sendJSON.ok(res, record))
-               .catch(err => sendJSON.serverError(res, err))
+	const id = req.params.id
+	controller._byId(id)
+		.then(record => {
+			if (record.validated != null) return Promise.reject(new Error('status is not pending'))
+			else return controller._update(id, {validated: false})
+		})
+		.then(record => sendJSON.ok(res, record))
+		.catch(err => sendJSON.serverError(res, err))
 }
 
 // fusion

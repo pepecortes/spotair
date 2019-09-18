@@ -18,15 +18,23 @@ const photoController = require('../app_api/controllers/photos.js')
 console.log("START")
 
 
-db.updateFTSindex()
-
-//const id = 40000
-//var photo = null
+const id = 54260
+var photo = null
 	
-//db.Photo.findByPk(id, {include: [{all:true, nested:true}]})
-	//.then(result => {photo = result; return result})
-	//.then(photo => photo.likes)
-	//.then(likes => likes.map(like => like.destroy()))
+db.Photo.findByPk(id, {include: [{all:true, nested:true}]})
+	//.then(photo => photo.destroy())
+	.then(result => {photo=result; return photo.original})
+	.then(original => {
+		original.validated = false
+		original.photoId = null
+		original.save()
+	})
+	
+	.then(db.PhotoUpload.findByPk(54245, {include: [{all:true, nested:true}]}))
+	
+	.then(result => console.log(result))
+	.then(() => photo.destroy())
+	.then(() => console.log("all ok"))
 
 
 //storageController._deletePicture(id)

@@ -174,7 +174,7 @@ export default {
 		deletePhoto() {
 			const url = `photos/photoDelete/${this.photo.id}`
 			this.axios.delete(url, {'headers': headers})
-				.then(response => this.$bvModal.msgBoxOk("Photo updated: " + response.data))
+				.then(response => this.$bvModal.msgBoxOk("Photo deleted"))
 				.catch(err => this.$bvModal.msgBoxOk("Server error: " + err.message))
 		},
 		

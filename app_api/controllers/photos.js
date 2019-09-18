@@ -165,7 +165,7 @@ controller._invalidate = async function(photo) {
  * @return {Photo} the deleted photo object
  */
 controller.photoDelete = async function(req, res) {
-	// Invalidate photo from photoUploads
+	// Invalidate photo from photoUploads and remove link
 	// Remove photo from likes
 	// Remove images
 	// Remove photo from photos
@@ -174,10 +174,15 @@ controller.photoDelete = async function(req, res) {
 	let photo = null
 	db.Photo.findByPk(id, {include: [{all:true, nested:true}]})
 		.then(result => {photo = result; return photo.original})
-		.then(original => {original.validated = false; return original.save()})
+		.then(original => {
+			original.validated = false
+			original.photoId = null
+			return original.save()
+		})
 		.then(() => photo.likes)
 		.then(likes => likes.map(e => e.destroy()))
 		.then(() => storageController._deletePicture(photo.id))
+		.then(() => photo.destroy())
 		.then(() => db.updateFTSindex())
 		.then(() =>	sendJSON.ok(res, photo))
 		.catch(err => sendJSON.serverError(res, err))

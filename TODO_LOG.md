@@ -1,3 +1,6 @@
+VALIDATE PHOTO
+	Rebuild FTS index? Generalize
+
 PHOTO-DATA-EDIT
 	DELETE API call manage all the tasks linked to deletion?
 	Think if you can refactor ModifySinglePhoto

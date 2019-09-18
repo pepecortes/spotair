@@ -166,23 +166,21 @@ controller._invalidate = async function(photo) {
  */
 controller.photoDelete = async function(req, res) {
 	// Invalidate photo from photoUploads and remove link
-	// Remove photo from likes
-	// Remove images
-	// Remove photo from photos
+	// Remove 
+	//		photo from likes
+	// 		images
+	// 		photo from photos
 	// Build FTS again
 	const id = req.params.id
-	let photo = null
-	db.Photo.findByPk(id, {include: [{all:true, nested:true}]})
-		.then(result => {photo = result; return photo.original})
-		.then(original => {
-			original.validated = false
-			original.photoId = null
-			return original.save()
+	
+	photoUploadController._rejectExistingPhoto(id)
+		.then(() => db.Photo.findByPk(id, {include: [{all:true, nested:true}]}))
+		.then(photo => {
+			p1 = photo.deleteAllViews()
+			p2 = storageController._deletePicture(id)
+			p3 = photo.destroy()
+			return Promise.all([p1, p2, p3])
 		})
-		.then(() => photo.likes)
-		.then(likes => likes.map(e => e.destroy()))
-		.then(() => storageController._deletePicture(photo.id))
-		.then(() => photo.destroy())
 		.then(() => db.updateFTSindex())
 		.then(() =>	sendJSON.ok(res, photo))
 		.catch(err => sendJSON.serverError(res, err))

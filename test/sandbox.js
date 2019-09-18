@@ -18,27 +18,23 @@ const photoController = require('../app_api/controllers/photos.js')
 console.log("START")
 
 
-const id = 54260
-var photo = null
-	
-db.Photo.findByPk(id, {include: [{all:true, nested:true}]})
-	//.then(photo => photo.destroy())
-	.then(result => {photo=result; return photo.original})
-	.then(original => {
-		original.validated = false
-		original.photoId = null
-		original.save()
+const id = 54301
+
+photoUploadController._rejectExistingPhoto(id)
+	.then(() => db.Photo.findByPk(id, {include: [{all:true, nested:true}]}))
+	.then(photo => {
+		p1 = photo.deleteAllViews()
+		p2 = storageController._deletePicture(id)
+		p3 = photo.destroy()
+		return Promise.all([p1, p2, p3])
 	})
-	
-	.then(db.PhotoUpload.findByPk(54245, {include: [{all:true, nested:true}]}))
-	
-	.then(result => console.log(result))
-	.then(() => photo.destroy())
-	.then(() => console.log("all ok"))
+	.then(() => db.updateFTSindex())
+	.catch(err => console.log(err))
 
-
-//storageController._deletePicture(id)
-		//.then(result => console.log(result))
+//db.Photo.findByPk(id, {include: [{all:true, nested:true}]})
+	//.then(photo => photo.deleteAllViews())
+	//.then(result => console.log(result))
+	//.catch(err => console.log(err))
 
 
 

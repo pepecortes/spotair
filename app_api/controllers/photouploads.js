@@ -44,6 +44,21 @@ controller.reject = async function(req, res) {
 		.catch(err => sendJSON.serverError(res, err))
 }
 
+/**
+ * @function _rejectExistingPhoto
+ * @desc Reject and PhotoUpload that was previously accepted
+ *       (photo already exists)
+ * @params {Integer} id	-	id of the existing photo (not the photoUpload)
+ */
+controller._rejectExistingPhoto = async function(id) {
+	return db.PhotoUpload.findOne({where: {photoId: id}})
+		.then(photoUpload => {
+			photoUpload.validated = false
+			photoUpload.photoId = null
+			return photoUpload.save()
+		})
+}
+
 // fusion
 controller.fusion =  async function(req, res) {
 	const sourceid = req.params.sourceid;

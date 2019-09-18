@@ -145,7 +145,14 @@ module.exports = function(sequelize, DataTypes) {
 				addView: function() {
 					// increment the view count of this photo
 					this.setDataValue('views', this.getDataValue('views') + 1)
-				}
+				},
+				
+				//deleteAllViews: function() {
+					//// delete all "likes" entries
+					//console.log("in deleteallviews")
+					//return this.likes
+						//.then(likes => likes.map(e => e.destroy()))
+				//},
 		},
 			
 		indexes: [
@@ -154,6 +161,11 @@ module.exports = function(sequelize, DataTypes) {
 			
 		}
   );
+  
+  Model.prototype.deleteAllViews = async function() {
+		return this.likes
+			.then(likes => likes.map(e => e.destroy()))
+	}
   
 	Model.metadata = {
 		name: "Photo",

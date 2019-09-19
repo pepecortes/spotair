@@ -172,7 +172,6 @@ controller.photoDelete = async function(req, res) {
 	// 		photo from photos
 	// Build FTS again
 	const id = req.params.id
-	
 	photoUploadController._rejectExistingPhoto(id)
 		.then(() => db.Photo.findByPk(id, {include: [{all:true, nested:true}]}))
 		.then(photo => {
@@ -182,7 +181,7 @@ controller.photoDelete = async function(req, res) {
 			return Promise.all([p1, p2, p3])
 		})
 		.then(() => db.updateFTSindex())
-		.then(() =>	sendJSON.ok(res, photo))
+		.then(() =>	sendJSON.ok(res, id))
 		.catch(err => sendJSON.serverError(res, err))
 }
 

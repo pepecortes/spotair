@@ -11,7 +11,7 @@
 					b-nav-item-dropdown
 						template(slot="button-content")
 							em Photos
-						b-dropdown-item(to="/admin/validatePhoto") Validate
+						b-dropdown-item(to="/admin/validatePhotos") Validate
 						b-dropdown-item(to="/admin/editPhoto") Edit
 					b-nav-item-dropdown
 						template(slot="button-content")

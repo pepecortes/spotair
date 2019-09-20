@@ -20,8 +20,7 @@ console.log("START")
 
 const id = 54301
 
-photoUploadController._rejectExistingPhoto(id)
-	.then(() => db.Photo.findByPk(id, {include: [{all:true, nested:true}]}))
+db.Photo.findByPk(id, {include: [{all:true, nested:true}]}))
 	.then(photo => {
 		p1 = photo.deleteAllViews()
 		p2 = storageController._deletePicture(id)
@@ -29,12 +28,10 @@ photoUploadController._rejectExistingPhoto(id)
 		return Promise.all([p1, p2, p3])
 	})
 	.then(() => db.updateFTSindex())
-	.catch(err => console.log(err))
+	.then(() =>	sendJSON.ok(res, photo))
+	.catch(err => sendJSON.serverError(res, err))
+	
 
-//db.Photo.findByPk(id, {include: [{all:true, nested:true}]})
-	//.then(photo => photo.deleteAllViews())
-	//.then(result => console.log(result))
-	//.catch(err => console.log(err))
 
 
 

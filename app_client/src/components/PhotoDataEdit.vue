@@ -147,7 +147,7 @@ export default {
 					this.photo = response.data
 					this.setInitialValue()
 				})
-				.catch(err => console.err(err))
+				.catch(err => console.log(err))
 		},
 		
 		setInitialValue() {

@@ -1,6 +1,6 @@
 <template lang="pug">
 
-	div(id="TestEditPhoto")
+	div(id="validatePhotos")
 	
 		b-alert(
 			:variant="alert.type",
@@ -10,34 +10,34 @@
 			@dismissed="alert.show=false",
 		) {{ alert.text }}
 		
-		single-photo-edit(:id='id')
+		validate-expo-collection(:collection='photos')
 		
 </template>
 
 <script>
 import { alertMixin } from './AlertMixin'
-import SinglePhotoEdit from './SinglePhotoEdit.vue'
-
+import ValidateExpoCollection from './ValidateExpoCollection.vue'
 
 export default {
 	
 	beforeMount() {
-		this.id = this.$route.params.id
+		const url = `/photouploads/pending`
+		this.axios.get(url)
+			.then(response => this.photos = response.data)
+			.catch(err => this.showAxiosAlert(err, "danger"))
 	},
 	
 	components: {
-		'single-photo-edit': SinglePhotoEdit,
+		'validate-expo-collection': ValidateExpoCollection,
 	},	
 	
 	data() {
 		return {
-			id: null,
+			photos: [],
 		}
 	},
 	
 	mixins: [alertMixin],
-	
-	methods: {},
 	
 }
 

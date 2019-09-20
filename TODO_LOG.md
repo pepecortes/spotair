@@ -1,4 +1,5 @@
-VALIDATE PHOTO
+VALIDATE PHOTOS
+	What if not photo remaining for validation
 	Rebuild FTS index? Generalize
 
 PHOTO-DATA-EDIT

@@ -41,13 +41,9 @@ import ModeleForm from './components/ModeleForm.vue'
 import AvionForm from './components/AvionForm.vue'
 import AppareilForm from './components/AppareilForm.vue'
 import PhotoForm from './components/PhotoForm.vue'
-import ValidateSinglePhoto from './components/ValidateSinglePhoto.vue'
+import ValidatePhotos from './components/ValidatePhotos.vue'
 import ProfileForm from './components/ProfileForm.vue'
 import Search from './components/Search.vue'
-
-//TEST
-import TestEditPhoto from './components/TestEditPhoto.vue'
-
 
 // Define the routes
 const routes = [
@@ -63,12 +59,12 @@ const routes = [
   { path: '/admin/appareils/:tab?', component: AppareilForm },
   { path: '/admin/photos/:tab?', component: PhotoForm },
   { path: '/admin/users/:tab?', component: UserForm },
-  { path: '/admin/validatePhoto/:id(\\d+)?', component: ValidateSinglePhoto },
+  { path: '/admin/validatePhotos', component: ValidatePhotos },
   { path: '/admin/profileForm', component: ProfileForm },
   { path: '/admin/search', component: Search, props: { adminSearch: true } },
   
   // TEST
-  { path: '/admin/editPhoto/:id(\\d+)?', component: TestEditPhoto },
+  //{ path: '/admin/editPhoto/:id(\\d+)?', component: TestEditPhoto },
 ]
 
 // Create the router

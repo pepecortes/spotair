@@ -1,5 +1,7 @@
 VALIDATE PHOTOS
+	Which flag to display/hide the validate and reject buttons?
 	What if not photo remaining for validation
+	You miss the photographe information
 	Rebuild FTS index? Generalize
 
 PHOTO-DATA-EDIT

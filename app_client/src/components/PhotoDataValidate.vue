@@ -2,16 +2,16 @@
 	div
 	
 		b-modal(
-			title='Confirm photo update?',
-			id='confirmUpdate',
-			v-on:ok='updatePhoto',
+			title='Confirm photo validate?',
+			id='confirmValidate',
+			v-on:ok='validatePhoto',
 		)
 			b-form-checkbox(v-model="removeWatermark") Remove the watermark
 			
 		b-modal(
-			title='Confirm photo delete?',
-			id='confirmDelete',
-			v-on:ok='deletePhoto',
+			title='Confirm photo reject?',
+			id='confirmReject',
+			v-on:ok='rejectPhoto',
 		)
 	
 		div(class='testelement')
@@ -21,19 +21,65 @@
 				apiCall="avions",
 				v-model="photo.avion",
 				:adminForm='admin.avion',
-				:state='!$v.photo.avion.$invalid',
 				:hideValidateButton='true',
+				@selector-changed='avionChanged',
 			)
+
+			editor-input(
+				ref='appareilValidator',
+				title="Immat",
+				apiCall="appareils",
+				v-model='photo.appareil',
+				:adminForm='admin.appareil',
+				:state='!$v.photo.appareil.$invalid',
+			)
+			
+			editor-input(
+				ref='aerodromeValidator',
+				:hideValidateButton='true',
+				apiCall="aerodromes",
+				v-model='photo.aerodrome',
+				title="Lieu",
+				:adminForm='admin.aerodrome',
+				@selector-changed='aerodromeChanged',
+			)
+
+			editor-input(
+				ref='galerieValidator',
+				apiCall="galeries",
+				v-model='photo.galerie',
+				title="Galerie",
+				:adminForm='admin.galerie',
+				:state='!$v.photo.galerie.$invalid',
+			)
+
+			editor-input(
+				ref='compagnieValidator',
+				apiCall="compagnies",
+				v-model='photo.compagnie',
+				title="Compagnie",
+				:adminForm='admin.compagnie',
+				:state='!$v.photo.compagnie.$invalid',
+			)
+			
+			b-form-textarea(
+				id="commentaire",
+				placeholder="Commentaire",
+				rows="3",
+				max-rows="6",
+				v-model="photo.commentaire"
+			)
+			
 			
 			b-button(
 				type="button", variant="outline-warning",
 				v-show='initialPhotoModified', 
-				v-b-modal.confirmUpdate,
+				v-b-modal.confirmValidate,
 			) Update
 			b-button(
 				type="button", variant="outline-danger",
-				v-b-modal.confirmDelete,
-			) Delete
+				v-b-modal.confirmReject,
+			) Reject
 			
 </template>
 
@@ -43,10 +89,9 @@ import { required } from 'vuelidate/lib/validators'
 
 import EditorInput from './EditorInput.vue'
 import AvionForm from './AvionForm.vue'
-//import AppareilForm from './AppareilForm.vue'
-//import GalerieForm from './GalerieForm.vue'
-//import CompagnieForm from './CompagnieForm.vue'
-//import PhotographeForm from './PhotographeForm.vue'
+import AppareilForm from './AppareilForm.vue'
+import GalerieForm from './GalerieForm.vue'
+import CompagnieForm from './CompagnieForm.vue'
 
 // API is restricted: use a key
 let headers = {'Authorization': `Bearer ${process.env.JWT_API_KEY}`}
@@ -71,10 +116,9 @@ export default {
 			removeWatermark: false,
 			admin: {
 				avion: AvionForm,
-				//appareil: AppareilForm,
-				//galerie: GalerieForm,
-				//compagnie: CompagnieForm,
-				//photographe: PhotographeForm
+				appareil: AppareilForm,
+				galerie: GalerieForm,
+				compagnie: CompagnieForm,
 			},
 		}
 	},
@@ -101,17 +145,6 @@ export default {
 			//return modified
 		},
 		
-		avionChanged(selected) {
-			//if(!selected || !selected.id) return
-			//var vm = this
-			//vm.axios.get(`appareils/byAvion/${selected.id}`)
-				//.then(response => {
-					//vm.$refs.appareilValidator.setOptions(response.data)
-					//vm.$refs.appareilValidator.reset()
-				//})
-				//.catch(err => vm.showAxiosAlert(err, "danger"))
-		},
-		
 	},
 	
 	watch: {
@@ -131,25 +164,43 @@ export default {
 	methods: {
 		
 		initialize() {
-			//if (!this.id) return
-			//this.axios.get(`photos/${this.id}`)
-				//.then(response => {
-					//this.photo = response.data
-					//this.setInitialValue()
-				//})
-				//.catch(err => console.log(err))
+			if (!this.id) return
+			this.axios.get(`photouploads/${this.id}`)
+				.then(response => {
+					this.photo = response.data
+					this.setInitialValue()
+				})
+				.catch(err => console.log(err))
 		},
 		
 		setInitialValue() {
-			//this.initialPhoto = JSON.parse(JSON.stringify(this.photo))
-			//this.removeWatermark = false
-			//this.$refs.photographeInput.setInitialValue(this.photo.photographe, true)
-			//this.$refs.compagnieInput.setInitialValue(this.photo.compagnie, true)
-			//this.$refs.appareilInput.setInitialValue(this.photo.appareil, true)
-			//this.$refs.galerieInput.setInitialValue(this.photo.galerie, true)
+			const data = this.photo.jsonData
+			this.initialPhoto = JSON.parse(JSON.stringify(this.photo))
+			this.removeWatermark = false
+			this.$refs.avionValidator.setInitialValue(data.avion, true)
+			this.$refs.appareilValidator.setInitialValue(data.appareil, true)
+			this.$refs.galerieValidator.setInitialValue(data.galerie, true)
+			this.$refs.compagnieValidator.setInitialValue(data.compagnie, true)
+			this.$refs.aerodromeValidator.setInitialValue(data.aerodrome, true)
+			this.photo.commentUpload = data.commentaire
 		},
 		
-		updatePhoto() {
+		avionChanged(selected) {
+			if(!selected || !selected.id) return
+			var vm = this
+			vm.axios.get(`appareils/byAvion/${selected.id}`)
+				.then(response => {
+					vm.$refs.appareilValidator.setOptions(response.data)
+					vm.$refs.appareilValidator.reset()
+				})
+				.catch(err => console.log(err))
+		},
+		
+		aerodromeChanged(selected) {
+			if(!selected || !selected.id) return
+		},
+		
+		validatePhoto() {
 			//const url = `photos/photoUpdate/${this.photo.id}/${this.removeWatermark}`
 			//this.axios.put(url, this.photo, {'headers': headers})	
 				//.then(response => {
@@ -161,7 +212,7 @@ export default {
 				//.catch(err => this.$bvModal.msgBoxOk("Server error: " + err.message))
 		},
 		
-		deletePhoto() {
+		rejectPhoto() {
 			//const url = `photos/photoDelete/${this.photo.id}`
 			//this.axios.delete(url, {'headers': headers})
 				//.then(response => this.$bvModal.msgBoxOk("Photo deleted"))
@@ -175,11 +226,9 @@ export default {
 	validations() {
 		return {photo: 
 			{
-				avion: {required},
-				//photographe: {required},
-				//compagnie: {required},
-				//appareil: {required},
-				//galerie: {required},
+				appareil: {required},
+				galerie: {required},
+				compagnie: {required},
 			}
 		}
 	},

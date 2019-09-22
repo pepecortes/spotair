@@ -7,12 +7,6 @@
 			v-on:ok='updatePhoto',
 		)
 			b-form-checkbox(v-model="removeWatermark") Remove the watermark
-			
-		b-modal(
-			title='Confirm photo delete?',
-			id='confirmDelete',
-			v-on:ok='deletePhoto',
-		)
 	
 		div(class='testelement')
 			editor-input(
@@ -53,9 +47,10 @@
 				v-show='initialPhotoModified', 
 				v-b-modal.confirmUpdate,
 			) Update
+			
 			b-button(
 				type="button", variant="outline-danger",
-				v-b-modal.confirmDelete,
+				v-on:click='deletePhoto',
 			) Delete
 			
 </template>
@@ -173,9 +168,11 @@ export default {
 		
 		deletePhoto() {
 			const url = `photos/photoDelete/${this.photo.id}`
-			this.axios.delete(url, {'headers': headers})
-				.then(response => this.$bvModal.msgBoxOk("Photo deleted"))
-				.catch(err => this.$bvModal.msgBoxOk("Server error: " + err.message))
+			this.$bvModal.msgBoxConfirm('Confirm delete photo?')
+				.then(confirmed => {if (!confirmed) return Promise.reject(null)})
+				.then(() => this.axios.delete(url, {'headers': headers}))
+				.then(() => this.$bvModal.msgBoxOk("Photo deleted"))
+				.catch(err => {if (err) return this.$bvModal.msgBoxOk("Server error: " + err.message)})
 		},
 		
 	},

@@ -16,6 +16,13 @@ export default {
 	
 	components: {
 		'photo-data-validate': PhotoDataValidate,
+	},	
+	
+	data() {
+		return {
+			thumbnailLocation: process.env.STORAGE_URL + process.env.UPLOAD_LOCATION,
+			photoLocation: process.env.STORAGE_URL + process.env.UPLOAD_LOCATION,
+		}
 	},
 	
 }

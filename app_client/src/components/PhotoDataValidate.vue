@@ -1,19 +1,6 @@
 <template lang="pug">
 	div
 	
-		b-modal(
-			title='Confirm photo validate?',
-			id='confirmValidate',
-			v-on:ok='validatePhoto',
-		)
-			b-form-checkbox(v-model="removeWatermark") Remove the watermark
-			
-		b-modal(
-			title='Confirm photo reject?',
-			id='confirmReject',
-			v-on:ok='rejectPhoto',
-		)
-	
 		div(class='testelement')
 			editor-input(
 				ref='avionValidator',
@@ -72,13 +59,14 @@
 			
 			
 			b-button(
-				type="button", variant="outline-warning",
-				v-show='initialPhotoModified', 
-				v-b-modal.confirmValidate,
-			) Update
+				type="button", variant="outline-success",
+				v-show='selectionIsValid', 
+				v-on:click='validatePhoto',
+			) Validate
+			
 			b-button(
 				type="button", variant="outline-danger",
-				v-b-modal.confirmReject,
+				v-on:click='rejectPhoto',
 			) Reject
 			
 </template>
@@ -113,7 +101,6 @@ export default {
 		return {
 			photo: {},
 			initialPhoto: {},
-			removeWatermark: false,
 			admin: {
 				avion: AvionForm,
 				appareil: AppareilForm,
@@ -125,24 +112,13 @@ export default {
 	
 	computed: {
 		
-		//selectionIsValid() {
-			//// Return true only if all the fields are validated by the user
-			//if (!this.photo.photographe || 
-					//!this.photo.compagnie ||
-					//!this.photo.appareil ||
-					//!this.photo.galerie)
-				//return false
-			//return true
-		//},
-		
-		initialPhotoModified() {
-			//if (!this.selectionIsValid) return false
-			//const modified = false
-				//|| (this.photo.photographe.id != this.initialPhoto.photographe.id)
-				//|| (this.photo.compagnie.id != this.initialPhoto.compagnie.id)
-				//|| (this.photo.appareil.id != this.initialPhoto.appareil.id)
-				//|| (this.photo.galerie.id != this.initialPhoto.galerie.id)
-			//return modified
+		selectionIsValid() {
+			// Return true only if all the relevant fields are validated by the user
+			if (!this.photo.appareil ||
+					!this.photo.galerie ||
+					!this.photo.compagnie)
+				return false
+			return true
 		},
 		
 	},
@@ -151,13 +127,13 @@ export default {
 		
 		id() {this.initialize()},
 			
-		//photo: {
-			//handler(photo) {
-				//if (this.selectionIsValid) this.$emit('input', photo)
-				//else this.$emit('input', null)
-			//},
-			//deep: true
-		//},
+		photo: {
+			handler(photo) {
+				if (this.selectionIsValid) this.$emit('input', photo)
+				else this.$emit('input', null)
+			},
+			deep: true
+		},
 		
 	},
 	
@@ -167,56 +143,60 @@ export default {
 			if (!this.id) return
 			this.axios.get(`photouploads/${this.id}`)
 				.then(response => {
-					this.photo = response.data
+					this.photo = response.data.jsonData
+					this.photo.photographe = response.data.photographe
+					this.photo.dateUpload = response.data.createdAt
 					this.setInitialValue()
 				})
 				.catch(err => console.log(err))
 		},
 		
 		setInitialValue() {
-			const data = this.photo.jsonData
 			this.initialPhoto = JSON.parse(JSON.stringify(this.photo))
-			this.removeWatermark = false
-			this.$refs.avionValidator.setInitialValue(data.avion, true)
-			this.$refs.appareilValidator.setInitialValue(data.appareil, true)
-			this.$refs.galerieValidator.setInitialValue(data.galerie, true)
-			this.$refs.compagnieValidator.setInitialValue(data.compagnie, true)
-			this.$refs.aerodromeValidator.setInitialValue(data.aerodrome, true)
-			this.photo.commentUpload = data.commentaire
+			this.$refs.avionValidator.setInitialValue(this.photo.avion, true)
+			this.$refs.appareilValidator.setInitialValue(this.photo.appareil, true)
+			this.$refs.galerieValidator.setInitialValue(this.photo.galerie, true)
+			this.$refs.compagnieValidator.setInitialValue(this.photo.compagnie, true)
+			this.$refs.aerodromeValidator.setInitialValue(this.photo.aerodrome, true)
+			//this.photo.commentUpload = this.photo.commentaire
 		},
 		
 		avionChanged(selected) {
 			if(!selected || !selected.id) return
-			var vm = this
-			vm.axios.get(`appareils/byAvion/${selected.id}`)
+			this.axios.get(`appareils/byAvion/${selected.id}`)
 				.then(response => {
-					vm.$refs.appareilValidator.setOptions(response.data)
-					vm.$refs.appareilValidator.reset()
+					this.$refs.appareilValidator.setOptions(response.data)
+					this.$refs.appareilValidator.reset()
 				})
 				.catch(err => console.log(err))
 		},
 		
 		aerodromeChanged(selected) {
 			if(!selected || !selected.id) return
+			this.axios.get(`galeries/byAerodrome/${selected.id}`)
+				.then(response => {
+					this.$refs.galerieValidator.setOptions(response.data)
+					this.$refs.galerieValidator.reset()
+				})
+				.catch(err => console.log(err))
 		},
 		
 		validatePhoto() {
-			//const url = `photos/photoUpdate/${this.photo.id}/${this.removeWatermark}`
-			//this.axios.put(url, this.photo, {'headers': headers})	
-				//.then(response => {
-					//this.photo = response.data
-					//this.setInitialValue()
-					//this.$bvModal.msgBoxOk("Photo updated")
-					//this.$emit('input', this.photo)
-				//})
-				//.catch(err => this.$bvModal.msgBoxOk("Server error: " + err.message))
+			const url = `photos/validateUpload/${this.id}`
+			this.$bvModal.msgBoxConfirm('Confirm validate?')
+				.then(confirmed => {if (!confirmed) return Promise.reject(null)})
+				.then(() => this.axios.post(url, this.photo, {'headers': headers}))
+				.then(() => this.$bvModal.msgBoxOk("Photo validated"))
+				.catch(err => {if (err) return this.$bvModal.msgBoxOk("Server error: " + err.message)})
 		},
 		
 		rejectPhoto() {
-			//const url = `photos/photoDelete/${this.photo.id}`
-			//this.axios.delete(url, {'headers': headers})
-				//.then(response => this.$bvModal.msgBoxOk("Photo deleted"))
-				//.catch(err => this.$bvModal.msgBoxOk("Server error: " + err.message))
+			const url = `photoUploads/reject/${this.id}`
+			this.$bvModal.msgBoxConfirm('Confirm photo reject?')
+				.then(confirmed => {if (!confirmed) return Promise.reject(null)})
+				.then(() => this.axios.put(url, {'headers': headers}))
+				.then(() => this.$bvModal.msgBoxOk("Photo rejected"))
+				.catch(err => {if (err) return this.$bvModal.msgBoxOk("Server error: " + err.message)})
 		},
 		
 	},

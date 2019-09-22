@@ -1,7 +1,8 @@
 VALIDATE PHOTOS
-	Which flag to display/hide the validate and reject buttons?
-	What if not photo remaining for validation
 	You miss the photographe information
+	Where next after a photo has been either validated or rejected?
+	Are you sure you understand the role of commentUpload in validate?
+	What if not photo remaining for validation
 	Rebuild FTS index? Generalize
 
 PHOTO-DATA-EDIT

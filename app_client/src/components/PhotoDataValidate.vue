@@ -2,6 +2,10 @@
 	div
 	
 		div(class='testelement')
+		
+			p(v-if='photo.photographe') Photographe : {{ photo.photographe.text }}
+			p(v-if='photo.commentUpload') Commentaire : {{ photo.commentUpload }}
+		
 			editor-input(
 				ref='avionValidator',
 				title="Avion",
@@ -56,7 +60,6 @@
 				max-rows="6",
 				v-model="photo.commentaire"
 			)
-			
 			
 			b-button(
 				type="button", variant="outline-success",
@@ -158,7 +161,6 @@ export default {
 			this.$refs.galerieValidator.setInitialValue(this.photo.galerie, true)
 			this.$refs.compagnieValidator.setInitialValue(this.photo.compagnie, true)
 			this.$refs.aerodromeValidator.setInitialValue(this.photo.aerodrome, true)
-			//this.photo.commentUpload = this.photo.commentaire
 		},
 		
 		avionChanged(selected) {

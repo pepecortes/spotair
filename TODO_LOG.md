@@ -1,7 +1,5 @@
 VALIDATE PHOTOS
-	You miss the photographe information
 	Where next after a photo has been either validated or rejected?
-	Are you sure you understand the role of commentUpload in validate?
 	What if not photo remaining for validation
 	Rebuild FTS index? Generalize
 

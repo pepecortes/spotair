@@ -68,7 +68,7 @@
 			placeholder="Commentaire",
 			rows="3",
 			max-rows="6",
-			v-model="value.commentaire"
+			v-model="value.commentUpload"
 		)
 		
 		b-button(v-if='allValidated', type="button", variant="outline-success", v-on:click="validateButtonClicked") Valider
@@ -117,7 +117,7 @@ export default {
 				{
 					photographe: null, avion: null, appareil: null,
 					galerie: null, compagnie: null, aerodrome: null,
-					dateUpload: null, commentUpload: null, commentaire: null
+					dateUpload: null, commentUpload: null
 				},
 			admin: {avion: AvionForm, appareil: AppareilForm, galerie: GalerieForm, compagnie: CompagnieForm, aerodrome: AerodromeForm},
 			uploadedFileURL: null,
@@ -168,7 +168,7 @@ export default {
 			this.$refs.galerieValidator.setInitialValue(data.galerie)
 			this.$refs.compagnieValidator.setInitialValue(data.compagnie)
 			this.$refs.aerodromeValidator.setInitialValue(data.aerodrome)
-			this.value.commentUpload = data.commentaire
+			this.value.commentUpload = data.commentUpload
 		},
 			
 		validateButtonClicked() {

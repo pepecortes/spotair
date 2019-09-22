@@ -24,6 +24,7 @@ export default {
 		const url = `/photouploads/pending`
 		this.axios.get(url)
 			.then(response => this.photos = response.data)
+			.then(() => {if (this.photos.length == 0) this.showAlert("Aucune photo en attente de validation")})
 			.catch(err => this.showAxiosAlert(err, "danger"))
 	},
 	

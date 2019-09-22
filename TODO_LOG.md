@@ -1,6 +1,5 @@
 VALIDATE PHOTOS
 	Where next after a photo has been either validated or rejected?
-	What if not photo remaining for validation
 	Rebuild FTS index? Generalize
 
 PHOTO-DATA-EDIT

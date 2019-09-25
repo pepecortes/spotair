@@ -3,7 +3,6 @@
 	
 		div(class='testelement')
 		
-			p validateStatus : {{ validateStatus }}
 			p(v-if='photo.photographe') Photographe : {{ photo.photographe.text }}
 			p(v-if='photo.commentUpload') Commentaire : {{ photo.commentUpload }}
 		
@@ -103,7 +102,6 @@ export default {
 	
 	data() {
 		return {
-			validateStatus: null,
 			photo: {},
 			initialPhoto: {},
 			admin: {
@@ -148,7 +146,6 @@ export default {
 			if (!this.id) return
 			this.axios.get(`photouploads/${this.id}`)
 				.then(response => {
-					this.validateStatus = response.data.validated
 					this.photo = response.data.jsonData
 					this.photo.photographe = response.data.photographe
 					this.photo.dateUpload = response.data.createdAt

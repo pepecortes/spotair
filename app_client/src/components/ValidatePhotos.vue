@@ -10,7 +10,12 @@
 			@dismissed="alert.show=false",
 		) {{ alert.text }}
 		
-		validate-expo-collection(:collection='photos')
+		validate-expo-collection(
+			:collection='photos',
+			v-on:update='TEST',
+		)
+		
+		b-button(v-on:click='TEST') TEST
 		
 </template>
 
@@ -36,6 +41,19 @@ export default {
 		return {
 			photos: [],
 		}
+	},
+	
+	// TEST
+	methods: {
+		TEST() {
+			console.log('IN TEST')
+			//this.photos.pop()
+			const url = `/photouploads/pending`
+			this.axios.get(url)
+				.then(response => this.photos = response.data)
+				.then(() => {if (this.photos.length == 0) this.showAlert("Aucune photo en attente de validation")})
+				.catch(err => this.showAxiosAlert(err, "danger"))
+		},
 	},
 	
 	mixins: [alertMixin],

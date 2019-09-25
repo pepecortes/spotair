@@ -2,7 +2,11 @@
 	extends BaseExpoCollection.pug
 	
 	block admin
-		photo-data-validate(:id='currentPhoto.id')
+		photo-data-validate(
+			:id='currentPhoto.id',
+			v-on:photo-rejected="$emit('update', currentPhoto.id)",
+			v-on:photo-validated='raiseHand',
+		)
 		
 </template>
 
@@ -22,6 +26,13 @@ export default {
 		return {
 			thumbnailLocation: process.env.STORAGE_URL + process.env.UPLOAD_LOCATION,
 			photoLocation: process.env.STORAGE_URL + process.env.UPLOAD_LOCATION,
+		}
+	},
+	
+	methods: {
+		raiseHand() {
+			console.log("RAISE HAND")
+			this.$emit('update', this.id)
 		}
 	},
 	

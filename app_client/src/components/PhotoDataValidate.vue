@@ -192,6 +192,7 @@ export default {
 				.then(confirmed => {if (!confirmed) return Promise.reject(null)})
 				.then(() => this.axios.post(url, this.photo, {'headers': headers}))
 				.then(() => this.$bvModal.msgBoxOk("Photo validated"))
+				.then(() => this.$emit('photo-validated', this.id))
 				.catch(err => {if (err) return this.$bvModal.msgBoxOk("Server error: " + err.message)})
 		},
 		
@@ -201,6 +202,7 @@ export default {
 				.then(confirmed => {if (!confirmed) return Promise.reject(null)})
 				.then(() => this.axios.put(url, {'headers': headers}))
 				.then(() => this.$bvModal.msgBoxOk("Photo rejected"))
+				.then(() => this.$emit('photo-rejected', this.id))
 				.catch(err => {if (err) return this.$bvModal.msgBoxOk("Server error: " + err.message)})
 		},
 		

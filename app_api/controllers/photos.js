@@ -65,15 +65,19 @@ controller.validateUpload = async function(req, res) {
 	// generate picture and thumbnail and obtain dimensions
 	// update photo with the dimension
 	// update photoUpload (validate and a reference to photo)
-
+	// refresh FTS
 	const srcId = req.params.id
 	photoUploadController._byId(srcId)
 		.then(upload => (upload.validated == null)? upload : Promise.reject(new Error('Photo already validated or rejected')))
 		.then(() => controller._create(req.body))
 		.then(photo => storageController._storeImage(srcId, photo.id, photo.caption))
 		.then(info => controller._update(info.id, {height: info.height, width: info.width}))
-		.then(photo => photoUploadController._update(srcId, {photo: photo, validated: true}))
-		.then(upload => sendJSON.ok(res, upload))
+		.then(photo => {
+			const p1 = photoUploadController._update(srcId, {photo: photo, validated: true})
+			const p2 = db.updateFTSindex()
+			return Promise.all([p1, p2])
+		})
+		.then(([upload, x]) => sendJSON.ok(res, upload))
 }
 
 /**
@@ -105,8 +109,12 @@ controller.photoUpdate = async function(req, res) {
 	const removeWatermark = (/true/i).test(req.params.removeWatermark) // convert to Boolean
 	const caption = (removeWatermark)? "" : null
 	return controller._update(req.params.id, req.body)
-		.then(photo => this._watermark(photo, caption))
-		.then(photo => sendJSON.ok(res, photo))
+		.then(photo => {
+			const p1 = this._watermark(photo, caption)
+			const p2 = db.updateFTSindex()
+			return Promise.all([p1, p2])
+		})
+		.then(([photo, x]) => sendJSON.ok(res, photo))
 		.catch(err => sendJSON.serverError(res, err))
 }
 

@@ -9,7 +9,11 @@
 		) {{ alert.text }}
 		
 		expo-collection(v-if='!adminSearch', :collection='photos')
-		admin-expo-collection(v-if='adminSearch', :collection='photos')
+		admin-expo-collection(
+			v-if='adminSearch',
+			:collection='photos',
+			v-on:update='refresh',
+		)
 </template>
 
 <script>
@@ -74,6 +78,14 @@ export default {
     // has access to `this` component instance.
     next()
   },
+  
+  methods: {
+		
+		refresh() {
+			alert("REFRESH METHOD NOT COMPLETED")
+		},
+		
+	},
 	
 }
 </script>

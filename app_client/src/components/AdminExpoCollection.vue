@@ -2,7 +2,11 @@
 	extends BaseExpoCollection.pug
 	
 	block admin
-		photo-data-edit(:id='currentPhoto.id')
+		photo-data-edit(
+			:id='currentPhoto.id',
+			v-on:photo-deleted="$emit('update', currentPhoto.id)",
+			v-on:photo-updated="$emit('update', currentPhoto.id)",
+		)
 		
 </template>
 

@@ -1,12 +1,9 @@
-VALIDATE PHOTOS
-	FTS index: perhaps a mysql trigger? (if so, clean all FTS refresh on photos controller
+SEARCH.VUE
+	Refresh method not completed
 
 PHOTO-DATA-EDIT
 	DELETE API call manage all the tasks linked to deletion?
 	Think if you can refactor ModifySinglePhoto
-	
-.ENV
-	Change .env OVH user: DO NOT COMMIT
 
 BUILD
 	Document somewhere how to build the app_client sources in production (install dependencies, launch webpack...)

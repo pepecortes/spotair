@@ -160,9 +160,9 @@ export default {
 				.then(response => {
 					this.photo = response.data
 					this.setInitialValue()
-					this.$bvModal.msgBoxOk("Photo updated")
-					this.$emit('input', this.photo)
+					return this.$bvModal.msgBoxOk("Photo updated")
 				})
+				.then(() => this.$emit('photo-updated', this.id))
 				.catch(err => this.$bvModal.msgBoxOk("Server error: " + err.message))
 		},
 		
@@ -172,6 +172,7 @@ export default {
 				.then(confirmed => {if (!confirmed) return Promise.reject(null)})
 				.then(() => this.axios.delete(url, {'headers': headers}))
 				.then(() => this.$bvModal.msgBoxOk("Photo deleted"))
+				.then(() => this.$emit('photo-deleted', this.id))
 				.catch(err => {if (err) return this.$bvModal.msgBoxOk("Server error: " + err.message)})
 		},
 		

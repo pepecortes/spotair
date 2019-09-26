@@ -81,8 +81,7 @@ createFTSIndex = function() {
 		
 		CREATE PROCEDURE CreateSearchTable()
 		BEGIN
-		DROP TABLE IF EXISTS photoSearch;
-		CREATE TABLE photoSearch
+		CREATE TABLE photoSearchTemp
 		SELECT photos.id, CONCAT_WS(', ', photos.commentaire,	photographes.nom,
 			photographes.prenom, compagnies.nom, compagnies.flotille,
 			appareils.immat, appareils.serial, appareils.commentaire,
@@ -100,11 +99,13 @@ createFTSIndex = function() {
 		LEFT JOIN annees ON galeries.anneeId = annees.id
 		LEFT JOIN themes ON galeries.themeId = themes.id
 		LEFT JOIN aerodromes ON galeries.aerodromeId = aerodromes.id;
-		CREATE FULLTEXT INDEX fts ON photoSearch (text);
+		CREATE FULLTEXT INDEX fts ON photoSearchTemp (text);
+		DROP TABLE IF EXISTS photoSearch;
+		RENAME TABLE photoSearchTemp TO photoSearch;
 		END;
 		
 		CREATE EVENT CreateSearchTableEvent
-		ON SCHEDULE EVERY 1 HOUR STARTS CURRENT_TIMESTAMP + INTERVAL 10 MINUTE
+		ON SCHEDULE EVERY 1 HOUR STARTS CURRENT_TIMESTAMP
 		ON COMPLETION PRESERVE
 		DO CALL CreateSearchTable;
 	`;

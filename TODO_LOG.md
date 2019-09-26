@@ -1,5 +1,5 @@
 VALIDATE PHOTOS
-	Rebuild FTS index? Generalize
+	FTS index: perhaps a mysql trigger? (if so, clean all FTS refresh on photos controller
 
 PHOTO-DATA-EDIT
 	DELETE API call manage all the tasks linked to deletion?

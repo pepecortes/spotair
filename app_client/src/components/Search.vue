@@ -8,7 +8,10 @@
 			@dismissed="alert.show=false",
 		) {{ alert.text }}
 		
-		expo-collection(v-if='!adminSearch', :collection='photos')
+		expo-collection(
+			v-if='!adminSearch',
+			:collection='photos'
+		)
 		admin-expo-collection(
 			v-if='adminSearch',
 			:collection='photos',
@@ -44,23 +47,7 @@ export default {
 	
 	watch: {
 		searchString: function(newValue, oldValue) {
-      const vm = this
-			vm.resetAlert()
-      newValue = newValue.replace('%', '')
-      const apiCall = `search/fts/idsOnly?q=${newValue}`
-			vm.$loading(true)
-      vm.axios.get(apiCall)
-				.then(response => {
-					const searchResults = response.data
-					const data = {ids: searchResults.slice(0,process.env.LIMIT_SEARCH_RESULTS)}
-					return vm.axios.post("photos/byIds", data)
-				})
-				.then(response => {
-					vm.photos = response.data
-					if (vm.photos.length == 0) vm.showAlert("Aucun résultat")
-					vm.$loading(false)
-				})
-				.catch(err => {vm.showAxiosAlert(err); this.$loading(false)})	
+			this.refresh()
     },
 	},
 	
@@ -82,7 +69,22 @@ export default {
   methods: {
 		
 		refresh() {
-			alert("REFRESH METHOD NOT COMPLETED")
+			this.resetAlert()
+      const query = this.searchString.replace('%', '')
+      const apiCall = `search/fts/idsOnly?q=${query}`
+			this.$loading(true)
+      this.axios.get(apiCall)
+				.then(response => {
+					const searchResults = response.data
+					const data = {ids: searchResults.slice(0,process.env.LIMIT_SEARCH_RESULTS)}
+					return this.axios.post("photos/byIds", data)
+				})
+				.then(response => {
+					this.photos = response.data
+					if (this.photos.length == 0) this.showAlert("Aucun résultat")
+					this.$loading(false)
+				})
+				.catch(err => {this.showAxiosAlert(err); this.$loading(false)})	
 		},
 		
 	},

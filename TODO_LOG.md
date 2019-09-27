@@ -1,5 +1,5 @@
-SEARCH.VUE
-	Refresh method not completed
+SEARCH.VUE ADMIN
+	EDIT and DELETE returns code 500 (API DELETE CALL returns "TypeError: Cannot set property 'validated' of null")
 
 PHOTO-DATA-EDIT
 	DELETE API call manage all the tasks linked to deletion?

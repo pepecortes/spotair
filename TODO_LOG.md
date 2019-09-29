@@ -1,5 +1,5 @@
-SEARCH.VUE ADMIN
-	EDIT and DELETE returns code 500 (API DELETE CALL returns "TypeError: Cannot set property 'validated' of null")
+Memory leaks both in PhotoDataEdit and PhotoDataValidate: sospecho los campos select
+Add an admin menu to display the recently updated pictures
 
 PHOTO-DATA-EDIT
 	DELETE API call manage all the tasks linked to deletion?

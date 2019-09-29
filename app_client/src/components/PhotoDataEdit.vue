@@ -42,6 +42,14 @@
 				:state='!$v.photo.galerie.$invalid',
 			)
 			
+			b-form-textarea(
+				id="commentaire",
+				placeholder="Commentaire",
+				rows="3",
+				max-rows="6",
+				v-model="photo.commentaire"
+			)
+			
 			b-button(
 				type="button", variant="outline-warning",
 				v-show='initialPhotoModified', 
@@ -69,6 +77,21 @@ import PhotographeForm from './PhotographeForm.vue'
 let headers = {'Authorization': `Bearer ${process.env.JWT_API_KEY}`}
 
 export default {
+	
+	//beforeCreate() {console.log("beforeCreate")},
+	created() {console.log("created")},
+	//beforeMount() {console.log("beforeMount")},
+	mounted() {console.log("mounted")},
+	//beforeUpdate() {console.log("beforeUpdate")},
+	updated() {console.log("updated")},
+	beforeDestroy() {
+		console.log("beforeDestroy")
+		//this.$refs.photographeInput.Sdestroy()
+		//this.$refs.compagnieInput.setInitialValue(this.photo.compagnie, true)
+		//this.$refs.appareilInput.setInitialValue(this.photo.appareil, true)
+		//this.$refs.galerieInput.setInitialValue(this.photo.galerie, true)
+	},
+	destroyed() {console.log("destroyed")},
 	
 	props: {
 		id: {
@@ -114,6 +137,7 @@ export default {
 				|| (this.photo.compagnie.id != this.initialPhoto.compagnie.id)
 				|| (this.photo.appareil.id != this.initialPhoto.appareil.id)
 				|| (this.photo.galerie.id != this.initialPhoto.galerie.id)
+				|| (this.photo.commentaire != this.initialPhoto.commentaire)
 			return modified
 		},
 		

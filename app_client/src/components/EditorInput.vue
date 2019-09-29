@@ -37,7 +37,11 @@
 import VueSelect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.min.css'
 
-export default {
+export default {	
+	
+	beforeDestroy() {
+		console.log("editorInput beforeDestroy")
+	},
 		
 	components: {
 		'v-select': VueSelect,

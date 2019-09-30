@@ -78,21 +78,6 @@ let headers = {'Authorization': `Bearer ${process.env.JWT_API_KEY}`}
 
 export default {
 	
-	//beforeCreate() {console.log("beforeCreate")},
-	created() {console.log("created")},
-	//beforeMount() {console.log("beforeMount")},
-	mounted() {console.log("mounted")},
-	//beforeUpdate() {console.log("beforeUpdate")},
-	updated() {console.log("updated")},
-	beforeDestroy() {
-		console.log("beforeDestroy")
-		//this.$refs.photographeInput.Sdestroy()
-		//this.$refs.compagnieInput.setInitialValue(this.photo.compagnie, true)
-		//this.$refs.appareilInput.setInitialValue(this.photo.appareil, true)
-		//this.$refs.galerieInput.setInitialValue(this.photo.galerie, true)
-	},
-	destroyed() {console.log("destroyed")},
-	
 	props: {
 		id: {
 			type: Number,
@@ -143,6 +128,10 @@ export default {
 		
 	},
 	
+	mounted() {
+		console.log("*************")
+	},
+	
 	watch: {
 		
 		id() {this.initialize()},
@@ -163,13 +152,15 @@ export default {
 			if (!this.id) return
 			this.axios.get(`photos/${this.id}`)
 				.then(response => {
-					this.photo = response.data
+					this.photo =  JSON.parse(JSON.stringify(response.data))
 					this.setInitialValue()
 				})
 				.catch(err => console.log(err))
 		},
 		
 		setInitialValue() {
+			console.log("START SETINITIALVALUE")
+			
 			this.initialPhoto = JSON.parse(JSON.stringify(this.photo))
 			this.removeWatermark = false
 			this.$refs.photographeInput.setInitialValue(this.photo.photographe, true)

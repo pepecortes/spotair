@@ -99,6 +99,7 @@ export default {
 	},
 		
 	mounted() {
+		console.log("START MOUNTED: GETOPTIONS")
 		this.getOptions()
 	},
 	
@@ -118,6 +119,7 @@ export default {
 		
 		setOptions(options) {
 			this.options = JSON.parse(JSON.stringify(options))
+			console.log("FINISHED GETOPTIONS")
 		},
 		
 		getOptions() {
@@ -157,6 +159,7 @@ export default {
 					vm.initial = response.data
 					vm.mutableValue = response.data
 					if (!validated) vm.invalidate()
+					console.log("FINISHED SETINITIALVALUE")
 				})
 				.catch(err => console.error(err))
 		},

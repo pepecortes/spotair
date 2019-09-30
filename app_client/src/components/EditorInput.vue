@@ -37,11 +37,7 @@
 import VueSelect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.min.css'
 
-export default {	
-	
-	beforeDestroy() {
-		console.log("editorInput beforeDestroy")
-	},
+export default {
 		
 	components: {
 		'v-select': VueSelect,
@@ -102,8 +98,13 @@ export default {
 		},
 	},
 		
-	beforeMount() {
+	mounted() {
 		this.getOptions()
+	},
+	
+	beforeDestroy() {
+		// accelerate the garbage collection to reduce memory footprint
+		this.options = null
 	},
 
 	methods: {
@@ -116,14 +117,13 @@ export default {
 		},
 		
 		setOptions(options) {
-			this.options = options
+			this.options = JSON.parse(JSON.stringify(options))
 		},
 		
 		getOptions() {
-			var vm = this
-			const url = vm.apiCall + '/'
-			vm.axios.get(url)
-				.then(response => vm.setOptions(response.data))
+			const url = this.apiCall + '/'
+			this.axios.get(url)
+				.then(response => this.setOptions(response.data))
 				.catch(err => console.error(err))
 		},
 		

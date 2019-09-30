@@ -1,4 +1,4 @@
-Memory leaks both in PhotoDataEdit and PhotoDataValidate: sospecho los campos select
+EditorInput: improve user experience. show content before mounted or whatever the like
 Add an admin menu to display the recently updated pictures
 
 PHOTO-DATA-EDIT

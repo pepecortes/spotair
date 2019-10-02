@@ -11,7 +11,8 @@
 					b-nav-item-dropdown
 						template(slot="button-content")
 							em Photos
-						b-dropdown-item(to="/admin/validatePhotos") Validate
+						b-dropdown-item(to="/admin/validatePhotos") En attente
+						b-dropdown-item(to="/admin/recentlyModified") Récemment modifiées
 						b-dropdown-item(to="/admin/editPhoto") Edit
 					b-nav-item-dropdown
 						template(slot="button-content")

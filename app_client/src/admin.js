@@ -42,6 +42,7 @@ import AvionForm from './components/AvionForm.vue'
 import AppareilForm from './components/AppareilForm.vue'
 import PhotoForm from './components/PhotoForm.vue'
 import ValidatePhotos from './components/ValidatePhotos.vue'
+import RecentlyModified from './components/RecentlyModified.vue'
 import ProfileForm from './components/ProfileForm.vue'
 import Search from './components/Search.vue'
 
@@ -60,6 +61,7 @@ const routes = [
   { path: '/admin/photos/:tab?', component: PhotoForm },
   { path: '/admin/users/:tab?', component: UserForm },
   { path: '/admin/validatePhotos', component: ValidatePhotos },
+  { path: '/admin/recentlyModified', component: RecentlyModified },
   { path: '/admin/profileForm', component: ProfileForm },
   { path: '/admin/search', component: Search, props: { adminSearch: true } },
   

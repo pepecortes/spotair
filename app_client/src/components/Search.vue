@@ -24,6 +24,7 @@
 import { alertMixin } from './AlertMixin'
 import BaseExpoCollection from './BaseExpoCollection.vue'
 import AdminExpoCollection from './AdminExpoCollection.vue'
+import { SearchType } from '../../../app_lib/constants'
 
 export default {
 	
@@ -34,6 +35,7 @@ export default {
 	
 	props: {
 		adminSearch: {type: Boolean, default: false},
+		searchType: {type: Number, default: SearchType.FTS},
 	},
 	
 	mixins: [alertMixin],
@@ -52,7 +54,10 @@ export default {
 	},
 	
 	mounted() {
-		this.searchString = this.$route.query.searchString
+		//this.searchString = this.$route.query.searchString
+		//console.log("Search.vue. SearchType: " + JSON.stringify(SearchType))
+		//console.log("Search.vue. this.searchType: " + this.searchType)
+		this.searchString = (this.searchType == SearchType.RECENT)? "maxime" : this.$route.query.searchString
 	},
 	
 	beforeRouteUpdate (to, from, next) {

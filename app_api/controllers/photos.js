@@ -53,6 +53,22 @@ controller.recent = async function(req, res) {
 }
 
 /**
+ * @function recentModified
+ * @desc Returns the last 'limit' (default=50) recently modified photos
+ */
+controller.recentModified = async function(req, res) {
+	const limit = (req.params.limit)? parseInt(req.params.limit) : 50
+	db.Photo.findAll({
+										limit: limit,
+										order:[['updatedAt', 'DESC']],
+										include: [{all:true, nested:true}]
+										})
+		.then(record => sendJSON.ok(res, record))
+		.catch(err => sendJSON.serverError(res, err))
+}
+		
+
+/**
  * @function validateUpload
  * @desc Validate referred upload with the given photo data
  * @params {Integer} req.params.id - id of the uploaded photo

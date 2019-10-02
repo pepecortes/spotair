@@ -94,6 +94,7 @@ module.exports = function(passport) {
 	
 	// Routes for managing visible & uploaded photos
 	router.get('/photos/recent/:limit(\\d{0,})', (req, res) => ctrlPhotos.recent(req, res))
+	router.get('/photos/recentModified/:limit(\\d{0,})', (req, res) => ctrlPhotos.recentModified(req, res))
 	router.get('/photos/byGalerie/:id(\\d+)', (req, res) => ctrlPhotos.byGalerie(req, res))
 	router.post('/photos/validateUpload/:id(\\d+)', (req, res) => ctrlPhotos.validateUpload(req, res))
 	router.post('/photos/byIds', (req, res) => ctrlPhotos.byIds(req, res))

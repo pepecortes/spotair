@@ -61,7 +61,7 @@ const routes = [
   { path: '/admin/photos/:tab?', component: PhotoForm },
   { path: '/admin/users/:tab?', component: UserForm },
   { path: '/admin/validatePhotos', component: ValidatePhotos },
-  { path: '/admin/recentlyModified', component: Search, props: { adminSearch: true, searchType: SearchType.RECENT } },
+  { path: '/admin/recentlyModified', component: Search, props: { adminSearch: true, searchType: SearchType.RECENT_MODIFIED } },
   { path: '/admin/profileForm', component: ProfileForm },
   { path: '/admin/search', component: Search, props: { adminSearch: true } },
   

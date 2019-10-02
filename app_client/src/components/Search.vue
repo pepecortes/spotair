@@ -57,7 +57,7 @@ export default {
 		//this.searchString = this.$route.query.searchString
 		//console.log("Search.vue. SearchType: " + JSON.stringify(SearchType))
 		//console.log("Search.vue. this.searchType: " + this.searchType)
-		this.searchString = (this.searchType == SearchType.RECENT)? "maxime" : this.$route.query.searchString
+		this.searchString = this.$route.query.searchString
 	},
 	
 	beforeRouteUpdate (to, from, next) {
@@ -75,21 +75,36 @@ export default {
 		
 		refresh() {
 			this.resetAlert()
-      const query = this.searchString.replace('%', '')
-      const apiCall = `search/fts/idsOnly?q=${query}`
 			this.$loading(true)
-      this.axios.get(apiCall)
-				.then(response => {
-					const searchResults = response.data
-					const data = {ids: searchResults.slice(0,process.env.LIMIT_SEARCH_RESULTS)}
-					return this.axios.post("photos/byIds", data)
-				})
-				.then(response => {
-					this.photos = response.data
-					if (this.photos.length == 0) this.showAlert("Aucun résultat")
-					this.$loading(false)
-				})
-				.catch(err => {this.showAxiosAlert(err); this.$loading(false)})	
+			this.searchCall().then(response => {
+				this.photos = JSON.parse(JSON.stringify(response.data))
+				if (this.photos.length == 0) this.showAlert("Aucun résultat")
+				this.$loading(false)
+			})
+			.catch(err => {this.showAxiosAlert(err); this.$loading(false)})	
+		},
+		
+		searchCall() {
+			switch(this.searchType) {
+				case SearchType.RECENT_MODIFIED:
+					return this.axios.get(`photos/recentModified/`)
+					break;
+				
+				case SearchType.ID:
+					const id = parseInt(this.searchString)
+					return this.axios.get(`photos/${id}`)
+					break;
+				
+				default:
+					const query = this.searchString.replace('%', '')
+					const apiCall = `search/fts/idsOnly?q=${query}`
+					return this.axios.get(apiCall)
+						.then(response => {
+							const searchResults = response.data
+							const data = {ids: searchResults.slice(0,process.env.LIMIT_SEARCH_RESULTS)}
+							return this.axios.post("photos/byIds", data)
+						})
+			}
 		},
 		
 	},

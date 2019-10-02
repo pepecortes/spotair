@@ -1,6 +1,3 @@
-I have created app_lib/constants.js: move from helpers and correct where necessary
-
-Add an admin menu to display the recently updated pictures
 Google maps: You must enable Billing on the Google Cloud Project at https://console.cloud.google.com/project/_/billing/enable Learn more at https://developers.google.com/maps/gmp-get-started
 Add a menu to edit a single photo by ID (perhaps it is enough to allow search by id)
 

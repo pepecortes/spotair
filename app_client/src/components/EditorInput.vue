@@ -99,8 +99,7 @@ export default {
 	},
 		
 	mounted() {
-		console.log("START MOUNTED: GETOPTIONS")
-		this.getOptions()
+		this.getRecords()
 	},
 	
 	beforeDestroy() {
@@ -117,12 +116,12 @@ export default {
 			this.$emit('selector-changed', selected)
 		},
 		
-		setOptions(options) {
-			this.options = JSON.parse(JSON.stringify(options))
-			console.log("FINISHED GETOPTIONS")
+		setOptions(records) {
+			// Note that 'options' only keep id and text from 'records'
+			this.options = records.map(element => {return {id: element.id, text: element.text}})
 		},
 		
-		getOptions() {
+		getRecords() {
 			const url = this.apiCall + '/'
 			this.axios.get(url)
 				.then(response => this.setOptions(response.data))
@@ -130,13 +129,13 @@ export default {
 		},
 		
 		recordAddedOrUpdated(record) {
-			this.getOptions()
+			this.getRecords()
 			this.invalidate()
 			this.mutableValue = record
 		},
 		
 		recordRemovedOrFusion() {
-			this.getOptions()
+			this.getRecords()
 			this.reset()
 		},
 		
@@ -159,7 +158,6 @@ export default {
 					vm.initial = response.data
 					vm.mutableValue = response.data
 					if (!validated) vm.invalidate()
-					console.log("FINISHED SETINITIALVALUE")
 				})
 				.catch(err => console.error(err))
 		},

@@ -129,7 +129,7 @@ export default {
 	},
 	
 	mounted() {
-		console.log("*************")
+		if (this.id) this.initialize()
 	},
 	
 	watch: {
@@ -159,8 +159,6 @@ export default {
 		},
 		
 		setInitialValue() {
-			console.log("START SETINITIALVALUE")
-			
 			this.initialPhoto = JSON.parse(JSON.stringify(this.photo))
 			this.removeWatermark = false
 			this.$refs.photographeInput.setInitialValue(this.photo.photographe, true)
@@ -173,7 +171,7 @@ export default {
 			const url = `photos/photoUpdate/${this.photo.id}/${this.removeWatermark}`
 			this.axios.put(url, this.photo, {'headers': headers})	
 				.then(response => {
-					this.photo = response.data
+					this.photo = JSON.parse(JSON.stringify(response.data))
 					this.setInitialValue()
 					return this.$bvModal.msgBoxOk("Photo updated")
 				})

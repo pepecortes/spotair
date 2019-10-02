@@ -7,7 +7,7 @@ const path = require('path')
 const fs = require('fs')
 const Readable = require('stream').Readable
 const fsp = require('fs').promises
-const imgType = require('./helpers').imgType
+const imgType = require('./constants').imgType
 
 class LocalStorage {
 	

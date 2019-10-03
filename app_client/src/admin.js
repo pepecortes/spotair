@@ -64,9 +64,7 @@ const routes = [
   { path: '/admin/recentlyModified', component: Search, props: { adminSearch: true, searchType: SearchType.RECENT_MODIFIED } },
   { path: '/admin/profileForm', component: ProfileForm },
   { path: '/admin/search', component: Search, props: { adminSearch: true } },
-  
-  // TEST
-  //{ path: '/admin/editPhoto/:id(\\d+)?', component: TestEditPhoto },
+  { path: '/admin/editPhoto/:id(\\d+)?', component: Search, props: { adminSearch: true, searchType: SearchType.ID } },
 ]
 
 // Create the router

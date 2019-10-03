@@ -1,3 +1,5 @@
+Investigate navigation in and out of search pages
+
 Google maps: You must enable Billing on the Google Cloud Project at https://console.cloud.google.com/project/_/billing/enable Learn more at https://developers.google.com/maps/gmp-get-started
 Add a menu to edit a single photo by ID (perhaps it is enough to allow search by id)
 

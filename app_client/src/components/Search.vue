@@ -43,6 +43,7 @@ export default {
 	data() {
 		return {
 			searchString: null,
+			id: null,
 			photos: [],
 		}
 	},
@@ -54,10 +55,8 @@ export default {
 	},
 	
 	mounted() {
-		//this.searchString = this.$route.query.searchString
-		//console.log("Search.vue. SearchType: " + JSON.stringify(SearchType))
-		//console.log("Search.vue. this.searchType: " + this.searchType)
 		this.searchString = this.$route.query.searchString
+		this.id = this.$route.params.id
 	},
 	
 	beforeRouteUpdate (to, from, next) {
@@ -76,8 +75,8 @@ export default {
 		refresh() {
 			this.resetAlert()
 			this.$loading(true)
-			this.searchCall().then(response => {
-				this.photos = JSON.parse(JSON.stringify(response.data))
+			this.searchCall().then(array => {
+				this.photos = JSON.parse(JSON.stringify(array))
 				if (this.photos.length == 0) this.showAlert("Aucun résultat")
 				this.$loading(false)
 			})
@@ -88,13 +87,12 @@ export default {
 			switch(this.searchType) {
 				case SearchType.RECENT_MODIFIED:
 					return this.axios.get(`photos/recentModified/`)
+						.then(response => response.data)
 					break;
-				
 				case SearchType.ID:
-					const id = parseInt(this.searchString)
-					return this.axios.get(`photos/${id}`)
+					return this.axios.get(`photos/${this.id}`)
+						.then(response => [response.data])
 					break;
-				
 				default:
 					const query = this.searchString.replace('%', '')
 					const apiCall = `search/fts/idsOnly?q=${query}`
@@ -103,6 +101,7 @@ export default {
 							const searchResults = response.data
 							const data = {ids: searchResults.slice(0,process.env.LIMIT_SEARCH_RESULTS)}
 							return this.axios.post("photos/byIds", data)
+								.then(response => response.data)
 						})
 			}
 		},

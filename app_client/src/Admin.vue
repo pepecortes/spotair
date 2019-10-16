@@ -13,7 +13,6 @@
 							em Photos
 						b-dropdown-item(to="/admin/validatePhotos") En attente
 						b-dropdown-item(to="/admin/recentlyModified") Récemment modifiées
-						b-dropdown-item(to="/admin/editPhoto") Edit
 					b-nav-item-dropdown
 						template(slot="button-content")
 							em Appareils
@@ -70,8 +69,15 @@ export default {
 		
 		submitSearch(evt) {
       evt.preventDefault()
-      const query = { searchString: this.searchString }
-			this.$router.push({ path: '/admin/search', query: query })
+      // If the searchString is "id:54360" the user is looking for the
+      // photo of the given id: capture the pattern with regexp
+      var regex = /id:(\d{1,6})/
+      const match = regex.exec(this.searchString)
+      if (match != null) this.$router.push({ path: `/admin/editPhoto/${match[1]}`})
+			else {
+				const query = { searchString: this.searchString }
+				this.$router.push({ path: '/admin/search', query: query })
+			}
 		},
 		
 		getCurrentUser() {

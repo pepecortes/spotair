@@ -49,30 +49,20 @@ export default {
 	},
 	
 	watch: {
-		searchString: function(newValue, oldValue) {
-			this.refresh()
-    },
+    
+    $route: function() {this.refresh()},
+		
 	},
 	
 	mounted() {
-		this.searchString = this.$route.query.searchString
-		this.id = this.$route.params.id
+		this.refresh()
 	},
-	
-	beforeRouteUpdate (to, from, next) {
-		this.searchString = to.query.searchString
-    // called when the route that renders this component has changed,
-    // but this component is reused in the new route.
-    // For example, for a route with dynamic params `/foo/:id`, when we
-    // navigate between `/foo/1` and `/foo/2`, the same `Foo` component instance
-    // will be reused, and this hook will be called when that happens.
-    // has access to `this` component instance.
-    next()
-  },
   
   methods: {
 		
 		refresh() {
+			this.searchString = this.$route.query.searchString
+			this.id = this.$route.params.id			
 			this.resetAlert()
 			this.$loading(true)
 			this.searchCall().then(array => {

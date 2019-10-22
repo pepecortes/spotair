@@ -1,31 +1,26 @@
 <template lang="pug">
 	div
-		b-alert(
-			:variant="alert.type",
-			dismissible,
-			fade,
-			:show="alert.show",
-			@dismissed="alert.show=false",
-		) {{ alert.text }}
-		
-		h4 {{ galerie.text }}
-		
-		expo-collection(:collection='photos')
+	
+		div(id="fixedSideNav")
+			galerie_browser
+
+		div(id="unFixedSideNavCompanion")
+			h4 GALERIE: {{ galerie.text }}
 		
 </template>
 
 <script>
 
-import { alertMixin } from './AlertMixin'
-import BaseExpoCollection from './BaseExpoCollection.vue'
+import GalerieBrowser from './GalerieBrowser.vue'
+import GalerieView from './GalerieView.vue'
 
 export default {
 	
 	components: {
-		'expo-collection': BaseExpoCollection,
+		'galerie_browser': GalerieBrowser,
+		'galerie_view': GalerieView,
 	},
 	
-	mixins: [alertMixin],
 	
 	data() {
 		return {
@@ -52,7 +47,8 @@ export default {
 					vm.galerie = vm.photos[0].galerie
 					vm.$loading(false)
 				})
-				.catch(err => {vm.showAxiosAlert(err); this.$loading(false)})	
+				// YOU WILL HAVE TO FINISH THIS
+				.catch(err => {console.log(err); this.$loading(false)})	
 		},
 		
 	},
@@ -61,4 +57,19 @@ export default {
 </script>
 
 <style lang="scss">
+/* Make the side nav fixed and scrollable */
+
+@media (min-width: 992px) {
+	#fixedSideNav {
+		position: fixed;
+		overflow-y: auto;
+		height: 90%;
+		width: 20%;
+	}
+	
+	#unFixedSideNavCompanion {
+		margin-left: 20%;
+		width: auto;
+	} 
+}
 </style>

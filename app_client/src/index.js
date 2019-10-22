@@ -38,7 +38,7 @@ Vue.use(VueLoading)
 // Define or input route components
 import Accueil from './components/Accueil.vue'
 import Map from './components/Map.vue'
-import ExpoGalerie from './components/ExpoGalerie.vue'
+import Galeries from './components/Galeries.vue'
 import FileUploadForm from './components/FileUpload.vue'
 import ProfileForm from './components/ProfileForm.vue'
 import Search from './components/Search.vue'
@@ -51,7 +51,7 @@ const routes = [
   { path: '/profileForm', component: ProfileForm },
   { path: '/search', component: Search },
   //TEST
-  { path: '/galeries/:id(\\d+)?', component: ExpoGalerie },
+  { path: '/galeries/:id(\\d+)?', component: Galeries },
 ]
 
 // Create the router

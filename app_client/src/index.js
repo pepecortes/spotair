@@ -50,7 +50,6 @@ const routes = [
   { path: '/pictadd', component: FileUploadForm },
   { path: '/profileForm', component: ProfileForm },
   { path: '/search', component: Search },
-  //TEST
   { path: '/galeries/:id(\\d+)?', component: Galeries },
 ]
 

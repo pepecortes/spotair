@@ -1,12 +1,11 @@
 <template lang="pug">
-	div
-	
-		div(id="fixedSideNav")
-			galerie_browser
 
+	div
+		div(id="fixedSideNav")
+			galerie_browser(v-on:change="changeGalery")
 		div(id="unFixedSideNavCompanion")
-			h4 GALERIE: {{ galerie.text }}
-		
+			galerie_view(:id='galerieId')
+			
 </template>
 
 <script>
@@ -21,39 +20,24 @@ export default {
 		'galerie_view': GalerieView,
 	},
 	
-	
 	data() {
 		return {
-			galerieId: null,
-			photos: [],
-			galerie: {},
+			galerieId: '',
 		}
 	},
 	
-	beforeMount() {
+	mounted() {
 		this.galerieId = this.$route.params.id
-		this.buildGalerie(this.galerieId)
 	},
-
+	
 	methods: {
 		
-		buildGalerie(galerieId) {
-			const vm = this
-			vm.$loading(true)
-			vm.axios.get(`photos/byGalerie/${galerieId}`)
-				.then(response => {
-					if (response.data.length == 0) throw new Error("Aucune photo dans la galerie")
-					vm.photos = response.data
-					vm.galerie = vm.photos[0].galerie
-					vm.$loading(false)
-				})
-				// YOU WILL HAVE TO FINISH THIS
-				.catch(err => {console.log(err); this.$loading(false)})	
-		},
+		changeGalery(id) {this.galerieId = id},
 		
 	},
 	
 }
+
 </script>
 
 <style lang="scss">

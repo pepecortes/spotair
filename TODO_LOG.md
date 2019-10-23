@@ -1,8 +1,7 @@
-Investigate navigation in and out of search pages
-
-Google maps: You must enable Billing on the Google Cloud Project at https://console.cloud.google.com/project/_/billing/enable Learn more at https://developers.google.com/maps/gmp-get-started
 Add a menu to edit a single photo by ID (perhaps it is enough to allow search by id)
 
+VALIDATION
+	"SCREENER" concept: a group of users that can flag a photo as being NO-QUALITY (or perhaps just remove it)
 
 PHOTO-DATA-EDIT
 	DELETE API call manage all the tasks linked to deletion?
@@ -17,8 +16,9 @@ LOADING ICON
 CAROUSEL - ACCUEIL
 	 Why cannot I use the freemode upon initialization: check if there is some bug
 	 
-VALIDATION
-	Could the user update his picture (i.e. remove) before it is validated?
+PICTADD
+	Could we display to each user the photos he submitted (like accepted/not accepted or something of the kind)
+	Could the user update his photo (i.e. remove) before it is validated?
 
 DATABASE MIGRATION
 	before migration; choose IMG_HEIGHT in .env, because thubnails size depends on it

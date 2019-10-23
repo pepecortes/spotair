@@ -15,10 +15,7 @@ export default {
 	},
 	
 	props: {
-		id: {
-			type: String,
-			default: ''
-		},
+		id: [String, Number]
 	}, 
 	
 	data() {
@@ -29,7 +26,10 @@ export default {
 	},
 	
 	watch: {
-    id() {this.buildGalerie()}
+    id(newValue, oldValue) {
+			if (!newValue) return
+			this.buildGalerie()
+		}
   },
 	
 	methods: {		
@@ -43,8 +43,7 @@ export default {
 					this.galerie = this.photos[0].galerie
 					this.$loading(false)
 				})
-				// YOU WILL HAVE TO FINISH THIS
-				.catch(err => {console.log(err); this.$loading(false)})
+				.catch(err => this.$bvModal.msgBoxOk("Server error: " + err.message))
 			},
 		
 		

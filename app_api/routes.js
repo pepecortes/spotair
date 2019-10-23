@@ -85,12 +85,17 @@ module.exports = function(passport) {
 	
 	// Create additional routes
 	router.get('/appareils/byAvion/:id(\\d+)', (req, res) => ctrlAppareils.byAvion(req, res))
-	router.get('/galeries/spotair', (req, res) => ctrlGaleries.allSpotair(req, res))
-	router.get('/galeries/byAerodrome/:id(\\d+)', (req, res) => ctrlGaleries.byAerodrome(req, res))
-	router.get('/galeries/byAnnee/:id(\\d+)', (req, res) => ctrlGaleries.byAnnee(req, res))
 	router.get('/photographes/actifs', (req, res) => ctrlPhotographes.onlyActives(req, res))
 	router.put('/users/setPassword/:id(\\d+)', (req, res) => ctrlUsers.setPassword(req, res))
 	router.get('/users/byLogin/:username', (req, res) => ctrlUsers.byLogin(req, res))
+	
+	//Routes for querying galeries
+	router.get('/galeries/spotair', (req, res) => ctrlGaleries.allSpotair(req, res))
+	router.get('/galeries/byAerodrome/:id(\\d+)', (req, res) => ctrlGaleries.byAerodrome(req, res))
+	router.get('/galeries/byAnnee/:id(\\d+)', (req, res) => ctrlGaleries.byAnnee(req, res))
+	router.get('/galeries/musees', (req, res) => ctrlGaleries.musees(req, res))
+	router.get('/galeries/collectors', (req, res) => ctrlGaleries.collectors(req, res))
+	router.get('/galeries/recent/:limit(\\d{0,})', (req, res) => ctrlGaleries.recent(req, res))
 	
 	// Routes for managing visible & uploaded photos
 	router.get('/photos/recent/:limit(\\d{0,})', (req, res) => ctrlPhotos.recent(req, res))

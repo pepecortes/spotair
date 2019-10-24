@@ -1,5 +1,11 @@
 Add a menu to edit a single photo by ID (perhaps it is enough to allow search by id)
 
+GALERIESELECTFORM
+	You will have to sort the lists used as options (i.e. Musees, Collectors and then 2019,2018,...)
+	
+API CALLS
+	galeries/spotair/byAnnee is not working
+
 VALIDATION
 	"SCREENER" concept: a group of users that can flag a photo as being NO-QUALITY (or perhaps just remove it)
 

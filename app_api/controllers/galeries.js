@@ -19,9 +19,17 @@ controller.allSpotair =  function(req, res) {
 		.catch(err => sendJSON.serverError(res, err));
 }
 
+// galeries "sorties associatives" only, filtered by annee
+controller.spotairByAnnee =  function(req, res) {
+	const id = req.params.id
+	galeriesFilteredByAnnee(db.Galerie.scope('isspotair'), id)
+		.then(record => sendJSON.ok(res, record))
+		.catch(err => sendJSON.serverError(res, err));
+}
+
 // filter by aerodrome id
 controller.byAerodrome = function(req, res) {
-	const id = req.params.id;
+	const id = req.params.id
 	db.Galerie
 		.findAll({where: {aerodromeId: id}, include: [{all:true, nested:true}]})
 		.then((record) => {
@@ -33,14 +41,17 @@ controller.byAerodrome = function(req, res) {
 
 // filter by annee id
 controller.byAnnee = function(req, res) {
-	const id = req.params.id;
-	db.Galerie
-		.findAll({where: {anneeId: id}, include: [{all:true, nested:true}]})
+	const id = req.params.id
+	galeriesFilteredByAnnee(db.Galerie, id)
 		.then((record) => {
 			if (record) sendJSON.ok(res, record);
 			else sendJSON.notFound(res, "Not found");
 		})
 		.catch(err => sendJSON.serverError(res, err));
+}
+
+async function galeriesFilteredByAnnee(model, anneeId) {
+	return model.findAll({where: {anneeId: anneeId}, include: [{all:true, nested:true}]})
 }
 
 // fusion

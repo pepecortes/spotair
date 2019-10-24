@@ -91,6 +91,7 @@ module.exports = function(passport) {
 	
 	//Routes for querying galeries
 	router.get('/galeries/spotair', (req, res) => ctrlGaleries.allSpotair(req, res))
+	router.get('/galeries/spotair/byAnnee/:id(\\d+)', (req, res) => ctrlGaleries.spotairByAnnee(req, res))
 	router.get('/galeries/byAerodrome/:id(\\d+)', (req, res) => ctrlGaleries.byAerodrome(req, res))
 	router.get('/galeries/byAnnee/:id(\\d+)', (req, res) => ctrlGaleries.byAnnee(req, res))
 	router.get('/galeries/musees', (req, res) => ctrlGaleries.musees(req, res))

@@ -28,19 +28,52 @@ export default {
 	watch: {
     id(newValue, oldValue) {
 			if (!newValue) return
-			this.buildGalerie()
+			switch(newValue){
+				case  "latest":
+					this.getLatest()
+					break
+				case  "bestof":
+					this.getBestOf()
+					break
+				default:
+					this.getGalerie(newValue)
+			}
 		}
   },
 	
 	methods: {		
 		
-		buildGalerie() {
+		getGalerie(id) {
 			this.$loading(true)
-			this.axios.get(`photos/byGalerie/${this.id}`)
+			this.axios.get(`photos/byGalerie/${id}`)
 				.then(response => {
 					if (response.data.length == 0) throw new Error("Aucune photo dans la galerie")
 					this.photos = response.data
 					this.galerie = this.photos[0].galerie
+					this.$loading(false)
+				})
+				.catch(err => this.$bvModal.msgBoxOk("Server error: " + err.message))
+		},
+			
+		getLatest() {
+			this.$loading(true)
+			this.axios.get(`photos/recent/200`)
+				.then(response => {
+					if (response.data.length == 0) throw new Error("Aucune photo dans la galerie")
+					this.photos = response.data
+					this.galerie = {text: "Dernières photos"}
+					this.$loading(false)
+				})
+				.catch(err => this.$bvModal.msgBoxOk("Server error: " + err.message))
+			},
+			
+		getBestOf() {
+			this.$loading(true)
+			this.axios.get(`photos/recent/200`)
+				.then(response => {
+					if (response.data.length == 0) throw new Error("Aucune photo dans la galerie")
+					this.photos = response.data
+					this.galerie = {text: "Best Of: TBC"}
 					this.$loading(false)
 				})
 				.catch(err => this.$bvModal.msgBoxOk("Server error: " + err.message))

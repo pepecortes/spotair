@@ -29,10 +29,22 @@
 
 import VueSelect from 'vue-multiselect'
 
+function sortAnnees(array) {
+	const compareFunction = (a, b) => ('' + b.annee).localeCompare(a.annee)
+	return array.sort(compareFunction)
+}
+
 export default {
 	
 	components: {
 		'v-select': VueSelect
+	},
+	
+	props: {
+		isSpotair: {
+			type: Boolean,
+			default: false,
+		}
 	},
 	
 	beforeMount() {
@@ -52,12 +64,13 @@ export default {
 		
 		getAnneeOptions() {			
 			this.axios.get(`annees`)
-				.then(response => this.anneeOptions = response.data)
+				.then(response => this.anneeOptions = sortAnnees(response.data))
 				.catch(err => this.$bvModal.msgBoxOk("Server error: " + err.message))
 		},
 		
 		getGalerieOptions(idAnnee) {
-			this.axios.get(`/galeries/byAnnee/${idAnnee}`)
+			const apiCall = (this.isSpotair)? "/galeries/spotair/byAnnee" : "/galeries/byAnnee"
+			this.axios.get(`${apiCall}/${idAnnee}`)
 				.then(response => this.galerieOptions = response.data)
 				.catch(err => this.$bvModal.msgBoxOk("Server error: " + err.message))
 		},

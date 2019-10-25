@@ -17,7 +17,10 @@
 		b-button(block, v-b-toggle.assoc, variant="dark", v-b-modal.assocGaleries) Sorties associatives
 		b-collapse(id="assoc", accordion="my-accordion")
 			b-modal(id="assocGaleries", title="Sorties associatives")
-				galerie_select(v-on:input="$emit('change', $event); $bvModal.hide('assocGaleries')")
+				galerie_select(
+					isSpotair=true,
+					v-on:input="$emit('change', $event); $bvModal.hide('assocGaleries')",
+				)
 			
 		b-button(block, v-b-toggle.acc2, variant="dark") Musées
 		b-collapse(id="acc2", accordion="my-accordion")

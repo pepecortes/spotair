@@ -1,13 +1,7 @@
-Add a menu to edit a single photo by ID (perhaps it is enough to allow search by id)
-
-GALERIESELECTFORM
-	You will have to sort the lists used as options (i.e. Musees, Collectors and then 2019,2018,...)
-	
-API CALLS
-	galeries/spotair/byAnnee is not working
-
-VALIDATION
+PICTADD + VALIDATION
 	"SCREENER" concept: a group of users that can flag a photo as being NO-QUALITY (or perhaps just remove it)
+	Could we display to each user the photos he submitted (like accepted/not accepted or something of the kind)
+	Could the user update his photo (i.e. remove) before it is validated?
 
 PHOTO-DATA-EDIT
 	DELETE API call manage all the tasks linked to deletion?
@@ -21,10 +15,6 @@ LOADING ICON
 	
 CAROUSEL - ACCUEIL
 	 Why cannot I use the freemode upon initialization: check if there is some bug
-	 
-PICTADD
-	Could we display to each user the photos he submitted (like accepted/not accepted or something of the kind)
-	Could the user update his photo (i.e. remove) before it is validated?
 
 DATABASE MIGRATION
 	before migration; choose IMG_HEIGHT in .env, because thubnails size depends on it

@@ -1,3 +1,10 @@
+DATABASE CHANGES FOR EXTENDED ADMIN ROLE (SCREENER)
+	Change 'isAdmin' field -> 'group'
+	
+ADMIN.PHOTOGRAPHES.UTILISATEURS DU SITE
+	Check the interface so as to select user/admin/screener
+	Verify if there are other changes
+
 PICTADD + VALIDATION
 	"SCREENER" concept: a group of users that can flag a photo as being NO-QUALITY (or perhaps just remove it)
 	Could we display to each user the photos he submitted (like accepted/not accepted or something of the kind)

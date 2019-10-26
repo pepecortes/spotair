@@ -232,7 +232,7 @@ export legacy database (from PHPMYADMIN)
 	FROM spotair_legacy.PHOTOGRAPHE;
 	
 	UPDATE spotair.users
-	SET isAdmin = 1
+	SET group = 1
 	WHERE mail = "webmaster@spotair.org";
 	
 	DELETE FROM spotair.users

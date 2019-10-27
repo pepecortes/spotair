@@ -62,6 +62,7 @@
 			)
 			
 			b-button(
+				v-if="isAdmin",
 				type="button", variant="outline-success",
 				v-show='selectionIsValid', 
 				v-on:click='validatePhoto',
@@ -83,11 +84,14 @@ import AvionForm from './AvionForm.vue'
 import AppareilForm from './AppareilForm.vue'
 import GalerieForm from './GalerieForm.vue'
 import CompagnieForm from './CompagnieForm.vue'
+import { credentialsMixin } from './CredentialsMixin'
 
 // API is restricted: use a key
 let headers = {'Authorization': `Bearer ${process.env.JWT_API_KEY}`}
 
 export default {
+	
+	mixins: [validationMixin, credentialsMixin],
 	
 	props: {
 		id: {
@@ -204,8 +208,6 @@ export default {
 		},
 		
 	},
-	
-	mixins: [validationMixin],
 	
 	validations() {
 		return {photo: 

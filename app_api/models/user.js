@@ -75,6 +75,11 @@ module.exports = function(sequelize, DataTypes) {
 			get() {return (this.group == 1)}
 		},
 		
+		isScreener: {
+			type: DataTypes.VIRTUAL,
+			get() {return (this.group == 2)}
+		},
+		
 		invalid: {
 			type: DataTypes.VIRTUAL,
 			get() {

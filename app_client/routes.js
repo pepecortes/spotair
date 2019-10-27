@@ -34,6 +34,13 @@ function requireAdmin(req, res, next) {
 	res.redirect('/login');
 }
 
+// the route requires at least an screener user
+function requireScreener(req, res, next) {
+	if (req.user.isAdmin || req.user.isScreener) return next()
+	req.flash('loginMessage', 'admin ou screener requis')
+	res.redirect('/login');
+}
+
 module.exports = function(passport) {
 
 	// Start the router
@@ -81,7 +88,7 @@ module.exports = function(passport) {
 	router.get("/APItoken",
 		setRedirect,
 		requireLogin,
-		requireAdmin,
+		requireScreener,
 		function(req, res) {
 			var payload = {user: process.env.APIuser}
 			try {
@@ -95,7 +102,7 @@ module.exports = function(passport) {
 	router.all('/admin*',
 		setRedirect,
 		requireLogin,
-		requireAdmin,
+		requireScreener,
 		(req, res) => res.sendFile(path.join(__dirname, 'admin.html'))
 	)
 	

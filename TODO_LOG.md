@@ -2,11 +2,12 @@ DATABASE CHANGES FOR EXTENDED ADMIN ROLE (SCREENER)
 	Change 'isAdmin' field -> 'group'
 	
 ADMIN.PHOTOGRAPHES.UTILISATEURS DU SITE
-	Check the interface so as to select user/admin/screener
-	Verify if there are other changes
+	When creating a photographe, the user should be automatic? (note that there is not any email field in photographes...)
+
+SCREENER
+	Test if it works
 
 PICTADD + VALIDATION
-	"SCREENER" concept: a group of users that can flag a photo as being NO-QUALITY (or perhaps just remove it)
 	Could we display to each user the photos he submitted (like accepted/not accepted or something of the kind)
 	Could the user update his photo (i.e. remove) before it is validated?
 

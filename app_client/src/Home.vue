@@ -11,7 +11,7 @@
 					b-nav-item(to="/map") Carte
 					b-nav-item(to="/galeries") Galeries
 					b-nav-item(v-if='loggedIn', to="/pictadd") Pictadd
-					b-nav-item(v-if='isAdmin', href="/admin") Admin
+					b-nav-item(v-if='isAdmin || isScreener', href="/admin") Admin
 					
 				b-navbar-nav(class="ml-auto")
 					b-nav-form(@submit='submitSearch')
@@ -29,21 +29,17 @@
 </template>
 
 <script>
-export default {	
+import { credentialsMixin } from './components/CredentialsMixin'
+
+export default {
+	
+	mixins: [credentialsMixin],
 	
 	data () {
 		return {
-			user: null,
 			searchString: null,
 		}
 	},
-	
-	computed: {
-		loggedIn() {return this.user && this.user.id},
-		isAdmin() {return this.user && this.user.isAdmin},
-	},
-	
-	beforeMount() {this.getCurrentUser()},
 	
 	methods: {
 		
@@ -52,15 +48,7 @@ export default {
       const query = { searchString: this.searchString }
 			this.$router.push({ path: '/search', query: query })
 		},
-		
-		getCurrentUser() {
-			var vm = this
-			vm.axios.get(process.env.WEB_URL + 'profile') 
-				// note that the call is NOT an API call
-				.then(response => vm.user = response.data)
-				.catch(err => vm.showAxiosAlert(err, "danger"))
-		},
-	}
+	},
 	
 }
 </script>

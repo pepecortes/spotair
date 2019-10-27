@@ -25,6 +25,8 @@ const SearchType = {
 	ID: 1,
 	RECENT: 2,
 	RECENT_MODIFIED: 3,
+	BY_USER_VALIDATED: 4,
+	BY_USER_REJECTED: 5,
 }
 exports.SearchType = SearchType
 

@@ -29,6 +29,22 @@ function filterValidation(req, res, scopeString = "pending") {
 }
 
 /**
+ * @function byUserRejected
+ * @desc Return the rejected photos filtered by photographe id 
+ */
+controller.byUserRejected = function(req, res) {
+	debug("PHOTOUPLOADS IN USER REJECTED TO BE COMPLETED")
+	const id = req.params.id
+	db.PhotoUpload.findAll({
+			where: {photographeId: id},
+			order:[['createdAt', 'DESC']],
+			include: [{all:true, nested:true}]
+		})
+		.then(record => sendJSON.ok(res, record))
+		.catch(err => sendJSON.serverError(res, err))
+}
+
+/**
  * @function reject
  * @desc Reject the referred upload, only if it is not yet validated
  * @params {Integer} req.params.id - id of the uploaded photo

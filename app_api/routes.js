@@ -112,6 +112,7 @@ module.exports = function(passport) {
 	router.get('/photouploads/pending', (req, res) => ctrlPhotoUploads.pending(req, res))
 	router.get('/photouploads/validated', (req, res) => ctrlPhotoUploads.validated(req, res))
 	router.get('/photouploads/rejected', (req, res) => ctrlPhotoUploads.rejected(req, res))
+	router.get('/photouploads/rejected/byUser/:id(\\d+)', (req, res) => ctrlPhotoUploads.byUserRejected(req, res))
 	router.put('/photouploads/reject/:id(\\d+)', (req, res) => ctrlPhotoUploads.reject(req, res))
 	
 	// Routes for object storage

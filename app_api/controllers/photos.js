@@ -22,6 +22,22 @@ controller.fusion =  async function(req, res) {
 
 
 /**
+ * @function byUserValidated
+ * @desc Return the published photos filtered by photographe id 
+ */
+controller.byUserValidated = function(req, res) {
+	const id = req.params.id
+	db.Photo
+		.findAll({
+			where: {photographeId: id},
+			order:[['createdAt', 'DESC']],
+			include: [{all:true, nested:true}]
+		})
+		.then(record => sendJSON.ok(res, record))
+		.catch(err => sendJSON.serverError(res, err))
+}
+
+/**
  * @function byGalerie
  * @desc Filter by galerie id
  */

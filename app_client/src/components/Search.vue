@@ -87,6 +87,11 @@ export default {
 					return this.axios.get(`photos/byUserValidated/${this.id}`)
 						.then(response => response.data)
 					break;
+					break;
+				case SearchType.BY_USER_PENDING:
+					return this.axios.get(`photouploads/pending/byUser/${this.id}`)
+						.then(response => response.data)
+					break;
 				case SearchType.BY_USER_REJECTED:
 					return this.axios.get(`photouploads/rejected/byUser/${this.id}`)
 						.then(response => response.data)

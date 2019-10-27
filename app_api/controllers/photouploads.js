@@ -20,28 +20,35 @@ controller.validated =  (req, res) =>	filterValidation(req, res, "validated")
 // photos rejected only
 controller.rejected =  (req, res) =>	filterValidation(req, res, "rejected")
 
-// select photos filtered by validation statuns (pending, rejected, validated)
-function filterValidation(req, res, scopeString = "pending") {
-	db.PhotoUpload.scope(scopeString)
-		.findAll({include: [{all:true}]})
-		.then(record => sendJSON.ok(res, record))
-		.catch(err => sendJSON.serverError(res, err));	
-}
-
 /**
  * @function byUserRejected
  * @desc Return the rejected photos filtered by photographe id 
  */
 controller.byUserRejected = function(req, res) {
-	debug("PHOTOUPLOADS IN USER REJECTED TO BE COMPLETED")
 	const id = req.params.id
-	db.PhotoUpload.findAll({
-			where: {photographeId: id},
+	return filterValidation(req, res, "rejected", {photographeId: id})
+}
+
+/**
+ * @function byUserPending
+ * @desc Return the photos pending validation filtered by photographe id 
+ */
+controller.byUserPending = function(req, res) {
+	const id = req.params.id
+	return filterValidation(req, res, "pending", {photographeId: id})
+}
+
+// select photos filtered by validation status (pending, rejected, validated)
+// or where clause
+function filterValidation(req, res, scopeString = "pending", filter = {}) {
+	db.PhotoUpload.scope(scopeString)
+		.findAll({
+			where: filter,
 			order:[['createdAt', 'DESC']],
-			include: [{all:true, nested:true}]
+			include: [{all:true}]
 		})
 		.then(record => sendJSON.ok(res, record))
-		.catch(err => sendJSON.serverError(res, err))
+		.catch(err => sendJSON.serverError(res, err));	
 }
 
 /**

@@ -1,5 +1,7 @@
-PICTADD + VALIDATION
-	photouploads.js controller: complete the function byUserRejected
+PICTADD / MES PHOTOS / EN ATTENTE, NON PUBLIES
+	The pictures are not displayed (because they are in uploads, and not in pictures)
+
+PICTADD
 	Could we display to each user the photos he submitted (like accepted/not accepted or something of the kind)
 	Could the user update his photo (i.e. remove) before it is validated?
 

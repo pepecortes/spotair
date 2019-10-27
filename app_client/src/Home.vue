@@ -14,6 +14,7 @@
 						template(slot="button-content")
 							em Mes Photos
 						b-dropdown-item(to="/pictadd") Pictadd
+						b-dropdown-item(:to="`/myPendingPictures/${user.id}`") En attente
 						b-dropdown-item(:to="`/myValidatedPictures/${user.id}`") Publiées
 						b-dropdown-item(:to="`/myRejectedPictures/${user.id}`") Non publiées
 					b-nav-item(v-if='isAdmin || isScreener', href="/admin") Admin

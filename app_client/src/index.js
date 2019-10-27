@@ -52,6 +52,7 @@ const routes = [
   { path: '/profileForm', component: ProfileForm },
   { path: '/search', component: Search },
   { path: '/galeries/:id(\\d+)?', component: Galeries },
+  { path: '/myPendingPictures/:id(\\d+)?', component: Search, props: { searchType: SearchType.BY_USER_PENDING } },
   { path: '/myValidatedPictures/:id(\\d+)?', component: Search, props: { searchType: SearchType.BY_USER_VALIDATED } },
   { path: '/myRejectedPictures/:id(\\d+)?', component: Search, props: { searchType: SearchType.BY_USER_REJECTED } },
 ]

@@ -10,7 +10,12 @@
 				b-navbar-nav
 					b-nav-item(to="/map") Carte
 					b-nav-item(to="/galeries") Galeries
-					b-nav-item(v-if='loggedIn', to="/pictadd") Pictadd
+					b-nav-item-dropdown(v-if='loggedIn')
+						template(slot="button-content")
+							em Mes Photos
+						b-dropdown-item(to="/pictadd") Pictadd
+						b-dropdown-item(:to="`/myValidatedPictures/${user.id}`") Publiées
+						b-dropdown-item(:to="`/myRejectedPictures/${user.id}`") Non publiées
 					b-nav-item(v-if='isAdmin || isScreener', href="/admin") Admin
 					
 				b-navbar-nav(class="ml-auto")

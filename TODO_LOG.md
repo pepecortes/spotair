@@ -1,15 +1,13 @@
+PICTADD + VALIDATION
+	photouploads.js controller: complete the function byUserRejected
+	Could we display to each user the photos he submitted (like accepted/not accepted or something of the kind)
+	Could the user update his photo (i.e. remove) before it is validated?
+
 DATABASE CHANGES FOR EXTENDED ADMIN ROLE (SCREENER)
 	Change 'isAdmin' field -> 'group'
 	
 ADMIN.PHOTOGRAPHES.UTILISATEURS DU SITE
 	When creating a photographe, the user should be automatic? (note that there is not any email field in photographes...)
-
-SCREENER
-	Test if it works
-
-PICTADD + VALIDATION
-	Could we display to each user the photos he submitted (like accepted/not accepted or something of the kind)
-	Could the user update his photo (i.e. remove) before it is validated?
 
 PHOTO-DATA-EDIT
 	DELETE API call manage all the tasks linked to deletion?

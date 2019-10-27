@@ -7,6 +7,7 @@ import VueAxios from 'vue-axios'
 import Home from './Home.vue'
 import * as VueGoogleMaps from "vue2-google-maps"
 import VueLoading from 'vuejs-loading-plugin'
+import {SearchType} from '../../app_lib/constants'
 
 // Import bootstrap style
 import 'bootstrap/dist/css/bootstrap.css'
@@ -51,6 +52,8 @@ const routes = [
   { path: '/profileForm', component: ProfileForm },
   { path: '/search', component: Search },
   { path: '/galeries/:id(\\d+)?', component: Galeries },
+  { path: '/myValidatedPictures/:id(\\d+)?', component: Search, props: { searchType: SearchType.BY_USER_VALIDATED } },
+  { path: '/myRejectedPictures/:id(\\d+)?', component: Search, props: { searchType: SearchType.BY_USER_REJECTED } },
 ]
 
 // Create the router

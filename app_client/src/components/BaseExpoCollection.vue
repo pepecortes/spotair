@@ -22,6 +22,16 @@ export default {
 			default: () => []
 		},
 		
+		thumbnailLocation: {
+			type: String,
+			default: process.env.STORAGE_URL + process.env.THUMBNAIL_LOCATION,
+		},
+		
+		photoLocation: {
+			type: String,
+			default: process.env.STORAGE_URL + process.env.PICTURE_LOCATION,
+		},
+		
 	},
 	
 	data() {
@@ -29,8 +39,6 @@ export default {
 			photoSelected: {},
 			currentPhoto: {},
 			showThumbs: true,
-			thumbnailLocation: process.env.STORAGE_URL + process.env.THUMBNAIL_LOCATION,
-			photoLocation: process.env.STORAGE_URL + process.env.PICTURE_LOCATION,
 		}
 	},
 	

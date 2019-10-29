@@ -10,12 +10,16 @@
 		
 		expo-collection(
 			v-if='!adminSearch',
-			:collection='photos'
+			:collection='photos',
+			:thumbnailLocation='thumbnailLocation',
+			:photoLocation='photoLocation',
 		)
 		admin-expo-collection(
 			v-if='adminSearch',
 			:collection='photos',
 			v-on:update='refresh',
+			:thumbnailLocation='thumbnailLocation',
+			:photoLocation='photoLocation',
 		)
 </template>
 
@@ -34,8 +38,27 @@ export default {
 	},
 	
 	props: {
-		adminSearch: {type: Boolean, default: false},
-		searchType: {type: Number, default: SearchType.FTS},
+		
+		adminSearch: {
+			type: Boolean,
+			default: false
+		},
+		
+		searchType: {
+			type: Number,
+			default: SearchType.FTS
+		},
+		
+		thumbnailLocation: {
+			type: String,
+			default: process.env.STORAGE_URL + process.env.THUMBNAIL_LOCATION
+		},
+		
+		photoLocation: {
+			type: String,
+			default: process.env.STORAGE_URL + process.env.PICTURE_LOCATION
+		},
+		
 	},
 	
 	mixins: [alertMixin],
@@ -49,9 +72,7 @@ export default {
 	},
 	
 	watch: {
-    
     $route: function() {this.refresh()},
-		
 	},
 	
 	mounted() {

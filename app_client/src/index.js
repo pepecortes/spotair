@@ -52,9 +52,26 @@ const routes = [
   { path: '/profileForm', component: ProfileForm },
   { path: '/search', component: Search },
   { path: '/galeries/:id(\\d+)?', component: Galeries },
-  { path: '/myPendingPictures/:id(\\d+)?', component: Search, props: { searchType: SearchType.BY_USER_PENDING } },
-  { path: '/myValidatedPictures/:id(\\d+)?', component: Search, props: { searchType: SearchType.BY_USER_VALIDATED } },
-  { path: '/myRejectedPictures/:id(\\d+)?', component: Search, props: { searchType: SearchType.BY_USER_REJECTED } },
+  { path: '/myPendingPictures/:id(\\d+)?',
+		component: Search,
+		props: {
+			searchType: SearchType.BY_USER_PENDING,
+			thumbnailLocation: process.env.STORAGE_URL + process.env.UPLOAD_LOCATION,
+			photoLocation: process.env.STORAGE_URL + process.env.UPLOAD_LOCATION,
+		} 
+	},
+  { path: '/myValidatedPictures/:id(\\d+)?',
+		component: Search,
+		props: { searchType: SearchType.BY_USER_VALIDATED } 
+	},
+  { path: '/myRejectedPictures/:id(\\d+)?',
+		component: Search, 
+		props: { 
+			searchType: SearchType.BY_USER_REJECTED,
+			thumbnailLocation: process.env.STORAGE_URL + process.env.UPLOAD_LOCATION,
+			photoLocation: process.env.STORAGE_URL + process.env.UPLOAD_LOCATION,
+		}
+	},
 ]
 
 // Create the router

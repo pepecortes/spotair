@@ -1,47 +1,38 @@
 <template lang="pug">
 	div
 		b-button(v-on:click='test') TEST
-		expo-collection(
-			:collection='photos',
+		b-button(v-on:click='test2') TEST2
+		photo-data-edit(
+			ref='TEST',
+			v-model='photo',
 		)
 </template>
 
 <script>
-import ExpoCollection from './components/ExpoCollection.vue'
+//import PhotoDataEdit from './components/PhotoDataEdit.vue'
 
 export default {
 	
+	data() {},
+	
 	components: {
-		'expo-collection': ExpoCollection,
-	},
-		
-	beforeMount() {
-		this.axios.get("/photos/recent/1000")
-			.then(response => {this.photos = response.data; this.photoSelected = response.data[1]})
-			.catch(err => console.error(err))
-	},
-	
-	mounted () {
-
-	},
-	
-	data() {
-		return {
-			photos: [],
-		}
-	},
-	
-	computed: {
+		//'photo-data-edit': PhotoDataEdit,
 	},
 	
 	methods: {
 		
 		test() {
-			this.axios.get("/photos/recent/1000")
-				.then(response => this.photos = response.data.slice(500,600))
-				.catch(err => console.error(err))
-		}
-			
+			//this.axios.get("/photos/54260")
+				//.then(response => this.photo = response.data)
+				//.catch(err => console.error(err))
+		},
+		
+		test2() {
+			//console.log("photographe: " + JSON.stringify(this.photo.photographe))
+			//console.log("compagnie: " + JSON.stringify(this.photo.compagnie))
+			//console.log("photo: " + JSON.stringify(this.photo))
+		},
+		
 	},
 	
 }
@@ -49,5 +40,4 @@ export default {
 </script>
 
 <style lang="scss">
-
 </style>

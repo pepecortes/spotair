@@ -8,18 +8,57 @@
 			@dismissed="alert.show=false",
 		) {{ alert.text }}
 		
-		expo-collection(:collection='photos')
+		expo-collection(
+			v-if='!adminSearch',
+			:collection='photos',
+			:thumbnailLocation='thumbnailLocation',
+			:photoLocation='photoLocation',
+		)
+		admin-expo-collection(
+			v-if='adminSearch',
+			:collection='photos',
+			v-on:update='refresh',
+			:thumbnailLocation='thumbnailLocation',
+			:photoLocation='photoLocation',
+		)
 </template>
 
 <script>
 
 import { alertMixin } from './AlertMixin'
-import ExpoCollection from './ExpoCollection.vue'
+import BaseExpoCollection from './BaseExpoCollection.vue'
+import AdminExpoCollection from './AdminExpoCollection.vue'
+import { SearchType } from '../../../app_lib/constants'
 
 export default {
 	
 	components: {
-		'expo-collection': ExpoCollection,
+		'expo-collection': BaseExpoCollection,
+		'admin-expo-collection': AdminExpoCollection,
+	},
+	
+	props: {
+		
+		adminSearch: {
+			type: Boolean,
+			default: false
+		},
+		
+		searchType: {
+			type: Number,
+			default: SearchType.FTS
+		},
+		
+		thumbnailLocation: {
+			type: String,
+			default: process.env.STORAGE_URL + process.env.THUMBNAIL_LOCATION
+		},
+		
+		photoLocation: {
+			type: String,
+			default: process.env.STORAGE_URL + process.env.PICTURE_LOCATION
+		},
+		
 	},
 	
 	mixins: [alertMixin],
@@ -27,45 +66,71 @@ export default {
 	data() {
 		return {
 			searchString: null,
+			id: null,
 			photos: [],
 		}
 	},
 	
-	computed: {
-		
-	},
-	
 	watch: {
-		searchString: function(newValue, oldValue) {
-      const vm = this
-			vm.resetAlert()
-      newValue = newValue.replace('%', '')
-      const apiCall = `search/fts?q=${newValue}`
-			vm.$loading(true)
-      vm.axios.get(apiCall)
-				.then(response => {
-					vm.photos = response.data
-					if (vm.photos.length == 0) vm.showAlert("Aucun résultat")
-					vm.$loading(false)
-				})
-				.catch(err => {vm.showAxiosAlert(err); this.$loading(false)})	
-    },
+    $route: function() {this.refresh()},
 	},
 	
 	mounted() {
-		this.searchString = this.$route.query.searchString
+		this.refresh()
 	},
-	
-	beforeRouteUpdate (to, from, next) {
-		this.searchString = to.query.searchString
-    // called when the route that renders this component has changed,
-    // but this component is reused in the new route.
-    // For example, for a route with dynamic params `/foo/:id`, when we
-    // navigate between `/foo/1` and `/foo/2`, the same `Foo` component instance
-    // will be reused, and this hook will be called when that happens.
-    // has access to `this` component instance.
-    next()
-  },
+  
+  methods: {
+		
+		refresh() {
+			this.searchString = this.$route.query.searchString
+			this.id = this.$route.params.id			
+			this.resetAlert()
+			this.$loading(true)
+			this.searchCall().then(array => {
+				this.photos = JSON.parse(JSON.stringify(array))
+				if (this.photos.length == 0) this.showAlert("Aucun résultat")
+				this.$loading(false)
+			})
+			.catch(err => {this.showAxiosAlert(err); this.$loading(false)})	
+		},
+		
+		searchCall() {
+			switch(this.searchType) {
+				case SearchType.RECENT_MODIFIED:
+					return this.axios.get(`photos/recentModified/`)
+						.then(response => response.data)
+					break;
+				case SearchType.ID:
+					return this.axios.get(`photos/${this.id}`)
+						.then(response => [response.data])
+					break;
+				case SearchType.BY_USER_VALIDATED:
+					return this.axios.get(`photos/byUserValidated/${this.id}`)
+						.then(response => response.data)
+					break;
+					break;
+				case SearchType.BY_USER_PENDING:
+					return this.axios.get(`photouploads/pending/byUser/${this.id}`)
+						.then(response => response.data)
+					break;
+				case SearchType.BY_USER_REJECTED:
+					return this.axios.get(`photouploads/rejected/byUser/${this.id}`)
+						.then(response => response.data)
+					break;
+				default:
+					const query = this.searchString.replace('%', '')
+					const apiCall = `search/fts/idsOnly?q=${query}`
+					return this.axios.get(apiCall)
+						.then(response => {
+							const searchResults = response.data
+							const data = {ids: searchResults.slice(0,process.env.LIMIT_SEARCH_RESULTS)}
+							return this.axios.post("photos/byIds", data)
+								.then(response => response.data)
+						})
+			}
+		},
+		
+	},
 	
 }
 </script>

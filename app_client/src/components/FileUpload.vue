@@ -90,7 +90,7 @@
 					id="commentaire",
 					rows="3",
 					max-rows="6",
-					v-model="commentaire"
+					v-model="commentUpload"
 				)
 
 			tab-content(title="review")
@@ -101,7 +101,7 @@
 					b-list-group-item(v-if="photoData.compagnie") Compagnie: {{ photoData.compagnie.text }}
 					b-list-group-item(v-if="photoData.aerodrome") Aerodrome: {{ photoData.aerodrome.text }}
 					b-list-group-item(v-if="photoData.galerie") Galerie: {{ photoData.galerie.text }}
-					b-list-group-item(v-if="photoData.commentaire") {{ photoData.commentaire }}
+					b-list-group-item(v-if="photoData.commentUpload") {{ photoData.commentUpload }}
 					
 		img(:src="tmpFileURL", width="500") 
 			
@@ -136,7 +136,7 @@ export default {
 			compagnie: {options: [], headSelected: true, head: null, tail: null},
 			aerodrome: {options: [], headSelected: true, head: null, tail: null},
 			galerie: {options: [], headSelected: true, head: null, tail: null},
-			commentaire: "",
+			commentUpload: "",
 		}
 	},
 	
@@ -149,7 +149,7 @@ export default {
 			output.compagnie = this.extractData(this.compagnie)
 			output.aerodrome = this.extractData(this.aerodrome)
 			output.galerie = this.extractData(this.galerie)
-			output.commentaire = this.commentaire
+			output.commentUpload = this.commentUpload
 			return output
 		},
 		

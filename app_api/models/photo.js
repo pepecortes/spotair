@@ -117,13 +117,42 @@ module.exports = function(sequelize, DataTypes) {
 					// TO BE COMPLETED return the number of views per year 
 					return this.getDataValue('views') / 2
 				},
+				
+				async original() {
+					// Returns the originally uploaded photo data
+					// Note that it returns a promise!
+					return db.PhotoUpload.findOne({
+						where: {photoId: this.id},
+						include: [{all:true, nested:true}],
+					})
+				},
+				
+				async likes() {
+					// Returns the array of likes linked to this photo
+					return db.Like.findAll({
+						where: {photoId: this.id},
+						include: [{all:true, nested:true}],
+					})
+				},
+				
+				async likeRank() {
+					// Returns the rank of the photo based on the likes info
+					return 0
+				},
 		},
 		
 		setterMethods: {
 				addView: function() {
 					// increment the view count of this photo
 					this.setDataValue('views', this.getDataValue('views') + 1)
-				}
+				},
+				
+				//deleteAllViews: function() {
+					//// delete all "likes" entries
+					//console.log("in deleteallviews")
+					//return this.likes
+						//.then(likes => likes.map(e => e.destroy()))
+				//},
 		},
 			
 		indexes: [
@@ -132,6 +161,11 @@ module.exports = function(sequelize, DataTypes) {
 			
 		}
   );
+  
+  Model.prototype.deleteAllViews = async function() {
+		return this.likes
+			.then(likes => likes.map(e => e.destroy()))
+	}
   
 	Model.metadata = {
 		name: "Photo",

@@ -30,6 +30,9 @@ const ctrlInfos = require('./controllers/infos')
 const ctrlJournaux = require('./controllers/journaux')
 const ctrlLikes = require('./controllers/likes')
 
+// TEST
+const testController = require('./controllers/testController')
+
 // Import the storage controllers
 const ctrlStorage = require('./controllers/storage')
 
@@ -82,18 +85,35 @@ module.exports = function(passport) {
 	
 	// Create additional routes
 	router.get('/appareils/byAvion/:id(\\d+)', (req, res) => ctrlAppareils.byAvion(req, res))
-	router.get('/galeries/spotair', (req, res) => ctrlGaleries.allSpotair(req, res))
-	router.get('/galeries/byAerodrome/:id(\\d+)', (req, res) => ctrlGaleries.byAerodrome(req, res))
-	router.get('/galeries/byAnnee/:id(\\d+)', (req, res) => ctrlGaleries.byAnnee(req, res))
 	router.get('/photographes/actifs', (req, res) => ctrlPhotographes.onlyActives(req, res))
 	router.put('/users/setPassword/:id(\\d+)', (req, res) => ctrlUsers.setPassword(req, res))
 	router.get('/users/byLogin/:username', (req, res) => ctrlUsers.byLogin(req, res))
+	
+	//Routes for querying galeries
+	router.get('/galeries/spotair', (req, res) => ctrlGaleries.allSpotair(req, res))
+	router.get('/galeries/spotair/byAnnee/:id(\\d+)', (req, res) => ctrlGaleries.spotairByAnnee(req, res))
+	router.get('/galeries/byAerodrome/:id(\\d+)', (req, res) => ctrlGaleries.byAerodrome(req, res))
+	router.get('/galeries/byAnnee/:id(\\d+)', (req, res) => ctrlGaleries.byAnnee(req, res))
+	router.get('/galeries/musees', (req, res) => ctrlGaleries.musees(req, res))
+	router.get('/galeries/collectors', (req, res) => ctrlGaleries.collectors(req, res))
+	router.get('/galeries/recent/:limit(\\d{0,})', (req, res) => ctrlGaleries.recent(req, res))
+	
+	// Routes for managing visible & uploaded photos
+	router.get('/photos/byUserValidated/:id(\\d+)', (req, res) => ctrlPhotos.byUserValidated(req, res))
 	router.get('/photos/recent/:limit(\\d{0,})', (req, res) => ctrlPhotos.recent(req, res))
+	router.get('/photos/recentModified/:limit(\\d{0,})', (req, res) => ctrlPhotos.recentModified(req, res))
 	router.get('/photos/byGalerie/:id(\\d+)', (req, res) => ctrlPhotos.byGalerie(req, res))
 	router.post('/photos/validateUpload/:id(\\d+)', (req, res) => ctrlPhotos.validateUpload(req, res))
+	router.post('/photos/byIds', (req, res) => ctrlPhotos.byIds(req, res))
+	router.put('/photos/photoUpdate/:id(\\d+)/:removeWatermark?', (req, res) => ctrlPhotos.photoUpdate(req, res))
+	router.delete('/photos/photoDelete/:id(\\d+)', (req, res) => ctrlPhotos.photoDelete(req, res))
+	router.put('/photos/watermark/:id(\\d+)/:caption?', (req, res) => ctrlPhotos.watermark(req, res))
+	
 	router.get('/photouploads/pending', (req, res) => ctrlPhotoUploads.pending(req, res))
 	router.get('/photouploads/validated', (req, res) => ctrlPhotoUploads.validated(req, res))
 	router.get('/photouploads/rejected', (req, res) => ctrlPhotoUploads.rejected(req, res))
+	router.get('/photouploads/rejected/byUser/:id(\\d+)', (req, res) => ctrlPhotoUploads.byUserRejected(req, res))
+	router.get('/photouploads/pending/byUser/:id(\\d+)', (req, res) => ctrlPhotoUploads.byUserPending(req, res))
 	router.put('/photouploads/reject/:id(\\d+)', (req, res) => ctrlPhotoUploads.reject(req, res))
 	
 	// Routes for object storage
@@ -103,6 +123,7 @@ module.exports = function(passport) {
 	
 	// Routes for search functions
 	router.get('/search/fts', (req, res) => ctrlSearch.fts(req, res))
+	router.get('/search/fts/idsOnly', (req, res) => ctrlSearch.ftsIdsOnly(req, res))
 	router.get('/search/fts/partial/:limit(\\d+)/:offset(\\d+)', (req, res) => ctrlSearch.ftsPartial(req, res))
 
 	// Not found

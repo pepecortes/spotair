@@ -27,6 +27,16 @@ SearchController.fts = function(req, res) {
 }
 
 /**
+ * @function ftsIdsOnly
+ * @description Like fts, return an array of photo ids only
+ */
+SearchController.ftsIdsOnly = function(req, res) {
+	search(req.query.q)
+		.then(result => sendJSON.ok(res, result))
+		.catch(err => sendJSON.serverError(res, err))
+}
+
+/**
  * @function ftsPartial
  * @description Like fts, but limit the number of results
  * @param {String} req.query.q	- query string to search for

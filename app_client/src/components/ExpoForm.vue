@@ -96,7 +96,6 @@ export default {
 			}, 500, {'trailing': false}),
 			
 		loadMore: function() {
-			console.log("loading more ")
 			this.transfer([this.bufferPhotos, this.loadedPhotos, TRANSFER_SIZE])
 		}
 		

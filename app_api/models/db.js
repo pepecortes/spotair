@@ -69,6 +69,68 @@ PhotoUpload.belongsTo(Photographe, {onDelete: 'RESTRICT'})
 PhotoUpload.belongsTo(Photo, {onDelete: 'RESTRICT'})
 Like.belongsTo(Photo, {onDelete: 'CASCADE'})
 
+
+createFTSIndex = function() {
+	// Create MYSQL stored procedure CreateSearchTable generation (FULL TEXT SEARCH)
+	// Create MYSQL schedule for launching it
+	
+	debug("Creating CreateSearchTable generation procedure & schedule")
+	const SQLquery =`
+		DROP PROCEDURE IF EXISTS CreateSearchTable;
+		DROP EVENT IF EXISTS CreateSearchTableEvent;
+		
+		CREATE PROCEDURE CreateSearchTable()
+		BEGIN
+		CREATE TABLE photoSearchTemp
+		SELECT photos.id, CONCAT_WS(', ', photos.commentaire,	photographes.nom,
+			photographes.prenom, compagnies.nom, compagnies.flotille,
+			appareils.immat, appareils.serial, appareils.commentaire,
+			avions.version,	modeles.nom, modeles.surnom,	constructeurs.nom,
+			galeries.commentaire,	annees.annee,	themes.theme,	aerodromes.nom,
+			aerodromes.lieu) AS text
+		FROM photos
+		LEFT JOIN photographes ON photos.photographeId = photographes.id
+		LEFT JOIN compagnies ON photos.compagnieId = compagnies.id
+		LEFT JOIN appareils ON photos.appareilId = appareils.id
+		LEFT JOIN avions ON appareils.avionId = avions.id
+		LEFT JOIN modeles ON avions.modeleId = modeles.id
+		LEFT JOIN constructeurs ON modeles.constructeurId = constructeurs.id
+		LEFT JOIN galeries ON photos.galerieId = galeries.id
+		LEFT JOIN annees ON galeries.anneeId = annees.id
+		LEFT JOIN themes ON galeries.themeId = themes.id
+		LEFT JOIN aerodromes ON galeries.aerodromeId = aerodromes.id;
+		CREATE FULLTEXT INDEX fts ON photoSearchTemp (text);
+		DROP TABLE IF EXISTS photoSearch;
+		RENAME TABLE photoSearchTemp TO photoSearch;
+		END;
+		
+		CREATE EVENT CreateSearchTableEvent
+		ON SCHEDULE EVERY 1 HOUR STARTS CURRENT_TIMESTAMP
+		ON COMPLETION PRESERVE
+		DO CALL CreateSearchTable;
+	`;
+	
+	sequelize.query(SQLquery)
+		.then(([results, metadata]) =>  debug("CreateSearchTable: " + JSON.stringify(results)))
+		.catch(err => debug(err))
+}
+
+updateFTSindex = function() {
+	// Force immediate update of the FULL TEXT SEARCH index
+	debug("Force FTS index update")
+	sequelize.query("CALL CreateSearchTable();")
+		.then(results =>  debug("FTS index update completed"))
+		.catch(err => debug(err))
+}
+
+// synchro with the mysql server
+// disable or enable logs for dev
+sequelize.sync({logging: false})
+
+// Create FTS index generation and schedule
+createFTSIndex()
+
+	
 // export sequelize object (a handler to the db) and the Models
 module.exports.sequelize = sequelize
 module.exports.Aerodrome = Aerodrome
@@ -88,49 +150,5 @@ module.exports.Info = Info
 module.exports.Journal = Journal
 module.exports.Like = Like
 module.exports.LogMigration = LogMigration
-
-// synchro with the mysql server
-// disable or enable logs for dev
-sequelize.sync({logging: false})
-
-// Create MYSQL stored procedure SearchTable generation (FULL TEXT SEARCH)
-// Create MYSQL schedule for launching it
-debug("Creating 'CreateSearchTable' stored procedure and schedule")
-const SQLquery =`
-	DROP PROCEDURE IF EXISTS CreateSearchTable;
-	DROP EVENT IF EXISTS CreateSearchTableEvent;
-	
-	CREATE PROCEDURE CreateSearchTable()
-	BEGIN
-	DROP TABLE IF EXISTS photoSearch;
-	CREATE TABLE photoSearch
-	SELECT photos.id, CONCAT_WS(', ', photos.commentaire,	photographes.nom,
-		photographes.prenom, compagnies.nom, compagnies.flotille,
-		appareils.immat, appareils.serial, appareils.commentaire,
-		avions.version,	modeles.nom, modeles.surnom,	constructeurs.nom,
-		galeries.commentaire,	annees.annee,	themes.theme,	aerodromes.nom,
-		aerodromes.lieu) AS text
-	FROM photos
-	LEFT JOIN photographes ON photos.photographeId = photographes.id
-	LEFT JOIN compagnies ON photos.compagnieId = compagnies.id
-	LEFT JOIN appareils ON photos.appareilId = appareils.id
-	LEFT JOIN avions ON appareils.avionId = avions.id
-	LEFT JOIN modeles ON avions.modeleId = modeles.id
-	LEFT JOIN constructeurs ON modeles.constructeurId = constructeurs.id
-	LEFT JOIN galeries ON photos.galerieId = galeries.id
-	LEFT JOIN annees ON galeries.anneeId = annees.id
-	LEFT JOIN themes ON galeries.themeId = themes.id
-	LEFT JOIN aerodromes ON galeries.aerodromeId = aerodromes.id;
-	CREATE FULLTEXT INDEX fts ON photoSearch (text);
-	END;
-	
-	CREATE EVENT CreateSearchTableEvent
-	ON SCHEDULE EVERY 1 HOUR
-	ON COMPLETION PRESERVE
-	DO CALL CreateSearchTable;
-`;
-
-sequelize.query(SQLquery)
-	.then(([results, metadata]) =>  debug("CreateSearchTable: " + JSON.stringify(results)))
-	.catch(err => debug(err))
+module.exports.updateFTSindex = updateFTSindex	
 

@@ -11,8 +11,9 @@
 					b-nav-item-dropdown
 						template(slot="button-content")
 							em Photos
-						b-dropdown-item(to="/admin/validatePhoto") Validate
-					b-nav-item-dropdown
+						b-dropdown-item(to="/admin/validatePhotos") En attente
+						b-dropdown-item(v-if='isAdmin', to="/admin/recentlyModified") Récemment modifiées
+					b-nav-item-dropdown(v-if='isAdmin')
 						template(slot="button-content")
 							em Appareils
 						b-dropdown-item(to="/admin/appareils") Appareils
@@ -20,24 +21,24 @@
 						b-dropdown-item(to="/admin/modeles") Modèles
 						b-dropdown-item(to="/admin/constructeurs") Constructeurs
 						b-dropdown-item(to="/admin/compagnies") Compagnies
-					b-nav-item-dropdown
+					b-nav-item-dropdown(v-if='isAdmin')
 						template(slot="button-content")
 							em Galeries
 						b-dropdown-item(to="/admin/galeries") Galeries
 						b-dropdown-item(to="/admin/themes") Thèmes
 						b-dropdown-item(to="/admin/annees") Années
 						b-dropdown-item(to="/admin/aerodromes") Aérodromes
-					b-nav-item-dropdown
+					b-nav-item-dropdown(v-if='isAdmin')
 						template(slot="button-content")
 							em Photographes
 						b-dropdown-item(to="/admin/photographes") Photographes
 						b-dropdown-item(to="/admin/users") Utilisateurs du site
 						
 				b-navbar-nav(class="ml-auto")
-					b-nav-form
-						b-form-input(size="sm", class="mr-sm-2", placeholder="Search")
+					b-nav-form(v-if='isAdmin', @submit='submitSearch')
+						b-form-input(v-model='searchString', size="sm", class="mr-sm-2", placeholder="Search")
 						b-button(size="sm", class="my-2 my-sm-0", type="submit") Search
-					b-nav-item(href="/doc") Docs
+					b-nav-item(v-if='isAdmin', href="/doc") Docs
 					b-nav-item-dropdown(right)
 						template(slot="button-content")
 							em User
@@ -48,31 +49,34 @@
 </template>
 
 <script>
-export default {	
+import { credentialsMixin } from './components/CredentialsMixin'
+
+export default {
+	
+	mixins: [credentialsMixin],	
 	
 	data () {
 		return {
-			user: null,
+			searchString: null,
 		}
 	},
 	
-	computed: {
-		loggedIn() {return this.user && this.user.id},
-		isAdmin() {return this.user && this.user.isAdmin},
-	},
-	
-	beforeMount() {this.getCurrentUser()},
-	
 	methods: {
 		
-		getCurrentUser() {
-			var vm = this
-			vm.axios.get(process.env.WEB_URL + 'profile') 
-				// note that the call is NOT an API call
-				.then(response => vm.user = response.data)
-				.catch(err => vm.showAxiosAlert(err, "danger"))
+		submitSearch(evt) {
+      evt.preventDefault()
+      // If the searchString is "id:54360" the user is looking for the
+      // photo of the given id: capture the pattern with regexp
+      var regex = /id:(\d{1,6})/
+      const match = regex.exec(this.searchString)
+      if (match != null) this.$router.push({ path: `/admin/editPhoto/${match[1]}`})
+			else {
+				const query = { searchString: this.searchString }
+				this.$router.push({ path: '/admin/search', query: query })
+			}
 		},
-	}
+
+	},
 	
 }
 

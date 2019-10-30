@@ -1,10 +1,9 @@
 <template lang="pug">
 	div(ref="carousel")
+		b-button(pill, variant="outline-secondary", v-show='action') Action defined in Carousel
 		swiper(:options="swiperOptions", ref="mySwiper", v-on:doubleTap='doubleTap', v-on:slideChangeTransitionEnd='slideChange')
 			swiper-slide(v-for='slide in viewSlides', v-bind:key='slide.id')
 				b-img(:src='slide.url', v-bind:style='imgStyle(slide)')
-		div(class="swiper-button-next")
-		div(class="swiper-button-prev")
 </template>
 
 <script>
@@ -20,14 +19,10 @@ export default {
 	
 	components: {swiper, swiperSlide},
 	
-	model: {
-		prop: 'value',
-		event: 'slideChange'
-	},
-	
 	props: {
 		value: {type: Object},
 		options: {type: Object},
+		action: {type: Boolean, default: false},
 		
 		/**
 		 * Pictures data. An array of objects. Each object must have,
@@ -54,10 +49,6 @@ export default {
 				freeMode: false,
 				initialSlide: RANGE,
 				lazy: true,
-			  navigation: {
-					nextEl: '.swiper-button-next',
-					prevEl: '.swiper-button-prev',
-				},
 				grabCursor: true,
 				keyboard: {enabled: true},
 				mousewheel: true,
@@ -101,6 +92,8 @@ export default {
 		updateDisplayedSlide() {
 			// Synchro the information of the currently displayed slide
 			this.displayedSlide = this.viewSlides[this.swiper.realIndex]
+			// Emit event to inform that a new slide is displayed
+			this.$emit('slide-updated', this.displayedSlide)
 		},
 		
 		centerAroundPhotoId(idPhoto=false) {

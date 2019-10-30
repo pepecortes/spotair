@@ -1,11 +1,19 @@
-ENVIRONMENT
-	Do you use mocha?
-	There are config files everywhere. Could we rationalize all that?
-	Dockerfile starts nodemon. How to do it in production?
-	Let's Encrypt?
+PICTADD
+	Could we display to each user the photos he submitted (like accepted/not accepted or something of the kind)
+	Could the user update his photo (i.e. remove) before it is validated?
 
-SEARCH
-	Check that a call to search overrides current page (try: do a search, go to carousel, do another search)
+DATABASE CHANGES FOR EXTENDED ADMIN ROLE (SCREENER)
+	Change 'isAdmin' field -> 'group'
+	
+ADMIN.PHOTOGRAPHES.UTILISATEURS DU SITE
+	When creating a photographe, the user should be automatic? (note that there is not any email field in photographes...)
+
+PHOTO-DATA-EDIT
+	DELETE API call manage all the tasks linked to deletion?
+	Think if you can refactor ModifySinglePhoto
+
+BUILD
+	Document somewhere how to build the app_client sources in production (install dependencies, launch webpack...)
 
 LOADING ICON
 	VALIDATION: When using REMOTE: validation takes a long time: add icon for waiting
@@ -14,6 +22,7 @@ CAROUSEL - ACCUEIL
 	 Why cannot I use the freemode upon initialization: check if there is some bug
 
 DATABASE MIGRATION
+	before migration; choose IMG_HEIGHT in .env, because thubnails size depends on it
 	after the migration, many users will have a username xxx@nomail.com. how to manage this?
 	in galeries, many comments appear as "-": erase them (after migration, or add a SQL to do it automatically upon migration)
 	in avions: rows 2 + 3 can be fusion to 1 (the NIL row)
@@ -30,12 +39,12 @@ https://www.npmjs.com/package/node-ovh-storage
 local container:
 	document in README
 	
-WHEN IN PROD:
-	Monitor size of javascript sources: can be compressed
-	Ensure traefik api is off (see "command" in docker-compose.yml)
-	
 LATER:
 	Reinforce security using expiring JWT tokens (ref: https://www.techynovice.com/setting-up-JWT-token-refresh-mechanism-with-axios/)
+	SSL certificates in acme.json: backup and store off-premises
+	Should we protect the images object server?
+	You might need to backup SPOTAIR BLOCK STORAGE VOLUMEs
+	You might need to configure the FAILOVER IP firewall
 	
 
 

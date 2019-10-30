@@ -98,8 +98,13 @@ export default {
 		},
 	},
 		
-	created() {
-		this.getOptions()
+	mounted() {
+		this.getRecords()
+	},
+	
+	beforeDestroy() {
+		// accelerate the garbage collection to reduce memory footprint
+		this.options = null
 	},
 
 	methods: {
@@ -111,26 +116,26 @@ export default {
 			this.$emit('selector-changed', selected)
 		},
 		
-		setOptions(options) {
-			this.options = options
+		setOptions(records) {
+			// Note that 'options' only keep id and text from 'records'
+			this.options = records.map(element => {return {id: element.id, text: element.text}})
 		},
 		
-		getOptions() {
-			var vm = this
-			const url = vm.apiCall + '/'
-			vm.axios.get(url)
-				.then(response => vm.setOptions(response.data))
-				.catch(err => vm.showAxiosAlert(err, "danger"))
+		getRecords() {
+			const url = this.apiCall + '/'
+			this.axios.get(url)
+				.then(response => this.setOptions(response.data))
+				.catch(err => console.error(err))
 		},
 		
 		recordAddedOrUpdated(record) {
-			this.getOptions()
+			this.getRecords()
 			this.invalidate()
 			this.mutableValue = record
 		},
 		
 		recordRemovedOrFusion() {
-			this.getOptions()
+			this.getRecords()
 			this.reset()
 		},
 		
@@ -138,15 +143,23 @@ export default {
 			this.$refs.adminComponent.resetAlert()
 		},
 		
-		setInitialValue(val) {
+		/**
+		 * Set the control initial value. Can be set in "validated" condition
+		 */
+		setInitialValue(val, validated=false) {
 			var vm = this
-			vm.mutableValue = val // improve user experience
+			
+			// improve user experience
+			vm.mutableValue = val
+			if (validated) vm.validate()
+			
 			this.lookupInitialValue(val)
 				.then (response => {
 					vm.initial = response.data
-					vm.reset()
+					vm.mutableValue = response.data
+					if (!validated) vm.invalidate()
 				})
-				.catch(err => vm.showAxiosAlert(err, "danger"))
+				.catch(err => console.error(err))
 		},
 		
 		async lookupInitialValue(val) {

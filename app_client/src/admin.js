@@ -6,16 +6,14 @@ import Axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueLoading from 'vuejs-loading-plugin'
 import Admin from './Admin.vue'
+import {SearchType} from '../../app_lib/constants'
 
 // Import bootstrap style
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-// CHECK require.context https://vuejs.org/v2/guide/components-registration.html
-// so that common components are imported without need for additional imports
-// on each module
-
 Vue.config.productionTip = false
+Vue.config.devtools = false
 
 // To be able to use async computed properties
 Vue.use(AsyncComputed)
@@ -44,9 +42,9 @@ import ModeleForm from './components/ModeleForm.vue'
 import AvionForm from './components/AvionForm.vue'
 import AppareilForm from './components/AppareilForm.vue'
 import PhotoForm from './components/PhotoForm.vue'
-import ValidateSinglePhoto from './components/ValidateSinglePhoto.vue'
+import ValidatePhotos from './components/ValidatePhotos.vue'
 import ProfileForm from './components/ProfileForm.vue'
-
+import Search from './components/Search.vue'
 
 // Define the routes
 const routes = [
@@ -62,8 +60,11 @@ const routes = [
   { path: '/admin/appareils/:tab?', component: AppareilForm },
   { path: '/admin/photos/:tab?', component: PhotoForm },
   { path: '/admin/users/:tab?', component: UserForm },
-  { path: '/admin/validatePhoto/:id(\\d+)?', component: ValidateSinglePhoto },
+  { path: '/admin/validatePhotos', component: ValidatePhotos },
+  { path: '/admin/recentlyModified', component: Search, props: { adminSearch: true, searchType: SearchType.RECENT_MODIFIED } },
   { path: '/admin/profileForm', component: ProfileForm },
+  { path: '/admin/search', component: Search, props: { adminSearch: true } },
+  { path: '/admin/editPhoto/:id(\\d+)?', component: Search, props: { adminSearch: true, searchType: SearchType.ID } },
 ]
 
 // Create the router

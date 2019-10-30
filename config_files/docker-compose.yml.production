@@ -21,7 +21,7 @@ services:
       - reverse-proxy
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.entryPoints=http"
+      - "traefik.frontend.entryPoints=https"
       - "traefik.frontend.rule=Host:cloud.spotair.org"
       - "traefik.backend=spotair"
       - "traefik.port=3000"
@@ -62,9 +62,14 @@ services:
     restart: always
     ports:
       - "80:80"
-      - "8080:8080"
+      - "443:443"
       - "$PORT_DB_ADMIN:8081"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.toml:/etc/traefik/traefik.toml
-      
+      - ./traefik.acme.json:/acme.json
+    environment:
+      - OVH_ENDPOINT=ovh-eu
+      - OVH_APPLICATION_KEY=$OVH_APPLICATION_KEY
+      - OVH_APPLICATION_SECRET=$OVH_APPLICATION_SECRET
+      - OVH_CONSUMER_KEY=$OVH_APPLICATION_SECRET

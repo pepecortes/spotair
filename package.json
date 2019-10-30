@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./www",
-    "build": "webpack --config ./app_client/webpack.prod.js",
+    "build": "npm install --only=dev && webpack --config ./app_client/webpack.prod.js",
     "watch": "webpack --config ./app_client/webpack.dev.js --watch"
   },
   "nodemonConfig": {
@@ -45,7 +45,7 @@
     "pluralize": "^7.0.0",
     "probe-image-size": "^4.0.0",
     "pug": "^2.0.4",
-    "sequelize": "^5.15.1",
+    "sequelize": "^5.21.2",
     "serve-favicon": "^2.5.0",
     "serve-index": "^1.9.1",
     "sharp": "^0.22.1",

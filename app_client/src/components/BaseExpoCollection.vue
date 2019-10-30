@@ -1,18 +1,5 @@
 <template lang="pug">
-	div
-		div(v-if='collectionAvailable', v-show='showThumbs')
-			expo-form(
-				:photos='thumbnails',
-				v-model='photoSelected',
-				v-on:input='showThumbs = false',
-			)
-		div(v-if='collectionAvailable && showCarousel')
-			carousel(
-				style="width:100%; height:80vh",
-				:photos='photos',
-				v-model='photoSelected',
-				v-on:input='showThumbs = true',
-			)
+	include BaseExpoCollection.pug
 </template>
 
 <script>
@@ -35,18 +22,28 @@ export default {
 			default: () => []
 		},
 		
+		thumbnailLocation: {
+			type: String,
+			default: process.env.STORAGE_URL + process.env.THUMBNAIL_LOCATION,
+		},
+		
+		photoLocation: {
+			type: String,
+			default: process.env.STORAGE_URL + process.env.PICTURE_LOCATION,
+		},
+		
 	},
 	
 	data() {
 		return {
 			photoSelected: {},
+			currentPhoto: {},
 			showThumbs: true,
-			thumbnailLocation: process.env.STORAGE_URL + process.env.THUMBNAIL_LOCATION,
-			photoLocation: process.env.STORAGE_URL + process.env.PICTURE_LOCATION,
 		}
 	},
 	
 	computed: {
+		
 		collectionAvailable() {return !_.isEmpty(this.collection)},
 		
 		showCarousel() {return !this.showThumbs},
@@ -66,9 +63,13 @@ export default {
 		},
 		
 	},
+		
+	watch: {
+		collection: function() {this.showThumbs = true},
+	},
 	
 	methods: {
-		
+		slideUpdatedEvent(slide) {this.currentPhoto = slide},
 	},
 	
 }

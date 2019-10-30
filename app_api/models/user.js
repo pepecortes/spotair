@@ -11,7 +11,7 @@ function generateHash(password) {
  * User model
  * @module /app_api/models/user
  * @param {email}				mail
- * @param {boolean}			isAdmin
+ * @param {tinyint}			group
  * @param {string}			passwordHash
  * @param {foreignKey}	photographeId
  * @param {virtual}			text					- (summary of all fields)
@@ -40,10 +40,10 @@ module.exports = function(sequelize, DataTypes) {
       unique: true,
 		},
 		
-		isAdmin: {
-			type: DataTypes.BOOLEAN,
+		group: {
+			type: DataTypes.INTEGER,
 			allowNull: false,
-			defaultValue: false,
+			defaultValue: 0,
 		},
 		
 		passwordHash: {
@@ -68,6 +68,16 @@ module.exports = function(sequelize, DataTypes) {
 		text: {
 			type: DataTypes.VIRTUAL,
 			get() {return this.mail}
+		},
+		
+		isAdmin: {
+			type: DataTypes.VIRTUAL,
+			get() {return (this.group == 1)}
+		},
+		
+		isScreener: {
+			type: DataTypes.VIRTUAL,
+			get() {return (this.group == 2)}
 		},
 		
 		invalid: {
@@ -104,7 +114,7 @@ module.exports = function(sequelize, DataTypes) {
 	Model.metadata = {
 		name: "User",
 		hasForeignKeys: true,
-		fieldNames: ['mail', 'isAdmin', 'passwordHash', 'photographeId'],
+		fieldNames: ['mail', 'group', 'passwordHash', 'photographeId'],
 	}
 	
 	// Class function. Generate a hash out of the given password

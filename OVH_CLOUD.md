@@ -49,3 +49,13 @@ next: create database spotair
 
 next: SSL certificate and HTTPS server
 
+REMINDER: what did I do to use cloud.spotair.org in OCT-2019 ?
+
+		In OVH PUBLIC CLOUD / STORAGE / INSTANCE BACKUP: create instance
+		In OVH / FAILOVER IP: modify associated instance (so that you can access DNS cloud.spotair.org)
+		OVH / BLOCK STORAGE: attach to instance
+		ssh spotair@cloud.spotair.org
+		cd docker, then git fetch and pull if needed, then docker-compose down -v, then docker-compuse up build
+
+
+

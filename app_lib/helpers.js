@@ -150,15 +150,4 @@ exports.jpegMetadataSync = function(path) {
 	return Object.assign(result.getImageSize(), result.tags)
 }
 
-/**
- * @constant
- * @desc describe several image types
- */
-const imgType = {
-	picture: 0,
-	upload: 1,
-	thumbnail: 2,	
-}
-exports.imgType = imgType
-
 module.exports = exports;

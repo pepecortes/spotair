@@ -80,4 +80,16 @@ storageController.list = function(req, res) {
 		.catch(err => sendJSON.serverError(res, err))
 }
 
+/**
+ * @function _deletePicture
+ * @desc Remove both the picture and the thumbnail files from the storage
+ *       (does not remove the uploaded image file)
+ * @param {Integer} id - picture id
+ * @param {Boolean} removeThumbnail - whether or notthe thubnail is removed
+ */
+storageController._deletePicture = function(id, removeThumbnail=true) {
+	return container.deletePicture(id)
+		.then(() => {return (removeThumbnail)? container.deleteThumbnail(id) : true})
+}
+
 module.exports = storageController

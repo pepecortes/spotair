@@ -6,7 +6,7 @@ const debug = require('debug')('app:lib:OVH')
 const fs = require('fs')
 const Readable = require('stream').Readable
 const OVHStorage = require('node-ovh-storage')
-const imgType = require('./helpers').imgType
+const imgType = require('./constants').imgType
 
 class OVH extends OVHStorage {
 	

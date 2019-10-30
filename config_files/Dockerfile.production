@@ -9,7 +9,7 @@ COPY ./app.js ./
 COPY ./*.json ./
 COPY ./.env ./
 
-RUN ["npm", "install", "--only=production"]
+RUN ["npm", "install"]
 
 EXPOSE $PORT
 

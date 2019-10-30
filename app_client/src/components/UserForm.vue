@@ -31,13 +31,18 @@
 				:state="checkValidityState($v.formData.mail)"
 			)
 		b-form-group(
-			label="Admin",
-			label-for="isAdmin"
+			label="Group",
+			label-for="group"
 		)
-			b-form-checkbox(
-				id="isAdmin",
-				v-model="formData.isAdmin"
+			b-form-select(
+				id="group",
+				v-model="formData.group",
+				:options="groupOptions",
+				size="sm",
 			)
+			
+			
+			
 			
 	block additionalModifyActions
 		b-button(type="button", variant="outline-danger", v-on:click="resetPassword") Reset password
@@ -60,6 +65,11 @@ export default {
 				mail: {required, email}
 			},
 			photographeOptions: [],
+			groupOptions: [
+				{value: 0, text: 'Photographe'},
+				{value: 1, text: 'Administrateur'},
+				{value: 2, text: 'Screener'},
+			],
 		}
 	},
 	

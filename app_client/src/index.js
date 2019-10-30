@@ -7,16 +7,14 @@ import VueAxios from 'vue-axios'
 import Home from './Home.vue'
 import * as VueGoogleMaps from "vue2-google-maps"
 import VueLoading from 'vuejs-loading-plugin'
+import {SearchType} from '../../app_lib/constants'
 
 // Import bootstrap style
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-// CHECK require.context https://vuejs.org/v2/guide/components-registration.html
-// so that common components are imported without need for additional imports
-// on each module
-
 Vue.config.productionTip = false
+Vue.config.devtools = false
 
 // To be able to use async computed properties
 Vue.use(AsyncComputed)
@@ -24,7 +22,7 @@ Vue.use(AsyncComputed)
 // Create an axios instance and set some defaults for authorization...
 var axios = Axios.create()
 axios.defaults.baseURL = process.env.API_URL
-axios.defaults.timeout = 10000 // wait 10 seconds before giving out
+axios.defaults.timeout = 10000 // wait 10 seconds before giving up
 
 Vue.use(VueGoogleMaps, {
 	load: {
@@ -41,7 +39,7 @@ Vue.use(VueLoading)
 // Define or input route components
 import Accueil from './components/Accueil.vue'
 import Map from './components/Map.vue'
-import ExpoGalerie from './components/ExpoGalerie.vue'
+import Galeries from './components/Galeries.vue'
 import FileUploadForm from './components/FileUpload.vue'
 import ProfileForm from './components/ProfileForm.vue'
 import Search from './components/Search.vue'
@@ -53,8 +51,27 @@ const routes = [
   { path: '/pictadd', component: FileUploadForm },
   { path: '/profileForm', component: ProfileForm },
   { path: '/search', component: Search },
-  //TEST
-  { path: '/galeries/:id(\\d+)?', component: ExpoGalerie },
+  { path: '/galeries/:id(\\d+)?', component: Galeries },
+  { path: '/myPendingPictures/:id(\\d+)?',
+		component: Search,
+		props: {
+			searchType: SearchType.BY_USER_PENDING,
+			thumbnailLocation: process.env.STORAGE_URL + process.env.UPLOAD_LOCATION,
+			photoLocation: process.env.STORAGE_URL + process.env.UPLOAD_LOCATION,
+		} 
+	},
+  { path: '/myValidatedPictures/:id(\\d+)?',
+		component: Search,
+		props: { searchType: SearchType.BY_USER_VALIDATED } 
+	},
+  { path: '/myRejectedPictures/:id(\\d+)?',
+		component: Search, 
+		props: { 
+			searchType: SearchType.BY_USER_REJECTED,
+			thumbnailLocation: process.env.STORAGE_URL + process.env.UPLOAD_LOCATION,
+			photoLocation: process.env.STORAGE_URL + process.env.UPLOAD_LOCATION,
+		}
+	},
 ]
 
 // Create the router

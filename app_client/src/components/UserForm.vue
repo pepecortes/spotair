@@ -76,8 +76,41 @@ export default {
 	mounted() {
 		this.getPhotographeOptions()
 	},
+		
+	//watch: {
+    //// monitor changes on selection
+    //selection() {
+			//console.log("SELECTION CHANGED")
+			//this.initForm()
+		//}
+  //},
 	
 	methods: {
+				
+		// Init the form with the given selection and reset validators
+		initForm() {
+			console.log("initForm")
+			this.formData = JSON.parse(JSON.stringify(this.selection))
+			console.log(this.formData.photographeId)
+			this.fusionTarget = null
+			this.$v.$reset()
+		},	
+		
+		// Create a fresh form ready for adding new data
+		newForm() {
+			var vm = this
+			this.axios.get(vm.apiURL + 'fresh')
+				.then(response => {
+					console.log(response.data)
+					response.data.photographeId = 16
+					response.data.mail = "MAIL@KOKO.ES"
+					vm.selection = response.data
+					console.log(response.data)
+					console.log(vm.selection.photographeId)
+						
+				})
+				.catch(err => vm.showAxiosAlert(err, "danger"))
+		},
 		
 		getPhotographeOptions() {
 			var vm = this

@@ -20,21 +20,29 @@ export default {
 	},
 	
 	props: {
+		
 		initialTab: {
 			type: Number,
 			default: 0
 		},
+		
+		initialId: {
+			type: Number,
+			default: null
+		},
+		
 	}, 
 	
 	data () {
 		return {
-			formData: null,
+			formData: {},
 			selectOptions: [],
 			selection: null, // the original selection, in case you need to reset
 			fusionTarget: null, // self-explanatory
 			validations: {}, // overriden by each form validations object
 			tabIndex: this.initialTab, // the index of the selected tab (0-based)
 			isLoading: false, // while the ajax call is in progress...
+			preselectedId: this.initialId // i.e. in user form you want the photographe preselected
 		}
 	},
 	
@@ -49,7 +57,10 @@ export default {
 	},
 	
 	beforeMount () {
-		if (this.$route && this.$route.params.tab) this.tabIndex = localRouter[this.$route.params.tab]
+		if (this.$route) {
+			if (this.$route.params.tab) this.tabIndex = localRouter[this.$route.params.tab]
+			if (this.$route.params.id) this.preselectedId = this.$route.params.id
+		}
 		switch(this.tabIndex) {
 			case 1:
 				this.newClicked()

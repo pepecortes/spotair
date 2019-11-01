@@ -41,9 +41,6 @@
 				size="sm",
 			)
 			
-			
-			
-			
 	block additionalModifyActions
 		b-button(type="button", variant="outline-danger", v-on:click="resetPassword") Reset password
 			
@@ -73,50 +70,30 @@ export default {
 		}
 	},
 	
-	mounted() {
+	beforeMount() {
 		this.getPhotographeOptions()
 	},
 		
-	//watch: {
-    //// monitor changes on selection
-    //selection() {
-			//console.log("SELECTION CHANGED")
-			//this.initForm()
-		//}
-  //},
-	
 	methods: {
-				
-		// Init the form with the given selection and reset validators
-		initForm() {
-			console.log("initForm")
-			this.formData = JSON.parse(JSON.stringify(this.selection))
-			console.log(this.formData.photographeId)
-			this.fusionTarget = null
-			this.$v.$reset()
-		},	
-		
-		// Create a fresh form ready for adding new data
-		newForm() {
-			var vm = this
-			this.axios.get(vm.apiURL + 'fresh')
-				.then(response => {
-					console.log(response.data)
-					response.data.photographeId = 16
-					response.data.mail = "MAIL@KOKO.ES"
-					vm.selection = response.data
-					console.log(response.data)
-					console.log(vm.selection.photographeId)
-						
-				})
-				.catch(err => vm.showAxiosAlert(err, "danger"))
-		},
 		
 		getPhotographeOptions() {
-			var vm = this
-			vm.axios.get('photographes/')
-				.then(response => vm.photographeOptions = response.data)
-				.catch(err => vm.showAxiosAlert(err))
+			this.axios.get('photographes/')
+				.then(response => this.photographeOptions = response.data)
+				
+				//TEST
+				.then(() => {
+					console.log("setting formdata photographe")
+					//this.formData.photographe = {}
+					this.formData.photographe = JSON.parse(JSON.stringify(this.photographeOptions[16]))
+				})
+				//.then(() => console.log("preselected: " + this.preselectedId))
+				//.then(() => console.log("...: " + JSON.stringify(this.photographeOptions[15])))
+				
+				//.then(() => this.formData.photographe = this.photographeOptions.find(e => (e.id == 15)))
+				//.then(() => this.formData.photographe = null)
+				
+				
+				.catch(err => this.showAxiosAlert(err))
 		},
 	
 		// Reset the  password to the DEFAULT one

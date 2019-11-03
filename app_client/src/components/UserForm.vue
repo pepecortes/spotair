@@ -1,7 +1,11 @@
 <template lang="pug">
 	extends BaseForm.pug
 	
+	
 	block input
+	
+		b-button(@click='test') TEST
+		b-button(@click='display') DATA
 			
 		b-form-group(
 			label="Photographe",
@@ -17,6 +21,15 @@
 				:state="checkValidityState($v.formData.photographe)"
 			)
 				span(slot="no options") Aucun résultat
+				
+		b-form-group(
+			label="TEST",
+			label-for="testSelect",
+		)
+			v-select(
+				id="testSelect",
+				:options="[1,2,3]",
+			)
 				
 		b-form-group(
 			label="Email",
@@ -76,19 +89,33 @@ export default {
 		
 	methods: {
 		
+		test() {
+			this.formData.mail = "kaka@koko.es"
+			this.formData.photographe = this.photographeOptions[4]
+		},
+		
+		display() {
+			console.log(JSON.stringify(this.formData))
+		},
+		
+		//// Return the validity state or null if the input is untouched
+		//checkValidityState(input) {
+			//console.log(`CHECKING  ${input.$dirty} / ${input.$invalid}`)
+			//return (input.$dirty)? !input.$invalid : null
+		//},
+		
 		getPhotographeOptions() {
 			this.axios.get('photographes/')
 				.then(response => this.photographeOptions = response.data)
 				
-				//TEST
-				.then(() => {
-					console.log("setting formdata photographe")
+				////TEST
+				//.then(() => {
+					//console.log("FORMDATA " + JSON.stringify(this.formData))
 					//this.formData.photographe = {}
-					this.formData.photographe = JSON.parse(JSON.stringify(this.photographeOptions[16]))
-				})
+					//this.formData.photographe = "KQKQVQK"
+					//console.log("FORMDATA " + JSON.stringify(this.formData))
+				//})
 				//.then(() => console.log("preselected: " + this.preselectedId))
-				//.then(() => console.log("...: " + JSON.stringify(this.photographeOptions[15])))
-				
 				//.then(() => this.formData.photographe = this.photographeOptions.find(e => (e.id == 15)))
 				//.then(() => this.formData.photographe = null)
 				

@@ -22,11 +22,13 @@ export default {
 	props: {
 		
 		initialTab: {
+			// The index of the selected tab (see localRouter)
 			type: Number,
 			default: 0
 		},
 		
 		initialId: {
+			// Preselected id for "modify" and "fusion"
 			type: Number,
 			default: null
 		},
@@ -35,14 +37,16 @@ export default {
 	
 	data () {
 		return {
+			
+			mutableInitialId: this.initialId,
+			mutableInitialTab: this.initialTab,
+			
 			formData: {},
 			selectOptions: [],
 			selection: null, // the original selection, in case you need to reset
 			fusionTarget: null, // self-explanatory
 			validations: {}, // overriden by each form validations object
-			tabIndex: this.initialTab, // the index of the selected tab (0-based)
 			isLoading: false, // while the ajax call is in progress...
-			preselectedId: this.initialId // i.e. in user form you want the photographe preselected
 		}
 	},
 	
@@ -58,10 +62,10 @@ export default {
 	
 	beforeMount () {
 		if (this.$route) {
-			if (this.$route.params.tab) this.tabIndex = localRouter[this.$route.params.tab]
-			if (this.$route.params.id) this.preselectedId = this.$route.params.id
+			if (this.$route.params.tab) this.mutableInitialTab = localRouter[this.$route.params.tab]
+			if (this.$route.params.id) this.mutableInitialId = this.$route.params.id
 		}
-		switch(this.tabIndex) {
+		switch(this.mutableInitialTab) {
 			case 1:
 				this.newClicked()
 				break;
@@ -82,7 +86,10 @@ export default {
 				
 		// Init the form with the given selection and reset validators
 		initForm() {
-			this.formData = JSON.parse(JSON.stringify(this.selection))
+			
+			// TBC: which one? what do yo want to do?
+			this.formData = Object.assign(this.formData, this.selection)
+			//this.formData = JSON.parse(JSON.stringify(this.selection))
 			this.fusionTarget = null
 			this.$v.$reset()
 		},
@@ -93,26 +100,24 @@ export default {
 		},
 		
 		modifyClicked() {
-			this.getSelectOptions()
+			this.getSelectOptions(this.mutableInitialId)
 		},
 		
 		fusionClicked() {
-			this.getSelectOptions()
+			this.getSelectOptions(this.mutableInitialId)
 		},
 		
 		// Create a fresh form ready for adding new data
 		newForm() {
-			var vm = this
-			this.axios.get(vm.apiURL + 'fresh')
-				.then(response => {vm.selection = response.data})
-				.catch(err => vm.showAxiosAlert(err, "danger"))
+			this.axios.get(this.apiURL + 'fresh')
+				.then(response => {this.selection = response.data})
+				.catch(err => this.showAxiosAlert(err, "danger"))
 		},
 		
 		// Get all the available options for the SELECT control
 		getSelectOptions(preselected) {
 			var vm = this
 			vm.selectOptions = []
-			vm.selection = null
 			vm.isLoading = true
 			const partialStep = 5000 // split the api call to 5000 records each time
 			
@@ -126,11 +131,16 @@ export default {
 					})
 			}
 			
+			async function getPreselection(id) {
+				if (!id) return null
+				return vm.axios.get(`${vm.apiURL}${id}`)
+					.then(response => response.data)
+			}
+			
 			partialQuery(partialStep, 0)
-				.then(() => {
-					vm.selection = (preselected)? preselected : vm.selection
-					vm.isLoading = false
-				})
+				.then(() => getPreselection(preselected))
+				.then(record => vm.selection = record)
+				.then(() => vm.isLoading = false)
 				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},  
     

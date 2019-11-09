@@ -1,4 +1,5 @@
 BASEFORM
+	RESET button is not working
 	A new ID parameter can be sent. If exists, this is the initial id to select
 
 PICTADD

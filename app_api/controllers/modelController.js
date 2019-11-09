@@ -34,8 +34,8 @@ function ModelController(Model) {
  */
 ModelController.buildFusionController =  function(idField, targetModel, parentModel) {
 	return async function(req, res) {
-		const sourceid = req.params.sourceid;
-		const destinationid = req.params.destinationid;
+		const sourceid = req.params.sourceid
+		const destinationid = req.params.destinationid
 		dbReplaceReference(parentModel, targetModel, idField, sourceid, destinationid)
 			.then(result => sendJSON.ok(res, result))
 			.catch(err => sendJSON.serverError(res, err))
@@ -51,7 +51,7 @@ ModelController.buildFusionController =  function(idField, targetModel, parentMo
  * @return {[Model]} All matching instances of Model
  */	
 ModelController.prototype._findAll = function(ids=false, limit=false, offset=false) {
-	const options = this.includeOption
+	const options = Object.assign({}, this.includeOption)
 	if (ids) Object.assign(options, { where: { id: { [Op.in]: ids } } })
 	if (limit) Object.assign(options, { limit: limit })
 	if (offset) Object.assign(options, { offset: offset })
@@ -77,9 +77,9 @@ ModelController.prototype._byId = async function(id) {
 }
 
 ModelController.prototype.byId = function(req, res) {
-	const id = req.params.id;
+	const id = req.params.id
 	this._byId(id)
-		.then((record) => {
+		.then(record => {
 			if (record) sendJSON.ok(res, record);
 			else sendJSON.notFound(res, "id: " + id + " not found");
 		})

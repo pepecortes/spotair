@@ -1,6 +1,3 @@
-BASEFORM
-	RESET button is not working
-	A new ID parameter can be sent. If exists, this is the initial id to select
 
 PICTADD
 	Could we display to each user the photos he submitted (like accepted/not accepted or something of the kind)

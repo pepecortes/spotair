@@ -58,6 +58,12 @@ export default {
 	
 	methods: {
 		
+		selectNewForm() {
+			this.axios.get(`modeles/${this.mutableInitialId}`)
+				.then(output => this.newForm({modele: output.data}))
+				.catch(() => this.newForm())
+		},
+		
 		getModeleOptions() {
 			var vm = this
 			vm.axios.get('modeles/')

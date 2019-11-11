@@ -72,6 +72,12 @@ export default {
 	
 	methods: {
 		
+		selectNewForm() {
+			this.axios.get(`constructeurs/${this.mutableInitialId}`)
+				.then(output => this.newForm({constructeur: output.data}))
+				.catch(() => this.newForm())
+		},
+		
 		getConstructeurOptions() {
 			var vm = this
 			vm.axios.get('constructeurs/')

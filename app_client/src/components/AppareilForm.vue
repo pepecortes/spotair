@@ -86,6 +86,12 @@ export default {
 	
 	methods: {
 		
+		selectNewForm() {
+			this.axios.get(`avions/${this.mutableInitialId}`)
+				.then(output => this.newForm({avion: output.data}))
+				.catch(() => this.newForm())
+		},
+		
 		getAvionOptions() {
 			var vm = this
 			vm.axios.get('avions/')

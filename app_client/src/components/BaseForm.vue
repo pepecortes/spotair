@@ -41,9 +41,9 @@ export default {
 			mutableInitialId: this.initialId,
 			mutableInitialTab: this.initialTab,
 			
-			formData: {},
+			formData: {}, // the fields that will be modified by the each "block input" (see BaseForm.pug)
 			selectOptions: [],
-			selection: null, // the original selection, in case you need to reset
+			selection: null,
 			fusionTarget: null, // self-explanatory
 			validations: {}, // overriden by each form validations object
 			isLoading: false, // while the ajax call is in progress...
@@ -51,7 +51,6 @@ export default {
 	},
 	
 	watch: {
-    // monitor changes on selection
     selection() {this.initForm()}
   },
 	
@@ -67,13 +66,13 @@ export default {
 		}
 		switch(this.mutableInitialTab) {
 			case 1:
-				this.newClicked()
+				this.selectNewForm()
 				break;
 			case 2:
-				this.fusionClicked()
+				this.selectFusionForm()
 				break;
 			default:
-				this.modifyClicked()
+				this.selectModifyForm()
 		}
 	},
 
@@ -86,36 +85,33 @@ export default {
 				
 		// Init the form with the given selection and reset validators
 		initForm() {
-			
-			// TBC: which one? what do yo want to do?
-			this.formData = Object.assign(this.formData, this.selection)
-			//this.formData = JSON.parse(JSON.stringify(this.selection))
+			this.formData = JSON.parse(JSON.stringify(this.selection))
 			this.fusionTarget = null
 			this.$v.$reset()
 		},
 		
-		newClicked() {
-			this.selection = null
+		selectNewForm() {
 			this.newForm()
 		},
 		
-		modifyClicked() {
+		selectModifyForm() {
 			this.getSelectOptions(this.mutableInitialId)
 		},
 		
-		fusionClicked() {
+		selectFusionForm() {
 			this.getSelectOptions(this.mutableInitialId)
 		},
 		
 		// Create a fresh form ready for adding new data
-		newForm() {
+		newForm(preselectedObject = {}) {
 			this.axios.get(this.apiURL + 'fresh')
-				.then(response => {this.selection = response.data})
+				.then(response => this.selection = Object.assign(response.data, preselectedObject))
 				.catch(err => this.showAxiosAlert(err, "danger"))
 		},
 		
 		// Get all the available options for the SELECT control
-		getSelectOptions(preselected) {
+		getSelectOptions(preselected, reload = false) {
+			if (!reload && this.selectOptions.length > 0) return
 			var vm = this
 			vm.selectOptions = []
 			vm.isLoading = true
@@ -139,7 +135,7 @@ export default {
 			
 			partialQuery(partialStep, 0)
 				.then(() => getPreselection(preselected))
-				.then(record => vm.selection = record)
+				.then(record => {if (record) vm.selection = record})
 				.then(() => vm.isLoading = false)
 				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},  

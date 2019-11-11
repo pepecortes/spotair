@@ -105,6 +105,12 @@ export default {
 	
 	methods: {
 		
+		selectNewForm() {
+			this.axios.get(`annees/${this.mutableInitialId}`)
+				.then(output => this.newForm({annee: output.data}))
+				.catch(() => this.newForm())
+		},
+		
 		getAnneeOptions() {
 			var vm = this
 			vm.axios.get('annees/')

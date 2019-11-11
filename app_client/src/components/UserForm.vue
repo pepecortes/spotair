@@ -77,18 +77,18 @@ export default {
 		
 	methods: {
 		
+		selectNewForm() {
+			this.axios.get(`photographes/${this.mutableInitialId}`)
+				.then(output => this.newForm({photographe: output.data}))
+				.catch(() => this.newForm())
+		},
+		
 		getPhotographeOptions() {
 			this.axios.get('photographes/')
 				.then(response => this.photographeOptions = response.data)
 				//.then(() => this.preselectPhotographe(this.preselectedId))
 				.catch(err => this.showAxiosAlert(err))
 		},
-		
-		//preselectPhotographe(id) {
-			//if (!id) return
-			//this.selection.photographe = this.photographeOptions.find(e => (e.id == id))
-			//this.initForm()
-		//},
 	
 		// Reset the  password to the DEFAULT one
 		resetPassword() {

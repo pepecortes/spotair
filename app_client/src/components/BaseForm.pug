@@ -10,7 +10,7 @@ div.baseForm
 			@dismissed="alert.show=false",
 		) {{ alert.text }}
 	
-		b-tab(title="Modifier", v-on:click="modifyClicked")
+		b-tab(title="Modifier", v-on:click="selectModifyForm")
 			v-select(
 				:options="selectOptions",
 				label="text",
@@ -25,13 +25,13 @@ div.baseForm
 				b-button(type="button", variant="outline-danger", v-on:click="removeButtonClicked") Delete
 				b-button(type="button", variant="outline-success", v-on:click="resetButtonClicked") Reset
 			
-		b-tab(title="Nouveau", v-on:click="newClicked")
+		b-tab(title="Nouveau", v-on:click="selectNewForm")
 			b-form(v-if="selection")
 				block input
 				b-button(type="button", variant="outline-primary", v-on:click="addButtonClicked") Add
 				b-button(type="button", variant="outline-success", v-on:click="resetButtonClicked") Reset
 
-		b-tab(title="Fusioner", v-on:click="fusionClicked")
+		b-tab(title="Fusioner", v-on:click="selectFusionForm")
 			v-select(
 				:options="selectOptions",
 				label="text",

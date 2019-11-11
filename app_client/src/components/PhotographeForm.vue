@@ -55,6 +55,23 @@ export default {
 		}
 	},
 	
+	methods: {
+		
+    add() {
+			// Override BaseForm method for redirection (add new user)
+      this.$v.formData.$touch()
+      if (this.$v.formData.$invalid) return
+			this.axios.post(this.apiURL, this.formData)
+				.then(response => {
+					this.$emit('record-added', response.data)
+					return response.data.id
+				})
+				.then(id => this.$router.push({ path: `/admin/users/new/${id}` }))
+				.catch(err => this.showAxiosAlert(err, "danger"))
+		},
+		
+	},
+	
 	}
 	
 </script>

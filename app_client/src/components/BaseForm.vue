@@ -146,6 +146,7 @@ export default {
 		},
     
     addButtonClicked() {
+      if (!confirmDialog("confirmer nouveau ?")) return
 			this.add()
 		},
 		

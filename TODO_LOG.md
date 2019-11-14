@@ -1,7 +1,17 @@
+SEARCH
+	id:3456 should work as well as id: 3456
 
 PICTADD
-	Could we display to each user the photos he submitted (like accepted/not accepted or something of the kind)
+	Add "des liens pour vous aider..."
+	When you fill in one selection (i.e. avion) the list of immat is filtered. You can then enter freetext, but the immat filter remains!
+	Make the enter key function as NEXT, perhaps the tab to select, choose an adequate focus
 	Could the user update his photo (i.e. remove) before it is validated?
+	
+ADMIN
+	Put a title in each interface so as to know what you are dealing with
+
+ADMIN / AERODROMES
+	interface googlemaps pour rentrer les coordonées?
 
 DATABASE CHANGES FOR EXTENDED ADMIN ROLE (SCREENER)
 	Change 'isAdmin' field -> 'group'

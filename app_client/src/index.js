@@ -36,6 +36,11 @@ Vue.use(BootstrapVue)
 Vue.use(VueAxios, axios)
 Vue.use(VueLoading)
 
+Vue.directive('focus', {
+  // Get focus when the bound element is inserted into the DOM
+  inserted: function (el) {el.focus()}
+})
+
 // Define or input route components
 import Accueil from './components/Accueil.vue'
 import Map from './components/Map.vue'

@@ -1,11 +1,7 @@
 <template lang="pug">
 	div
-		b-button(v-on:click='test') TEST
+		b-button(v-focus, v-on:click='test') TEST
 		b-button(v-on:click='test2') TEST2
-		photo-data-edit(
-			ref='TEST',
-			v-model='photo',
-		)
 </template>
 
 <script>
@@ -13,7 +9,6 @@
 
 export default {
 	
-	data() {},
 	
 	components: {
 		//'photo-data-edit': PhotoDataEdit,

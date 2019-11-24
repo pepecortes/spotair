@@ -24,20 +24,19 @@
 
 
 			tab-content(title="avion", :beforeChange="leavingAvion")
-				head-or-tail(v-model="avion.headSelected")
+				head-or-tail(v-model="avion.headSelected", @toggle="toggle(avion)")
 					template(v-slot:head-slot)
 						v-select(
 							id="avion",
 							:options="avion.options",
 							label="text",
 							v-model="avion.head",
-							@input="avionChanged",
 						)
 					template(v-slot:tail-slot)
 						input(type='text', v-model="avion.tail")
 					
 			tab-content(title="immat" :beforeChange="leavingAppareil")
-				head-or-tail(v-model="appareil.headSelected")
+				head-or-tail(v-model="appareil.headSelected", @toggle="toggle(appareil)")
 					template(v-slot:head-slot)
 						v-select(
 							id="immatriculation",
@@ -49,20 +48,19 @@
 						input(type='text', v-model="appareil.tail")
 
 			tab-content(title="lieu" :beforeChange="leavingAerodrome")
-				head-or-tail(v-model="aerodrome.headSelected")
+				head-or-tail(v-model="aerodrome.headSelected", @toggle="toggle(aerodrome)")
 					template(v-slot:head-slot)
 						v-select(
 							id="aerodrome",
 							:options="aerodrome.options",
 							label="text",
 							v-model="aerodrome.head",
-							@input="aerodromeChanged",
 						)
 					template(v-slot:tail-slot)
 						input(type='text', v-model="aerodrome.tail")
 						
 			tab-content(title="galerie" :beforeChange="leavingGalerie")
-				head-or-tail(v-model="galerie.headSelected")
+				head-or-tail(v-model="galerie.headSelected", @toggle="toggle(galerie)")
 					template(v-slot:head-slot)
 						v-select(
 							id="galerie",
@@ -74,7 +72,7 @@
 						input(type='text', v-model="galerie.tail")
 						
 			tab-content(title="exploitant" :beforeChange="leavingCompagnie")
-				head-or-tail(v-model="compagnie.headSelected")
+				head-or-tail(v-model="compagnie.headSelected", @toggle="toggle(compagnie)")
 					template(v-slot:head-slot)
 						v-select(
 							id="compagnie",
@@ -164,11 +162,34 @@ export default {
 		this.axios.get(process.env.WEB_URL + 'profile') 
 			.then(response => this.photographe = response.data.photographe)
 			.catch(err => vm.showAxiosAlert(err, "danger"))
-	},	
+	},
+	 
+	watch: {
+		
+		avion: {
+			handler(avion) {
+				this.avionChanged(avion.head)
+				//this.$refs.formWizard.nextTab()
+			},
+			deep: true
+    },
+    
+     aerodrome: {
+			handler(aerodrome) {this.aerodromeChanged(aerodrome.head)},
+			deep: true
+    },
+
+	},
 	
 	mixins: [alertMixin],
 	
 	methods: {
+		
+		toggle(data) {
+			// If toggle between head and tail, erase the previous selection
+			if (data.headSelected) data.tail = null
+			else data.head = null
+		},
 		
 		extractData(dataObject) {
 			// extract data that will be entered in photoData	

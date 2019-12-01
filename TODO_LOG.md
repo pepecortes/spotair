@@ -1,10 +1,3 @@
-SEARCH
-	id:3456 should work as well as id: 3456
-
-PICTADD
-	Add "des liens pour vous aider..."
-	Could the user update his photo (i.e. remove) before it is validated?
-	
 ADMIN
 	Put a title in each interface so as to know what you are dealing with
 
@@ -49,6 +42,8 @@ local container:
 	document in README
 	
 LATER:
+	PICTADD: 	Add "des liens pour vous aider..."
+	PICTADD: Could the user update his photo (i.e. remove) before it is validated?
 	Reinforce security using expiring JWT tokens (ref: https://www.techynovice.com/setting-up-JWT-token-refresh-mechanism-with-axios/)
 	SSL certificates in acme.json: backup and store off-premises
 	Should we protect the images object server?

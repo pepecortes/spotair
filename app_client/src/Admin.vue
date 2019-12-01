@@ -67,7 +67,7 @@ export default {
       evt.preventDefault()
       // If the searchString is "id:54360" the user is looking for the
       // photo of the given id: capture the pattern with regexp
-      var regex = /id:(\d{1,6})/
+      var regex = /id: *(\d{1,6})/
       const match = regex.exec(this.searchString)
       if (match != null) this.$router.push({ path: `/admin/editPhoto/${match[1]}`})
 			else {

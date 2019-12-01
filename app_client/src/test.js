@@ -27,6 +27,15 @@ Vue.use(VueAxios, axios)
 Vue.use(VueLoading)
 Vue.use(AsyncComputed)
 
+Vue.directive('focus', {
+  // When the bound element is inserted into the DOM...
+  inserted: function (el) {
+    // Focus the element
+    console.log("IN FOCUS")
+    el.focus()
+  }
+})
+
 import Test from './Test.vue'
 
 const app = new Vue({

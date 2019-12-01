@@ -18,72 +18,76 @@
 					@change="onFileChange",
 					v-model="filex",
 					:state="acceptableImage",
-					placeholder="Choose a file..."
+					placeholder="Choose a file...",
+					v-on:input='nextTab(true)',
+					autofocus,
 				)
 				b-button(type="button", variant="outline-success", v-on:click="resetFile") Reset
 
-
 			tab-content(title="avion", :beforeChange="leavingAvion")
-				head-or-tail(v-model="avion.headSelected")
+				head-or-tail(v-model="avion.headSelected", @toggle="toggle(avion)")
 					template(v-slot:head-slot)
 						v-select(
 							id="avion",
 							:options="avion.options",
 							label="text",
 							v-model="avion.head",
-							@input="avionChanged",
+							v-on:input='afterAvionSelected(avion.head)',
 						)
 					template(v-slot:tail-slot)
-						input(type='text', v-model="avion.tail")
-					
+						input(type='text', v-model="avion.tail", v-on:keyup.enter='nextTab(avion.tail)')
+						
 			tab-content(title="immat" :beforeChange="leavingAppareil")
-				head-or-tail(v-model="appareil.headSelected")
+				head-or-tail(v-model="appareil.headSelected", @toggle="toggle(appareil)")
 					template(v-slot:head-slot)
 						v-select(
 							id="immatriculation",
 							:options="appareil.options",
 							label="text",
 							v-model="appareil.head",
+							v-on:input='nextTab(appareil.head)',
 						)
 					template(v-slot:tail-slot)
-						input(type='text', v-model="appareil.tail")
+						input(type='text', v-model="appareil.tail", v-on:keyup.enter='nextTab(appareil.tail)')
 
 			tab-content(title="lieu" :beforeChange="leavingAerodrome")
-				head-or-tail(v-model="aerodrome.headSelected")
+				head-or-tail(v-model="aerodrome.headSelected", @toggle="toggle(aerodrome)")
 					template(v-slot:head-slot)
 						v-select(
 							id="aerodrome",
 							:options="aerodrome.options",
 							label="text",
 							v-model="aerodrome.head",
-							@input="aerodromeChanged",
+							v-on:input='afterAerodromeSelected(aerodrome.head)',
 						)
 					template(v-slot:tail-slot)
-						input(type='text', v-model="aerodrome.tail")
+						input(type='text', v-model="aerodrome.tail", v-on:keyup.enter='nextTab(aerodrome.tail)')
 						
 			tab-content(title="galerie" :beforeChange="leavingGalerie")
-				head-or-tail(v-model="galerie.headSelected")
+				head-or-tail(v-model="galerie.headSelected", @toggle="toggle(galerie)")
 					template(v-slot:head-slot)
 						v-select(
 							id="galerie",
 							:options="galerie.options",
 							label="text",
-							v-model="galerie.head"
+							v-model="galerie.head",
+							v-on:input='nextTab(galerie.head)',
 						)
 					template(v-slot:tail-slot)
-						input(type='text', v-model="galerie.tail")
+						input(type='text', v-model="galerie.tail", v-on:keyup.enter='nextTab(galerie.tail)')
 						
 			tab-content(title="exploitant" :beforeChange="leavingCompagnie")
-				head-or-tail(v-model="compagnie.headSelected")
+				head-or-tail(v-model="compagnie.headSelected", @toggle="toggle(compagnie)")
 					template(v-slot:head-slot)
 						v-select(
 							id="compagnie",
 							:options="compagnie.options",
 							label="text",
-							v-model="compagnie.head"
+							v-model="compagnie.head",
+							v-on:input='nextTab(compagnie.head)',
 						)
 					template(v-slot:tail-slot)
-						input(type='text', v-model="compagnie.tail")
+						input(type='text', v-model="compagnie.tail", v-on:keyup.enter='nextTab(compagnie.tail)')
 			
 			tab-content(title="commentaire")
 				b-form-textarea(
@@ -104,7 +108,6 @@
 					b-list-group-item(v-if="photoData.commentUpload") {{ photoData.commentUpload }}
 					
 		img(:src="tmpFileURL", width="500") 
-			
 		
 </template>
 
@@ -164,11 +167,56 @@ export default {
 		this.axios.get(process.env.WEB_URL + 'profile') 
 			.then(response => this.photographe = response.data.photographe)
 			.catch(err => vm.showAxiosAlert(err, "danger"))
-	},	
+	},
 	
 	mixins: [alertMixin],
 	
+	watch: {
+		avion: {
+			handler(avion) {
+				if (!avion.head) this.appareil = {options: [], headSelected: true, head: null, tail: null}
+			},
+			deep: true
+		},
+		aerodrome: {
+			handler(aerodrome) {
+				if (!aerodrome.head) this.galerie = {options: [], headSelected: true, head: null, tail: null}
+			},
+			deep: true
+		},
+	},
+
 	methods: {
+		
+		afterAvionSelected(selection) {
+			this.appareil = {options: [], headSelected: true, head: null, tail: null}
+			if (!selection) return
+			this.axios.get(`appareils/byAvion/${selection.id}`)
+				.then(response => this.appareil.options = response.data)
+				.then(() => this.$refs.formWizard.nextTab())
+				.catch(err => vm.showAxiosAlert(err, "danger"))
+		},
+		
+		afterAerodromeSelected(selection) {
+			this.galerie = {options: [], headSelected: true, head: null, tail: null}
+			if (!selection) return
+			this.axios.get(`galeries/byAerodrome/${selection.id}`)
+				.then(response => this.galerie.options = response.data)
+				.then(() => this.$refs.formWizard.nextTab())
+				.catch(err => vm.showAxiosAlert(err, "danger"))
+		},
+		
+		nextTab(data) {
+			// If user entered data, go to next tab
+			if (!data) return
+			this.$refs.formWizard.nextTab()
+		},
+		
+		toggle(data) {
+			// If toggle between head and tail, erase the previous selection
+			if (data.headSelected) data.tail = null
+			else data.head = null
+		},
 		
 		extractData(dataObject) {
 			// extract data that will be entered in photoData	
@@ -202,43 +250,11 @@ export default {
 		leavingCompagnie() {return (this.photoData.compagnie != null)},
 		leavingGalerie() {return (this.photoData.galerie != null)},
 		
-		avionChanged(selected) {
-			const id = (selected)? selected.id : false
-			this.getAppareilOptions(id)
-		},
-		
-		aerodromeChanged(selected) {
-			const id = (selected)? selected.id : false
-			this.getGalerieOptions(id)
-		},
-		
 		getOptions(apicall, variable) {
 			var vm = this
 			const url = apicall + '/'
 			vm.axios.get(url)
 				.then(response => variable.options = response.data)
-				.catch(err => vm.showAxiosAlert(err, "danger"))
-		},
-		
-		getAppareilOptions(avionId=false) {
-			// reset appareil
-			// if an avion is given, set appareil options filtered by avion
-			var vm = this
-			vm.appareil = {options: [], headSelected: true, head: null, tail: null}
-			if (!avionId) return
-			else vm.axios.get(`appareils/byAvion/${avionId}`)
-				.then(response => vm.appareil.options = response.data)
-				.catch(err => vm.showAxiosAlert(err, "danger"))
-		},
-		
-		getGalerieOptions(aerodromeId=false) {
-			// reset galerie
-			// if an aerodrome is given, set galerie options filtered by aerodrome
-			var vm = this
-			vm.galerie = {options: [], headSelected: true, head: null, tail: null}
-			if (!aerodromeId) return
-			else vm.axios.get(`galeries/byAerodrome/${aerodromeId}`)
-				.then(response => vm.galerie.options = response.data)
 				.catch(err => vm.showAxiosAlert(err, "danger"))
 		},
 		
@@ -292,12 +308,9 @@ export default {
 	},
 	
 }
-	
-
 </script>
 
 <style lang="scss">
-
 .formButtons {
 	display: inline-flex;
 }

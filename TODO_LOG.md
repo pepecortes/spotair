@@ -3,8 +3,6 @@ SEARCH
 
 PICTADD
 	Add "des liens pour vous aider..."
-	When you fill in one selection (i.e. avion) the list of immat is filtered. You can then enter freetext, but the immat filter remains!
-	Make the enter key function as NEXT, perhaps the tab to select, choose an adequate focus
 	Could the user update his photo (i.e. remove) before it is validated?
 	
 ADMIN

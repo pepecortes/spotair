@@ -1,6 +1,3 @@
-ADMIN
-	Put a title in each interface so as to know what you are dealing with
-
 ADMIN / AERODROMES
 	interface googlemaps pour rentrer les coordonées?
 

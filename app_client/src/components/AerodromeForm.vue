@@ -50,18 +50,25 @@
 				v-model.trim="formData.longitude",
 				:state="checkValidityState($v.formData.longitude)"
 			)
+			
+		gmap-input()
+			
+			
 </template>
 
 <script>
 
 import BaseForm from './BaseForm.vue'
 import { required, decimal, between } from "vuelidate/lib/validators"
+import GMapInput from './GMapInput.vue'
 
 // Check that both latitude and longitud are present or neither
 const bothCoordinates = (value, vm) => 
 	(vm.latitude && vm.longitude) || (!vm.latitude && !vm.longitude);
 
-export default {
+export default {	
+	
+	components: {'gmap-input': GMapInput},
 	
 	extends: BaseForm,
 	

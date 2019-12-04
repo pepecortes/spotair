@@ -6,6 +6,7 @@ import Axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueLoading from 'vuejs-loading-plugin'
 import Admin from './Admin.vue'
+import * as VueGoogleMaps from "vue2-google-maps"
 import {SearchType} from '../../app_lib/constants'
 
 // Import bootstrap style
@@ -28,6 +29,13 @@ Vue.use(VueRouter)
 Vue.use(BootstrapVue)
 Vue.use(VueAxios, axios)
 Vue.use(VueLoading)
+
+Vue.use(VueGoogleMaps, {
+	load: {
+		key: process.env.GOOGLE_API_KEY,
+		libraries: 'places'
+	}
+})
 
 Vue.directive('focus', {
   // Get focus when the bound element is inserted into the DOM

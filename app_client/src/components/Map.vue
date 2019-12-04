@@ -12,8 +12,8 @@
 		
 		div(v-show='mapAvailable', ref='gmapFilter', id='gmapFilter')
 			v-select(:options="anneeOptionSorted", label="text", v-model="annee")
-			button(class='btn btn-primary', @click='centerClicked') Recentrer
-			button(class='btn btn-link', @click='resetClicked') Reset
+			b-button(class='btn btn-primary', @click='centerClicked') Recentrer
+			b-button(class='btn btn-primary', @click='resetClicked') Reset
 		
 		gmap-map(
 			style="width: 100%; height: 600px",

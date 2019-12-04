@@ -51,8 +51,11 @@
 				:state="checkValidityState($v.formData.longitude)"
 			)
 			
-		gmap-input()
-			
+		gmap-input(
+			text='LFBO',
+			:latitude='formData.latitude',
+			:longitude='formData.longitude',
+		)
 			
 </template>
 

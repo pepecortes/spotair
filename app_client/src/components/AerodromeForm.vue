@@ -52,9 +52,10 @@
 			)
 			
 		gmap-input(
-			text='LFBO',
+			:text='formData.nom + " " + formData.lieu',
 			:latitude='formData.latitude',
 			:longitude='formData.longitude',
+			v-on:input='TEST',
 		)
 			
 </template>
@@ -85,6 +86,15 @@ export default {
 				longitude: {decimal, between: between(-180, 180), bothCoordinates},
 			},
 		}
+	},
+	
+	methods: {
+		
+		TEST(gps) {
+			this.formData.latitude = gps.latitude
+			this.formData.longitude = gps.longitude
+		},
+		
 	},
 	
 }

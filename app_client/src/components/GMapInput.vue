@@ -19,11 +19,6 @@ import { gmapApi } from 'vue2-google-maps'
 
 export default {
 	
-	model: {
-		//prop: 'headSelected',
-    //event: 'toggle'
-	},
-	
 	props: {
 		text: {default: "", type: String},
 		latitude: {default: 0},
@@ -35,6 +30,7 @@ export default {
       center: {lat:15, lng:15},
       zoom: 3,
       MAP: null,
+      MARKER: null,
       mapAvailable: false,
     }
 	},
@@ -62,21 +58,34 @@ export default {
 		
 		initializeMap() {
 			var vm = this
-			const MARKER = new this.google.maps.Marker({map: vm.MAP, draggable:true})
+			vm.MARKER = new this.google.maps.Marker({map: vm.MAP, draggable:true})
 			vm.google.maps.event.addListener(vm.MAP, 'click', 
 				function(event) {
-					MARKER.setMap(vm.MAP)
-					MARKER.setPosition(event.latLng)
+					vm.MARKER.setMap(vm.MAP)
+					vm.MARKER.setPosition(event.latLng)
+					const position = {'latitude': event.latLng.lat(), 'longitude': event.latLng.lng()}
+					vm.$emit('input', position)
 				})
 			vm.addCustomControl(vm.$refs.gmapControls)
 			vm.zoomAndCenter()
 		},
 		
 		searchClicked() {
-			console.log(`text: ${this.text} / latitude: ${this.latitude}, longitude: ${this.longitude}`)
+			var vm = this
+			const geocoder = new vm.google.maps.Geocoder()
+			geocoder.geocode({'address': vm.text}, function(results, status) {
+				if (status === 'OK') {
+					const location = results[0].geometry.location
+					vm.MAP.setCenter(location)
+					vm.MAP.setZoom(12)
+					vm.MARKER.setMap(vm.MAP);
+					vm.MARKER.setPosition(location);
+				} else {alert("GOOGLE MAPS dit : " + status)}
+			})
 		},
 		
 		centerClicked() {
+			alert("NOT COMPLETED")
 			this.zoomAndCenter()
 		},
 		

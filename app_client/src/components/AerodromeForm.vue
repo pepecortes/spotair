@@ -26,36 +26,16 @@
 				v-model.trim="formData.lieu",
 				:state="checkValidityState($v.formData.lieu)"
 			)
-		b-form-group(
-			label="Latitude",
-			label-for="latitude",
-			:invalid-feedback="formData.invalid.latitude",
-			:state="checkValidityState($v.formData.latitude)"
-		)
-			b-form-input(
-				id="latitude",
-				type="text",
-				v-model.trim="formData.latitude",
-				:state="checkValidityState($v.formData.latitude)"
-			)
-		b-form-group(
-			label="Longitude",
-			label-for="longitude",
-			:invalid-feedback="formData.invalid.longitude",
-			:state="checkValidityState($v.formData.longitude)"
-		)
-			b-form-input(
-				id="longitude",
-				type="text",
-				v-model.trim="formData.longitude",
-				:state="checkValidityState($v.formData.longitude)"
-			)
+			
+		p LATITUDE: {{ formData.latitude }}
+		p LONGITUDE: {{ formData.longitude }}
+		
+		p GPS LAT: {{ gps.latitude }}
+		p GPS LONG: {{ gps.longitude }}
 			
 		gmap-input(
 			:text='formData.nom + " " + formData.lieu',
-			:latitude='formData.latitude',
-			:longitude='formData.longitude',
-			v-on:input='TEST',
+			v-model='gps',
 		)
 			
 </template>
@@ -88,13 +68,19 @@ export default {
 		}
 	},
 	
-	methods: {
+	computed: {
 		
-		TEST(gps) {
-			this.formData.latitude = gps.latitude
-			this.formData.longitude = gps.longitude
+		gps: {
+				get: function() {
+					if (!this.formData) return {}
+					return {latitude: this.formData.latitude, longitude: this.formData.longitude}
+				},
+				set: function(val) {
+					this.formData.latitude = val.latitude
+					this.formData.longitude = val.longitude
+				},
 		},
-		
+			
 	},
 	
 }

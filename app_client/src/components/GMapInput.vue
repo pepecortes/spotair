@@ -1,6 +1,5 @@
 <template lang="pug">
 	div
-	
 		div(v-show='mapAvailable', ref='gmapControls', id='gmapControls')
 			b-button(class='btn btn-primary', @click='searchClicked') Rechercher
 			b-button(class='btn btn-primary', @click='centerClicked') Recentrer
@@ -20,9 +19,8 @@ import { gmapApi } from 'vue2-google-maps'
 export default {
 	
 	props: {
+		value: Object,
 		text: {default: "", type: String},
-		latitude: {default: 0},
-		longitude: {default: 0},
 	},
 	
 	data() {
@@ -45,12 +43,24 @@ export default {
 		
 	},
 	
+	watch: {
+		// TEST NOT YET COMPLETED. DEBOUNCE? MODIFY MARKERSYNC?
+		value: {
+			handler(v) {
+				console.log("....")
+				const x = new this.google.maps.LatLng(v.latitude, v.longitude)
+				this.MARKER.setPosition(x)
+			},
+			deep: true,
+		}
+		
+	},
+	
 	mounted() {
 		this.$refs.mapRef.$mapPromise.then(map => {
 			this.MAP = map
 			this.initializeMap()
 			this.mapAvailable = true
-			console.log(`text: ${this.text} / latitude: ${this.latitude}, longitude: ${this.longitude}`)
 		})
 	},
 
@@ -59,15 +69,24 @@ export default {
 		initializeMap() {
 			var vm = this
 			vm.MARKER = new this.google.maps.Marker({map: vm.MAP, draggable:true})
-			vm.google.maps.event.addListener(vm.MAP, 'click', 
-				function(event) {
-					vm.MARKER.setMap(vm.MAP)
-					vm.MARKER.setPosition(event.latLng)
-					const position = {'latitude': event.latLng.lat(), 'longitude': event.latLng.lng()}
-					vm.$emit('input', position)
-				})
+
+			const x = new vm.google.maps.LatLng(vm.value.latitude, vm.value.longitude)
+			vm.markerSync(x)
+			
+			vm.google.maps.event.addListener(vm.MAP, 'click', e => this.markerSync(e.latLng))
+			vm.google.maps.event.addListener(vm.MARKER, 'dragend', e => this.markerSync(e.latLng))
+			vm.google.maps.event.addListener(vm.MARKER, 'position_changed', vm.markerSync)
 			vm.addCustomControl(vm.$refs.gmapControls)
-			vm.zoomAndCenter()
+			vm.zoomAndCenter(3, vm.value.latitude, vm.value.longitude)
+		},
+		
+		markerSync(markerLatLng) {
+			// Sync MARKER and this.value
+			if (!this.MARKER) this.MARKER.setMap(this.MAP)
+			if (markerLatLng) this.MARKER.setPosition(markerLatLng)
+			const markerPos = this.MARKER.getPosition()		
+			const gps = {'latitude': markerPos.lat(), 'longitude': markerPos.lng()}
+			this.$emit('input', gps)
 		},
 		
 		searchClicked() {
@@ -85,8 +104,8 @@ export default {
 		},
 		
 		centerClicked() {
-			alert("NOT COMPLETED")
-			this.zoomAndCenter()
+			if (!this.value) this.zoomAndCenter()
+			else this.zoomAndCenter(3, this.value.latitude, this.value.longitude)
 		},
 		
 		addCustomControl(dom) {

@@ -16,6 +16,8 @@
 <script>
 import { gmapApi } from 'vue2-google-maps'
 
+const _ = require('lodash')
+
 export default {
 	
 	props: {
@@ -44,16 +46,13 @@ export default {
 	},
 	
 	watch: {
-		// TEST NOT YET COMPLETED. DEBOUNCE? MODIFY MARKERSYNC?
 		value: {
-			handler(v) {
-				console.log("....")
+			handler: _.throttle(function(v) {
 				const x = new this.google.maps.LatLng(v.latitude, v.longitude)
 				this.MARKER.setPosition(x)
-			},
+			}, 1000, {'trailing': false}),
 			deep: true,
 		}
-		
 	},
 	
 	mounted() {

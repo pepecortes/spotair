@@ -27,11 +27,7 @@
 				:state="checkValidityState($v.formData.lieu)"
 			)
 			
-		p LATITUDE: {{ formData.latitude }}
-		p LONGITUDE: {{ formData.longitude }}
-		
-		p GPS LAT: {{ gps.latitude }}
-		p GPS LONG: {{ gps.longitude }}
+		p LATITUDE: {{ formData.latitude }} / LONGITUDE: {{ formData.longitude }}
 			
 		gmap-input(
 			:text='formData.nom + " " + formData.lieu',
@@ -61,7 +57,7 @@ export default {
 			model: "aerodrome",
 			validations: {
 				nom: {required},
-				lieu: {required},
+				lieu: {},
 				latitude: {decimal, between: between(-90, 90), bothCoordinates},
 				longitude: {decimal, between: between(-180, 180), bothCoordinates},
 			},
@@ -76,8 +72,15 @@ export default {
 					return {latitude: this.formData.latitude, longitude: this.formData.longitude}
 				},
 				set: function(val) {
-					this.formData.latitude = val.latitude
-					this.formData.longitude = val.longitude
+						this.formData.latitude = val.latitude
+						this.formData.longitude = val.longitude
+					//if ((this.formData.latitude == 0) && (this.formData.longitude == 0)) {
+						//this.formData.latitude = null
+						//this.formData.latitude = null
+					//} else {
+						//this.formData.latitude = val.latitude
+						//this.formData.longitude = val.longitude
+					//}
 				},
 		},
 			

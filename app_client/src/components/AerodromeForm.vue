@@ -2,6 +2,7 @@
 	extends BaseForm.pug
 	
 	block input
+	
 		b-form-group(
 			label="Nom",
 			label-for="nom",
@@ -30,6 +31,7 @@
 		p LATITUDE: {{ formData.latitude }} / LONGITUDE: {{ formData.longitude }}
 			
 		gmap-input(
+			ref='mapInput',
 			:text='formData.nom + " " + formData.lieu',
 			v-model='gps',
 		)
@@ -67,23 +69,28 @@ export default {
 	computed: {
 		
 		gps: {
-				get: function() {
-					if (!this.formData) return {}
-					return {latitude: this.formData.latitude, longitude: this.formData.longitude}
-				},
-				set: function(val) {
-						this.formData.latitude = val.latitude
-						this.formData.longitude = val.longitude
-					//if ((this.formData.latitude == 0) && (this.formData.longitude == 0)) {
-						//this.formData.latitude = null
-						//this.formData.latitude = null
-					//} else {
-						//this.formData.latitude = val.latitude
-						//this.formData.longitude = val.longitude
-					//}
-				},
+			get: function() {
+				if (!this.formData) return {}
+				return {latitude: this.formData.latitude, longitude: this.formData.longitude}
+			},
+			set: function(val) {
+					this.formData.latitude = val.latitude
+					this.formData.longitude = val.longitude
+			},
 		},
 			
+	},	
+	
+	watch: {
+		
+		formData: {
+			handler: function(vnew, vold) {
+				if (!vnew) return
+				this.$nextTick(() => this.$refs.mapInput.resetMarker())
+			},
+			deep: true,
+		},
+		
 	},
 	
 }

@@ -16,8 +16,6 @@
 <script>
 import { gmapApi } from 'vue2-google-maps'
 
-const _ = require('lodash')
-
 export default {
 	
 	props: {
@@ -31,7 +29,7 @@ export default {
       zoom: 3,
       MAP: null,
       MARKER: null,
-      mapAvailable: false,
+      MARKER_POS: null,
     }
 	},
 	
@@ -43,46 +41,61 @@ export default {
 			return {mapTypeControlOptions: {position: this.google.maps.ControlPosition.TOP_RIGHT}}
 		},
 		
-	},
-	
-	watch: {
-		value: {
-			handler: _.throttle(function(v) {
-				const x = new this.google.maps.LatLng(v.latitude, v.longitude)
-				this.MARKER.setPosition(x)
-			}, 1000, {'trailing': false}),
-			deep: true,
-		}
+		mapAvailable() {return (this.MAP != null)},
 	},
 	
 	mounted() {
 		this.$refs.mapRef.$mapPromise.then(map => {
 			this.MAP = map
+			this.MARKER = new this.google.maps.Marker({map: this.MAP, draggable:true})
+			if (this.value.latitude && this.value.longitude) {
+				this.MARKER_POS = new this.google.maps.LatLng(this.value.latitude, this.value.longitude)
+			}
 			this.initializeMap()
-			this.mapAvailable = true
 		})
 	},
 
 	methods: {
 		
-		initializeMap() {
-			var vm = this
-			vm.MARKER = new this.google.maps.Marker({map: vm.MAP, draggable:true})
-
-			const x = new vm.google.maps.LatLng(vm.value.latitude, vm.value.longitude)
-			vm.markerSync(x)
+		resetMarker() {
+			console.log(JSON.stringify(this.value))
+			if (!this.google) return
+			if (this.value.latitude && this.value.longitude) {
+				const x = new this.google.maps.LatLng(this.value.latitude, this.value.longitude)
+				console.log("SETTING MARKER " + x)
+				this.MARKER.setMap(this.MAP)
+				this.MARKER.setPosition(x)
+			} else {
+				this.MARKER.setMap(null)
+			}
 			
-			vm.google.maps.event.addListener(vm.MAP, 'click', e => this.markerSync(e.latLng))
-			vm.google.maps.event.addListener(vm.MARKER, 'dragend', e => this.markerSync(e.latLng))
-			vm.google.maps.event.addListener(vm.MARKER, 'position_changed', vm.markerSync)
-			vm.addCustomControl(vm.$refs.gmapControls)
-			vm.zoomAndCenter(3, vm.value.latitude, vm.value.longitude)
+		},
+		
+		initializeMap() {
+			this.addCustomControl(this.$refs.gmapControls)
+			this.google.maps.event.addListener(this.MAP, 'click', e => this.markerSync(e.latLng))
+			this.google.maps.event.addListener(this.MARKER, 'dragend', e => this.markerSync(e.latLng))
+			
+			this.markerSync(this.MARKER_POS)
+			
+			this.zoomAndCenter(3, this.value.latitude, this.value.longitude)
 		},
 		
 		markerSync(markerLatLng) {
 			// Sync MARKER and this.value
-			if (!this.MARKER) this.MARKER.setMap(this.MAP)
-			if (markerLatLng) this.MARKER.setPosition(markerLatLng)
+			
+			//if (!markerLatLng) {
+				//console.log("CHECK")
+				//this.MARKER.setMap()
+				//return
+			//}
+			//if (!this.MARKER) this.MARKER.setMap(this.MAP)
+			//if (markerLatLng) this.MARKER.setPosition(markerLatLng)
+			
+			if (!markerLatLng) {this.MARKER.setMap(null); return}
+			else this.MARKER.setMap(this.MAP)
+			
+			this.MARKER.setPosition(markerLatLng)
 			const markerPos = this.MARKER.getPosition()		
 			const gps = {'latitude': markerPos.lat(), 'longitude': markerPos.lng()}
 			this.$emit('input', gps)
@@ -96,8 +109,8 @@ export default {
 					const location = results[0].geometry.location
 					vm.MAP.setCenter(location)
 					vm.MAP.setZoom(12)
-					vm.MARKER.setMap(vm.MAP);
-					vm.MARKER.setPosition(location);
+					vm.MARKER.setMap(vm.MAP)
+					vm.MARKER.setPosition(location)
 				} else {alert("GOOGLE MAPS dit : " + status)}
 			})
 		},

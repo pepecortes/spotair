@@ -46,17 +46,15 @@ export default {
 	asyncComputed: {
 		
 		gMap() {
-			console.log("in gMap " + this.mapAvailable)
-			if (this.mapAvailable) return resolve(this.MAP)
-			this.$nextTick()
+			if (this.mapAvailable) {return this.MAP}
+			return this.$nextTick()
 				.then(() => this.$refs.mapRef.$mapPromise)
 				.then(map => {
-					this.addCustomControl(this.$refs.gmapControls)
-					//this.google.maps.event.addListener(map, 'click', e => this.markerSync(e.latLng))
+					this.addCustomControl(map, this.$refs.gmapControls)
+					this.google.maps.event.addListener(map, 'click', e => this.markerSync(e.latLng))
 					this.MAP = map
 					return map
 				})
-				
 				
 		},
 	
@@ -87,21 +85,29 @@ export default {
 		//},
 		
 		resetMarker(pos) {
-			console.log("RESETMARKER NOT COMPLETED")
-			this.gMap.then(map => console.log("map created"))
-			//this.initMap()
+			console.log(this.google.maps)
+			
+			//this.$nextTick()
+				//.then(() => console.log(this.google.maps))
+				
+				//.then(() => this.gMap)
+				////.then(map => console.log("map created"))
 				//.then(map => {
-					
 					//if (this.value.latitude && this.value.longitude) {
 						//const x = new this.google.maps.LatLng(this.value.latitude, this.value.longitude)
 						//console.log("SETTING MARxER " + x)
-						//this.MARKER.setMap(this.MAP)
-						//this.MARKER.setPosition(x)
-						//const markerPos = this.MARKER.getPosition()
-						//console.log(JSON.stringify(markerPos))
+						////this.MARKER.setMap(this.MAP)
+						////this.MARKER.setPosition(x)
+						////const markerPos = this.MARKER.getPosition()
+						////console.log(JSON.stringify(markerPos))
 					//} else {
+						//console.log("ERASING MARxER ")
 						////this.MARKER.setMap(null)
 					//}
+				//})
+				
+				
+
 				//})
 		},
 		
@@ -136,11 +142,11 @@ export default {
 			else this.zoomAndCenter(3, this.value.latitude, this.value.longitude)
 		},
 		
-		addCustomControl(dom) {
+		addCustomControl(map, dom) {
 			var borderDiv = document.createElement('div')
 			borderDiv.className = "gMapControlBorder"
 			borderDiv.appendChild(dom);
-			this.MAP.controls[this.google.maps.ControlPosition.TOP_LEFT].push(borderDiv)
+			map.controls[this.google.maps.ControlPosition.TOP_LEFT].push(borderDiv)
 		},
 		
 		zoomAndCenter(zoom=3, lat=15, long=15) {

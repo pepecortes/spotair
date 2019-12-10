@@ -86,7 +86,9 @@ export default {
 		formData: {
 			handler: function(vnew, vold) {
 				if (!vnew) return
-				this.$nextTick(() => this.$refs.mapInput.resetMarker())
+				if (vold && vnew.id == vold.id) return
+				const position = {latitude: vnew.latitude, longitude: vnew.longitude}
+				this.$nextTick(() => this.$refs.mapInput.resetMarker(position))
 			},
 			deep: true,
 		},

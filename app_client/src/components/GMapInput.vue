@@ -43,98 +43,72 @@ export default {
 		mapAvailable() {return (this.MAP != null)},
 	},
 	
-	asyncComputed: {
-		
-		gMap() {
-			if (this.mapAvailable) {return this.MAP}
-			return this.$nextTick()
-				.then(() => this.$refs.mapRef.$mapPromise)
-				.then(map => {
-					this.addCustomControl(map, this.$refs.gmapControls)
-					this.google.maps.event.addListener(map, 'click', e => this.markerSync(e.latLng))
-					this.MAP = map
-					return map
-				})
-				
-		},
-	
-	},
-	
 	mounted() {
-		//this.initMap(null)
+		console.log("value " + JSON.stringify(this.value) + " mapavail " + this.mapAvailable)
+		this.initMap(this.value)
 	},
 
 	methods: {
 		
-		//async initMap(pos) {
-			//if (this.MAP) return this.MAP
-			//return this.$refs.mapRef.$mapPromise
-				//.then(map => {
-					//this.MAP = map
-					//this.MARKER = new this.google.maps.Marker({map: this.MAP, draggable:true})
-					//if (this.value.latitude && this.value.longitude) {
-						//this.MARKER_POS = new this.google.maps.LatLng(this.value.latitude, this.value.longitude)
-					//}
-					//this.addCustomControl(this.$refs.gmapControls)
-					//this.google.maps.event.addListener(this.MAP, 'click', e => this.markerSync(e.latLng))
-					//this.google.maps.event.addListener(this.MARKER, 'dragend', e => this.markerSync(e.latLng))
-					//this.markerSync(this.MARKER_POS)
-					//this.zoomAndCenter(3, this.value.latitude, this.value.longitude)
-					//return map
-				//})
-		//},
+		async initMap(pos) {
+			if (this.mapAvailable) return this.MAP
+			return this.$refs.mapRef.$mapPromise
+				.then(map => {
+					this.MAP = map
+					this.MARKER = new this.google.maps.Marker({draggable:true})
+					const mrkPos = (pos)?	{lat: pos.latitude, lng: pos.longitude} :	null
+					this.addCustomControl(this.$refs.gmapControls)
+					this.google.maps.event.addListener(this.MAP, 'click', e => this.markerSync(e.latLng))
+					this.google.maps.event.addListener(this.MARKER, 'dragend', e => this.markerSync(e.latLng))
+					this.markerSync(mrkPos)
+					this.zoomAndCenter(3, this.value.latitude, this.value.longitude)
+					return map
+				})
+		},
 		
 		resetMarker(pos) {
-			console.log(this.google.maps)
-			
-			//this.$nextTick()
-				//.then(() => console.log(this.google.maps))
-				
-				//.then(() => this.gMap)
-				////.then(map => console.log("map created"))
+			console.log("RESET MARKER: " + JSON.stringify(pos))
+			return
+			//this.initMap()
 				//.then(map => {
+					
 					//if (this.value.latitude && this.value.longitude) {
 						//const x = new this.google.maps.LatLng(this.value.latitude, this.value.longitude)
 						//console.log("SETTING MARxER " + x)
-						////this.MARKER.setMap(this.MAP)
-						////this.MARKER.setPosition(x)
-						////const markerPos = this.MARKER.getPosition()
-						////console.log(JSON.stringify(markerPos))
+						//this.MARKER.setMap(this.MAP)
+						//this.MARKER.setPosition(x)
+						//const markerPos = this.MARKER.getPosition()
+						//console.log(JSON.stringify(markerPos))
 					//} else {
-						//console.log("ERASING MARxER ")
 						////this.MARKER.setMap(null)
 					//}
 				//})
-				
-				
-
-				//})
 		},
 		
-		//markerSync(markerLatLng) {
-			//// Sync MARKER and this.value
+		markerSync(markerLatLng) {
+			// Sync MARKER and this.value
 			
-			//if (!markerLatLng) {this.MARKER.setMap(null); return}
-			//else this.MARKER.setMap(this.MAP)
+			if (!markerLatLng) {this.MARKER.setMap(null); return}
+			else this.MARKER.setMap(this.MAP)
 			
-			//this.MARKER.setPosition(markerLatLng)
-			//const markerPos = this.MARKER.getPosition()		
-			//const gps = {'latitude': markerPos.lat(), 'longitude': markerPos.lng()}
-			//this.$emit('input', gps)
-		//},
+			this.MARKER.setPosition(markerLatLng)
+			const markerPos = this.MARKER.getPosition()		
+			const gps = {'latitude': markerPos.lat(), 'longitude': markerPos.lng()}
+			this.$emit('input', gps)
+		},
 		
 		searchClicked() {
 			var vm = this
 			const geocoder = new vm.google.maps.Geocoder()
-			//geocoder.geocode({'address': vm.text}, function(results, status) {
-				//if (status === 'OK') {
-					//const location = results[0].geometry.location
-					//vm.MAP.setCenter(location)
-					//vm.MAP.setZoom(12)
-					//vm.MARKER.setMap(vm.MAP)
-					//vm.MARKER.setPosition(location)
-				//} else {alert("GOOGLE MAPS dit : " + status)}
-			//})
+			geocoder.geocode({'address': vm.text}, function(results, status) {
+				if (status === 'OK') {
+					const location = results[0].geometry.location
+					vm.MAP.setCenter(location)
+					vm.MAP.setZoom(12)
+					vm.MARKER.setMap(vm.MAP)
+					vm.MARKER.setPosition(location)
+				} else {alert("GOOGLE MAPS dit : " + status)}
+			})
 		},
 		
 		centerClicked() {
@@ -142,11 +116,11 @@ export default {
 			else this.zoomAndCenter(3, this.value.latitude, this.value.longitude)
 		},
 		
-		addCustomControl(map, dom) {
+		addCustomControl(dom) {
 			var borderDiv = document.createElement('div')
 			borderDiv.className = "gMapControlBorder"
 			borderDiv.appendChild(dom);
-			map.controls[this.google.maps.ControlPosition.TOP_LEFT].push(borderDiv)
+			this.MAP.controls[this.google.maps.ControlPosition.TOP_LEFT].push(borderDiv)
 		},
 		
 		zoomAndCenter(zoom=3, lat=15, long=15) {

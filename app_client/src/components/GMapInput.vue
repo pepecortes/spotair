@@ -41,6 +41,7 @@ export default {
 		},
 		
 		mapAvailable() {return (this.MAP != null)},
+		
 	},
 	
 	mounted() {
@@ -51,12 +52,13 @@ export default {
 	methods: {
 		
 		async initMap(pos) {
+			console.log("ENTERING INITMAP")
 			if (this.mapAvailable) return this.MAP
 			return this.$refs.mapRef.$mapPromise
 				.then(map => {
 					this.MAP = map
 					this.MARKER = new this.google.maps.Marker({draggable:true})
-					const mrkPos = (pos)?	{lat: pos.latitude, lng: pos.longitude} :	null
+					const mrkPos = this.gMapPosition(pos)
 					this.addCustomControl(this.$refs.gmapControls)
 					this.google.maps.event.addListener(this.MAP, 'click', e => this.markerSync(e.latLng))
 					this.google.maps.event.addListener(this.MARKER, 'dragend', e => this.markerSync(e.latLng))
@@ -66,9 +68,25 @@ export default {
 				})
 		},
 		
+		gMapPosition(pos) {
+			// Return a gMap position or false (if unable to get one)
+			if (!pos) return false
+			if (!pos.latitude || !pos.longitude) return false
+			return {lat: pos.latitude, lng: pos.longitude}
+		},
+		
 		resetMarker(pos) {
-			console.log("RESET MARKER: " + JSON.stringify(pos))
-			return
+			if (!this.mapAvailable) return
+			console.log("SETTING RESET MARKER")
+			this.MARKER.setMap(null)
+			
+			
+			//const mrkPos = this.gMapPosition(pos)
+			//if (!mrkPos) {
+				//console.log("SETTING MAP NULL")
+				//this.MARKER.setMap(null)
+				//return
+			//}
 			//this.initMap()
 				//.then(map => {
 					
@@ -85,13 +103,12 @@ export default {
 				//})
 		},
 		
-		markerSync(markerLatLng) {
+		markerSync(pos) {
 			// Sync MARKER and this.value
-			
-			if (!markerLatLng) {this.MARKER.setMap(null); return}
+			console.log("ENTERING MARKERSYNC")
+			if (!pos) {this.MARKER.setMap(null); return}
 			else this.MARKER.setMap(this.MAP)
-			
-			this.MARKER.setPosition(markerLatLng)
+			this.MARKER.setPosition(pos)
 			const markerPos = this.MARKER.getPosition()		
 			const gps = {'latitude': markerPos.lat(), 'longitude': markerPos.lng()}
 			this.$emit('input', gps)

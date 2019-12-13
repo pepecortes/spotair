@@ -21,6 +21,7 @@ export default {
 	props: {
 		value: Object,
 		text: {default: "", type: String},
+		id: {default: null, type: Number},
 	},
 	
 	data() {
@@ -41,29 +42,36 @@ export default {
 		},
 		
 		mapAvailable() {return (this.MAP != null)},
-		
+	},
+	
+	watch: {
+		id(newId, oldId) {
+			if (!this.mapAvailable || (newId == oldId)) return
+			const pos = {latitude: this.value.latitude, longitude: this.value.longitude}
+			const mrkPos = this.gMapPosition(pos)
+			this.markerSync(mrkPos)
+			this.zoomAndCenter(undefined, pos)
+		}
 	},
 	
 	mounted() {
-		console.log("value " + JSON.stringify(this.value) + " mapavail " + this.mapAvailable)
 		this.initMap(this.value)
 	},
 
 	methods: {
 		
 		async initMap(pos) {
-			console.log("ENTERING INITMAP")
 			if (this.mapAvailable) return this.MAP
 			return this.$refs.mapRef.$mapPromise
 				.then(map => {
 					this.MAP = map
-					this.MARKER = new this.google.maps.Marker({draggable:true})
+					this.MARKER = new this.google.maps.Marker({map: map, draggable:true})
 					const mrkPos = this.gMapPosition(pos)
 					this.addCustomControl(this.$refs.gmapControls)
 					this.google.maps.event.addListener(this.MAP, 'click', e => this.markerSync(e.latLng))
 					this.google.maps.event.addListener(this.MARKER, 'dragend', e => this.markerSync(e.latLng))
 					this.markerSync(mrkPos)
-					this.zoomAndCenter(3, this.value.latitude, this.value.longitude)
+					this.zoomAndCenter(undefined, pos)
 					return map
 				})
 		},
@@ -75,39 +83,10 @@ export default {
 			return {lat: pos.latitude, lng: pos.longitude}
 		},
 		
-		resetMarker(pos) {
-			if (!this.mapAvailable) return
-			console.log("SETTING RESET MARKER")
-			this.MARKER.setMap(null)
-			
-			
-			//const mrkPos = this.gMapPosition(pos)
-			//if (!mrkPos) {
-				//console.log("SETTING MAP NULL")
-				//this.MARKER.setMap(null)
-				//return
-			//}
-			//this.initMap()
-				//.then(map => {
-					
-					//if (this.value.latitude && this.value.longitude) {
-						//const x = new this.google.maps.LatLng(this.value.latitude, this.value.longitude)
-						//console.log("SETTING MARxER " + x)
-						//this.MARKER.setMap(this.MAP)
-						//this.MARKER.setPosition(x)
-						//const markerPos = this.MARKER.getPosition()
-						//console.log(JSON.stringify(markerPos))
-					//} else {
-						////this.MARKER.setMap(null)
-					//}
-				//})
-		},
-		
 		markerSync(pos) {
 			// Sync MARKER and this.value
-			console.log("ENTERING MARKERSYNC")
-			if (!pos) {this.MARKER.setMap(null); return}
-			else this.MARKER.setMap(this.MAP)
+			if (!pos) {this.MARKER.setVisible(false); return}
+			this.MARKER.setVisible(true)
 			this.MARKER.setPosition(pos)
 			const markerPos = this.MARKER.getPosition()		
 			const gps = {'latitude': markerPos.lat(), 'longitude': markerPos.lng()}
@@ -130,7 +109,10 @@ export default {
 		
 		centerClicked() {
 			if (!this.value) this.zoomAndCenter()
-			else this.zoomAndCenter(3, this.value.latitude, this.value.longitude)
+			else {
+				const pos = {latitude: this.value.latitude, longitude: this.value.longitude}
+				this.zoomAndCenter(undefined, pos)
+			}
 		},
 		
 		addCustomControl(dom) {
@@ -140,10 +122,9 @@ export default {
 			this.MAP.controls[this.google.maps.ControlPosition.TOP_LEFT].push(borderDiv)
 		},
 		
-		zoomAndCenter(zoom=3, lat=15, long=15) {
-			 var center = new this.google.maps.LatLng(lat, long)
-			 this.MAP.panTo(center)
-			 this.MAP.setZoom(zoom)
+		zoomAndCenter(zoom=this.zoom, center=this.center) {
+			this.MAP.panTo(this.gMapPosition(center))
+			this.MAP.setZoom(zoom)
 		},
 	}
 		

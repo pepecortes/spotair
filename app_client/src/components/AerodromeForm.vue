@@ -31,7 +31,7 @@
 		p LATITUDE: {{ formData.latitude }} / LONGITUDE: {{ formData.longitude }}
 			
 		gmap-input(
-			ref='mapInput',
+			:id='formData.id',
 			:text='formData.nom + " " + formData.lieu',
 			v-model='gps',
 		)
@@ -79,20 +79,6 @@ export default {
 			},
 		},
 			
-	},	
-	
-	watch: {
-		
-		formData: {
-			handler: function(vnew, vold) {
-				if (!vnew) return
-				if (vold && vnew.id == vold.id) return
-				const position = {latitude: vnew.latitude, longitude: vnew.longitude}
-				this.$nextTick(() => this.$refs.mapInput.resetMarker(position))
-			},
-			deep: true,
-		},
-		
 	},
 	
 }

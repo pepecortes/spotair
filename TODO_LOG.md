@@ -1,6 +1,3 @@
-ADMIN / AERODROMES
-	interface googlemaps pour rentrer les coordonées?
-	
 GOOGLE MAPS
 	Change prompt?
 

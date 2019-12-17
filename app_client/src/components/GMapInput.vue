@@ -50,7 +50,7 @@ export default {
 			const pos = {latitude: this.value.latitude, longitude: this.value.longitude}
 			const mrkPos = this.gMapPosition(pos)
 			this.markerSync(mrkPos)
-			this.zoomAndCenter(undefined, pos)
+			this.zoomAndCenter(undefined, mrkPos)
 		}
 	},
 	
@@ -71,7 +71,7 @@ export default {
 					this.google.maps.event.addListener(this.MAP, 'click', e => this.markerSync(e.latLng))
 					this.google.maps.event.addListener(this.MARKER, 'dragend', e => this.markerSync(e.latLng))
 					this.markerSync(mrkPos)
-					this.zoomAndCenter(undefined, pos)
+					this.zoomAndCenter(undefined, mrkPos)
 					return map
 				})
 		},
@@ -108,11 +108,8 @@ export default {
 		},
 		
 		centerClicked() {
-			if (!this.value) this.zoomAndCenter()
-			else {
-				const pos = {latitude: this.value.latitude, longitude: this.value.longitude}
-				this.zoomAndCenter(undefined, pos)
-			}
+			const pos = this.gMapPosition(this.value)
+			this.zoomAndCenter(undefined, pos)
 		},
 		
 		addCustomControl(dom) {
@@ -123,7 +120,8 @@ export default {
 		},
 		
 		zoomAndCenter(zoom=this.zoom, center=this.center) {
-			this.MAP.panTo(this.gMapPosition(center))
+			if (!center) return
+			this.MAP.panTo(center)
 			this.MAP.setZoom(zoom)
 		},
 	}

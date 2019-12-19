@@ -21,7 +21,7 @@ export default {
 	props: {
 		value: Object,
 		text: {default: "", type: String},
-		id: {default: null, type: Number},
+		resetRequest: {default: false, type: Boolean},
 	},
 	
 	data() {
@@ -45,35 +45,37 @@ export default {
 	},
 	
 	watch: {
-		id(newId, oldId) {
-			if (!this.mapAvailable || (newId == oldId)) return
+		resetRequest(request) {
+			if (!request) return
 			const pos = {latitude: this.value.latitude, longitude: this.value.longitude}
-			const mrkPos = this.gMapPosition(pos)
-			this.markerSync(mrkPos)
-			this.zoomAndCenter(undefined, mrkPos)
-		}
+			this.reset(pos)
+		},
 	},
 	
 	mounted() {
-		this.initMap(this.value)
+		this.createMap().then(map => this.reset(this.value))
 	},
 
 	methods: {
 		
-		async initMap(pos) {
+		async createMap() {
 			if (this.mapAvailable) return this.MAP
 			return this.$refs.mapRef.$mapPromise
 				.then(map => {
 					this.MAP = map
 					this.MARKER = new this.google.maps.Marker({map: map, draggable:true})
-					const mrkPos = this.gMapPosition(pos)
 					this.addCustomControl(this.$refs.gmapControls)
 					this.google.maps.event.addListener(this.MAP, 'click', e => this.markerSync(e.latLng))
 					this.google.maps.event.addListener(this.MARKER, 'dragend', e => this.markerSync(e.latLng))
-					this.markerSync(mrkPos)
-					this.zoomAndCenter(undefined, mrkPos)
 					return map
 				})
+		},
+		
+		reset(pos) {
+			const mrkPos = this.gMapPosition(pos)
+			this.markerSync(mrkPos)
+			this.zoomAndCenter(undefined, mrkPos)			
+			this.$emit('reset')
 		},
 		
 		gMapPosition(pos) {
@@ -99,10 +101,8 @@ export default {
 			geocoder.geocode({'address': vm.text}, function(results, status) {
 				if (status === 'OK') {
 					const location = results[0].geometry.location
-					vm.MAP.setCenter(location)
-					vm.MAP.setZoom(12)
-					vm.MARKER.setMap(vm.MAP)
-					vm.MARKER.setPosition(location)
+					vm.markerSync(location)
+					vm.zoomAndCenter(12, location)
 				} else {alert("GOOGLE MAPS dit : " + status)}
 			})
 		},

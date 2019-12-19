@@ -29,11 +29,12 @@
 			)
 			
 		p LATITUDE: {{ formData.latitude }} / LONGITUDE: {{ formData.longitude }}
-			
+		
 		gmap-input(
-			:id='formData.id',
 			:text='formData.nom + " " + formData.lieu',
 			v-model='gps',
+			:resetRequest='resetRequest',
+			v-on:reset='resetRequest = false',
 		)
 			
 </template>
@@ -56,6 +57,7 @@ export default {
 	
 	data () {
 		return {
+			resetRequest: false,
 			model: "aerodrome",
 			validations: {
 				nom: {required},
@@ -64,6 +66,20 @@ export default {
 				longitude: {decimal, between: between(-180, 180), bothCoordinates},
 			},
 		}
+	},
+	
+	watch: {
+		
+		formData: {
+			// If new selection, reset the GMapInput
+			handler(n, o) {
+				if (!n) return
+				if (o && (n.id == o.id)) return
+				this.resetRequest = true
+			},
+			deep: true,
+		}
+		
 	},
 	
 	computed: {
@@ -79,6 +95,14 @@ export default {
 			},
 		},
 			
+	},
+	
+	methods: {
+		// Reset the form to the initial selection
+		reset() {
+      this.resetRequest = true
+      this.initForm()
+		},
 	},
 	
 }

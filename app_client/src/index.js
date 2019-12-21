@@ -10,8 +10,8 @@ import VueLoading from 'vuejs-loading-plugin'
 import {SearchType} from '../../app_lib/constants'
 
 // Import bootstrap style
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+//import 'bootstrap/dist/css/bootstrap.css'
+//import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 Vue.config.productionTip = false
 Vue.config.devtools = false

@@ -9,6 +9,9 @@
 			@dismissed="alert.show=false",
 		) {{ alert.text }}
 		
+		h2 Nous sommes Spot'Air
+		p Passionnés d'aéronautique et de photographie
+		
 		carousel(
 			v-if='carouselActive',
 			:options='options',

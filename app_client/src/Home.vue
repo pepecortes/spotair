@@ -1,8 +1,9 @@
 <template lang="pug">
 	div(id='home')
 	
-		b-navbar(toggleable="lg", type="dark", variant="info")
-			b-navbar-brand(href="/") Spotair
+		b-navbar(toggleable="lg", type="dark", variant="primary")
+			b-navbar-brand(id='logo', href="/")
+				img(:src='logoUrl', alt="logo")
 			
 			b-navbar-toggle(target="nav-collapse")
 			b-collapse(id="nav-collapse", is-nav)
@@ -21,7 +22,7 @@
 					
 				b-navbar-nav(class="ml-auto")
 					b-nav-form(@submit='submitSearch')
-						b-form-input(v-model='searchString', size="sm", class="mr-sm-2", placeholder="Search")
+						b-form-input(v-model='searchString', size="sm", class="mr-sm-2", placeholder="Recherche")
 						b-button(size="sm", class="my-2 my-sm-0", type="submit") Search
 					b-nav-item-dropdown(right)
 						template(slot="button-content")
@@ -44,6 +45,7 @@ export default {
 	data () {
 		return {
 			searchString: null,
+			logoUrl: `${process.env.ASSETS_URL}icons/spotair_logo.png`,
 		}
 	},
 	
@@ -79,4 +81,13 @@ export default {
 
 #home {
 }
+
+#logo {
+	padding: 0px;
+}
+
+#logo img {
+	height:50px;
+}
+
 </style>

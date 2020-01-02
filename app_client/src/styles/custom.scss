@@ -1,13 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=B612');
+@import 'fonts.scss';
 @import 'colors.scss';
 
-* {
-	font-family: 'B612';
-}
-
-// Body
-//
-// Settings for the `<body>` element.
-
-$body-bg: $background-color;
-$body-color: $grey;

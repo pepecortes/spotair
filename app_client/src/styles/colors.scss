@@ -18,30 +18,47 @@ $color-secondary-2-3: #E8CE4C;
 $color-secondary-2-4: #CCB33A;
 
 /* BASICS */
-$black: #3C3C3C;
-$white: #FFFFFF;
-$grey: #9D9D9D;
-$light-grey: #ECECEC;
+$white: #fff;
+$gray-100: #f8f9fa;
+$gray-200: #e9ecef;
+$gray-300: #dee2e6;
+$gray-400: #ced4da;
+$gray-500: #adb5bd;
+$gray-600: #6c757d;
+$gray-700: #495057;
+$gray-800: #343a40;
+$gray-900: #212529;
+$black: #000;	
+	
+$blue: $color-primary-0;
+$indigo: $color-primary-4;
+$purple: #7A389B;
+$pink: #D69EBD;
+$red: #AA3C39;
+$orange: $color-secondary-2-3;
+$yellow: $color-secondary-1-1;
+$green: #419641;
+$teal: #7AB85C;
+$cyan: #184900;
 
-$blue:    $color-primary-0;
-$indigo:  #6610f2;
-$purple:  #6f42c1;
-$pink:    #e83e8c;
-$red:			#C12E2A;
-$orange:  #fd7e14;
-$yellow:  #ffc107;
-$green:   #419641;
-$teal:    #20c997;
-$cyan:    #17a2b8;
+// Bootstrap variants
+$primary: $blue;
+$secondary: $gray-600;
+$success: $green;
+$info: $purple;
+$warning: $orange;
+$danger: $red;
+$light: $gray-100;
+$dark: $gray-800;
 
-$primary:       $blue;
-// $secondary:     $gray-600;
-$success:       $green;
-$info:          $cyan;
-$warning:       $yellow;
-$danger:        $red;
-// $light:         $gray-100;
-// $dark:          $gray-800;
+/* FUNCTION COLORS */
+
+// Body
+$body-bg: $color-secondary-2-1;
+$body-color: $gray-300;
+
+// Navbar
+$navbar-dark-color: $yellow;
 
 
 
@@ -62,9 +79,3 @@ $frame-background-color: $light-grey;
 */
 
 
-// Body
-$body-bg: $color-secondary-2-1;
-$body-color: $grey;
-
-// Navbar
-$navbar-dark-color: yellow;

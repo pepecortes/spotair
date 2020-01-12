@@ -6,6 +6,8 @@ import Axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueLoading from 'vuejs-loading-plugin'
 
+import Test from './Test.vue'
+
 // Import bootstrap style
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -15,6 +17,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 // on each module
 
 Vue.config.productionTip = false
+Vue.config.devtools = false
 
 // Create an axios instance and set some defaults for authorization...
 var axios = Axios.create()
@@ -36,15 +39,28 @@ Vue.directive('focus', {
   }
 })
 
-import Test from './Test.vue'
+// Define or input route components
+import ProfileForm from './components/ProfileForm.vue'
+import Palette from './components/Palette.vue'
+//import Test1 from './components/Test1.vue'
 
+// Define the routes
+const routes = [
+  { path: '/admin/profileForm', component: ProfileForm },
+  { path: '/test/colors', component: Palette },
+  //{ path: '/test/test1', component: Test1 },
+]
+
+// Create the router
+const router = new VueRouter({
+	mode: 'history',
+  routes: routes
+})
+
+// Start the Vue Root instance
 const app = new Vue({
   el: '#test',
   components: { Test },
   template: '<Test/>',
+  router,
 })
-
-
-
-
-

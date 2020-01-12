@@ -1,4 +1,5 @@
 /* Palette URL: http://paletton.com/#uid=33M0u1kllllaFw0g0qFqFg0w0aFkllllaFw0g0qFqFg0w0aFk8XBW1eR82DFzlwt6mVpy */
+
 $color-primary-0: #2E4272;	/* Main Primary color */
 $color-primary-1: #7887AB;
 $color-primary-2: #4F618F;
@@ -41,7 +42,7 @@ $green: #419641;
 $teal: #7AB85C;
 $cyan: #184900;
 
-// Bootstrap variants
+/* Bootstrap basic variants */
 $primary: $blue;
 $secondary: $gray-600;
 $success: $green;
@@ -51,6 +52,62 @@ $danger: $red;
 $light: $gray-100;
 $dark: $gray-800;
 
+/* Customized variant names */
+$theme-colors: ();
+$theme-colors: map-merge(
+  (
+    'color-primary-0': $color-primary-0,
+    'color-primary-1': $color-primary-1,
+    'color-primary-2': $color-primary-2,
+    'color-primary-3': $color-primary-3,
+    'color-primary-4': $color-primary-4,
+    'color-secondary-1-0': $color-secondary-1-0,
+    'color-secondary-1-1': $color-secondary-1-1,
+    'color-secondary-1-2': $color-secondary-1-2,
+    'color-secondary-1-3': $color-secondary-1-3,
+    'color-secondary-1-4': $color-secondary-1-4,
+    'color-secondary-2-0': $color-secondary-2-0,
+    'color-secondary-2-1': $color-secondary-2-1,
+    'color-secondary-2-2': $color-secondary-2-2,
+    'color-secondary-2-3': $color-secondary-2-3,
+    'color-secondary-2-4': $color-secondary-2-4,
+  ),
+  $theme-colors
+);
+
+$theme-colors: map-merge(
+  (
+		'blue': $blue,
+		'indigo': $indigo,
+		'purple': $purple,
+		'pink': $pink,
+		'red': $red,
+		'orange': $orange,
+		'yellow': $yellow,
+		'green': $green,
+		'teal': $teal,
+		'cyan': $cyan,
+  ),
+  $theme-colors
+);
+
+$theme-colors: map-merge(
+  (
+		'white': $white,
+		'gray-100': $gray-100,
+		'gray-200': $gray-200,
+		'gray-300': $gray-300,
+		'gray-400': $gray-400,
+		'gray-500': $gray-500,
+		'gray-600': $gray-600,
+		'gray-700': $gray-700,
+		'gray-800': $gray-800,
+		'gray-900': $gray-900,
+		'black': $black,
+  ),
+  $theme-colors
+);
+
 /* FUNCTION COLORS */
 
 // Body
@@ -59,8 +116,6 @@ $body-color: $gray-300;
 
 // Navbar
 $navbar-dark-color: $yellow;
-
-
 
 /* FUNCTION COLORS 
 $background-color: $color-secondary-2-1;

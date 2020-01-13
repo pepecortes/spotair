@@ -1,7 +1,7 @@
 <template lang="pug">
 	div(id='home')
 	
-		b-navbar(toggleable="lg", type="dark", variant="primary")
+		b-navbar(toggleable="lg", type="dark", variant="color-primary-1")
 			b-navbar-brand(id='logo', href="/")
 				img(:src='logoUrl', alt="logo")
 			
@@ -23,7 +23,7 @@
 				b-navbar-nav(class="ml-auto")
 					b-nav-form(@submit='submitSearch')
 						b-form-input(v-model='searchString', size="sm", class="mr-sm-2", placeholder="Recherche")
-						b-button(size="sm", class="my-2 my-sm-0", type="submit") Search
+						b-button(variant="primary", size="sm", class="my-2 my-sm-0", type="submit") Search
 					b-nav-item-dropdown(right)
 						template(slot="button-content")
 							em User

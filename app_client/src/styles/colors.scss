@@ -37,7 +37,7 @@ $purple: #7A389B;
 $pink: #D69EBD;
 $red: #AA3C39;
 $orange: $color-secondary-2-3;
-$yellow: $color-secondary-1-1;
+$yellow: $color-secondary-2-0;
 $green: #419641;
 $teal: #7AB85C;
 $cyan: #184900;
@@ -116,6 +116,8 @@ $body-color: $gray-300;
 
 // Navbar
 $navbar-dark-color: $yellow;
+$navbar-dark-hover-color: $orange;
+$navbar-dark-active-color: $orange;
 
 /* FUNCTION COLORS 
 $background-color: $color-secondary-2-1;

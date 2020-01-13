@@ -2,6 +2,10 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import AsyncComputed from 'vue-async-computed'
 import BootstrapVue from 'bootstrap-vue'
+
+import { BIconArrowUp } from 'bootstrap-vue'
+
+
 import Axios from 'axios'
 import VueAxios from 'vue-axios'
 import Home from './Home.vue'
@@ -33,6 +37,9 @@ Vue.use(VueGoogleMaps, {
 
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
+
+Vue.component('BIconArrowUp', BIconArrowUp)
+
 Vue.use(VueAxios, axios)
 Vue.use(VueLoading)
 
@@ -82,7 +89,8 @@ const routes = [
 // Create the router
 const router = new VueRouter({
 	mode: 'history',
-  routes: routes
+  routes: routes,
+  linkActiveClass: "active", 
 })
 
 // Start the Vue Root instance

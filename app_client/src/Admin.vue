@@ -83,8 +83,11 @@ export default {
 </script>
 
 <style lang="scss">
-@import './styles/variables.scss';
-@import './styles/common.scss';
+@import './styles/custom.scss';
+
+// Import Bootstrap and BootstrapVue source SCSS files
+@import '~bootstrap/scss/bootstrap.scss';
+@import '~bootstrap-vue/src/index.scss';
 
 *, *::before, *::after {
 	box-sizing: border-box;

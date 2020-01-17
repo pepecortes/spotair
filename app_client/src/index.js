@@ -2,20 +2,12 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import AsyncComputed from 'vue-async-computed'
 import BootstrapVue from 'bootstrap-vue'
-
-import { BIconArrowUp } from 'bootstrap-vue'
-
-
 import Axios from 'axios'
 import VueAxios from 'vue-axios'
 import Home from './Home.vue'
 import * as VueGoogleMaps from "vue2-google-maps"
 import VueLoading from 'vuejs-loading-plugin'
 import {SearchType} from '../../app_lib/constants'
-
-// Import bootstrap style
-//import 'bootstrap/dist/css/bootstrap.css'
-//import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 Vue.config.productionTip = false
 Vue.config.devtools = false
@@ -37,9 +29,6 @@ Vue.use(VueGoogleMaps, {
 
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
-
-Vue.component('BIconArrowUp', BIconArrowUp)
-
 Vue.use(VueAxios, axios)
 Vue.use(VueLoading)
 

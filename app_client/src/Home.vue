@@ -9,21 +9,21 @@
 			b-collapse(id="nav-collapse", is-nav)
 			
 				b-navbar-nav
-					b-nav-item(to="/map") Carte
-					b-nav-item(to="/galeries") Galeries
+					b-nav-item(to="/map") CARTE
+					b-nav-item(to="/galeries") GALERIES
 					b-nav-item-dropdown(v-if='loggedIn')
-						template(slot="button-content")
-							em Mes Photos
-						b-dropdown-item(to="/pictadd") Pictadd
-						b-dropdown-item(:to="`/myPendingPictures/${user.id}`") En attente
-						b-dropdown-item(:to="`/myValidatedPictures/${user.id}`") Publiées
-						b-dropdown-item(:to="`/myRejectedPictures/${user.id}`") Non publiées
-					b-nav-item(v-if='isAdmin || isScreener', href="/admin") Admin
+						template(slot="button-content") MES PHOTOS
+						b-dropdown-item(to="/pictadd") PICTADD
+						b-dropdown-item(:to="`/myPendingPictures/${user.id}`") EN ATTENTE
+						b-dropdown-item(:to="`/myValidatedPictures/${user.id}`") PUBLIÉES
+						b-dropdown-item(:to="`/myRejectedPictures/${user.id}`") NON PUBLIÉES
+					b-nav-item(v-if='isAdmin || isScreener', href="/admin") ADMIN
 					
 				b-navbar-nav(class="ml-auto")
 					b-nav-form(@submit='submitSearch')
 						b-form-input(v-model='searchString', size="sm", class="mr-sm-2", placeholder="Recherche")
-						b-button(variant="primary", size="sm", class="my-2 my-sm-0", type="submit") Search
+						b-button(size="sm", type="submit", variant="primary")
+							b-icon(icon="search")
 					b-nav-item-dropdown(right)
 						template(slot="button-content")
 							em User
@@ -37,8 +37,14 @@
 
 <script>
 import { credentialsMixin } from './components/CredentialsMixin'
+import { BIcon, BIconSearch } from 'bootstrap-vue'
 
 export default {
+	
+  components: {
+		BIcon,
+    BIconSearch,
+  },
 	
 	mixins: [credentialsMixin],
 	
@@ -67,9 +73,6 @@ export default {
 // Import Bootstrap and BootstrapVue source SCSS files
 @import '~bootstrap/scss/bootstrap.scss';
 @import '~bootstrap-vue/src/index.scss';
-
-//@import './styles/variables.scss';
-//@import './styles/common.scss';
 
 *, *::before, *::after {
 	box-sizing: border-box;

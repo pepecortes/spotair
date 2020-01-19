@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=B612');
+@import url('https://fonts.googleapis.com/css?family=B612+Mono');
+@import url('https://fonts.googleapis.com/css?family=PT+Serif+Caption');
 
-* {
-	font-family: 'B612';
-}
+$font-family-base: 'B612';
+$font-family-monospace: 'B612 Mono';
 

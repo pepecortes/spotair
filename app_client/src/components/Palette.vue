@@ -74,7 +74,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../styles/custom.scss';
+@import '../styles/custom_variables.scss';
 
 // Import Bootstrap and BootstrapVue source SCSS files
 @import '~bootstrap/scss/bootstrap.scss';

@@ -9,8 +9,9 @@
 			@dismissed="alert.show=false",
 		) {{ alert.text }}
 		
-		h2 Nous sommes Spot'Air
-		p Passionnés d'aéronautique et de photographie
+		b-container(class='nous_sommes text-center')
+			h2 Nous sommes Spot'Air
+			p Passionnés d'aéronautique et de photographie
 		
 		carousel(
 			v-if='carouselActive',
@@ -79,5 +80,16 @@ export default {
 </script>
 
 <style lang="scss">
+@import '../styles/custom_variables.scss';
+
+.nous_sommes {
+	font-family: 'PT Serif Caption';
+}
+
+.nous_sommes > p {
+	font-size: 1.3em;
+	font-style: italic;
+	color: $color-secondary-1-4;
+}
 
 </style>

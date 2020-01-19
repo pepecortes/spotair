@@ -1,6 +1,6 @@
 <template lang="pug">
 
-	div
+	div(id="galeries")
 		div(id="fixedSideNav")
 			galerie_browser(v-on:change="changeGalery")
 		div(id="unFixedSideNavCompanion")
@@ -41,6 +41,7 @@ export default {
 </script>
 
 <style lang="scss">
+
 /* Make the side nav fixed and scrollable */
 
 @media (min-width: 992px) {

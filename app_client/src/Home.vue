@@ -21,9 +21,10 @@
 						b-nav-item(v-if='isAdmin || isScreener', href="/admin") ADMIN
 						
 					b-navbar-nav(class="ml-auto")
-						b-nav-form(@submit='submitSearch')
-							b-form-input(v-model='searchString', size="sm", class="mr-sm-2", placeholder="Recherche")
-							b-button(size="sm", type="submit", variant="primary")
+						b-nav-form(@submit.stop.prevent="submitSearch")
+							b-collapse(id="collapseSearchField")
+								b-form-input(v-model='searchString', size="sm", class="mr-sm-2", placeholder="Recherche")
+							b-button(size="sm", variant="primary", v-b-toggle.collapseSearchField)
 								b-icon(icon="search")
 						b-nav-item-dropdown(right)
 							template(slot="button-content")
@@ -60,8 +61,9 @@ export default {
 	methods: {
 		
 		submitSearch(evt) {
-      evt.preventDefault()
       const query = { searchString: this.searchString }
+      this.searchString = ""
+			this.$root.$emit('bv::toggle::collapse', 'collapseSearchField')
 			this.$router.push({ path: '/search', query: query })
 		},
 	},

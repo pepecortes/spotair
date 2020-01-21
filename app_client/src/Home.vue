@@ -27,7 +27,7 @@
 								b-icon(icon="search")
 						b-nav-item-dropdown(right)
 							template(slot="button-content")
-								em User
+								b-icon(icon="person")
 							b-dropdown-item(v-if='!loggedIn', href="/login") Login
 							b-dropdown-item(v-if='loggedIn', to="/profileForm") Profile
 							b-dropdown-item(v-if='loggedIn', href="/logout") Logout
@@ -38,13 +38,14 @@
 
 <script>
 import { credentialsMixin } from './components/CredentialsMixin'
-import { BIcon, BIconSearch } from 'bootstrap-vue'
+import { BIcon, BIconSearch, BIconPerson } from 'bootstrap-vue'
 
 export default {
 	
   components: {
 		BIcon,
     BIconSearch,
+    BIconPerson,
   },
 	
 	mixins: [credentialsMixin],

@@ -1,3 +1,7 @@
+GALERIES
+	Should land in Dernieres Photos
+	Should be reflected in URL
+
 GOOGLE MAPS
 	Change prompt?
 

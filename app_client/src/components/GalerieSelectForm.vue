@@ -1,21 +1,15 @@
 <template lang="pug">
 	div
-		b-form-group(
-			label="Année",
-			label-for="annee",
+		v-select(
+			id="annee",
+			placeholder="Année"
+			:options="anneeOptions",
+			label="text",
+			v-model="annee",
+			v-on:input="anneeChanged",
 		)
-			v-select(
-				id="annee",
-				:options="anneeOptions",
-				label="text",
-				v-model="annee",
-				v-on:input="anneeChanged",
-			)
-		b-form-group(
-			v-if="annee"
-			label="Galerie",
-			label-for="galerie",
-		)
+		div(v-if="annee")
+			br
 			v-select(
 				id="galerie",
 				:options="galerieOptions",
@@ -84,3 +78,8 @@ export default {
 	
 }
 </script>
+
+<style lang="scss">
+@import '../styles/custom_variables.scss';
+
+</style>

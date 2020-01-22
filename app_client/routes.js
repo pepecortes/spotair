@@ -55,7 +55,8 @@ module.exports = function(passport) {
 	
 	// login pages
 	router.get('/login*',
-		(req, res) => res.render(path.join(__dirname, 'Login'), {message: req.flash('loginMessage')})
+		//(req, res) => res.render(path.join(__dirname, 'Login'), {message: req.flash('loginMessage')})
+		(req, res) => res.sendFile(path.join(__dirname, 'login.html'))
 	)
 	
 	router.get('/logout*',

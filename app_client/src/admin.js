@@ -9,10 +9,6 @@ import Admin from './Admin.vue'
 import * as VueGoogleMaps from "vue2-google-maps"
 import {SearchType} from '../../app_lib/constants'
 
-// Import bootstrap style
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-
 Vue.config.productionTip = false
 Vue.config.devtools = false
 

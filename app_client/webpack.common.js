@@ -11,6 +11,7 @@ module.exports = {
   entry: {
 		app: path.resolve(__dirname, 'src/index.js'),
 		adminApp: path.resolve(__dirname, 'src/admin.js'),
+		loginApp: path.resolve(__dirname, 'src/login.js'),
 	},
 	
   output: {

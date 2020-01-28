@@ -1,8 +1,13 @@
 <template lang="pug">
 	div
 		b-collapse(id='head', v-model='onHead')
-			slot(name="head-slot")
-			b-button(@click='toggle') {{ buttonHead }}
+			b-container
+				b-row(no-gutters)
+					b-col(cols="10")
+						slot(name="head-slot")
+					b-col(cols="2")
+						b-button(pill, variant="outline-danger", @click='toggle') {{ buttonHead }}
+						
 		b-collapse(id="tail", v-model='onTail')
 			slot(name="tail-slot")
 			b-button(@click='toggle') {{ buttonTail }}
@@ -18,7 +23,7 @@ export default {
 	
 	props: {
 		headSelected: {default: true, type: Boolean},
-		buttonHead: {default: "Je ne trouve pas !"},
+		buttonHead: {default: "?"},
 		buttonTail: {default: "Retour vers sélection..."},
 	},
 	

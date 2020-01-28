@@ -119,20 +119,15 @@ $navbar-dark-color: $gray-100;
 $navbar-dark-hover-color: $yellow;
 $navbar-dark-active-color: $yellow;
 
-/* FUNCTION COLORS 
-$background-color: $color-secondary-2-1;
-$header-background-color: $color-primary-1;
-$panels-background-color: $color-secondary-2-1;
-$main-font-color: $color-primary-4;
-$nav-main-menu-item-font-color: $color-secondary-2-1;
-$secondary-font-color: $color-secondary-1-4;
-$brand-font-color: $color-primary-4;
-$selector-color: $color-primary-3;
-$nav-list-color: $grey;
-$link-color: $color-primary-2;
-$a-link-color: $color-secondary-1-0;
-$primary-button-color: $color-primary-2;
-$frame-background-color: $light-grey;
-*/
+/* 
+ * Export the variables that you intend to share within the
+ * <script> in the Vue component
+ * (you have to import them also in the <script>)
+ */
+ 
+:export {
+	success: $success;
+	danger: $danger;
+}
 
 

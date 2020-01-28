@@ -10,104 +10,125 @@
 			@dismissed="alert.show=false",
 		) {{ alert.text }}
 	
-		form-wizard(ref="formWizard", title="", subtitle="", stepSize="xs", finishButtonText="Submit", @on-complete="onComplete")
+		b-container
+		
+			form-wizard(
+				ref="formWizard",
+				title="PICTADD",
+				subtitle="télechargement de photos pour validation",
+				stepSize="xs",
+				:color="tabColor", :errorColor="errorTabColor",
+				nextButtonText="Suivant", backButtonText="Retour", finishButtonText="Envoyer",
+				@on-complete="onComplete"
+			)
 			
-			tab-content(title="photo", :beforeChange="imageAvailable")
-				b-form-file(
-					ref="fileinput",
-					@change="onFileChange",
-					v-model="filex",
-					:state="acceptableImage",
-					placeholder="Choose a file...",
-					v-on:input='nextTab(true)',
-					autofocus,
-				)
-				b-button(type="button", variant="outline-success", v-on:click="resetFile") Reset
+				template(slot="next")
+					b-button(type="button", variant="outline-success")
+						b-icon(icon="arrow-right")
+				template(slot="prev")
+					b-button(type="button", variant="outline-success")
+						b-icon(icon="arrow-left")
 
-			tab-content(title="avion", :beforeChange="leavingAvion")
-				head-or-tail(v-model="avion.headSelected", @toggle="toggle(avion)")
-					template(v-slot:head-slot)
-						v-select(
-							id="avion",
-							:options="avion.options",
-							label="text",
-							v-model="avion.head",
-							v-on:input='afterAvionSelected(avion.head)',
+				tab-content(title="avion", :beforeChange="leavingAvion")
+					head-or-tail(v-model="avion.headSelected", @toggle="toggle(avion)")
+						template(v-slot:head-slot)
+							v-select(
+								id="avion",
+								:options="avion.options",
+								label="text",
+								v-model="avion.head",
+								v-on:input='afterAvionSelected(avion.head)',
+							)
+						template(v-slot:tail-slot)
+							input(type='text', v-model="avion.tail", v-on:keyup.enter='nextTab(avion.tail)')
+				
+				tab-content(title="photo", :beforeChange="imageAvailable")
+					b-input-group
+						b-button(type="button", size="lg", squared, variant="gray-300", v-on:click="resetFile")
+							b-icon(icon="x")
+						b-form-file(
+							ref="fileinput",
+							size="lg",
+							@change="onFileChange",
+							v-model="filex",
+							:state="acceptableImage",
+							browse-text="Choisir",
+							placeholder="Télécharger une photo...",
+							v-on:input='nextTab(true)',
+							autofocus,
 						)
-					template(v-slot:tail-slot)
-						input(type='text', v-model="avion.tail", v-on:keyup.enter='nextTab(avion.tail)')
-						
-			tab-content(title="immat" :beforeChange="leavingAppareil")
-				head-or-tail(v-model="appareil.headSelected", @toggle="toggle(appareil)")
-					template(v-slot:head-slot)
-						v-select(
-							id="immatriculation",
-							:options="appareil.options",
-							label="text",
-							v-model="appareil.head",
-							v-on:input='nextTab(appareil.head)',
-						)
-					template(v-slot:tail-slot)
-						input(type='text', v-model="appareil.tail", v-on:keyup.enter='nextTab(appareil.tail)')
+							
+				tab-content(title="immat" :beforeChange="leavingAppareil")
+					head-or-tail(v-model="appareil.headSelected", @toggle="toggle(appareil)")
+						template(v-slot:head-slot)
+							v-select(
+								id="immatriculation",
+								:options="appareil.options",
+								label="text",
+								v-model="appareil.head",
+								v-on:input='nextTab(appareil.head)',
+							)
+						template(v-slot:tail-slot)
+							input(type='text', v-model="appareil.tail", v-on:keyup.enter='nextTab(appareil.tail)')
 
-			tab-content(title="lieu" :beforeChange="leavingAerodrome")
-				head-or-tail(v-model="aerodrome.headSelected", @toggle="toggle(aerodrome)")
-					template(v-slot:head-slot)
-						v-select(
-							id="aerodrome",
-							:options="aerodrome.options",
-							label="text",
-							v-model="aerodrome.head",
-							v-on:input='afterAerodromeSelected(aerodrome.head)',
-						)
-					template(v-slot:tail-slot)
-						input(type='text', v-model="aerodrome.tail", v-on:keyup.enter='nextTab(aerodrome.tail)')
-						
-			tab-content(title="galerie" :beforeChange="leavingGalerie")
-				head-or-tail(v-model="galerie.headSelected", @toggle="toggle(galerie)")
-					template(v-slot:head-slot)
-						v-select(
-							id="galerie",
-							:options="galerie.options",
-							label="text",
-							v-model="galerie.head",
-							v-on:input='nextTab(galerie.head)',
-						)
-					template(v-slot:tail-slot)
-						input(type='text', v-model="galerie.tail", v-on:keyup.enter='nextTab(galerie.tail)')
-						
-			tab-content(title="exploitant" :beforeChange="leavingCompagnie")
-				head-or-tail(v-model="compagnie.headSelected", @toggle="toggle(compagnie)")
-					template(v-slot:head-slot)
-						v-select(
-							id="compagnie",
-							:options="compagnie.options",
-							label="text",
-							v-model="compagnie.head",
-							v-on:input='nextTab(compagnie.head)',
-						)
-					template(v-slot:tail-slot)
-						input(type='text', v-model="compagnie.tail", v-on:keyup.enter='nextTab(compagnie.tail)')
-			
-			tab-content(title="commentaire")
-				b-form-textarea(
-					id="commentaire",
-					rows="3",
-					max-rows="6",
-					v-model="commentUpload"
-				)
+				tab-content(title="lieu" :beforeChange="leavingAerodrome")
+					head-or-tail(v-model="aerodrome.headSelected", @toggle="toggle(aerodrome)")
+						template(v-slot:head-slot)
+							v-select(
+								id="aerodrome",
+								:options="aerodrome.options",
+								label="text",
+								v-model="aerodrome.head",
+								v-on:input='afterAerodromeSelected(aerodrome.head)',
+							)
+						template(v-slot:tail-slot)
+							input(type='text', v-model="aerodrome.tail", v-on:keyup.enter='nextTab(aerodrome.tail)')
+							
+				tab-content(title="galerie" :beforeChange="leavingGalerie")
+					head-or-tail(v-model="galerie.headSelected", @toggle="toggle(galerie)")
+						template(v-slot:head-slot)
+							v-select(
+								id="galerie",
+								:options="galerie.options",
+								label="text",
+								v-model="galerie.head",
+								v-on:input='nextTab(galerie.head)',
+							)
+						template(v-slot:tail-slot)
+							input(type='text', v-model="galerie.tail", v-on:keyup.enter='nextTab(galerie.tail)')
+							
+				tab-content(title="exploitant" :beforeChange="leavingCompagnie")
+					head-or-tail(v-model="compagnie.headSelected", @toggle="toggle(compagnie)")
+						template(v-slot:head-slot)
+							v-select(
+								id="compagnie",
+								:options="compagnie.options",
+								label="text",
+								v-model="compagnie.head",
+								v-on:input='nextTab(compagnie.head)',
+							)
+						template(v-slot:tail-slot)
+							input(type='text', v-model="compagnie.tail", v-on:keyup.enter='nextTab(compagnie.tail)')
+				
+				tab-content(title="commentaire")
+					b-form-textarea(
+						id="commentaire",
+						rows="3",
+						max-rows="6",
+						v-model="commentUpload"
+					)
 
-			tab-content(title="review")
-				b-list-group
-					b-list-group-item(variant="primary") Photographe: {{ photographe.text }}
-					b-list-group-item(v-if="photoData.avion") Avion: {{ photoData.avion.text }}
-					b-list-group-item(v-if="photoData.appareil") Appareil: {{ photoData.appareil.text }}
-					b-list-group-item(v-if="photoData.compagnie") Compagnie: {{ photoData.compagnie.text }}
-					b-list-group-item(v-if="photoData.aerodrome") Aerodrome: {{ photoData.aerodrome.text }}
-					b-list-group-item(v-if="photoData.galerie") Galerie: {{ photoData.galerie.text }}
-					b-list-group-item(v-if="photoData.commentUpload") {{ photoData.commentUpload }}
-					
-		img(:src="tmpFileURL", width="500") 
+				tab-content(title="review")
+					b-list-group
+						b-list-group-item(variant="primary") Photographe: {{ photographe.text }}
+						b-list-group-item(v-if="photoData.avion") Avion: {{ photoData.avion.text }}
+						b-list-group-item(v-if="photoData.appareil") Appareil: {{ photoData.appareil.text }}
+						b-list-group-item(v-if="photoData.compagnie") Compagnie: {{ photoData.compagnie.text }}
+						b-list-group-item(v-if="photoData.aerodrome") Aerodrome: {{ photoData.aerodrome.text }}
+						b-list-group-item(v-if="photoData.galerie") Galerie: {{ photoData.galerie.text }}
+						b-list-group-item(v-if="photoData.commentUpload") {{ photoData.commentUpload }}
+						
+			b-img(:src="tmpFileURL", rounded, center, fluid)
 		
 </template>
 
@@ -118,6 +139,8 @@ import {FormWizard, TabContent} from 'vue-form-wizard'
 import HeadOrTail from './HeadOrTail.vue'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'
 import { alertMixin } from './AlertMixin'
+import { BIcon, BIconArrowRight, BIconArrowLeft, BIconX } from 'bootstrap-vue'
+import colors from '../styles/colors.scss'
 
 export default {
 	
@@ -126,6 +149,10 @@ export default {
 		'tab-content': TabContent,
 		'v-select': VueSelect,
 		'head-or-tail': HeadOrTail,
+		BIcon,
+    BIconArrowRight,
+    BIconArrowLeft,
+    BIconX,
 	},		
 	
 	data() {
@@ -140,6 +167,8 @@ export default {
 			aerodrome: {options: [], headSelected: true, head: null, tail: null},
 			galerie: {options: [], headSelected: true, head: null, tail: null},
 			commentUpload: "",
+			tabColor: colors.success,
+			errorTabColor: colors.danger,
 		}
 	},
 	
@@ -314,4 +343,34 @@ export default {
 .formButtons {
 	display: inline-flex;
 }
+
+
+.multiselect,
+.multiselect__input,
+.multiselect__single {
+  font-size: 0.95rem;
+}
+
+.multiselect__tags {
+  font-size: 1.0rem;
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+  min-height: unset;
+}
+
+.multiselect__placeholder {
+    margin-bottom: 0px;
+    padding-top: 0px;
+}
+
+.multiselect__tag-icon:after {
+  font-size: 1.0rem;
+}
+
+.multiselect__option:after {
+  font-size: 1.0rem;
+}
+
+
+
 </style>

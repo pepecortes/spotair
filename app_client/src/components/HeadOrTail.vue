@@ -1,20 +1,31 @@
 <template lang="pug">
 	div
+	
 		b-collapse(id='head', v-model='onHead')
-			b-container
-				b-row(no-gutters)
-					b-col(cols="10")
-						slot(name="head-slot")
-					b-col(cols="2")
-						b-button(pill, variant="outline-danger", @click='toggle') {{ buttonHead }}
+			div(style="width: 90%; float: left;" )
+				slot(name="head-slot")
+			b-button(pill, variant="outline-danger", @click='toggle', v-b-tooltip.hover title="Je ne le trouve pas...")
+				b-icon(icon="pencil")
 						
 		b-collapse(id="tail", v-model='onTail')
-			slot(name="tail-slot")
-			b-button(@click='toggle') {{ buttonTail }}
+			b-input-group
+				slot(name="tail-slot")
+				b-input-group-append
+					b-button(pill, variant="outline-danger", @click='toggle', v-b-tooltip.hover title="Retour vers la liste...")
+						b-icon(icon="search")
+					
 </template>
 
 <script>
+import { BIcon, BIconPencil, BIconSearch } from 'bootstrap-vue'
+
 export default {
+	
+	components: {
+		BIcon,
+    BIconPencil,
+    BIconSearch,
+	},
 	
 	model: {
 		prop: 'headSelected',
@@ -23,8 +34,6 @@ export default {
 	
 	props: {
 		headSelected: {default: true, type: Boolean},
-		buttonHead: {default: "?"},
-		buttonTail: {default: "Retour vers sélection..."},
 	},
 	
 	data() {

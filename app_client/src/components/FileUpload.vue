@@ -40,7 +40,7 @@
 								v-on:input='afterAvionSelected(avion.head)',
 							)
 						template(v-slot:tail-slot)
-							input(type='text', v-model="avion.tail", v-on:keyup.enter='nextTab(avion.tail)')
+							b-form-input(type='text', v-model="avion.tail", v-on:keyup.enter='nextTab(avion.tail)')
 				
 				tab-content(title="photo", :beforeChange="imageAvailable")
 					b-input-group

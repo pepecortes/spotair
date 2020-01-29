@@ -8,19 +8,26 @@
 			@dismissed="alert.show=false",
 		) {{ alert.text }}
 		
-		expo-collection(
-			v-if='!adminSearch',
-			:collection='photos',
-			:thumbnailLocation='thumbnailLocation',
-			:photoLocation='photoLocation',
-		)
-		admin-expo-collection(
-			v-if='adminSearch',
-			:collection='photos',
-			v-on:update='refresh',
-			:thumbnailLocation='thumbnailLocation',
-			:photoLocation='photoLocation',
-		)
+		b-container
+		
+			div(class="title text-center")
+				h4(v-if='title') {{ title }}
+				p(v-if='subtitle') {{ subtitle }}
+			
+			expo-collection(
+				v-if='!adminSearch',
+				:collection='photos',
+				:thumbnailLocation='thumbnailLocation',
+				:photoLocation='photoLocation',
+			)
+			
+			admin-expo-collection(
+				v-if='adminSearch',
+				:collection='photos',
+				v-on:update='refresh',
+				:thumbnailLocation='thumbnailLocation',
+				:photoLocation='photoLocation',
+			)
 </template>
 
 <script>
@@ -57,6 +64,16 @@ export default {
 		photoLocation: {
 			type: String,
 			default: process.env.STORAGE_URL + process.env.PICTURE_LOCATION
+		},
+		
+		title: {
+			type: String,
+			default: null,
+		},
+		
+		subtitle: {
+			type: String,
+			default: null,
 		},
 		
 	},
@@ -136,5 +153,16 @@ export default {
 </script>
 
 <style lang="scss">
+@import '../styles/custom_variables.scss';
+
+.title {
+	color: $primary;
+}
+
+.title > p {
+	color: $gray-600;
+	font-size: 1.1em;
+	font-style: italic;
+}
 
 </style>

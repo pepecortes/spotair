@@ -59,11 +59,17 @@ const routes = [
 			searchType: SearchType.BY_USER_PENDING,
 			thumbnailLocation: process.env.STORAGE_URL + process.env.UPLOAD_LOCATION,
 			photoLocation: process.env.STORAGE_URL + process.env.UPLOAD_LOCATION,
+			title: "Mes photos",
+			subtitle: "en attente de validation",
 		} 
 	},
   { path: '/myValidatedPictures/:id(\\d+)?',
 		component: Search,
-		props: { searchType: SearchType.BY_USER_VALIDATED } 
+		props: { 
+			searchType: SearchType.BY_USER_VALIDATED,
+			title: "Mes photos",
+			subtitle: "publiées",
+		} 
 	},
   { path: '/myRejectedPictures/:id(\\d+)?',
 		component: Search, 
@@ -71,6 +77,8 @@ const routes = [
 			searchType: SearchType.BY_USER_REJECTED,
 			thumbnailLocation: process.env.STORAGE_URL + process.env.UPLOAD_LOCATION,
 			photoLocation: process.env.STORAGE_URL + process.env.UPLOAD_LOCATION,
+			title: "Mes photos",
+			subtitle: "non publiées",
 		}
 	},
 ]

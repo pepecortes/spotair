@@ -344,5 +344,24 @@ export default {
 </script>
 
 <style lang="scss">
+@import '../styles/custom_variables.scss';
+
+.vue-form-wizard .wizard-header {
+  padding: 0px;
+  margin-bottom: 1.2em;
+}
+
+.vue-form-wizard .wizard-title {
+	color: $primary;
+	font-weight: unset;
+	text-align: center;
+}
+
+.vue-form-wizard .category {
+	color: $gray-600;
+	font-size: 1.1em;
+	font-style: italic;
+  text-align: center;
+}
 
 </style>

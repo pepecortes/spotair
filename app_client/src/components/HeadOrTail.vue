@@ -8,11 +8,10 @@
 				b-icon(icon="pencil")
 						
 		b-collapse(id="tail", v-model='onTail')
-			b-input-group
-				slot(name="tail-slot")
-				b-input-group-append
-					b-button(pill, variant="outline-danger", @click='toggle', v-b-tooltip.hover title="Retour vers la liste...")
-						b-icon(icon="search")
+				div(style="width: 90%; float: left;" )
+					slot(name="tail-slot")
+				b-button(pill, variant="outline-danger", @click='toggle', v-b-tooltip.hover title="Retour vers la liste...")
+					b-icon(icon="search")
 					
 </template>
 

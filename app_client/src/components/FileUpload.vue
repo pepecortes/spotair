@@ -18,7 +18,6 @@
 				subtitle="télechargement de photos pour validation",
 				stepSize="xs",
 				:color="tabColor", :errorColor="errorTabColor",
-				nextButtonText="Suivant", backButtonText="Retour", finishButtonText="Envoyer",
 				@on-complete="onComplete"
 			)
 			
@@ -28,6 +27,24 @@
 				template(slot="prev")
 					b-button(type="button", variant="outline-success")
 						b-icon(icon="arrow-left")
+				template(slot="finish")
+					b-button(type="button", variant="success")
+						b-icon(icon="check")
+				
+				tab-content(title="photo", :beforeChange="imageAvailable")
+					b-input-group
+						b-button(type="button", squared, variant="gray-300", v-on:click="resetFile")
+							b-icon(icon="x")
+						b-form-file(
+							ref="fileinput",
+							@change="onFileChange",
+							v-model="filex",
+							:state="acceptableImage",
+							browse-text="Choisir",
+							placeholder="Télécharger une photo...",
+							v-on:input='nextTab(true)',
+							autofocus,
+						)
 
 				tab-content(title="avion", :beforeChange="leavingAvion")
 					head-or-tail(v-model="avion.headSelected", @toggle="toggle(avion)")
@@ -40,23 +57,7 @@
 								v-on:input='afterAvionSelected(avion.head)',
 							)
 						template(v-slot:tail-slot)
-							b-form-input(type='text', v-model="avion.tail", v-on:keyup.enter='nextTab(avion.tail)')
-				
-				tab-content(title="photo", :beforeChange="imageAvailable")
-					b-input-group
-						b-button(type="button", size="lg", squared, variant="gray-300", v-on:click="resetFile")
-							b-icon(icon="x")
-						b-form-file(
-							ref="fileinput",
-							size="lg",
-							@change="onFileChange",
-							v-model="filex",
-							:state="acceptableImage",
-							browse-text="Choisir",
-							placeholder="Télécharger une photo...",
-							v-on:input='nextTab(true)',
-							autofocus,
-						)
+							b-form-input(type='text', placeholder="Renseignez...", v-model="avion.tail", v-on:keyup.enter='nextTab(avion.tail)')
 							
 				tab-content(title="immat" :beforeChange="leavingAppareil")
 					head-or-tail(v-model="appareil.headSelected", @toggle="toggle(appareil)")
@@ -69,7 +70,7 @@
 								v-on:input='nextTab(appareil.head)',
 							)
 						template(v-slot:tail-slot)
-							input(type='text', v-model="appareil.tail", v-on:keyup.enter='nextTab(appareil.tail)')
+							b-form-input(type='text', placeholder="Renseignez...", v-model="appareil.tail", v-on:keyup.enter='nextTab(appareil.tail)')
 
 				tab-content(title="lieu" :beforeChange="leavingAerodrome")
 					head-or-tail(v-model="aerodrome.headSelected", @toggle="toggle(aerodrome)")
@@ -82,7 +83,7 @@
 								v-on:input='afterAerodromeSelected(aerodrome.head)',
 							)
 						template(v-slot:tail-slot)
-							input(type='text', v-model="aerodrome.tail", v-on:keyup.enter='nextTab(aerodrome.tail)')
+							b-form-input(type='text', placeholder="Renseignez...", v-model="aerodrome.tail", v-on:keyup.enter='nextTab(aerodrome.tail)')
 							
 				tab-content(title="galerie" :beforeChange="leavingGalerie")
 					head-or-tail(v-model="galerie.headSelected", @toggle="toggle(galerie)")
@@ -95,7 +96,7 @@
 								v-on:input='nextTab(galerie.head)',
 							)
 						template(v-slot:tail-slot)
-							input(type='text', v-model="galerie.tail", v-on:keyup.enter='nextTab(galerie.tail)')
+							b-form-input(type='text', placeholder="Renseignez...", v-model="galerie.tail", v-on:keyup.enter='nextTab(galerie.tail)')
 							
 				tab-content(title="exploitant" :beforeChange="leavingCompagnie")
 					head-or-tail(v-model="compagnie.headSelected", @toggle="toggle(compagnie)")
@@ -108,14 +109,16 @@
 								v-on:input='nextTab(compagnie.head)',
 							)
 						template(v-slot:tail-slot)
-							input(type='text', v-model="compagnie.tail", v-on:keyup.enter='nextTab(compagnie.tail)')
+							b-form-input(type='text', placeholder="Renseignez...", v-model="compagnie.tail", v-on:keyup.enter='nextTab(compagnie.tail)')
 				
 				tab-content(title="commentaire")
 					b-form-textarea(
 						id="commentaire",
 						rows="3",
 						max-rows="6",
-						v-model="commentUpload"
+						v-model="commentUpload",
+						placeholder="Entrez votre commentaire",
+						trim,
 					)
 
 				tab-content(title="review")
@@ -133,26 +136,27 @@
 </template>
 
 <script>
-import VueSelect from 'vue-multiselect'
-import 'vue-multiselect/dist/vue-multiselect.min.css'
-import {FormWizard, TabContent} from 'vue-form-wizard'
+import { FormWizard, TabContent } from 'vue-form-wizard'
 import HeadOrTail from './HeadOrTail.vue'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'
 import { alertMixin } from './AlertMixin'
-import { BIcon, BIconArrowRight, BIconArrowLeft, BIconX } from 'bootstrap-vue'
+import { BIcon, BIconArrowRight, BIconArrowLeft, BIconX, BIconCheck } from 'bootstrap-vue'
 import colors from '../styles/colors.scss'
+
+import CustomVueMultiselect from "./CustomVueMultiselect.vue" 
 
 export default {
 	
 	components: {
+    'v-select': CustomVueMultiselect,
 		'form-wizard': FormWizard,
 		'tab-content': TabContent,
-		'v-select': VueSelect,
 		'head-or-tail': HeadOrTail,
 		BIcon,
     BIconArrowRight,
     BIconArrowLeft,
     BIconX,
+    BIconCheck,
 	},		
 	
 	data() {
@@ -340,37 +344,5 @@ export default {
 </script>
 
 <style lang="scss">
-.formButtons {
-	display: inline-flex;
-}
-
-
-.multiselect,
-.multiselect__input,
-.multiselect__single {
-  font-size: 0.95rem;
-}
-
-.multiselect__tags {
-  font-size: 1.0rem;
-  padding-top: 0.4rem;
-  padding-bottom: 0.4rem;
-  min-height: unset;
-}
-
-.multiselect__placeholder {
-    margin-bottom: 0px;
-    padding-top: 0px;
-}
-
-.multiselect__tag-icon:after {
-  font-size: 1.0rem;
-}
-
-.multiselect__option:after {
-  font-size: 1.0rem;
-}
-
-
 
 </style>

@@ -1,5 +1,5 @@
 <template lang="pug">
-	div
+	div(id="map")
 		b-alert(
 			:variant="alert.type",
 			dismissible,
@@ -11,12 +11,26 @@
 		br
 		
 		div(v-show='mapAvailable', ref='gmapFilter', id='gmapFilter')
-			v-select(:options="anneeOptionSorted", label="text", v-model="annee")
-			b-button(class='btn btn-primary', @click='centerClicked') Recentrer
-			b-button(class='btn btn-primary', @click='resetClicked') Reset
+			div(style="width: 70%; float: left;" )
+				v-select(
+								:options="anneeOptionSorted",
+								label="text",
+								v-model="annee",
+								placeholder="Année",
+								selectLabel="",
+								selectedLabel="",
+								deselectLabel="",
+								)
+			b-button(size="sm", variant="outline-secondary", @click='resetClicked')
+				b-icon(icon="x")
+			b-button(size="sm", variant="outline-secondary", @click='centerClicked')
+				b-icon(icon="house")
+				
+				
+				
 		
 		gmap-map(
-			style="width: 100%; height: 600px",
+			style="width: 100%; height: 700px;",
 			ref='mapRef',
 			:center='center',
 			:zoom='zoom',
@@ -25,18 +39,21 @@
 </template>
 
 <script>
-
-import VueSelect from 'vue-multiselect'
-import 'vue-multiselect/dist/vue-multiselect.min.css'
+import CustomVueMultiselect from "./CustomVueMultiselect.vue" 
 import { alertMixin } from './AlertMixin'
 import { gmapApi } from 'vue2-google-maps'
+import { BIcon, BIconBullseye, BIconX, BIconHouse } from 'bootstrap-vue'
 
 const _ = require('lodash')
 
 export default {
 	
 	components: {
-		'v-select': VueSelect
+    'v-select': CustomVueMultiselect,
+		BIcon,
+    BIconBullseye,
+    BIconX,
+    BIconHouse,
 	},
 	
 	mixins: [alertMixin],
@@ -269,23 +286,28 @@ export default {
 
 <style lang="scss">
 
+#map {
+	margin-top: -40px;
+}
+
 .gMapControlBorder {
-    background-color: #ffffff;
-    border-radius: 3px;
-    cursor: pointer;
-    margin: 10px;
-    text-align: center;
+	background-color: #ffffff;
+	border-radius: 3px;
+	cursor: pointer;
+	margin: 10px;
+	text-align: center;
 }
 
 #gmapFilter {
-    background-color: #ffffff;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    border-bottom-left-radius: 2px;
-    border-top-left-radius: 2px;
-    box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+	width: 300px;
+	background-color: #ffffff;
+	padding-top: 7px;
+	padding-bottom: 9px;
+	padding-left: 10px;
+	padding-right: 10px;
+	border-bottom-left-radius: 2px;
+	border-top-left-radius: 2px;
+	box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
 }
 
 </style>

@@ -39,15 +39,20 @@ export default {
 <style lang="scss">
 @import '../styles/colors.scss';
 
-.multiselect,
+.multiselect {
+	padding-top: 0px;
+}
+
 .multiselect__input,
 .multiselect__single {
   font-size: 0.95rem;
+  margin-bottom: 0px;
+  padding-top: 0px;
 }
 
 .multiselect__tags {
   font-size: 1.0rem;
-  padding-top: 0.4rem;
+  padding-top: 0.3rem;
   padding-bottom: 0.4rem;
   min-height: unset;
   border-color: $gray-400;

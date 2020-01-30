@@ -10,7 +10,7 @@
 		
 		b-container
 		
-			div(class="title text-center")
+			div(class="spotair-title text-center")
 				h4(v-if='title') {{ title }}
 				p(v-if='subtitle') {{ subtitle }}
 			
@@ -153,16 +153,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../styles/custom_variables.scss';
-
-.title {
-	color: $primary;
-}
-
-.title > p {
-	color: $gray-600;
-	font-size: 1.1em;
-	font-style: italic;
-}
 
 </style>

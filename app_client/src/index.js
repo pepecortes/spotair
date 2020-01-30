@@ -52,7 +52,8 @@ const routes = [
   { path: '/pictadd', component: FileUploadForm },
   { path: '/profileForm', component: ProfileForm },
   { path: '/search', component: Search },
-  { path: '/galeries/:id(\\d+)?', component: Galeries },
+  { path: '/galeries', component: Galeries },
+  { path: '/galeries/:id', component: Galeries },
   { path: '/myPendingPictures/:id(\\d+)?',
 		component: Search,
 		props: {

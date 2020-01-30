@@ -1,5 +1,4 @@
-GALERIES
-	Should land in Dernieres Photos
+GALERIES BROWSER
 	Should be reflected in URL
 
 GOOGLE MAPS

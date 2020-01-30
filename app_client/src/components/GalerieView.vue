@@ -1,6 +1,8 @@
 <template lang="pug">
 	div
-		h4 {{ galerie.text }}
+		div(class="spotair-title text-center")
+			h4(v-if='galerie.text') {{ galerie.text }}
+			hr
 		expo-collection(:collection='photos')
 </template>
 

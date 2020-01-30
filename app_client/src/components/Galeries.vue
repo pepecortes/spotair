@@ -1,6 +1,7 @@
 <template lang="pug">
 
 	div(id="galeries")
+		
 		div(id="fixedSideNav")
 			galerie_browser(v-on:change="changeGalery")
 		div(id="unFixedSideNavCompanion")
@@ -27,7 +28,8 @@ export default {
 	},
 	
 	mounted() {
-		this.galerieId = this.$route.params.id
+		this.galerieId = (this.$route.params.id)? this.$route.params.id : "latest"
+		// if no id given: search latest galleries
 	},
 	
 	methods: {
@@ -55,6 +57,7 @@ export default {
 	#unFixedSideNavCompanion {
 		margin-left: 20%;
 		width: auto;
+		max-width: 70em;
 	} 
 }
 </style>

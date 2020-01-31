@@ -43,7 +43,7 @@
 				v-model.trim="formData.serial",
 				:state="checkValidityState($v.formData.serial)"
 			)
-				
+			
 		b-form-group(
 			label="Commentaire",
 			label-for="commentaire",

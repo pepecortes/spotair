@@ -2,9 +2,9 @@
 	include BaseForm.pug
 </template>
 
-<script>
-import VueSelect from 'vue-multiselect'
-import 'vue-multiselect/dist/vue-multiselect.min.css'
+<script>import Vue from 'vue'
+import { BFormGroup	} from 'bootstrap-vue'
+import CustomVueMultiselect from "./CustomVueMultiselect.vue" 
 import pluralize from 'pluralize'
 import { validationMixin } from 'vuelidate'
 import { confirmDialog } from '../lib/common'
@@ -13,10 +13,28 @@ import { alertMixin } from './AlertMixin'
 
 const	localRouter = {"modify": 0, "new": 1,	"fusion": 2}
 
+Vue.component('b-form-group', {
+	extends: BFormGroup,
+	props: {
+		'label-cols-sm': {
+			type: String,
+			default: "3"
+		},
+		'label-cols-lg': {
+			type: String,
+			default: "2"
+		},
+		'label-align-sm': {
+			type: String,
+			default: "right"
+		},
+	}
+})
+
 export default {
 	
 	components: {
-		'v-select': VueSelect
+		'v-select': CustomVueMultiselect
 	},
 	
 	props: {
@@ -248,8 +266,23 @@ export default {
 </script>
 
 <style lang="scss">
+@import '../styles/custom_variables.scss';
 
-.formButtons {
-	display: inline-flex;
+.selector {
+	margin-bottom: 1.6rem;
 }
+
+.tab-content {
+	padding-top: 30px;
+	padding-bottom: 30px;
+	padding-left: 60px;
+	padding-right: 60px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: $gray-300;
+	border-top-color: transparent;
+	border-bottom-left-radius: 0.25rem;
+	border-bottom-right-radius: 0.25rem;
+}
+
 </style>

@@ -9,6 +9,8 @@
 			:show="alert.show",
 			@dismissed="alert.show=false",
 		) {{ alert.text }}
+	
+		h4.spotair-title.text-center Photos en attente de validation
 		
 		validate-expo-collection(:collection='photos', v-on:update='refresh')
 		
@@ -54,7 +56,9 @@ export default {
 
 <style lang="scss">
 
-.formButtons {
-	display: inline-flex;
+.spotair-title {
+    margin-bottom: 2rem;
+    margin-top: 2rem;
 }
+
 </style>

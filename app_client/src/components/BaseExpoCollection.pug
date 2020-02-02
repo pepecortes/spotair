@@ -1,18 +1,22 @@
 div.baseExpoCollection
-	
-	div
-		div(v-if='collectionAvailable', v-show='showThumbs')
-			expo-form(
-				:photos='thumbnails',
-				v-model='photoSelected',
-				v-on:input='showThumbs = false',
-			)
-		div(v-if='collectionAvailable && showCarousel')
-			carousel(
-				style="width:100%; height:80vh",
-				:photos='photos',
-				v-model='photoSelected',
-				v-on:input='showThumbs = true',
-				v-on:slide-updated='slideUpdatedEvent',
-			)
-			block admin
+
+	div(v-if='collectionAvailable', v-show='showThumbs')
+		expo-form(
+			:photos='thumbnails',
+			v-model='photoSelected',
+			v-on:input='showThumbs = false',
+		)
+		
+	div(v-if='collectionAvailable && showCarousel')
+		b-container(fluid)
+			b-row
+				b-col(xl="4", md="6")
+					block admin
+				b-col(xl="8", md="6")
+					carousel(
+						style="width:100%; height:80vh",
+						:photos='photos',
+						v-model='photoSelected',
+						v-on:input='showThumbs = true',
+						v-on:slide-updated='slideUpdatedEvent',
+					)

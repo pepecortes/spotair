@@ -27,17 +27,15 @@ div.baseForm
 					b-container.text-center
 						b-button-group
 							block additionalModifyActions
-							b-button(type="button", variant="outline-warning", v-on:click="updateButtonClicked") Update
-							b-button(type="button", variant="outline-danger", v-on:click="removeButtonClicked") Delete
-							b-button(type="button", variant="outline-success", v-on:click="resetButtonClicked") Reset
+							b-button(type="button", variant="outline-primary", v-on:click="updateButtonClicked") Modifier
+							b-button(type="button", variant="outline-danger", v-on:click="removeButtonClicked") Eliminer
 				
 			b-tab(title="Nouveau", v-on:click="selectNewForm")
 				b-form(v-if="selection")
 					block input
 					b-container.text-center
 						b-button-group
-							b-button(type="button", variant="outline-primary", v-on:click="addButtonClicked") Add
-							b-button(type="button", variant="outline-success", v-on:click="resetButtonClicked") Reset
+							b-button(type="button", variant="outline-primary", v-on:click="addButtonClicked") Ajouter
 
 			b-tab(title="Fusioner", v-on:click="selectFusionForm")
 				v-select.selector(
@@ -64,5 +62,4 @@ div.baseForm
 						)
 					b-container.text-center
 						b-button-group
-							b-button(type="button", variant="outline-danger", v-on:click="fusionButtonClicked") Fusion
-							b-button(type="button", variant="outline-success", v-on:click="resetButtonClicked") Reset
+							b-button(type="button", variant="outline-danger", v-on:click="fusionButtonClicked") Fusioner

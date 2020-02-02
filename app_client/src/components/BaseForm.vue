@@ -272,6 +272,10 @@ export default {
 	margin-bottom: 1.6rem;
 }
 
+.btn-group {
+	padding-top: 1rem;
+}
+
 .tab-content {
 	padding-top: 30px;
 	padding-bottom: 30px;

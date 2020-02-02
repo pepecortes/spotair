@@ -47,7 +47,7 @@ export default {
 		collectionAvailable() {return !_.isEmpty(this.collection)},
 		
 		showCarousel() {return !this.showThumbs},
-				
+		
 		thumbnails() {
 			if (!this.collectionAvailable) return []
 			return this.collection.map(photo => {

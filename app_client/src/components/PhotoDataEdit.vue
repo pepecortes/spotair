@@ -8,7 +8,7 @@
 		)
 			b-form-checkbox(v-model="removeWatermark") Remove the watermark
 	
-		div(class='testelement')
+		div
 			editor-input(
 				ref='photographeInput',
 				title="Photographe",
@@ -209,10 +209,5 @@ export default {
 </script>
 
 <style lang="scss">
-
-.testelement {
-	width: 500px;
-	background-color: blanchedalmond;
-}
 
 </style>

@@ -1,7 +1,7 @@
 <template lang="pug">
 	div
 	
-		div(class='testelement')
+		div
 		
 			p(v-if='photo.photographe') Photographe : {{ photo.photographe.text }}
 			p(v-if='photo.commentUpload') Commentaire : {{ photo.commentUpload }}
@@ -224,10 +224,5 @@ export default {
 </script>
 
 <style lang="scss">
-
-.testelement {
-	width: 500px;
-	background-color: blanchedalmond;
-}
 
 </style>

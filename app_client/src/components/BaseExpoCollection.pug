@@ -1,18 +1,19 @@
 div.baseExpoCollection
 
 	div(v-if='collectionAvailable', v-show='showThumbs')
-		expo-form(
-			:photos='thumbnails',
-			v-model='photoSelected',
-			v-on:input='showThumbs = false',
-		)
+		b-container
+			expo-form(
+				:photos='thumbnails',
+				v-model='photoSelected',
+				v-on:input='showThumbs = false',
+			)
 		
 	div(v-if='collectionAvailable && showCarousel')
 		b-container(fluid)
 			b-row
-				b-col(xl="4", md="6")
+				b-col(xl="4")
 					block admin
-				b-col(xl="8", md="6")
+				b-col(xl="8")
 					carousel(
 						style="width:100%; height:80vh",
 						:photos='photos',

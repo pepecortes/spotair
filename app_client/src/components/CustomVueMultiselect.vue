@@ -41,6 +41,7 @@ export default {
 
 .multiselect {
 	padding-top: 0px;
+	min-height: unset;
 }
 
 .multiselect__input,

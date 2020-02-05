@@ -1,42 +1,31 @@
 <template lang="pug">
 	div
 	
-		div.card
-			div.card-header(v-bind:class="{'bg-success': state}") {{ title }}
-			div.card-body
-				v-select(
-					v-if='!mutableValidated',
-					id="selector",
-					:options="options",
-					label="text",
-					v-model="mutableValue",
-					@input='vselectChanged',
-				)
-				p(v-if="mutableValidated") {{ mutableValue.text }}
-			div.card-footer
-				b-button(v-if='!hideValidateButton && selectionIsLegal && !mutableValidated', variant='outline-secondary', @click='validate') V
-				b-button(variant='outline-secondary', @click='reset') X
-				b-button(variant='outline-secondary', @click='admin') N
-			
-			
-	
-		b-form-group(:state='state')
-			b-input-group(size="sm")
-				b-badge(slot='prepend', variant="success", v-if='state') V
-				span(slot='prepend') {{ title }} &nbsp;
-				v-select(
-					v-if='!mutableValidated',
-					id="selector",
-					:options="options",
-					label="text",
-					v-model="mutableValue",
-					@input='vselectChanged',
-				)
-				p(v-if="mutableValidated") {{ mutableValue.text }}
-				b-input-group-append
-					b-button(v-if='!hideValidateButton && selectionIsLegal && !mutableValidated', variant='outline-secondary', @click='validate') V
-					b-button(variant='outline-secondary', @click='reset') X
-					b-button(variant='outline-secondary', @click='admin') N
+		div.card(v-if="!hideValidateButton")
+			div.row.no-gutters
+				div.card-header.col-md-2(v-bind:class="{'bg-success': state, 'bg-warning': !state}")
+					div.text-center {{ title }}
+				div.card-body.col-md-7
+					v-select(
+						v-if='!mutableValidated',
+						id="selector",
+						:options="options",
+						label="text",
+						v-model="mutableValue",
+						@input='vselectChanged',
+					)
+					div.text-center(v-if="mutableValidated") {{ mutableValue.text }}
+				div.card-footer.col-md-3(v-bind:class="{'bg-success': state, 'bg-warning': !state}")
+					b-container.text-center
+						b-button(v-if="!state", variant='outline-secondary', size="sm", @click='admin') Nouveau
+						b-button(v-if='canBeValidated', variant='success', size="sm", @click='validate', v-b-tooltip.hover title="Valider")
+							b-icon(icon="check")
+						b-button(v-if='state', variant='outline-warning', size="sm", @click='reset', v-b-tooltip.hover title="Annuler")
+							b-icon(icon="reply-fill", flip-h)
+
+						
+		div(v-if="hideValidateButton && mutableValue")
+			p {{ title }} {{ mutableValue.text }}
 					
 		b-modal(ref="adminModal", :title='title', @hide='adminHidden')
 			div(class="d-block")
@@ -53,12 +42,16 @@
 </template>
 
 <script>
-import CustomVueMultiselect from "./CustomVueMultiselect.vue" 
+import CustomVueMultiselect from "./CustomVueMultiselect.vue"
+import { BIcon, BIconCheck, BIconReplyFill } from 'bootstrap-vue'
 
 export default {
 		
 	components: {
 		'v-select': CustomVueMultiselect,
+		BIcon,
+		BIconCheck,
+    BIconReplyFill,
 	},
 	
 	data() {
@@ -114,6 +107,12 @@ export default {
 		selectionIsLegal() {
 			return (this.mutableValue && this.mutableValue.id)
 		},
+		
+		canBeValidated() {
+			// Return true if the field is available for validation
+			return !this.hideValidateButton && this.selectionIsLegal && !this.mutableValidated
+		},
+		
 	},
 		
 	mounted() {
@@ -212,4 +211,25 @@ export default {
 </script>
 
 <style lang="scss">
+
+.card {
+	margin-bottom: 1.0rem;
+}
+
+.card-body {
+	padding: 0px;
+}
+
+.card-header {
+	padding: 0px;
+}
+
+.card-footer {
+	padding: 0px;
+}
+
+.multiselect__tags {
+	border: unset;
+}
+    
 </style>

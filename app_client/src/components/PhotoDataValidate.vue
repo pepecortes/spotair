@@ -1,77 +1,76 @@
 <template lang="pug">
+
 	div
 	
-		div
+		p(v-if='photo.photographe') Photographe : {{ photo.photographe.text }}
+		p(v-if='photo.commentUpload') Commentaire : {{ photo.commentUpload }}
+	
+		editor-input(
+			ref='avionValidator',
+			title="Avion",
+			apiCall="avions",
+			v-model="photo.avion",
+			:adminForm='admin.avion',
+			:hideValidateButton='true',
+			@selector-changed='avionChanged',
+		)
 		
-			p(v-if='photo.photographe') Photographe : {{ photo.photographe.text }}
-			p(v-if='photo.commentUpload') Commentaire : {{ photo.commentUpload }}
+		editor-input(
+			ref='aerodromeValidator',
+			:hideValidateButton='true',
+			apiCall="aerodromes",
+			v-model='photo.aerodrome',
+			title="Lieu",
+			:adminForm='admin.aerodrome',
+			@selector-changed='aerodromeChanged',
+		)
+
+		editor-input(
+			ref='appareilValidator',
+			title="Immat",
+			apiCall="appareils",
+			v-model='photo.appareil',
+			:adminForm='admin.appareil',
+			:state='!$v.photo.appareil.$invalid',
+		)
+
+		editor-input(
+			ref='galerieValidator',
+			apiCall="galeries",
+			v-model='photo.galerie',
+			title="Galerie",
+			:adminForm='admin.galerie',
+			:state='!$v.photo.galerie.$invalid',
+		)
+
+		editor-input(
+			ref='compagnieValidator',
+			apiCall="compagnies",
+			v-model='photo.compagnie',
+			title="Compagnie",
+			:adminForm='admin.compagnie',
+			:state='!$v.photo.compagnie.$invalid',
+		)
 		
-			editor-input(
-				ref='avionValidator',
-				title="Avion",
-				apiCall="avions",
-				v-model="photo.avion",
-				:adminForm='admin.avion',
-				:hideValidateButton='true',
-				@selector-changed='avionChanged',
-			)
-
-			editor-input(
-				ref='appareilValidator',
-				title="Immat",
-				apiCall="appareils",
-				v-model='photo.appareil',
-				:adminForm='admin.appareil',
-				:state='!$v.photo.appareil.$invalid',
-			)
-			
-			editor-input(
-				ref='aerodromeValidator',
-				:hideValidateButton='true',
-				apiCall="aerodromes",
-				v-model='photo.aerodrome',
-				title="Lieu",
-				:adminForm='admin.aerodrome',
-				@selector-changed='aerodromeChanged',
-			)
-
-			editor-input(
-				ref='galerieValidator',
-				apiCall="galeries",
-				v-model='photo.galerie',
-				title="Galerie",
-				:adminForm='admin.galerie',
-				:state='!$v.photo.galerie.$invalid',
-			)
-
-			editor-input(
-				ref='compagnieValidator',
-				apiCall="compagnies",
-				v-model='photo.compagnie',
-				title="Compagnie",
-				:adminForm='admin.compagnie',
-				:state='!$v.photo.compagnie.$invalid',
-			)
-			
-			b-form-textarea(
-				id="commentaire",
-				placeholder="Commentaire",
-				rows="3",
-				max-rows="6",
-				v-model="photo.commentaire"
-			)
-			
-			b-button(
-				v-if="isAdmin",
-				type="button", variant="outline-success",
-				v-show='selectionIsValid', 
-				v-on:click='validatePhoto',
-			) Validate
-			
-			b-button(
-				type="button", variant="outline-danger",
-				v-on:click='rejectPhoto',
-			) Reject
+		b-form-textarea(
+			id="commentaire",
+			placeholder="Commentaire",
+			rows="3",
+			max-rows="6",
+			v-model="photo.commentaire"
+		)
+		
+		b-button(
+			v-if="isAdmin",
+			type="button", variant="outline-success",
+			v-show='selectionIsValid', 
+			v-on:click='validatePhoto',
+		) Validate
+		
+		b-button(
+			type="button", variant="outline-danger",
+			v-on:click='rejectPhoto',
+		) Reject
 			
 </template>
 

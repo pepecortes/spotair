@@ -1,11 +1,12 @@
 <template lang="pug">
 	div
 	
-		div.card(v-if="!hideValidateButton")
+		div(v-if="!hideValidateButton")
 			div.row.no-gutters
-				div.card-header.col-md-2(v-bind:class="{'bg-success': state, 'bg-warning': !state}")
+				div.col-md-2(v-bind:class="{'bg-success': state, 'bg-warning': !state}")
 					div.text-center {{ title }}
-				div.card-body.col-md-7
+					b-form-checkbox(switch, :disabled="!selectionIsLegal")
+				div.col-md-7
 					v-select(
 						v-if='!mutableValidated',
 						id="selector",
@@ -15,7 +16,7 @@
 						@input='vselectChanged',
 					)
 					div.text-center(v-if="mutableValidated") {{ mutableValue.text }}
-				div.card-footer.col-md-3(v-bind:class="{'bg-success': state, 'bg-warning': !state}")
+				div.col-md-3(v-bind:class="{'bg-success': state, 'bg-warning': !state}")
 					b-container.text-center
 						b-button(v-if="!state", variant='outline-secondary', size="sm", @click='admin') Nouveau
 						b-button(v-if='canBeValidated', variant='success', size="sm", @click='validate', v-b-tooltip.hover title="Valider")

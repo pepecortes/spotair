@@ -2,11 +2,10 @@
 	div
 	
 		div(v-if="!hideValidateButton")
-			div.row.no-gutters
-				div.col-md-2(v-bind:class="{'bg-success': state, 'bg-warning': !state}")
+			div.row.no-gutters#editor(v-bind:class="{'bg-success': state, 'bg-warning': !state}")
+				div.col-md-2.align-self-center
 					div.text-center {{ title }}
-					b-form-checkbox(switch, :disabled="!selectionIsLegal")
-				div.col-md-7
+				div.col-md-7.align-self-center
 					v-select(
 						v-if='!mutableValidated',
 						id="selector",
@@ -16,14 +15,13 @@
 						@input='vselectChanged',
 					)
 					div.text-center(v-if="mutableValidated") {{ mutableValue.text }}
-				div.col-md-3(v-bind:class="{'bg-success': state, 'bg-warning': !state}")
+				div.col-md-2.align-self-center
 					b-container.text-center
 						b-button(v-if="!state", variant='outline-secondary', size="sm", @click='admin') Nouveau
-						b-button(v-if='canBeValidated', variant='success', size="sm", @click='validate', v-b-tooltip.hover title="Valider")
-							b-icon(icon="check")
-						b-button(v-if='state', variant='outline-warning', size="sm", @click='reset', v-b-tooltip.hover title="Annuler")
-							b-icon(icon="reply-fill", flip-h)
-
+				div.col-md-1.align-self-center
+					b-container.text-center
+						b-form-checkbox(v-model="state", switch, :disabled="!selectionIsLegal", @change="validateSwitch", v-b-tooltip.hover title="Valider", size="lg")
+						
 						
 		div(v-if="hideValidateButton && mutableValue")
 			p {{ title }} {{ mutableValue.text }}
@@ -186,6 +184,11 @@ export default {
 			return this.axios.get(url)
 		},
 		
+		validateSwitch(validate) {
+			if (validate) this.validate()
+			else this.invalidate()
+		},
+		
 		validate() {
 			if (!this.selectionIsLegal) {this.reset(); return}
 			this.mutableValidated = true
@@ -213,21 +216,10 @@ export default {
 
 <style lang="scss">
 
-.card {
-	margin-bottom: 1.0rem;
+#editor {
+	height: 3.0rem;
 }
 
-.card-body {
-	padding: 0px;
-}
-
-.card-header {
-	padding: 0px;
-}
-
-.card-footer {
-	padding: 0px;
-}
 
 .multiselect__tags {
 	border: unset;

@@ -2,7 +2,7 @@
 	div
 	
 		div(v-if="!hideValidateButton")
-			div.row.no-gutters#editor(v-bind:class="{'bg-success': state, 'bg-warning': !state}")
+			div.row.no-gutters.editor(v-bind:class="{'bg-success': state, 'bg-warning': !state}")
 				div.col-md-2.align-self-center
 					div.text-center {{ title }}
 				div.col-md-7.align-self-center
@@ -17,14 +17,21 @@
 					div.text-center(v-if="mutableValidated") {{ mutableValue.text }}
 				div.col-md-2.align-self-center
 					b-container.text-center
-						b-button(v-if="!state", variant='outline-secondary', size="sm", @click='admin') Nouveau
+						b-button(v-if="!state", variant='outline-light', size="sm", @click='admin') Nouveau
 				div.col-md-1.align-self-center
 					b-container.text-center
-						b-form-checkbox(v-model="state", switch, :disabled="!selectionIsLegal", @change="validateSwitch", v-b-tooltip.hover title="Valider", size="lg")
+						b-form-checkbox(v-model="state", switch, :disabled="!selectionIsLegal", @change="validateSwitch", v-b-tooltip.hover title="Valider")
 						
 						
 		div(v-if="hideValidateButton && mutableValue")
-			p {{ title }} {{ mutableValue.text }}
+			div.row.no-gutters.editor.disabled
+				div.col-md-2.align-self-center
+					div.text-center {{ title }}
+				div.col-md-7.align-self-center
+					div.text-center {{ mutableValue.text }}
+				div.col-md-2.align-self-center
+					b-container.text-center
+						b-button(v-if="!state", variant='outline-dark', size="sm", @click='admin') Nouveau
 					
 		b-modal(ref="adminModal", :title='title', @hide='adminHidden')
 			div(class="d-block")
@@ -215,11 +222,22 @@ export default {
 </script>
 
 <style lang="scss">
+@import '../styles/custom_variables.scss';
 
-#editor {
+.editor {
 	height: 3.0rem;
+	margin-bottom: 0.5rem;
+	padding-left: 1rem;
+	padding-right: 1rem;
+	border-radius: 1rem;
+	border-style: solid;
+	border-width: 0.1px;
+	color: $primary;
+	border-color: $primary;
 }
 
+.disabled {
+}
 
 .multiselect__tags {
 	border: unset;

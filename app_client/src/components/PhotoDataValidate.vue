@@ -35,21 +35,21 @@
 		)
 
 		editor-input(
-			ref='galerieValidator',
-			apiCall="galeries",
-			v-model='photo.galerie',
-			title="Galerie",
-			:adminForm='admin.galerie',
-			:state='!$v.photo.galerie.$invalid',
-		)
-
-		editor-input(
 			ref='compagnieValidator',
 			apiCall="compagnies",
 			v-model='photo.compagnie',
 			title="Compagnie",
 			:adminForm='admin.compagnie',
 			:state='!$v.photo.compagnie.$invalid',
+		)
+
+		editor-input(
+			ref='galerieValidator',
+			apiCall="galeries",
+			v-model='photo.galerie',
+			title="Galerie",
+			:adminForm='admin.galerie',
+			:state='!$v.photo.galerie.$invalid',
 		)
 		
 		b-form-textarea(

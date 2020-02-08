@@ -3,7 +3,7 @@
 	div
 	
 		p(v-if='photo.photographe') Photographe : {{ photo.photographe.text }}
-		p(v-if='photo.commentUpload') Commentaire : {{ photo.commentUpload }}
+		p(v-if='photo.commentUpload') {{ photo.commentUpload }}
 	
 		editor-input(
 			ref='avionValidator',
@@ -12,7 +12,6 @@
 			v-model="photo.avion",
 			:adminForm='admin.avion',
 			:hideValidateButton='true',
-			@selector-changed='avionChanged',
 		)
 		
 		editor-input(
@@ -60,17 +59,18 @@
 			v-model="photo.commentaire"
 		)
 		
-		b-button(
-			v-if="isAdmin",
-			type="button", variant="outline-success",
-			v-show='selectionIsValid', 
-			v-on:click='validatePhoto',
-		) Validate
-		
-		b-button(
-			type="button", variant="outline-danger",
-			v-on:click='rejectPhoto',
-		) Reject
+		b-container.text-center
+			b-button-group
+				b-button(
+					v-if="isAdmin",
+					type="button", variant="outline-success",
+					v-show='selectionIsValid', 
+					v-on:click='validatePhoto',
+				) Validate
+				b-button(
+					type="button", variant="outline-danger",
+					v-on:click='rejectPhoto',
+				) Reject
 			
 </template>
 
@@ -223,5 +223,9 @@ export default {
 </script>
 
 <style lang="scss">
+
+.btn-group {
+	margin-bottom: 2rem;
+}
 
 </style>

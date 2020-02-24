@@ -42,6 +42,8 @@ export default {
 .multiselect {
 	padding-top: 0px;
 	min-height: unset;
+	border: 1px solid $gray-400;
+	border-radius: 0.25rem;
 }
 
 .multiselect__input,
@@ -56,7 +58,6 @@ export default {
   padding-top: 0.3rem;
   padding-bottom: 0.4rem;
   min-height: unset;
-  border-color: $gray-400;
 }
 
 .multiselect__placeholder {

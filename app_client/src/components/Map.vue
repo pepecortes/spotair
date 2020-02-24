@@ -11,7 +11,7 @@
 		br
 		
 		div(v-show='mapAvailable', ref='gmapFilter', id='gmapFilter')
-			div(style="width: 70%; float: left;" )
+			div(style="width: 80%; float: left;" )
 				v-select(
 								:options="anneeOptionSorted",
 								label="text",
@@ -21,9 +21,7 @@
 								selectedLabel="",
 								deselectLabel="",
 								)
-			b-button(size="sm", variant="outline-secondary", @click='resetClicked')
-				b-icon(icon="x")
-			b-button(size="sm", variant="outline-secondary", @click='centerClicked')
+			b-button(size="sm", variant="outline-secondary", @click='homeClicked')
 				b-icon(icon="house")
 				
 				
@@ -163,11 +161,9 @@ export default {
 			vm.zoomAndCenter()
 		},
 		
-		centerClicked() {
+		homeClicked() {
+			// Map to initial conditions (no filter, default zoom and center
 			this.zoomAndCenter()
-		},
-		
-		resetClicked() {
 			this.annee = null
 		},
 		
@@ -299,7 +295,7 @@ export default {
 }
 
 #gmapFilter {
-	width: 300px;
+	width: 250px;
 	background-color: #ffffff;
 	padding-top: 7px;
 	padding-bottom: 9px;

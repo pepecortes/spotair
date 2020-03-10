@@ -1,5 +1,5 @@
-GALERIES BROWSER
-	Should be reflected in URL
+SCREENING-VALIDATION
+	A picture has perhaps been visited by a screener or a validator, but no decision taken. How to indicate this?
 
 GOOGLE MAPS
 	Change prompt?

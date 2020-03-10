@@ -2,13 +2,13 @@
 
 	div(id='galeryBrowser')
 	
-		b-button(block, v-b-toggle.latest, variant="link", v-on:click="$emit('change', 'latest')") Dernières photos
+		b-button(block, v-b-toggle.latest, variant="link", v-on:click="galerieSelected()") Dernières photos
 		b-collapse(id="latest", accordion="my-accordion")
 	
 		b-button(block, v-b-toggle.acc1, variant="link") Dernières galeries
 		b-collapse(id="acc1", accordion="my-accordion")
 			div(class="subMenu", v-for="galerie in recentGaleries")
-				b-button(block, variant="link", v-on:click="galerieSelected(galerie)") {{ galerie.text }}
+				b-button(block, variant="link", v-on:click="galerieSelected(galerie.id)") {{ galerie.text }}
 				
 		b-button(block, v-b-toggle.all, variant="link", v-b-modal.allGaleries) Toutes les galeries
 		b-collapse(id="all", accordion="my-accordion")
@@ -20,7 +20,7 @@
 							button-size="sm",
 							hide-footer,
 							)
-				galerie_select(v-on:input="$emit('change', $event); $bvModal.hide('allGaleries')")
+				galerie_select(v-on:input="galerieSelected($event); $bvModal.hide('allGaleries')")
 				
 		b-button(block, v-b-toggle.assoc, variant="link", v-b-modal.assocGaleries) Sorties associatives
 		b-collapse(id="assoc", accordion="my-accordion")
@@ -34,18 +34,18 @@
 							)
 				galerie_select(
 					isSpotair=true,
-					v-on:input="$emit('change', $event); $bvModal.hide('assocGaleries')",
+					v-on:input="galerieSelected($event); $bvModal.hide('assocGaleries')",
 				)
 			
 		b-button(block, v-b-toggle.acc2, variant="link") Musées
 		b-collapse(id="acc2", accordion="my-accordion")
 			div(class="subMenu", v-for="galerie in musees")
-				b-button(block, variant="link", v-on:click="galerieSelected(galerie)") {{ galerie.text }}
+				b-button(block, variant="link", v-on:click="galerieSelected(galerie.id)") {{ galerie.text }}
 			
 		b-button(block, v-b-toggle.collectors, variant="link") Collectors
 		b-collapse(id="collectors", accordion="my-accordion")
 			div(class="subMenu", v-for="galerie in collectors")
-				b-button(block, variant="link", v-on:click="galerieSelected(galerie)") {{ galerie.text }}
+				b-button(block, variant="link", v-on:click="galerieSelected(galerie.id)") {{ galerie.text }}
 
 </template>
 
@@ -77,10 +77,18 @@ export default {
 			.catch(err => this.$bvModal.msgBoxOk("Server error: " + err.message))
 	},
 	
+	watch: {
+    $route(to, from) {
+			// react to changes in the URL
+			if (to.params.id != from.params.id) this.$emit('change', to.params.id)
+		}
+	},
+	
 	methods: {
 		
-		galerieSelected(galerie) {
-			this.$emit('change', galerie.id)
+		galerieSelected(id="latest") {
+			this.$router.push({ path: `/galeries/${id}` })
+			this.$emit('change', id)
 		},
 		
 		

@@ -1,14 +1,14 @@
+ADMIN/PHOTOGRAPHES (perhaps somewhere else)
+	Membre actif checkbox deselected when using a browser history back
+
 SCREENING-VALIDATION
 	A picture has perhaps been visited by a screener or a validator, but no decision taken. How to indicate this?
-
-GOOGLE MAPS
-	Change prompt?
 
 DATABASE CHANGES FOR EXTENDED ADMIN ROLE (SCREENER)
 	Change 'isAdmin' field -> 'group'
 	
-ADMIN.PHOTOGRAPHES.UTILISATEURS DU SITE
-	When creating a photographe, the user should be automatic? (note that there is not any email field in photographes...)
+ADMIN.PHOTOGRAPHES.MODIFIER
+	Provide the user information (mail) and link it to modify the user
 
 PHOTO-DATA-EDIT
 	DELETE API call manage all the tasks linked to deletion?

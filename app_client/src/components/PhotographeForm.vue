@@ -34,6 +34,13 @@
 				v-model.trim="formData.nom",
 				:state="checkValidityState($v.formData.nom)"
 			)
+	
+	block input_modify
+		b-form-group(
+			label="Utilisateur",
+			label-for="email",
+		)
+			b-link(v-bind:href="'/admin/users/modify/' + user.id") {{ user.mail }}
 			
 </template>
 
@@ -52,10 +59,27 @@ export default {
 				nom: {required},
 				prenom: {required},
 			},
+			user: {},
 		}
 	},
 	
 	methods: {
+		
+		initForm() {
+			// Override BaseForm method to get the corresponding user data
+			this.formData = JSON.parse(JSON.stringify(this.selection))
+			
+			console.log("formData.actif " + this.formData.actif)
+			
+			this.fusionTarget = null
+			this.user = {}
+			this.$v.$reset()
+			if (this.formData && this.formData.id) {
+				this.axios.get(`users/byPhotographe/${this.formData.id}`)
+					.then(response => this.user = response.data)
+					.catch(err => this.showAxiosAlert(err, "danger"))
+			}
+		},
 		
     add() {
 			// Override BaseForm method for redirection (add new user)

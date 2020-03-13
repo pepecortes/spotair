@@ -14,13 +14,25 @@ var controller = new ModelController(db.User)
 // get user by login name
 /**
  * @function byLogin
- * @description Returns the photographe that has the given username
+ * @description Returns the user that has the given username
  * @param {string} username
- * @return {Object} The given photographe, or null if not exists
+ * @return {Object} The given user, or null if not exists
  */
 controller.byLogin =  async function(req, res) {
 	const username = req.params.username
 	db.User.findOne({where: {mail: username}})
+		.then(result => sendJSON.ok(res, result))
+		.catch(err => sendJSON.serverError(res, err))
+}
+/**
+ * @function byPhotographe
+ * @description Returns the user corresponding to the give photographe id
+ * @param {string} photographeId
+ * @return {Object} The given user, or null if not exists
+ */
+controller.byPhotographe =  async function(req, res) {
+	const photographeId = req.params.photographeId
+	db.User.findOne({where: {photographeId: photographeId}})
 		.then(result => sendJSON.ok(res, result))
 		.catch(err => sendJSON.serverError(res, err))
 }

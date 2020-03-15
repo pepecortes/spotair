@@ -1,5 +1,3 @@
-ADMIN/PHOTOGRAPHES (perhaps somewhere else)
-	Membre actif checkbox deselected when using a browser history back
 
 SCREENING-VALIDATION
 	A picture has perhaps been visited by a screener or a validator, but no decision taken. How to indicate this?

@@ -34,12 +34,7 @@
 			label="Group",
 			label-for="group"
 		)
-			b-form-select(
-				id="group",
-				v-model="formData.group",
-				:options="groupOptions",
-				size="sm",
-			)
+			b-form-radio-group(v-model="formData.group", :options="groupOptions")
 			
 	block additionalModifyActions
 		b-button(type="button", variant="outline-danger", v-on:click="resetPassword") Reset password

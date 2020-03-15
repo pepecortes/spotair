@@ -11,7 +11,8 @@
 			b-form-checkbox(
 				id="isspotair",
 				v-model="formData.isSpotair",
-				:state="checkValidityState($v.formData.isspotair)"
+				:state="checkValidityState($v.formData.isspotair)",
+				switch,
 			)
 			
 		b-form-group(

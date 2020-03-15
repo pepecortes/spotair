@@ -9,7 +9,9 @@
 			b-form-checkbox(
 				id="isspotair",
 				v-model="formData.actif",
+				switch,
 			)
+			
 		b-form-group(
 			label="Prénom",
 			label-for="prenom",
@@ -69,7 +71,7 @@ export default {
 			// Override BaseForm method to get the corresponding user data
 			this.formData = JSON.parse(JSON.stringify(this.selection))
 			
-			console.log("formData.actif " + this.formData.actif)
+			console.log("fformData.actif " + this.formData.actif)
 			
 			this.fusionTarget = null
 			this.user = {}

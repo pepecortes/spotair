@@ -37,12 +37,13 @@
 				:state="checkValidityState($v.formData.nom)"
 			)
 	
-	block input_modify
+	block input_modify		
 		b-form-group(
 			label="Utilisateur",
 			label-for="email",
 		)
-			b-link(v-bind:href="'/admin/users/modify/' + user.id") {{ user.mail }}
+			div(class="link-container")
+				b-link(v-bind:href="'/admin/users/modify/' + user.id") {{ user.mail }}
 			
 </template>
 
@@ -101,3 +102,12 @@ export default {
 	}
 	
 </script>
+
+<style>
+
+.link-container {
+	padding-top: calc(0.375rem + 1px);
+	padding-left: 0.2rem;
+}
+
+</style>

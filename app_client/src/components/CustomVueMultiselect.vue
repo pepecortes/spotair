@@ -48,9 +48,9 @@ export default {
 
 .multiselect__input,
 .multiselect__single {
-  font-size: 0.95rem;
+  font-size: 1.0rem;
   margin-bottom: 0px;
-  padding-top: 0px;
+  padding-top: 0.25rem;
 }
 
 .multiselect__tags {

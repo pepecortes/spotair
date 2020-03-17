@@ -289,4 +289,9 @@ export default {
 	border-bottom-right-radius: 0.25rem;
 }
 
+.custom-control {
+	padding-top: calc(0.375rem + 1px);
+	padding-left: 2.5rem;
+}
+
 </style>

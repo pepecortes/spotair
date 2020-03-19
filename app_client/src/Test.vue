@@ -17,6 +17,7 @@
 						template(slot="button-content")
 							em Tests
 						b-dropdown-item(to="/test") Test 1
+						b-dropdown-item(to="/test/twitterFeed") Twitter feed
 						
 				b-navbar-nav(class="ml-auto")
 					b-nav-item(v-if='isAdmin', href="/doc") Docs

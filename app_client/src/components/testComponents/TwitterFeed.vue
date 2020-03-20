@@ -1,56 +1,35 @@
 <template lang="pug">
-	div(id='cover')
+
+	div(id='test')
 		
-		b-container(class='nous_sommes text-center')
-			h2 Nous sommes Spot'Air
-			p Passionnés d'aéronautique et de photographie
-			
+		b-container(class='text-center')
+			h2 TwitterFeed Test
+			b-link(href="https://www.npmjs.com/package/vue-tweet-embed") vue-tweet-embed
+			b-row
+				div Note: Firefox tracking protection prevents feed display (the browser needs to load Twitter JS and cookies)
+			b-row
+				b-col
+				b-col
+					timeline(id="jcortesocana", sourceType="profile", :options="{ tweetLimit: '3' }")
+				b-col
+
 </template>
 
 <script>
+import { Tweet, Moment, Timeline } from 'vue-tweet-embed'
 
 export default {
 	
 	components: {
-    //carousel
-	},
-
-	beforeMount () {
-		//this.getLatestPhotos()
+		'timeline': Timeline,
 	},
 	
 	data() {
 		return {
-			//carouselActive: false,
-			//photos: [],
-			//photo: {},
-			//options: {autoplay: {delay: 3500, disableOnInteraction: false}},
-			//fileLocation: process.env.STORAGE_URL + process.env.PICTURE_LOCATION
 		}
 	},
 	
 	methods: {
-		
-		//photoSelected(photo) {
-			//const galerieId = photo.galerie.id
-			//this.$router.push({ path: `/galeries/${galerieId}` })
-		//},
-		
-		//photoToCarouselData(photo) {
-			//var output = photo
-			//output.url = `${this.fileLocation}${photo.id}.jpg`
-			//return output
-		//},
-		
-		//getLatestPhotos() {
-			//const vm = this
-			//this.axios.get('/photos/recent/')
-				//.then(response =>  {
-					//vm.photos = response.data.map(this.photoToCarouselData)
-					//vm.carouselActive = true
-				//})
-				//.catch(err => vm.showAxiosAlert(err))
-		//},
 			
 	},
 	
@@ -61,14 +40,5 @@ export default {
 <style lang="scss">
 @import '../../styles/custom_variables.scss';
 
-.nous_sommes {
-	font-family: 'PT Serif Caption';
-}
-
-.nous_sommes > p {
-	font-size: 1.3em;
-	font-style: italic;
-	color: $color-secondary-1-4;
-}
 
 </style>

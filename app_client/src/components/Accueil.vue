@@ -1,5 +1,6 @@
 <template lang="pug">
-	div(id='cover')
+
+	div#cover
 
 		b-alert(
 			:variant="alert.type",
@@ -9,29 +10,46 @@
 			@dismissed="alert.show=false",
 		) {{ alert.text }}
 		
-		b-container(class='nous_sommes text-center')
+		b-container.nous_sommes.text-center
 			h2 Nous sommes Spot'Air
 			p Passionnés d'aéronautique et de photographie
 		
-		carousel(
-			v-if='carouselActive',
-			:options='options',
-			:photos='photos',
-			v-model='photo',
-			v-on:input='photoSelected',
-			style="width:100%; height:80vh"
-		)
+		b-container(fluid)
+			b-row
+				b-col(cols="2")
+				b-col(cols="8")
+					carousel(
+						v-if='carouselActive',
+						:options='options',
+						:photos='photos',
+						v-model='photo',
+						v-on:input='photoSelected',
+						style="width:100%; height:80vh"
+					)
+				b-col(cols="2")
+					div(v-b-toggle.tweetFeed, style="float: right")
+						b-icon.when-opened(icon="chevron-up")
+						b-icon.when-closed(icon="chevron-down")
+					b-collapse#tweetFeed(visible)
+						timeline(id="jcortesocana", sourceType="profile", :options="{ tweetLimit: '6' }")
+						
 </template>
 
 <script>
 
+import { Timeline } from 'vue-tweet-embed'
+import { BIcon, BIconChevronUp, BIconChevronDown } from 'bootstrap-vue'
 import { alertMixin } from './AlertMixin'
 import carousel from './Carousel.vue'
 
 export default {
 	
 	components: {
-    carousel
+		BIcon,
+    BIconChevronUp,
+    BIconChevronDown,
+    carousel,
+    'timeline': Timeline,
 	},
 	
 	mixins: [alertMixin],
@@ -90,6 +108,11 @@ export default {
 	font-size: 1.3em;
 	font-style: italic;
 	color: $color-secondary-1-4;
+}
+
+.collapsed > .when-opened,
+:not(.collapsed) > .when-closed {
+		display: none;
 }
 
 </style>

@@ -16,7 +16,13 @@
 		
 		b-container(fluid)
 			b-row
-				b-col(cols="2")
+				b-col.sidePanel(cols="2")
+					div(v-b-toggle.tweetFeed, style="float: right")
+						b-icon.when-opened(icon="chevron-up")
+						b-icon.when-closed(icon="chevron-down")
+					b-collapse#tweetFeed(visible)
+						p.secondary-header.text-center Les news
+						timeline(id="jcortesocana", sourceType="profile", :options="{ tweetLimit: '6' }")
 				b-col(cols="8")
 					carousel(
 						v-if='carouselActive',
@@ -24,17 +30,26 @@
 						:photos='photos',
 						v-model='photo',
 						v-on:input='photoSelected',
-						style="width:100%; height:80vh"
+						style="width:100%; height:76vh"
 					)
-				b-col(cols="2")
-					div(v-b-toggle.tweetFeed, style="float: right")
+					p.disclaimer Association Spot'Air, Blagnac (31). Les photos de ce site ne sont pas libres de droits.
+				b-col.sidePanel.text-center(cols="2")
+					div(v-b-toggle.partenaires, style="float: right")
 						b-icon.when-opened(icon="chevron-up")
 						b-icon.when-closed(icon="chevron-down")
-					b-collapse#tweetFeed(visible)
-						timeline(id="jcortesocana", sourceType="profile", :options="{ tweetLimit: '6' }")
+					b-collapse#partenaires(visible)
+						p.secondary-header.text-center Nos partenaires
+						a.partenaires-logo(href="https://www.welove.aero/fr", target="_blank")
+							img(:src="mediaURL + 'logo_we_love_aero.svg'", alt="logo", style="padding:0.5em;width:150px;")
+						a.partenaires-logo(href="http://cap-aero.com", target="_blank")
+							img(:src="mediaURL + 'logo_cap_aero.png'", alt="logo", style="padding:0.5em;width:150px;")
+						a.partenaires-logo(href="http://www.numeriphot.com/", target="_blank")
+							img(:src="mediaURL + 'logo_numeriphot.png'", alt="logo", style="padding:0.5em;width:150px;")
+							
+					
 						
 </template>
-
+`${process.env.ASSETS_URL}icons/spotair_logo.png`
 <script>
 
 import { Timeline } from 'vue-tweet-embed'
@@ -64,7 +79,8 @@ export default {
 			photos: [],
 			photo: {},
 			options: {autoplay: {delay: 3500, disableOnInteraction: false}},
-			fileLocation: process.env.STORAGE_URL + process.env.PICTURE_LOCATION
+			fileLocation: process.env.STORAGE_URL + process.env.PICTURE_LOCATION,
+			mediaURL: `${process.env.ASSETS_URL}icons/`,
 		}
 	},
 	
@@ -104,6 +120,12 @@ export default {
 	font-family: 'PT Serif Caption';
 }
 
+.secondary-header {
+	font-family: 'PT Serif Caption';
+	font-size: 1.3em;
+	font-weight: bold;
+}
+
 .nous_sommes > p {
 	font-size: 1.3em;
 	font-style: italic;
@@ -113,6 +135,21 @@ export default {
 .collapsed > .when-opened,
 :not(.collapsed) > .when-closed {
 		display: none;
+}
+
+.partenaires-logo {
+	margin: auto;
+}
+
+.disclaimer {
+	font-size: x-small;
+	text-align: center;
+	padding: 1.2rem;
+}
+
+.sidePanel {
+	height: 78vh;
+	overflow: auto;
 }
 
 </style>

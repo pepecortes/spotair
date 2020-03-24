@@ -40,7 +40,7 @@
 							b-button(size="sm", variant="light", v-b-toggle.collapseSearchField)
 								b-icon(icon="search")
 						b-nav-item(v-if='isAdmin', href="/doc")
-							b-icon(icon="documents")
+							b-icon(icon="file-text")
 						b-nav-item-dropdown(right)
 							template(slot="button-content")
 								b-icon(icon="person")
@@ -52,7 +52,7 @@
 
 <script>
 import { credentialsMixin } from './components/CredentialsMixin'
-import { BIcon, BIconSearch, BIconPerson, BIconDocuments } from 'bootstrap-vue'
+import { BIcon, BIconSearch, BIconPerson, BIconFileText } from 'bootstrap-vue'
 
 export default {
 	
@@ -60,7 +60,7 @@ export default {
 		BIcon,
     BIconSearch,
     BIconPerson,
-    BIconDocuments,
+    BIconFileText,
   },
 	
 	mixins: [credentialsMixin],	

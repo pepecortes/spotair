@@ -16,7 +16,7 @@
 					b-nav-item-dropdown
 						template(slot="button-content")
 							em Tests
-						b-dropdown-item(to="/test") Test 1
+						b-dropdown-item(to="/test/test1") Test 1
 						b-dropdown-item(to="/test/twitterFeed") Embeded Twitter feed
 						
 				b-navbar-nav(class="ml-auto")

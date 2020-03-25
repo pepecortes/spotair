@@ -8,8 +8,12 @@
 				
 				b-navbar-toggle(target="nav-collapse")
 				b-collapse(id="nav-collapse", is-nav)
-				
+						
 					b-navbar-nav
+						b-nav-item(href="https://www.facebook.com/spotair.org/", target="_blank")
+							fa-icon.social(icon="facebook-square")
+						b-nav-item(href="https://www.instagram.com/spotair.officiel/", target="_blank")
+							fa-icon.social(icon="instagram")
 						b-nav-item(to="/map") CARTE
 						b-nav-item(to="/galeries") GALERIES
 						b-nav-item-dropdown(v-if='loggedIn')
@@ -25,10 +29,12 @@
 							b-collapse(id="collapseSearchField")
 								b-form-input(v-model='searchString', size="sm", class="mr-sm-2", placeholder="Recherche")
 							b-button(size="sm", variant="primary", v-b-toggle.collapseSearchField)
-								b-icon(icon="search")
+								fa-icon(icon="search")
+						b-nav-item(href="https://www.instagram.com/spotair.officiel/", target="_blank")
+							fa-icon(icon="bell-slash-o")
 						b-nav-item-dropdown(right)
 							template(slot="button-content")
-								b-icon(icon="person")
+								fa-icon(icon="user")
 							b-dropdown-item(v-if='!loggedIn', href="/login") Login
 							b-dropdown-item(v-if='loggedIn', to="/profileForm") Profile
 							b-dropdown-item(v-if='loggedIn', href="/logout") Logout
@@ -39,14 +45,13 @@
 
 <script>
 import { credentialsMixin } from './components/CredentialsMixin'
-import { BIcon, BIconSearch, BIconPerson } from 'bootstrap-vue'
+import 'font-awesome/css/font-awesome.min.css'
+import VueFontawesome from 'vue-fontawesome-icon/VueFontawesome.vue'
 
 export default {
 	
   components: {
-		BIcon,
-    BIconSearch,
-    BIconPerson,
+		'fa-icon': VueFontawesome,
   },
 	
 	mixins: [credentialsMixin],
@@ -96,6 +101,11 @@ export default {
 
 #logo img {
 	height:50px;
+}
+
+.social {	
+	font-size: 1.5rem;
+	color: $color-primary-0;
 }
 
 </style>

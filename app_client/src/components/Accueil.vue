@@ -49,7 +49,7 @@
 					
 						
 </template>
-`${process.env.ASSETS_URL}icons/spotair_logo.png`
+
 <script>
 
 import { Timeline } from 'vue-tweet-embed'

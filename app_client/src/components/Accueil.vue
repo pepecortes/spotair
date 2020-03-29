@@ -17,11 +17,8 @@
 		b-container(fluid)
 			b-row
 				b-col.sidePanel(cols="2")
-					div(v-b-toggle.tweetFeed, style="float: right")
-						b-icon.when-opened(icon="chevron-up")
-						b-icon.when-closed(icon="chevron-down")
-					b-collapse#tweetFeed(visible)
-						p.secondary-header.text-center Les news
+					div(v-show='!silent')
+						p.secondary-header.text-center
 						timeline(id="jcortesocana", sourceType="profile", :options="{ tweetLimit: '6' }")
 				b-col(cols="8")
 					carousel(
@@ -34,19 +31,14 @@
 					)
 					p.disclaimer Association Spot'Air, Blagnac (31). Les photos de ce site ne sont pas libres de droits.
 				b-col.sidePanel.text-center(cols="2")
-					div(v-b-toggle.partenaires, style="float: right")
-						b-icon.when-opened(icon="chevron-up")
-						b-icon.when-closed(icon="chevron-down")
-					b-collapse#partenaires(visible)
-						p.secondary-header.text-center Nos partenaires
+					div(v-show='!silent')
+						p.secondary-header.text-center
 						a.partenaires-logo(href="https://www.welove.aero/fr", target="_blank")
 							img(:src="mediaURL + 'logo_we_love_aero.svg'", alt="logo", style="padding:0.5em;width:150px;")
 						a.partenaires-logo(href="http://cap-aero.com", target="_blank")
 							img(:src="mediaURL + 'logo_cap_aero.png'", alt="logo", style="padding:0.5em;width:150px;")
 						a.partenaires-logo(href="http://www.numeriphot.com/", target="_blank")
 							img(:src="mediaURL + 'logo_numeriphot.png'", alt="logo", style="padding:0.5em;width:150px;")
-							
-					
 						
 </template>
 
@@ -82,6 +74,10 @@ export default {
 			fileLocation: process.env.STORAGE_URL + process.env.PICTURE_LOCATION,
 			mediaURL: `${process.env.ASSETS_URL}icons/`,
 		}
+	},
+	
+	props: {
+		silent: Boolean,
 	},
 	
 	methods: {

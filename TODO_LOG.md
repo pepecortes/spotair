@@ -1,3 +1,9 @@
+ACCUEIL
+	Check bootstrap ASPECT
+
+ACCUEIL
+	Add menu information to navbar when hovering
+
 BASEFORM
 	When switching from Modifier to Nouveau and back, the hidden form fields appear: they shouldn't
 

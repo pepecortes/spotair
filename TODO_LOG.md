@@ -1,8 +1,8 @@
-ACCUEIL
-	Check bootstrap ASPECT
+NAVBAR
+	logo should go to home via router, not RELOAD
 
 ACCUEIL
-	Add menu information to navbar when hovering
+	Check bootstrap ASPECT
 
 BASEFORM
 	When switching from Modifier to Nouveau and back, the hidden form fields appear: they shouldn't

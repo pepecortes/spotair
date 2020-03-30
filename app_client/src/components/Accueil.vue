@@ -10,7 +10,7 @@
 			@dismissed="alert.show=false",
 		) {{ alert.text }}
 		
-		b-container.nous_sommes.text-center
+		b-container.nous_sommes.text-center(v-show="!silent")
 			h2 Nous sommes Spot'Air
 			p Passionnés d'aéronautique et de photographie
 		
@@ -27,9 +27,10 @@
 						:photos='photos',
 						v-model='photo',
 						v-on:input='photoSelected',
-						style="width:100%; height:76vh"
+						style="width:100%; height:76vh",
 					)
-					p.disclaimer Association Spot'Air, Blagnac (31). Les photos de ce site ne sont pas libres de droits.
+					p.disclaimer(v-show="!silent")
+						Association Spot'Air, Blagnac (31). Les photos de ce site ne sont pas libres de droits.
 				b-col.sidePanel.text-center(cols="2")
 					div(v-show='!silent')
 						p.secondary-header.text-center

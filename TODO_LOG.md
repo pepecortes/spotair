@@ -1,8 +1,8 @@
-NAVBAR
-	logo should go to home via router, not RELOAD
+GALERIES
+	Pictures do not seem to take all the room available? Search on BaseExpoCollection.pug
 
 ACCUEIL
-	Check bootstrap ASPECT
+	Check responsive
 
 BASEFORM
 	When switching from Modifier to Nouveau and back, the hidden form fields appear: they shouldn't

@@ -3,7 +3,7 @@
 		b-navbar(id="header", toggleable="lg", type="dark", variant="color-primary-1")
 			b-container
 			
-				b-navbar-brand(id='logo', href="/")
+				b-navbar-brand(id='logo', to="/")
 					img(:src='logoUrl', alt="logo")
 				
 				b-navbar-toggle(target="nav-collapse")

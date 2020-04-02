@@ -11,9 +11,9 @@ div.baseExpoCollection
 	div(v-if='collectionAvailable && showCarousel')
 		b-container(fluid)
 			b-row
-				b-col(xl="4")
+				b-col(v-show="blockAdmin", xl="4")
 					block admin
-				b-col(xl="8")
+				b-col(v-bind:xl="blockAdmin? 8 : 12")
 					carousel(
 						style="width:100%; height:80vh",
 						:photos='photos',

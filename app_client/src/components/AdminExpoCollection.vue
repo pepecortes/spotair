@@ -22,6 +22,12 @@ export default {
 		'photo-data-edit': PhotoDataEdit,
 	},
 	
+	data() {
+		return {
+			blockAdmin: true,
+		}
+	},
+	
 }
 </script>
 

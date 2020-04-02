@@ -1,6 +1,12 @@
 GALERIES
 	Pictures do not seem to take all the room available? Search on BaseExpoCollection.pug
 
+SEARCH
+	Focus to search field when the button is clicked
+
+ADMIN SEARCH
+	Investigate layout
+
 ACCUEIL
 	Check responsive
 

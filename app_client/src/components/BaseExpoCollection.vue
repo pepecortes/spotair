@@ -39,6 +39,9 @@ export default {
 			photoSelected: {},
 			currentPhoto: {},
 			showThumbs: true,
+			blockAdmin: false, 
+			// override if you need to add the template admin block
+			// example: AdminExpoCollection
 		}
 	},
 	

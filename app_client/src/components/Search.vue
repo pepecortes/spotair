@@ -8,7 +8,7 @@
 			@dismissed="alert.show=false",
 		) {{ alert.text }}
 		
-		b-container
+		b-container(v-bind:fluid='adminSearch')
 		
 			div(class="spotair-title text-center")
 				h4(v-if='title') {{ title }}

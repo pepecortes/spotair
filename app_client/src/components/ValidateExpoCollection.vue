@@ -22,6 +22,12 @@ export default {
 		'photo-data-validate': PhotoDataValidate,
 	},
 	
+	data() {
+		return {
+			blockAdmin: true,
+		}
+	},
+	
 	props: {
 		
 		thumbnailLocation: {

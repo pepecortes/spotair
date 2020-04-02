@@ -1,6 +1,3 @@
-SEARCH
-	Focus to search field when the button is clicked
-
 ACCUEIL
 	Check responsive
 

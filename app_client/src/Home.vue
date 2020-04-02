@@ -28,8 +28,8 @@
 						
 					b-navbar-nav(class="ml-auto")
 						b-nav-form(@submit.stop.prevent="submitSearch")
-							b-collapse(id="collapseSearchField")
-								b-form-input(v-model='searchString', size="sm", class="mr-sm-2", placeholder="Recherche")
+							b-collapse(id="collapseSearchField", v-on:shown='$refs.searchInput.focus()')
+								b-form-input(ref="searchInput", v-model='searchString', size="sm", class="mr-sm-2", placeholder="Recherche")
 							b-button(size="sm", variant="primary", v-b-toggle.collapseSearchField)
 								fa-icon(icon="search")
 							b-nav-item(v-show='!silent', v-on:click="toggleSilent", v-b-tooltip.hover.v-yellow.ds1000, title="au calme")

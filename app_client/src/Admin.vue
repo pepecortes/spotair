@@ -35,8 +35,8 @@
 							
 					b-navbar-nav(class="ml-auto")
 						b-nav-form(v-if='isAdmin', @submit.stop.prevent="submitSearch")
-							b-collapse(id="collapseSearchField")
-								b-form-input(v-model='searchString', size="sm", class="mr-sm-2", placeholder="Recherche")
+							b-collapse(id="collapseSearchField", v-on:shown='$refs.searchInput.focus()')
+								b-form-input(ref='searchInput', v-model='searchString', size="sm", class="mr-sm-2", placeholder="Recherche")
 							b-button(size="sm", variant="light", v-b-toggle.collapseSearchField)
 								b-icon(icon="search")
 						b-nav-item(v-if='isAdmin', href="/doc")

@@ -1,11 +1,12 @@
+ADMIN. AERODROMES. GMAPINPUT
+	Improve the button icons
+	Unsatisfied with the map and coordinates styling
+
 ACCUEIL
 	Check responsive
 
 BASEFORM
 	When switching from Modifier to Nouveau and back, the hidden form fields appear: they shouldn't
-
-ADMIN. AERODROMES
-	Unsatisfied with the map and coordinates styling
 
 SCREENING-VALIDATION
 	A picture has perhaps been visited by a screener or a validator, but no decision taken. How to indicate this?

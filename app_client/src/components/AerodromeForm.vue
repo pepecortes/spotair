@@ -30,12 +30,13 @@
 			
 		p LATITUDE: {{ formData.latitude }} / LONGITUDE: {{ formData.longitude }}
 		
-		gmap-input(
-			:text='formData.nom + " " + formData.lieu',
-			v-model='gps',
-			:resetRequest='resetRequest',
-			v-on:reset='resetRequest = false',
-		)
+		div#mapContainer
+			gmap-input(
+				:text='formData.nom + " " + formData.lieu',
+				v-model='gps',
+				:resetRequest='resetRequest',
+				v-on:reset='resetRequest = false',
+			)
 			
 </template>
 
@@ -108,3 +109,11 @@ export default {
 }
 
 </script>
+
+<style lang="scss">
+
+#mapContainer {
+	width: 100%;
+}
+
+</style>

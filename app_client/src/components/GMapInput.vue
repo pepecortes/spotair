@@ -5,7 +5,7 @@
 			b-button(class='btn btn-primary', @click='centerClicked') Recentrer
 	
 		gmap-map(
-			style="width: 60%; height: 450px",
+			style="height: 26rem",
 			ref='mapRef',
 			:center='center',
 			:zoom='zoom',

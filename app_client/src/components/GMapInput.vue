@@ -1,8 +1,10 @@
 <template lang="pug">
 	div
 		div(v-show='mapAvailable', ref='gmapControls', id='gmapControls')
-			b-button(class='btn btn-primary', @click='searchClicked') Rechercher
-			b-button(class='btn btn-primary', @click='centerClicked') Recentrer
+			b-button(size="sm", variant="outline-secondary", @click='searchClicked', v-b-tooltip.hover.v-yellow, title="Geolocalisation du nom/lieu")
+				b-icon(icon="search")
+			b-button(size="sm", variant="outline-secondary", @click='centerClicked' v-b-tooltip.hover.v-yellow, title="Centrer la carte")
+				b-icon(icon="geo")
 	
 		gmap-map(
 			style="height: 26rem",
@@ -15,8 +17,15 @@
 
 <script>
 import { gmapApi } from 'vue2-google-maps'
+import { BIcon, BIconSearch, BIconGeo } from 'bootstrap-vue'
 
 export default {
+	
+  components: {
+		BIcon,
+    BIconSearch,
+    BIconGeo,
+  },
 	
 	props: {
 		value: Object,

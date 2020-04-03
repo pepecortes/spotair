@@ -27,8 +27,6 @@
 				v-model.trim="formData.lieu",
 				:state="checkValidityState($v.formData.lieu)"
 			)
-			
-		p LATITUDE: {{ formData.latitude }} / LONGITUDE: {{ formData.longitude }}
 		
 		div#mapContainer
 			gmap-input(

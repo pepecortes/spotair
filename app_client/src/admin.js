@@ -72,7 +72,14 @@ const routes = [
   { path: '/admin/photos/:tab?/:id?', component: FormPhoto },
   { path: '/admin/users/:tab?/:id?', component: FormUser },
   { path: '/admin/validatePhotos', component: ThePhotoValidation },
-  { path: '/admin/recentlyModified', component: Search, props: { adminSearch: true, searchType: SearchType.RECENT_MODIFIED } },
+  { path: '/admin/recentlyModified',
+		component: Search,
+		props: {
+			adminSearch: true,
+			searchType: SearchType.RECENT_MODIFIED,
+			title: "Photos récemment ajoutées/modifiées",
+		 }
+	},
   { path: '/admin/profileForm', component: UserProfileForm },
   { path: '/admin/search', component: Search, props: { adminSearch: true } },
   { path: '/admin/editPhoto/:id(\\d+)?', component: Search, props: { adminSearch: true, searchType: SearchType.ID } },

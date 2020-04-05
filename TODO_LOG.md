@@ -9,13 +9,9 @@ SCREENING-VALIDATION
 
 DATABASE CHANGES FOR EXTENDED ADMIN ROLE (SCREENER)
 	Change 'isAdmin' field -> 'group'
-	
-ADMIN.PHOTOGRAPHES.MODIFIER
-	Provide the user information (mail) and link it to modify the user
 
 PHOTO-DATA-EDIT
 	DELETE API call manage all the tasks linked to deletion?
-	Think if you can refactor ModifySinglePhoto
 
 BUILD
 	Document somewhere how to build the app_client sources in production (install dependencies, launch webpack...)
@@ -23,9 +19,6 @@ BUILD
 LOADING ICON
 	VALIDATION: When using REMOTE: validation takes a long time: add icon for waiting
 	
-CAROUSEL - ACCUEIL
-	 Why cannot I use the freemode upon initialization: check if there is some bug
-
 DATABASE MIGRATION
 	before migration; choose IMG_HEIGHT in .env, because thubnails size depends on it
 	after the migration, many users will have a username xxx@nomail.com. how to manage this?

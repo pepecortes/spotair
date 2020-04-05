@@ -50,16 +50,17 @@
 				v-model="photo.commentaire"
 			)
 			
-			b-button(
-				type="button", variant="outline-warning",
-				v-show='initialPhotoModified', 
-				v-b-modal.confirmUpdate,
-			) Update
-			
-			b-button(
-				type="button", variant="outline-danger",
-				v-on:click='deletePhoto',
-			) Delete
+			b-container.text-center
+				b-button-group
+					b-button(
+						type="button", variant="outline-warning",
+						v-show='initialPhotoModified', 
+						v-b-modal.confirmUpdate,
+					) Update
+					b-button(
+						type="button", variant="outline-danger",
+						v-on:click='deletePhoto',
+					) Delete
 			
 </template>
 
@@ -209,5 +210,9 @@ export default {
 </script>
 
 <style lang="scss">
+
+.btn-group {
+	margin-bottom: 2rem;
+}
 
 </style>

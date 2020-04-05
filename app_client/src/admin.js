@@ -58,6 +58,7 @@ import Search from './views/Search.vue'
 // Define the routes
 const routes = [
 	// tab can be: "modify", "new",	"fusion"
+  { path: '/admin', component: ThePhotoValidation },
   { path: '/admin/aerodromes/:tab?/:id?', component: FormAerodrome },
   { path: '/admin/themes/:tab?/:id?', component: FormTheme },
   { path: '/admin/annees/:tab?/:id?', component: FormAnnee },

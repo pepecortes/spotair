@@ -67,11 +67,11 @@
 import { validationMixin } from 'vuelidate'
 import { required } from 'vuelidate/lib/validators'
 
-import EditorInput from './EditorInput.vue'
-import AppareilForm from './AppareilForm.vue'
-import GalerieForm from './GalerieForm.vue'
-import CompagnieForm from './CompagnieForm.vue'
-import PhotographeForm from './PhotographeForm.vue'
+import ControlInput from './ControlInput.vue'
+import FormAppareil from './FormAppareil.vue'
+import FormGalerie from './FormGalerie.vue'
+import FormCompagnie from './FormCompagnie.vue'
+import FormPhotographe from './FormPhotographe.vue'
 
 // API is restricted: use a key
 let headers = {'Authorization': `Bearer ${process.env.JWT_API_KEY}`}
@@ -86,7 +86,7 @@ export default {
 	},
 	
 	components: {
-		'editor-input': EditorInput,
+		'editor-input': ControlInput,
 	},
 	
 	data() {
@@ -95,10 +95,10 @@ export default {
 			initialPhoto: {},
 			removeWatermark: false,
 			admin: {
-				appareil: AppareilForm,
-				galerie: GalerieForm,
-				compagnie: CompagnieForm,
-				photographe: PhotographeForm
+				appareil: FormAppareil,
+				galerie: FormGalerie,
+				compagnie: FormCompagnie,
+				photographe: FormPhotographe
 			},
 		}
 	},

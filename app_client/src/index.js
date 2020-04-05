@@ -4,10 +4,11 @@ import AsyncComputed from 'vue-async-computed'
 import BootstrapVue from 'bootstrap-vue'
 import Axios from 'axios'
 import VueAxios from 'vue-axios'
-import Home from './Home.vue'
 import * as VueGoogleMaps from "vue2-google-maps"
 import VueLoading from 'vuejs-loading-plugin'
 import {SearchType} from '../../app_lib/constants'
+
+import Home from './views/Home.vue'
 
 Vue.config.productionTip = false
 Vue.config.devtools = false
@@ -38,19 +39,19 @@ Vue.directive('focus', {
 })
 
 // Define or input route components
-import Accueil from './components/Accueil.vue'
-import Map from './components/Map.vue'
-import Galeries from './components/Galeries.vue'
-import FileUploadForm from './components/FileUpload.vue'
-import ProfileForm from './components/ProfileForm.vue'
-import Search from './components/Search.vue'
+import Accueil from './views/Accueil.vue'
+import Map from './views/Map.vue'
+import Galeries from './views/Galeries.vue'
+import FileUploadForm from './views/FileUpload.vue'
+import UserProfileForm from './views/UserProfileForm.vue'
+import Search from './views/Search.vue'
 
 // Define the routes
 const routes = [
   { path: '/', component: Accueil },
   { path: '/map', component: Map },
   { path: '/pictadd', component: FileUploadForm },
-  { path: '/profileForm', component: ProfileForm },
+  { path: '/profileForm', component: UserProfileForm },
   { path: '/search', component: Search },
   { path: '/galeries', component: Galeries },
   { path: '/galeries/:id', component: Galeries },

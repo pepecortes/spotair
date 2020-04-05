@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import CustomVueMultiselect from "./CustomVueMultiselect.vue" 
+import ControlVueMultiselect from "./ControlVueMultiselect.vue" 
 
 function sortAnnees(array) {
 	const compareFunction = (a, b) => ('' + b.annee).localeCompare(a.annee)
@@ -30,7 +30,7 @@ function sortAnnees(array) {
 export default {
 	
 	components: {
-    'v-select': CustomVueMultiselect,
+    'v-select': ControlVueMultiselect,
 	},
 	
 	props: {

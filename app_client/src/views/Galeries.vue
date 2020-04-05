@@ -11,14 +11,14 @@
 
 <script>
 
-import GalerieBrowser from './GalerieBrowser.vue'
-import GalerieView from './GalerieView.vue'
+import ControlBrowserGaleries from '../components/ControlBrowserGaleries.vue'
+import TheGalerieView from '../components/TheGalerieView.vue'
 
 export default {
 	
 	components: {
-		'galerie_browser': GalerieBrowser,
-		'galerie_view': GalerieView,
+		'galerie_browser': ControlBrowserGaleries,
+		'galerie_view': TheGalerieView,
 	},
 	
 	data() {

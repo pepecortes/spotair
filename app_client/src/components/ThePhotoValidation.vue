@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import { alertMixin } from './AlertMixin'
-import ValidateExpoCollection from './ValidateExpoCollection.vue'
+import { alertMixin } from '../mixins/Alert'
+import ExpoCollectionValidate from './ExpoCollectionValidate.vue'
 
 export default {
 	
@@ -27,7 +27,7 @@ export default {
 	},
 	
 	components: {
-		'validate-expo-collection': ValidateExpoCollection,
+		'validate-expo-collection': ExpoCollectionValidate,
 	},	
 	
 	data() {

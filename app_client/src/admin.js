@@ -39,40 +39,40 @@ Vue.directive('focus', {
 })
 
 // Define or input route components
-import AerodromeForm from './components/AerodromeForm.vue'
-import ThemeForm from './components/ThemeForm.vue'
-import AnneeForm from './components/AnneeForm.vue'
-import GalerieForm from './components/GalerieForm.vue'
-import CompagnieForm from './components/CompagnieForm.vue'
-import PhotographeForm from './components/PhotographeForm.vue'
-import UserForm from './components/UserForm.vue'
-import ConstructeurForm from './components/ConstructeurForm.vue'
-import ModeleForm from './components/ModeleForm.vue'
-import AvionForm from './components/AvionForm.vue'
-import AppareilForm from './components/AppareilForm.vue'
-import PhotoForm from './components/PhotoForm.vue'
-import ValidatePhotos from './components/ValidatePhotos.vue'
-import ProfileForm from './components/ProfileForm.vue'
-import Search from './components/Search.vue'
+import FormAerodrome from './components/FormAerodrome.vue'
+import FormTheme from './components/FormTheme.vue'
+import FormAnnee from './components/FormAnnee.vue'
+import FormGalerie from './components/FormGalerie.vue'
+import FormCompagnie from './components/FormCompagnie.vue'
+import FormPhotographe from './components/FormPhotographe.vue'
+import FormUser from './components/FormUser.vue'
+import FormConstructeur from './components/FormConstructeur.vue'
+import FormModele from './components/FormModele.vue'
+import FormAvion from './components/FormAvion.vue'
+import FormAppareil from './components/FormAppareil.vue'
+import FormPhoto from './components/FormPhoto.vue'
+import ThePhotoValidation from './components/ThePhotoValidation.vue'
+import UserProfileForm from './views/UserProfileForm.vue'
+import Search from './views/Search.vue'
 
 // Define the routes
 const routes = [
 	// tab can be: "modify", "new",	"fusion"
-  { path: '/admin/aerodromes/:tab?/:id?', component: AerodromeForm },
-  { path: '/admin/themes/:tab?/:id?', component: ThemeForm },
-  { path: '/admin/annees/:tab?/:id?', component: AnneeForm },
-  { path: '/admin/galeries/:tab?/:id?', component: GalerieForm },
-  { path: '/admin/compagnies/:tab?/:id?', component: CompagnieForm },
-  { path: '/admin/photographes/:tab?/:id?', component: PhotographeForm },
-  { path: '/admin/constructeurs/:tab?/:id?', component: ConstructeurForm },
-  { path: '/admin/modeles/:tab?/:id?', component: ModeleForm },
-  { path: '/admin/avions/:tab?/:id?', component: AvionForm },
-  { path: '/admin/appareils/:tab?/:id?', component: AppareilForm },
-  { path: '/admin/photos/:tab?/:id?', component: PhotoForm },
-  { path: '/admin/users/:tab?/:id?', component: UserForm },
-  { path: '/admin/validatePhotos', component: ValidatePhotos },
+  { path: '/admin/aerodromes/:tab?/:id?', component: FormAerodrome },
+  { path: '/admin/themes/:tab?/:id?', component: FormTheme },
+  { path: '/admin/annees/:tab?/:id?', component: FormAnnee },
+  { path: '/admin/galeries/:tab?/:id?', component: FormGalerie },
+  { path: '/admin/compagnies/:tab?/:id?', component: FormCompagnie },
+  { path: '/admin/photographes/:tab?/:id?', component: FormPhotographe },
+  { path: '/admin/constructeurs/:tab?/:id?', component: FormConstructeur },
+  { path: '/admin/modeles/:tab?/:id?', component: FormModele },
+  { path: '/admin/avions/:tab?/:id?', component: FormAvion },
+  { path: '/admin/appareils/:tab?/:id?', component: FormAppareil },
+  { path: '/admin/photos/:tab?/:id?', component: FormPhoto },
+  { path: '/admin/users/:tab?/:id?', component: FormUser },
+  { path: '/admin/validatePhotos', component: ThePhotoValidation },
   { path: '/admin/recentlyModified', component: Search, props: { adminSearch: true, searchType: SearchType.RECENT_MODIFIED } },
-  { path: '/admin/profileForm', component: ProfileForm },
+  { path: '/admin/profileForm', component: UserProfileForm },
   { path: '/admin/search', component: Search, props: { adminSearch: true } },
   { path: '/admin/editPhoto/:id(\\d+)?', component: Search, props: { adminSearch: true, searchType: SearchType.ID } },
 ]

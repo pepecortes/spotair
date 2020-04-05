@@ -1,7 +1,3 @@
-ADMIN. AERODROMES. GMAPINPUT
-	Improve the button icons
-	Unsatisfied with the map and coordinates styling
-
 ACCUEIL
 	Check responsive
 

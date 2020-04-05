@@ -1,9 +1,9 @@
 <template lang="pug">
-	include BaseExpoCollection.pug
+	include ExpoCollectionBase.pug
 </template>
 
 <script>
-import ExpoForm from './ExpoForm.vue'
+import ControlExpoCollection from './ControlExpoCollection.vue'
 import Carousel from './Carousel.vue'
 
 const _ = require('lodash')
@@ -11,7 +11,7 @@ const _ = require('lodash')
 export default {
 	
 	components: {
-		'expo-form': ExpoForm,
+		'expo-form': ControlExpoCollection,
 		'carousel': Carousel,
 	},
 	

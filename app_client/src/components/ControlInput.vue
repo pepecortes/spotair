@@ -48,13 +48,13 @@
 </template>
 
 <script>
-import CustomVueMultiselect from "./CustomVueMultiselect.vue"
+import ControlVueMultiselect from "./ControlVueMultiselect.vue"
 import { BIcon, BIconCheck, BIconReplyFill } from 'bootstrap-vue'
 
 export default {
 		
 	components: {
-		'v-select': CustomVueMultiselect,
+		'v-select': ControlVueMultiselect,
 		BIcon,
 		BIconCheck,
     BIconReplyFill,
@@ -96,7 +96,7 @@ export default {
 		},
 		
 		adminForm: {
-			// Form used for adding new records (i.e. AvionForm.vue)
+			// Form used for adding new records (i.e. FormAvion.vue)
 			type: Object,
 			default: null,
 		},

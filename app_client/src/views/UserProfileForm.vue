@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { alertMixin } from './AlertMixin'
+import { alertMixin } from '../mixins/Alert'
 import { validationMixin } from 'vuelidate'
 import { confirmDialog } from '../lib/common'
 import { required, minLength } from "vuelidate/lib/validators"

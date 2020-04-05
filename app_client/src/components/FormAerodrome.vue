@@ -1,5 +1,5 @@
 <template lang="pug">
-	extends BaseForm.pug
+	extends FormBase.pug
 	
 	block input
 	
@@ -40,9 +40,9 @@
 
 <script>
 
-import BaseForm from './BaseForm.vue'
+import FormBase from './FormBase.vue'
 import { required, decimal, between } from "vuelidate/lib/validators"
-import GMapInput from './GMapInput.vue'
+import ControlGMap from './ControlGMap.vue'
 
 // Check that both latitude and longitud are present or neither
 const bothCoordinates = (value, vm) => 
@@ -50,9 +50,9 @@ const bothCoordinates = (value, vm) =>
 
 export default {	
 	
-	components: {'gmap-input': GMapInput},
+	components: {'gmap-input': ControlGMap},
 	
-	extends: BaseForm,
+	extends: FormBase,
 	
 	data () {
 		return {

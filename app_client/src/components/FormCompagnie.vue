@@ -1,5 +1,5 @@
 <template lang="pug">
-	extends BaseForm.pug
+	extends FormBase.pug
 	
 	block input
 		b-form-group(
@@ -14,22 +14,35 @@
 				v-model.trim="formData.nom",
 				:state="checkValidityState($v.formData.nom)"
 			)
+		b-form-group(
+			label="Flotille",
+			label-for="flotille",
+			:invalid-feedback="formData.invalid.flotille",
+			:state="checkValidityState($v.formData.flotille)"
+		)
+			b-form-input(
+				id="flotille",
+				type="text",
+				v-model.trim="formData.flotille",
+				:state="checkValidityState($v.formData.flotille)"
+			)
 </template>
 
 <script>
 
-import BaseForm from './BaseForm.vue'
+import FormBase from './FormBase.vue'
 import { required } from "vuelidate/lib/validators"
 
 export default {
 	
-	extends: BaseForm,
+	extends: FormBase,
 	
 	data () {
 		return {
-			model: "constructeur",
+			model: "compagnie",
 			validations: {
 				nom: {required},
+				flotille: {}
 			},
 		}
 	},

@@ -1,5 +1,5 @@
 <template lang="pug">
-	extends BaseExpoCollection.pug
+	extends ExpoCollectionBase.pug
 	
 	block admin
 		photo-data-validate(
@@ -11,12 +11,12 @@
 </template>
 
 <script>
-import BaseExpoCollection from './BaseExpoCollection.vue'
+import ExpoCollectionBase from './ExpoCollectionBase.vue'
 import PhotoDataValidate from './PhotoDataValidate.vue'
 
 export default {
 	
-	extends: BaseExpoCollection,
+	extends: ExpoCollectionBase,
 	
 	components: {
 		'photo-data-validate': PhotoDataValidate,

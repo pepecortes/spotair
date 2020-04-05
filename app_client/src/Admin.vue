@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { credentialsMixin } from './components/CredentialsMixin'
+import { credentialsMixin } from './mixins/Credentials'
 import { BIcon, BIconSearch, BIconPerson, BIconFileText } from 'bootstrap-vue'
 
 export default {

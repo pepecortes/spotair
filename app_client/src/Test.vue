@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { credentialsMixin } from './components/CredentialsMixin'
+import { credentialsMixin } from './mixins/Credentials'
 
 export default {
 	

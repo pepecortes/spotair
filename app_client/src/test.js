@@ -40,15 +40,15 @@ Vue.directive('focus', {
 })
 
 // Define or input route components
-import ProfileForm from './components/ProfileForm.vue'
-import Palette from './components/Palette.vue'
+import UserProfileForm from './views/UserProfileForm.vue'
+import ThePalette from './components/ThePalette.vue'
 import Test1 from './components/testComponents/Test1.vue'
 import TwitterFeedTest from './components/testComponents/TwitterFeed.vue'
 
 // Define the routes
 const routes = [
-  { path: '/admin/profileForm', component: ProfileForm },
-  { path: '/test/colors', component: Palette },
+  { path: '/admin/profileForm', component: UserProfileForm },
+  { path: '/test/colors', component: ThePalette },
   { path: '/test/test1', component: Test1 },
   { path: '/test/twitterFeed', component: TwitterFeedTest },
 ]

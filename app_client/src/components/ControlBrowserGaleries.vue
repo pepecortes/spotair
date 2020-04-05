@@ -51,12 +51,12 @@
 
 <script>
 
-import GalerieSelectForm from './GalerieSelectForm.vue'
+import ControlSelectGalerie from './ControlSelectGalerie.vue'
 
 export default {
 	
 	components: {
-		'galerie_select': GalerieSelectForm,
+		'galerie_select': ControlSelectGalerie,
 	},
 	
 	data () {

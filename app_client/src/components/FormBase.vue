@@ -1,15 +1,15 @@
 <template lang="pug">
-	include BaseForm.pug
+	include FormBase.pug
 </template>
 
 <script>import Vue from 'vue'
 import { BFormGroup	} from 'bootstrap-vue'
-import CustomVueMultiselect from "./CustomVueMultiselect.vue" 
+import ControlVueMultiselect from "./ControlVueMultiselect.vue" 
 import pluralize from 'pluralize'
 import { validationMixin } from 'vuelidate'
 import { confirmDialog } from '../lib/common'
 import { required } from "vuelidate/lib/validators"
-import { alertMixin } from './AlertMixin'
+import { alertMixin } from '../mixins/Alert'
 
 const	localRouter = {"modify": 0, "new": 1,	"fusion": 2}
 
@@ -34,7 +34,7 @@ Vue.component('b-form-group', {
 export default {
 	
 	components: {
-		'v-select': CustomVueMultiselect
+		'v-select': ControlVueMultiselect
 	},
 	
 	props: {

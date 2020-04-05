@@ -46,8 +46,8 @@
 
 import { Timeline } from 'vue-tweet-embed'
 import { BIcon, BIconChevronUp, BIconChevronDown } from 'bootstrap-vue'
-import { alertMixin } from './AlertMixin'
-import carousel from './Carousel.vue'
+import { alertMixin } from '../mixins/Alert'
+import carousel from '../components/Carousel.vue'
 
 export default {
 	

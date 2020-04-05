@@ -24,9 +24,6 @@
 			b-button(size="sm", variant="outline-secondary", @click='homeClicked')
 				b-icon(icon="house")
 				
-				
-				
-		
 		gmap-map(
 			style="width: 100%; height: 700px;",
 			ref='mapRef',
@@ -37,8 +34,8 @@
 </template>
 
 <script>
-import CustomVueMultiselect from "./CustomVueMultiselect.vue" 
-import { alertMixin } from './AlertMixin'
+import ControlVueMultiselect from "../components/ControlVueMultiselect.vue" 
+import { alertMixin } from '../mixins/Alert'
 import { gmapApi } from 'vue2-google-maps'
 import { BIcon, BIconBullseye, BIconX, BIconHouse } from 'bootstrap-vue'
 
@@ -47,7 +44,7 @@ const _ = require('lodash')
 export default {
 	
 	components: {
-    'v-select': CustomVueMultiselect,
+    'v-select': ControlVueMultiselect,
 		BIcon,
     BIconBullseye,
     BIconX,

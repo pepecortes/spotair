@@ -78,12 +78,12 @@
 import { validationMixin } from 'vuelidate'
 import { required } from 'vuelidate/lib/validators'
 
-import EditorInput from './EditorInput.vue'
-import AvionForm from './AvionForm.vue'
-import AppareilForm from './AppareilForm.vue'
-import GalerieForm from './GalerieForm.vue'
-import CompagnieForm from './CompagnieForm.vue'
-import { credentialsMixin } from './CredentialsMixin'
+import ControlInput from './ControlInput.vue'
+import FormAvion from './FormAvion.vue'
+import FormAppareil from './FormAppareil.vue'
+import FormGalerie from './FormGalerie.vue'
+import FormCompagnie from './FormCompagnie.vue'
+import { credentialsMixin } from '../mixins/Credentials'
 
 // API is restricted: use a key
 let headers = {'Authorization': `Bearer ${process.env.JWT_API_KEY}`}
@@ -100,7 +100,7 @@ export default {
 	},
 	
 	components: {
-		'editor-input': EditorInput,
+		'editor-input': ControlInput,
 	},
 	
 	data() {
@@ -108,10 +108,10 @@ export default {
 			photo: {},
 			initialPhoto: {},
 			admin: {
-				avion: AvionForm,
-				appareil: AppareilForm,
-				galerie: GalerieForm,
-				compagnie: CompagnieForm,
+				avion: FormAvion,
+				appareil: FormAppareil,
+				galerie: FormGalerie,
+				compagnie: FormCompagnie,
 			},
 		}
 	},

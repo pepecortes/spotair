@@ -137,21 +137,21 @@
 
 <script>
 import { FormWizard, TabContent } from 'vue-form-wizard'
-import HeadOrTail from './HeadOrTail.vue'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'
-import { alertMixin } from './AlertMixin'
+import { alertMixin } from '../mixins/Alert'
 import { BIcon, BIconArrowRight, BIconArrowLeft, BIconX, BIconCheck } from 'bootstrap-vue'
 import colors from '../styles/colors.scss'
 
-import CustomVueMultiselect from "./CustomVueMultiselect.vue" 
+import ControlVueMultiselect from "../components/ControlVueMultiselect.vue" 
+import ControlHeadOrTail from '../components/ControlHeadOrTail.vue'
 
 export default {
 	
 	components: {
-    'v-select': CustomVueMultiselect,
+    'v-select': ControlVueMultiselect,
 		'form-wizard': FormWizard,
 		'tab-content': TabContent,
-		'head-or-tail': HeadOrTail,
+		'head-or-tail': ControlHeadOrTail,
 		BIcon,
     BIconArrowRight,
     BIconArrowLeft,

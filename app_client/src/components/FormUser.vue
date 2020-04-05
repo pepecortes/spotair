@@ -1,5 +1,5 @@
 <template lang="pug">
-	extends BaseForm.pug
+	extends FormBase.pug
 	
 	block input
 			
@@ -42,12 +42,12 @@
 </template>
 
 <script>
-import BaseForm from './BaseForm.vue'
+import FormBase from './FormBase.vue'
 import { required, email } from "vuelidate/lib/validators"
 
 export default {
 	
-	extends: BaseForm,
+	extends: FormBase,
 	
 	data () {
 		return {

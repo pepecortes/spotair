@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { alertMixin } from './components/AlertMixin'
+import { alertMixin } from './mixins/Alert'
 
 export default {
 	

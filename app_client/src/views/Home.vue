@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { credentialsMixin } from './components/CredentialsMixin'
+import { credentialsMixin } from '../mixins/Credentials'
 import 'font-awesome/css/font-awesome.min.css'
 import VueFontawesome from 'vue-fontawesome-icon/VueFontawesome.vue'
 
@@ -86,7 +86,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import './styles/custom_variables.scss';
+@import '../styles/custom_variables.scss';
 
 // Import Bootstrap and BootstrapVue source SCSS files
 @import '~bootstrap/scss/bootstrap.scss';

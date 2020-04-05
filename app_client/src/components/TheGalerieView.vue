@@ -8,12 +8,12 @@
 
 <script>
 
-import BaseExpoCollection from './BaseExpoCollection.vue'
+import ExpoCollectionBase from './ExpoCollectionBase.vue'
 
 export default {
 	
 	components: {
-		'expo-collection': BaseExpoCollection,
+		'expo-collection': ExpoCollectionBase,
 	},
 	
 	props: {

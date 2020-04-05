@@ -1,5 +1,5 @@
 <template lang="pug">
-	extends BaseExpoCollection.pug
+	extends ExpoCollectionBase.pug
 	
 	block admin
 		photo-data-edit(
@@ -11,12 +11,12 @@
 </template>
 
 <script>
-import BaseExpoCollection from './BaseExpoCollection.vue'
+import ExpoCollectionBase from './ExpoCollectionBase.vue'
 import PhotoDataEdit from './PhotoDataEdit.vue'
 
 export default {
 	
-	extends: BaseExpoCollection,
+	extends: ExpoCollectionBase,
 	
 	components: {
 		'photo-data-edit': PhotoDataEdit,

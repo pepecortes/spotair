@@ -32,16 +32,16 @@
 
 <script>
 
-import { alertMixin } from './AlertMixin'
-import BaseExpoCollection from './BaseExpoCollection.vue'
-import AdminExpoCollection from './AdminExpoCollection.vue'
+import { alertMixin } from '../mixins/Alert'
+import ExpoCollectionBase from '../components/ExpoCollectionBase.vue'
+import ExpoCollectionAdmin from '../components/ExpoCollectionAdmin.vue'
 import { SearchType } from '../../../app_lib/constants'
 
 export default {
 	
 	components: {
-		'expo-collection': BaseExpoCollection,
-		'admin-expo-collection': AdminExpoCollection,
+		'expo-collection': ExpoCollectionBase,
+		'admin-expo-collection': ExpoCollectionAdmin,
 	},
 	
 	props: {

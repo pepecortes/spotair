@@ -5,3 +5,15 @@
 $font-family-base: 'B612';
 $font-family-monospace: 'B612 Mono';
 
+:root {
+	font-size: 10px;
+}
+
+@media only screen and (min-width: 768px) {
+	
+	:root {
+		font-size: 16px;
+	}
+	
+}
+

@@ -16,21 +16,16 @@
 		
 		b-container(fluid)
 			b-row
-				b-col.sidePanel(cols="2")
-					div(v-show='!silent')
-						p.secondary-header.text-center
-						timeline(id="jcortesocana", sourceType="profile", :options="{ tweetLimit: '6' }")
-				b-col(cols="8")
-					carousel(
+				b-col(order-lg="2", lg="8")
+					carousel#carousel(
 						v-if='carouselActive',
 						:options='options',
 						:photos='photos',
 						v-model='photo',
 						v-on:input='photoSelected',
-						style="width:100%; height:76vh",
 					)
 					p.disclaimer(v-show="!silent") Association Spot'Air, Blagnac (31). Les photos de ce site ne sont pas libres de droits.
-				b-col.sidePanel.text-center(cols="2")
+				b-col.sidePanel.text-center(order-lg="2", lg="2")
 					div(v-show='!silent')
 						p.secondary-header.text-center
 						a.partenaires-logo(href="https://www.welove.aero/fr", target="_blank")
@@ -39,6 +34,10 @@
 							img(:src="mediaURL + 'logo_cap_aero.png'", alt="logo", style="padding:0.5em;width:150px;")
 						a.partenaires-logo(href="http://www.numeriphot.com/", target="_blank")
 							img(:src="mediaURL + 'logo_numeriphot.png'", alt="logo", style="padding:0.5em;width:150px;")
+				b-col.sidePanel(order-lg="1", lg="2")
+					div(v-show='!silent')
+						p.secondary-header.text-center Les News
+						timeline(id="jcortesocana", sourceType="profile", :options="{ tweetLimit: '6', chrome: 'noborders noscrollbar transparent noheader' }")
 						
 </template>
 
@@ -123,9 +122,20 @@ export default {
 }
 
 .nous_sommes > p {
-	font-size: 1.3em;
 	font-style: italic;
 	color: $color-secondary-1-4;
+}
+
+@media only screen and (min-width: 768px) {
+	
+	.nous_sommes > p, h2 {
+	}
+	
+}
+
+#carousel {
+	width: 100%;
+	height: 76vh;
 }
 
 .collapsed > .when-opened,

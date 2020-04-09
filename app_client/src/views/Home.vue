@@ -7,15 +7,14 @@
 					img(:src='logoUrl', alt="logo")
 				
 				b-navbar-toggle(target="nav-collapse")
+				
 				b-collapse(id="nav-collapse", is-nav)
+				
 					b-navbar-nav
-						b-nav-item#social
-							fa-icon.social(icon="share-alt-square")
-						b-popover(target="social", triggers="hover focus", placement="bottom")
-							b-button(href="https://www.facebook.com/spotair.org/", target="_blank", variant="light")
-								fa-icon.social(icon="facebook-square")
-							b-button(href="https://www.instagram.com/spotair.officiel/", target="_blank", variant="light")
-								fa-icon.social(icon="instagram")
+						b-nav-item(href="https://www.facebook.com/spotair.org/", target="_blank")
+							fa-icon.social(icon="facebook-square")
+						b-nav-item(href="https://www.instagram.com/spotair.officiel/", target="_blank")
+							fa-icon.social(icon="instagram")
 						b-nav-item(to="/map") CARTE
 						b-nav-item(to="/galeries") GALERIES
 						b-nav-item-dropdown(v-if='loggedIn')
@@ -32,10 +31,10 @@
 								b-form-input(ref="searchInput", v-model='searchString', size="sm", class="mr-sm-2", placeholder="Recherche")
 							b-button(size="sm", variant="primary", v-b-toggle.collapseSearchField)
 								fa-icon(icon="search")
-							b-nav-item(v-show='!silent', v-on:click="toggleSilent", v-b-tooltip.hover.v-yellow.ds1000, title="au calme")
-								fa-icon(icon="bell-slash-o")
-							b-nav-item(v-show='silent', v-on:click="toggleSilent", v-b-tooltip.hover.v-yellow.ds1000, title="site complet")
-								fa-icon(icon="bell-o")
+						b-nav-item(v-show='silent', v-on:click="toggleSilent", v-b-tooltip.hover.v-yellow.ds1000, title="site complet")
+							fa-icon(icon="bell-o")
+						b-nav-item(v-show='!silent', v-on:click="toggleSilent", v-b-tooltip.hover.v-yellow.ds1000, title="au calme")
+							fa-icon(icon="bell-slash-o")
 						b-nav-item-dropdown(right)
 							template(slot="button-content")
 								fa-icon(icon="user")

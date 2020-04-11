@@ -25,6 +25,10 @@
 						v-on:input='photoSelected',
 					)
 					p.disclaimer(v-show="!silent") Association Spot'Air, Blagnac (31). Les photos de ce site ne sont pas libres de droits.
+				b-col#lesNews(order-lg="1", lg="2")
+					div(v-show='!silent')
+						p.secondary-header.text-center Les News
+						timeline(id="jcortesocana", sourceType="profile", :options="{ tweetLimit: '3', chrome: 'noborders noscrollbar transparent noheader nofooter' }")
 				b-col.text-center(order-lg="3", lg="2")
 					div(v-show='!silent')
 						p.secondary-header.text-center
@@ -34,10 +38,6 @@
 							img(:src="mediaURL + 'logo_cap_aero.png'", alt="logo", style="padding:0.5em;width:150px;")
 						a.partenaires-logo(href="http://www.numeriphot.com/", target="_blank")
 							img(:src="mediaURL + 'logo_numeriphot.png'", alt="logo", style="padding:0.5em;width:150px;")
-				b-col#lesNews(order-lg="1", lg="2")
-					div(v-show='!silent')
-						p.secondary-header.text-center Les News
-						timeline(id="jcortesocana", sourceType="profile", :options="{ tweetLimit: '6', chrome: 'noborders noscrollbar transparent noheader' }")
 						
 </template>
 

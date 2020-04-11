@@ -92,7 +92,10 @@ export default {
 		
 		options() {
 			if (!this.google) return {}
-			return {mapTypeControlOptions: {position: this.google.maps.ControlPosition.TOP_RIGHT}}
+			return {
+				mapTypeControl: false,
+				fullscreenControl: false,
+			}
 		},
 		
 		anneeOptionSorted() {
@@ -280,7 +283,7 @@ export default {
 <style lang="scss">
 
 #map {
-	margin-top: -40px;
+	margin-top: -2.5rem;
 }
 
 .gMapControlBorder {

@@ -46,6 +46,17 @@ export default {
 	border-radius: 0.25rem;
 }
 
+.multiselect__select {
+	height: 2.0rem;
+}
+
+.multiselect__option {
+	font-size: 1.1rem;
+	padding: 0.8rem;
+	min-height: 2.5rem;
+	line-height: 1rem;
+}
+
 .multiselect__input,
 .multiselect__single {
   font-size: 1.0rem;

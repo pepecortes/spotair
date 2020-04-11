@@ -104,7 +104,7 @@ export default {
 }
 
 #header {
-	margin-bottom: 1em;
+	margin-bottom: 1rem;
 }
 
 #logo {

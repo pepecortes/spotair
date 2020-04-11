@@ -1,4 +1,4 @@
-ACCUEIL
+PICTADD
 	Check responsive
 
 BASEFORM

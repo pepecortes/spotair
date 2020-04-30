@@ -14,6 +14,7 @@ services:
       - ./www:/app/www
       - ./passport.config.js:/app/passport.config.js
       - ./doc:/app/doc
+      - ./test:/app/test
       - ./$LOCAL_STORAGE_LOCATION:/app/$LOCAL_STORAGE_LOCATION
     depends_on:
       - db
@@ -59,9 +60,11 @@ services:
   reverse-proxy:
     image: traefik
     container_name: traefik
+    command: --api
     restart: always
     ports:
       - "80:80"
+      - "8080:8080"
       - "443:443"
       - "$PORT_DB_ADMIN:8081"
     volumes:

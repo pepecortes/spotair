@@ -1,3 +1,16 @@
+PHOTO MODIFY
+	Failed when trying to UPDATE compagnie (status code 500)
+		Force FTS index update +34ms
+		SequelizeDatabaseError: Table 'photoSearchTemp' already exists
+
+
+CLOUD.SPOTAIR.ORG
+	UBUNTU release is 19.04 not supported anymore
+	Get the presentation ready on the cloud
+
+LES NEWS
+	How to cope with the twitter tracking protection issue?
+
 PICTADD
 	Check responsive
 

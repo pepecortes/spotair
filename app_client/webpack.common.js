@@ -17,6 +17,8 @@ module.exports = {
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
+    // publicPath setting for route lazy loading with webpack
+    publicPath: '/dist/',
   },
 	
 	resolve: {
@@ -49,6 +51,25 @@ module.exports = {
 			},
     ],
   },
+  
+  optimization: {
+		splitChunks: {
+      chunks: 'all',
+      cacheGroups: {
+        vendors: {
+          name: 'vendors',
+        },
+				common: {
+					name: 'common',
+					minChunks: 2,
+					chunks: 'async',
+					priority: 10,
+					reuseExistingChunk: true,
+					enforce: true
+				},
+      }
+		},
+	},
   
   plugins: [
     new Dotenv(),

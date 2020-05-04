@@ -38,24 +38,24 @@ Vue.directive('focus', {
   inserted: function (el) {el.focus()}
 })
 
-// Define or input route components
-import FormAerodrome from './components/FormAerodrome.vue'
-import FormTheme from './components/FormTheme.vue'
-import FormAnnee from './components/FormAnnee.vue'
-import FormGalerie from './components/FormGalerie.vue'
-import FormCompagnie from './components/FormCompagnie.vue'
-import FormPhotographe from './components/FormPhotographe.vue'
-import FormUser from './components/FormUser.vue'
-import FormConstructeur from './components/FormConstructeur.vue'
-import FormModele from './components/FormModele.vue'
-import FormAvion from './components/FormAvion.vue'
-import FormAppareil from './components/FormAppareil.vue'
-import FormPhoto from './components/FormPhoto.vue'
-import ThePhotoValidation from './components/ThePhotoValidation.vue'
-import UserProfileForm from './views/UserProfileForm.vue'
-import Search from './views/Search.vue'
+// Define route components
+// They can be lazily loaded (and webpack will split the js in chunks)
+const FormAerodrome = () => import('./components/FormAerodrome.vue')
+const FormTheme = () => import('./components/FormTheme.vue')
+const FormAnnee = () => import('./components/FormAnnee.vue')
+const FormGalerie = () => import('./components/FormGalerie.vue')
+const FormCompagnie = () => import('./components/FormCompagnie.vue')
+const FormPhotographe = () => import('./components/FormPhotographe.vue')
+const FormUser = () => import('./components/FormUser.vue')
+const FormConstructeur = () => import('./components/FormConstructeur.vue')
+const FormModele = () => import('./components/FormModele.vue')
+const FormAvion = () => import('./components/FormAvion.vue')
+const FormAppareil = () => import('./components/FormAppareil.vue')
+const FormPhoto = () => import('./components/FormPhoto.vue')
+const ThePhotoValidation = () => import('./components/ThePhotoValidation.vue')
+const UserProfileForm = () => import('./views/UserProfileForm.vue')
+const Search = () => import('./views/Search.vue')
 
-// Define the routes
 const routes = [
 	// tab can be: "modify", "new",	"fusion"
   { path: '/admin', component: ThePhotoValidation },

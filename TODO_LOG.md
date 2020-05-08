@@ -8,9 +8,6 @@ LES NEWS
 PICTADD
 	Check responsive
 
-BASEFORM
-	When switching from Modifier to Nouveau and back, the hidden form fields appear: they shouldn't
-
 SCREENING-VALIDATION
 	A picture has perhaps been visited by a screener or a validator, but no decision taken. How to indicate this?
 

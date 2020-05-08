@@ -113,10 +113,14 @@ export default {
 		},
 		
 		selectModifyForm() {
+			// clean selection when comming from the NewForm tab
+			if (this.selection && !this.selection.id) this.selection = null
 			this.getSelectOptions(this.mutableInitialId)
 		},
 		
 		selectFusionForm() {
+			// clean selection when comming from the NewForm tab
+			if (this.selection && !this.selection.id) this.selection = null
 			this.getSelectOptions(this.mutableInitialId)
 		},
 		

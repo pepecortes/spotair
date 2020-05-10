@@ -61,8 +61,8 @@ HOW DO I CONNECT AND RUN THE SERVER IN cloud.spotair.org (WARNING: SETUP IS FOR 
 		NETWORK / FAILOVER IP: modify associated instance (so that you can access DNS cloud.spotair.org)
 		STORAGE / BLOCK STORAGE: attach to instance
 		ssh spotair@cloud.spotair.org (you might have SSH warning concerning DNS SPOOFING: you can remove the key and reconnect)
-		cd docker, then git fetch and pull if needed, then docker-compose down -v, then docker-compuse up --build
-		docker-compose exec web bash + npm run watch
+		cd docker, then git fetch and pull if needed, then docker-compose down -v, then docker-compose up --build
+		docker-compose exec web bash + npm run build (or watch, for development)
 
 
 

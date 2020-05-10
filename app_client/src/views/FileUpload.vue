@@ -29,7 +29,8 @@
 						b-icon(icon="arrow-left")
 				template(slot="finish")
 					b-button(type="button", variant="success")
-						b-icon(icon="check")
+						b-spinner(v-show='isLoading', small, type='grow')
+						b-icon(v-show='!isLoading', icon="check")
 				
 				tab-content(title="photo", :beforeChange="imageAvailable")
 					b-input-group
@@ -173,6 +174,7 @@ export default {
 			commentUpload: "",
 			tabColor: colors.success,
 			errorTabColor: colors.danger,
+			isLoading: false,
 		}
 	},
 	
@@ -322,6 +324,7 @@ export default {
 			var fileData = new FormData()
 			let headers = {'Authorization': `Bearer ${process.env.JWT_API_KEY}`}
 			// POST to API is restricted: use a key
+			vm.isLoading = true
 			vm.axios.post("photouploads/", data, {'headers': headers})
 				.then(output => output.data.id)
 				.then(id => {
@@ -332,10 +335,11 @@ export default {
 					return vm.axios.post("storage/putFile/", fileData, {'headers': headers})
 				})
 				.then(output => {
+					vm.isLoading = false
 					vm.showAlert("Photo envoyée pour validation", "success")
 					vm.resetForm()
 				})
-				.catch(err => vm.showAxiosAlert(err, "danger"))
+				.catch(err => {vm.isLoading = false; vm.showAxiosAlert(err, "danger")})
 		}, 
 		
 	},

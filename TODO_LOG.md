@@ -1,16 +1,14 @@
+ADMIN
+	DELETE photo should not send server error when picture is missing
+
 CLOUD.SPOTAIR.ORG
 	UBUNTU release is 19.04 not supported anymore
 	Get the presentation ready on the cloud
-		Put some pictures in HOME
 	VALIDATION: When using REMOTE: validation takes a long time: add icon for waiting
 	VALIDATION: when creating new (i.e. immat) you might want to fill the Avion (if exists)
 	
-
 LES NEWS
 	How to cope with the twitter tracking protection issue?
-
-PICTADD
-	Check responsive
 
 SCREENING-VALIDATION
 	A picture has perhaps been visited by a screener or a validator, but no decision taken. How to indicate this?

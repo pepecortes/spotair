@@ -18,6 +18,7 @@
 							em Tests
 						b-dropdown-item(to="/test/test1") Test 1
 						b-dropdown-item(to="/test/twitterFeed") Embeded Twitter feed
+						b-dropdown-item(to="/test/asyncMultiselect") Async Multiselect
 						
 				b-navbar-nav(class="ml-auto")
 					b-nav-item(v-if='isAdmin', href="/doc") Docs

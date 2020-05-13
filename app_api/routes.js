@@ -127,8 +127,12 @@ module.exports = function(passport) {
 	router.get('/search/fts/idsOnly', (req, res) => ctrlSearch.ftsIdsOnly(req, res))
 	router.get('/search/fts/partial/:limit(\\d+)/:offset(\\d+)', (req, res) => ctrlSearch.ftsPartial(req, res))
 
+	// TEST CONTROLLER
+	router.get('/test', (req, res) => testController.test2(req, res))
+	
 	// Not found
 	router.all('/*', ctrlNotFound);
+	
 	
 	return router
 }

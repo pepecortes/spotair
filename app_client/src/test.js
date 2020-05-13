@@ -44,6 +44,7 @@ import UserProfileForm from './views/UserProfileForm.vue'
 import ThePalette from './components/ThePalette.vue'
 import Test1 from './components/testComponents/Test1.vue'
 import TwitterFeedTest from './components/testComponents/TwitterFeed.vue'
+import TestAsyncMultiselect from './components/testComponents/TestAsyncMultiselect.vue'
 
 // Define the routes
 const routes = [
@@ -51,6 +52,7 @@ const routes = [
   { path: '/test/colors', component: ThePalette },
   { path: '/test/test1', component: Test1 },
   { path: '/test/twitterFeed', component: TwitterFeedTest },
+  { path: '/test/asyncMultiselect', component: TestAsyncMultiselect },
 ]
 
 // Create the router

@@ -113,10 +113,14 @@ export default {
 		},
 		
 		selectModifyForm() {
+			// clean selection when comming from the NewForm tab
+			if (this.selection && !this.selection.id) this.selection = null
 			this.getSelectOptions(this.mutableInitialId)
 		},
 		
 		selectFusionForm() {
+			// clean selection when comming from the NewForm tab
+			if (this.selection && !this.selection.id) this.selection = null
 			this.getSelectOptions(this.mutableInitialId)
 		},
 		
@@ -133,7 +137,7 @@ export default {
 			var vm = this
 			vm.selectOptions = []
 			vm.isLoading = true
-			const partialStep = 5000 // split the api call to 5000 records each time
+			const partialStep = 10000 // split the api call to 5000 records each time
 			
 			async function partialQuery(limit, offset) {
 				return vm.axios.get(`${vm.apiURL}partial/${limit}/${offset}`)

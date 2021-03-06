@@ -47,8 +47,10 @@ onHostRule = true
 # Note: mandatory for wildcard certificate generation.
 [acme.dnsChallenge]
 provider = "ovh"
-delayBeforeCheck = 300
+delayBeforeCheck = 10
+
 [[acme.domains]]
-   main = "spotair.org"
+  main="spotair.org"
+
 [[acme.domains]]
    main = "*.spotair.org"

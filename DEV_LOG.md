@@ -75,7 +75,15 @@ Using TRAEFIK and Let's Encrypt to create and manage SSL certificates. Principle
 	
 https://letsencrypt.org is a certificate authority that provides free X.509 certificates for TLS. It works automatically. Basically, when you apply for a certificate, you need to demonstrate that you have control over the DNS of the domain you are trying to certify. Traefik is capable to automate the task of applying to letsencrypt, but it needs to make API calls to add and remove information to the DNS servers (this demonstrate that you are in control over it for your domain).
 
-OVH documentation is poor. Use https://eu.api.ovh.com/createToken/ to create the following variables: OVH_ENDPOINT, OVH_APPLICATION_KEY, OVH_APPLICATION_SECRET, OVH_CONSUMER_KEY
-You need to allow the following API calls: POST: /domain/zone/<my_domain>/record, POST: /domain/zone/<my_domain>/refresh, DELETE: /domain/zone/<my_domain>/record/*
+OVH documentation is poor.
+API calls can be found here: https://api.ovh.com/console/
+API calls referring to API applications: /me/api/application
+	(i.e:  GET /me/api/application lists all your current applications)
+
+Use https://eu.api.ovh.com/createToken/ to create the following variables: OVH_ENDPOINT, OVH_APPLICATION_KEY, OVH_APPLICATION_SECRET, OVH_CONSUMER_KEY
+You need to allow the following API calls:
+	POST: /domain/zone/spotair.org/record
+	POST: /domain/zone/spotair.org/refresh
+	DELETE: /domain/zone/spotair.org/record/*
 
 

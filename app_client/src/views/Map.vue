@@ -38,8 +38,7 @@ import ControlVueMultiselect from "../components/ControlVueMultiselect.vue"
 import { alertMixin } from '../mixins/Alert'
 import { gmapApi } from 'vue2-google-maps'
 import { BIcon, BIconBullseye, BIconX, BIconHouse } from 'bootstrap-vue'
-
-const _ = require('lodash')
+import lodash_orderBy from 'lodash/orderBy'
 
 export default {
 	
@@ -99,7 +98,7 @@ export default {
 		},
 		
 		anneeOptionSorted() {
-			return _.orderBy(this.anneeOptions, [annee => annee.text], ['desc'])
+			return lodash_orderBy(this.anneeOptions, [annee => annee.text], ['desc'])
 		},
 		
 	},

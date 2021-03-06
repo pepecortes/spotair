@@ -39,12 +39,13 @@ Vue.directive('focus', {
 })
 
 // Define or input route components
-import Accueil from './views/Accueil.vue'
-import Map from './views/Map.vue'
-import Galeries from './views/Galeries.vue'
-import FileUploadForm from './views/FileUpload.vue'
-import UserProfileForm from './views/UserProfileForm.vue'
-import Search from './views/Search.vue'
+// They can be lazily loaded (and webpack will split the js in chunks)
+const Search = () => import('./views/Search.vue')
+const Accueil = () => import('./views/Accueil.vue')
+const Map = () => import('./views/Map.vue')
+const Galeries = () => import('./views/Galeries.vue')
+const FileUploadForm = () => import('./views/FileUpload.vue')
+const UserProfileForm = () => import('./views/UserProfileForm.vue')
 
 // Define the routes
 const routes = [

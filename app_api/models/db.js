@@ -81,6 +81,7 @@ createFTSIndex = function() {
 		
 		CREATE PROCEDURE CreateSearchTable()
 		BEGIN
+		DROP TABLE IF EXISTS photoSearchTemp;
 		CREATE TABLE photoSearchTemp
 		SELECT photos.id, CONCAT_WS(', ', photos.commentaire,	photographes.nom,
 			photographes.prenom, compagnies.nom, compagnies.flotille,
@@ -129,7 +130,6 @@ sequelize.sync({logging: false})
 
 // Create FTS index generation and schedule
 createFTSIndex()
-
 	
 // export sequelize object (a handler to the db) and the Models
 module.exports.sequelize = sequelize

@@ -41,7 +41,9 @@ const localStrategy = new LocalStrategy(
 )
 
 /**
- * API GET calls or calls issued from localhost are always authorized
+ * calls to private routes (i.e. /users) are NOT authorized
+ * API GET calls and other POST to public calls are authorized
+ * calls issued from localhost are authorized
  */
 const apiStrategy = new CustomStrategy(
   function(req, done) {
@@ -49,9 +51,11 @@ const apiStrategy = new CustomStrategy(
 		const privateRoute = 
 			req.path.startsWith("/users") ||
 			req.path.startsWith("/photographes")
+		const publicRoute = req.path.startsWith("/photos/byIds")
 		try {
 			if (req.hostname == "localhost") return done(null, {})
 			if (req.method == 'GET' && !privateRoute) return done(null, {})
+			if (publicRoute) return done(null, {})
 			return done(null, false)
 		} catch(e) {debug("error: " + e)}
 			

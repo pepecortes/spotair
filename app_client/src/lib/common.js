@@ -47,6 +47,9 @@ export function pictureURLs(photo) {
  * @param {Integer} radius	- number of elements to take, both left and right
  * @returns {Array} A copy of the original array
  */
+import lodash_ceil from 'lodash/ceil'
+import lodash_max from 'lodash/max'
+ 
 export function centeredSlice(array, center=0, radius=1) {
 	radius = Math.abs(radius)
 	const l = array.length
@@ -61,8 +64,8 @@ export function centeredSlice(array, center=0, radius=1) {
 		return concatNTimes(array, n-1, x)
 	}
 	
-	const n_float = _.max([(radius-center)/l, (radius+center)/l])
-	const n = _.ceil(n_float)
+	const n_float = lodash_max([(radius-center)/l, (radius+center)/l])
+	const n = lodash_ceil(n_float)
 	const extendedArray = concatNTimes(array, (2*n + 1))
 	let LH = center - radius + n*l
 	let RH = (shortArray)? center + radius + n*l : center + radius + 1 + n*l

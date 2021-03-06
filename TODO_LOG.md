@@ -1,14 +1,17 @@
-PICTADD
-	Check responsive
+ADMIN
+	DELETE photo should not send server error when picture is missing
 
-BASEFORM
-	When switching from Modifier to Nouveau and back, the hidden form fields appear: they shouldn't
+CLOUD.SPOTAIR.ORG
+	UBUNTU release is 19.04 not supported anymore
+	Get the presentation ready on the cloud
+	VALIDATION: When using REMOTE: validation takes a long time: add icon for waiting
+	VALIDATION: when creating new (i.e. immat) you might want to fill the Avion (if exists)
+	
+LES NEWS
+	How to cope with the twitter tracking protection issue?
 
 SCREENING-VALIDATION
 	A picture has perhaps been visited by a screener or a validator, but no decision taken. How to indicate this?
-
-DATABASE CHANGES FOR EXTENDED ADMIN ROLE (SCREENER)
-	Change 'isAdmin' field -> 'group'
 
 PHOTO-DATA-EDIT
 	DELETE API call manage all the tasks linked to deletion?
@@ -16,8 +19,7 @@ PHOTO-DATA-EDIT
 BUILD
 	Document somewhere how to build the app_client sources in production (install dependencies, launch webpack...)
 
-LOADING ICON
-	VALIDATION: When using REMOTE: validation takes a long time: add icon for waiting
+
 	
 DATABASE MIGRATION
 	before migration; choose IMG_HEIGHT in .env, because thubnails size depends on it

@@ -45,6 +45,7 @@ LATER:
 	Should we protect the images object server?
 	You might need to backup SPOTAIR BLOCK STORAGE VOLUMEs
 	You might need to configure the FAILOVER IP firewall
+	REFERENCEMENT: make the picture text appear in the HTML metadata
 	
 
 

@@ -57,7 +57,7 @@ export default {
 	#unFixedSideNavCompanion {
 		margin-left: 20%;
 		width: auto;
-		max-width: 70em;
+		/*max-width: 70em;*/
 	} 
 }
 </style>

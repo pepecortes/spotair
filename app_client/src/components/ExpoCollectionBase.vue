@@ -83,8 +83,8 @@ export default {
 	.expobox {
 		display: flex;
 		flex-flow: row wrap;
-		align-items: flex-start;
-		justify-content: flex-start;
+		align-items: center;
+		justify-content: center;
 	}
 	
 	.expobox img {

@@ -30,6 +30,8 @@ services:
       MYSQL_ROOT_PASSWORD: $DB_PASSWORD
     volumes:
       - ./dev_database:/var/lib/mysql
+    cap_add:
+      - SYS_NICE
       
   adminer:
     image: adminer

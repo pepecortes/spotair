@@ -14,8 +14,8 @@ const sequelize = new Sequelize({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
   define: {
-		charset: 'utf8',
-    collate: 'utf8_general_ci',
+		charset: 'utf8mb4',
+    collate: 'utf8mb4_general_ci',
     timestamp:true, engine: 'InnoDB', 
     underscored:false
   },
@@ -34,24 +34,23 @@ const sequelize = new Sequelize({
     //console.error('Unable to connect to the database:', err);
   //});
 
-// bring in the models that are defined in each file
-const Aerodrome = sequelize.import('./aerodrome')
-const Annee = sequelize.import('./annee')
-const Galerie = sequelize.import('./galerie')
-const Theme = sequelize.import('./theme')
-const Photographe = sequelize.import('./photographe')
-const User = sequelize.import('./user')
-const Compagnie = sequelize.import('./compagnie')
-const Constructeur = sequelize.import('./constructeur')
-const Modele = sequelize.import('./modele')
-const Avion = sequelize.import('./avion')
-const Appareil = sequelize.import('./appareil')
-const Photo = sequelize.import('./photo')
-const PhotoUpload = sequelize.import('./photoupload')
-const Info = sequelize.import('./info')
-const Journal = sequelize.import('./journal')
-const Like = sequelize.import('./like')
-const LogMigration = sequelize.import('./logMigration')
+const Aerodrome = require('./aerodrome')(sequelize, Sequelize)
+const Annee = require('./annee')(sequelize, Sequelize)
+const Galerie = require('./galerie')(sequelize, Sequelize)
+const Theme = require('./theme')(sequelize, Sequelize)
+const Photographe = require('./photographe')(sequelize, Sequelize)
+const User = require('./user')(sequelize, Sequelize)
+const Compagnie = require('./compagnie')(sequelize, Sequelize)
+const Constructeur = require('./constructeur')(sequelize, Sequelize)
+const Modele = require('./modele')(sequelize, Sequelize)
+const Avion = require('./avion')(sequelize, Sequelize)
+const Appareil = require('./appareil')(sequelize, Sequelize)
+const Photo = require('./photo')(sequelize, Sequelize)
+const PhotoUpload = require('./photoupload')(sequelize, Sequelize)
+const Info = require('./info')(sequelize, Sequelize)
+const Journal = require('./journal')(sequelize, Sequelize)
+const Like = require('./like')(sequelize, Sequelize)
+const LogMigration = require('./logMigration')(sequelize, Sequelize)
 
 // then, build all the relationships between Models
 Galerie.belongsTo(Annee, {onDelete: 'RESTRICT'})
@@ -116,6 +115,7 @@ createFTSIndex = function() {
 		.catch(err => debug(err))
 }
 
+
 updateFTSindex = function() {
 	// Force immediate update of the FULL TEXT SEARCH index
 	debug("Force FTS index update")
@@ -150,5 +150,4 @@ module.exports.Info = Info
 module.exports.Journal = Journal
 module.exports.Like = Like
 module.exports.LogMigration = LogMigration
-module.exports.updateFTSindex = updateFTSindex	
-
+module.exports.updateFTSindex = updateFTSindex

@@ -1,11 +1,11 @@
 /**
  * Main entry for the application
- */ 
-require('dotenv').load()
+ */
+require('dotenv').config()
 const express = require('express')
+const redis = require('redis')
 const session = require('express-session')
-const morgan       = require('morgan')
-const RedisStore = require('connect-redis')(session)
+const morgan = require('morgan')
 const path = require('path')
 const logger = require('morgan')
 const bodyParser = require('body-parser')
@@ -29,17 +29,14 @@ require('./app_api/models/db');
 var app = express();
 app.set("view engine", "pug")
 
-const redisOptions = {
-	host:process.env.REDIS_HOST,
-	port:process.env.REDIS_PORT,
-	logErrors:true
-}
+let RedisStore = require('connect-redis')(session)
+let redisClient = redis.createClient({ host: 'redis',  port: 6379 })
 
 app.use(session({
-	store: new RedisStore(redisOptions),
-	secret: process.env.COOKIE_SESSION_SECRET,
-	resave: false,
-	saveUninitialized: false
+	store: new RedisStore({ client: redisClient }),
+  secret: process.env.COOKIE_SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false
 }))
 
 app.use(logger('tiny'))

@@ -52,6 +52,7 @@
     "pluralize": "^8.0.0",
     "probe-image-size": "^7.0.0",
     "pug": "^3.0.2",
+    "redis": "^3.0.2",
     "sequelize": "^6.5.0",
     "serve-favicon": "^2.5.0",
     "serve-index": "^1.9.1",

@@ -1,4 +1,4 @@
-FROM node:12
+FROM node:15
 
 # Create app directory
 WORKDIR /app
@@ -19,7 +19,7 @@ COPY ./.env ./
 
 # Install dependencies
 RUN ["npm", "install"]
-RUN ["npm", "install", "-g", "nodemon@^1.18.8"]
+RUN ["npm", "install", "-g", "nodemon@^2.0.7"]
 
 EXPOSE $PORT
 

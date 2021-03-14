@@ -1,6 +1,53 @@
-version: "3.2"
+
+
+version: "3.7"
 
 services:
+
+  reverse-proxy:
+    image: traefik:v2.4
+    command:
+      - --log.level=INFO
+      - --api.insecure=true
+      - --entrypoints.web.address=:80
+      - --providers.docker=true
+      - --providers.docker.exposedByDefault=false
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      traefik.http.routers.dash.rule: Host(`proxyadmin.localhost`)
+      traefik.http.routers.dash.service: api@internal
+    ports:
+      - "80:80"
+      - "443:443"
+    
+  db:
+    image: "mysql:8.0"
+    container_name: mysql
+    command: --default-authentication-plugin=mysql_native_password --event-scheduler=ON
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: $DB_PASSWORD
+    volumes:
+      - ./dev_database:/var/lib/mysql
+      
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    expose:
+      - 8080
+    depends_on:
+      - db
+    labels:
+      traefik.enable: true
+      traefik.http.routers.adminer.rule: Host(`dbadmin.localhost`)
+  
+  redis:
+    image: "redis:alpine"
+    container_name: redis
+    restart: always
+    
   web:
     build: .
     container_name: spotair
@@ -21,53 +68,5 @@ services:
       - redis
       - reverse-proxy
     labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.entryPoints=https"
-      - "traefik.frontend.rule=Host:localhost"
-      - "traefik.backend=spotair"
-      - "traefik.port=3000"
-  
-  redis:
-    image: "redis:alpine"
-    container_name: redis
-    restart: always
-    
-  db:
-    image: "mysql:5.7"
-    container_name: mysql
-    command: --default-authentication-plugin=mysql_native_password --event-scheduler=ON
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: $DB_PASSWORD
-    volumes:
-      - ./dev_database:/var/lib/mysql
-      
-  adminer:
-    image: adminer
-    container_name: adminer
-    restart: always
-    expose:
-      - 8080
-    depends_on:
-      - db
-    labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.entryPoints=dbadmin"
-      - "traefik.frontend.rule=Host:localhost"
-      - "traefik.backend=dbAdmin"
-      - "traefik.port=8080"
-      
-  reverse-proxy:
-    image: traefik
-    container_name: traefik
-    command: --api
-    restart: always
-    ports:
-      - "80:80"
-      - "8080:8080"
-      - "443:443"
-      - "$PORT_DB_ADMIN:8081"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./traefik.toml:/etc/traefik/traefik.toml
-      
+      traefik.enable: true
+      traefik.http.routers.web.rule: Host(`localhost`)

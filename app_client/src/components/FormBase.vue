@@ -2,7 +2,8 @@
 	include FormBase.pug
 </template>
 
-<script>import Vue from 'vue'
+<script>
+import Vue from 'vue'
 import { BFormGroup	} from 'bootstrap-vue'
 import ControlVueMultiselect from "./ControlVueMultiselect.vue" 
 import pluralize from 'pluralize'

@@ -5,7 +5,6 @@
 * @module /app_client/routes
 */
 const path = require('path')
-const favicon = require('serve-favicon');
 const debug = require('debug')('app:client:routes')
 const sendJSON = require('../app_lib/helpers').sendJSON
 const jwt = require("jwt-simple")
@@ -49,9 +48,6 @@ module.exports = function(passport) {
 	// static routes
 	router.use('/dist', express.static(path.join(__dirname, 'dist')))
 	router.use('/static', express.static(path.join(__dirname, 'static')))
-	
-	// favicon
-	router.use(favicon(path.join(__dirname, 'static/icons', 'favicon.ico')))
 	
 	// login pages
 	router.get('/login*',

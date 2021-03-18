@@ -8,7 +8,7 @@
 
 <script>
 import 'swiper/css/swiper.css'
-import { swiper, swiperSlide } from 'vue-awesome-swiper'
+import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import { centeredSlice } from '../lib/common'
 
 const RANGE = 5
@@ -17,7 +17,7 @@ const RANGE = 5
 
 export default {
 	
-	components: {swiper, swiperSlide},
+	components: {Swiper, SwiperSlide},
 	
 	props: {
 		value: {type: Object},

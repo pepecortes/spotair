@@ -61,6 +61,7 @@ Notes for a new local installation
 	The site will not work: 'spotair' database does not exist yet + there is not any user available
 		Navigate to dbadmin.localhost (or the adminer host:port) and create  'spotair' database (collation 'utf8mb4_general_ci')
 	  Refresh: docker-compose down -v &&	docker-compose up
+	  The first items of each model table (id=1) is a "none": you might need to create it
 		Navigate again to dbamin and create a Photographe + an 'admin' User (link to the Photographe just created, group=1, passwordHash unchanged -corresponds to "membres!"-)
 	docker-compose exec web bash & npm run watch (this will create the client-side javascript)
 	Navigate to localhost:3001, then Admin, and create some database entries

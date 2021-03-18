@@ -58,7 +58,7 @@ export default {
 	
 	computed: {
 		
-		swiper() {return this.$refs.mySwiper.swiper},
+		swiper() {return this.$refs.mySwiper.$swiper},
 		
 		swiperOptions() {return Object.assign(this.defaultOptions, this.options)},
 		

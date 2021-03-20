@@ -37,10 +37,12 @@ The site and the database cannot yet work:
 	  
 	(refresh) docker-compose down -v &&	docker-compose up
 	
+* (Option: you can import a test database (see "test" folder)
 * The first items of each model table (id=1) is a "none": you might need to create it
 *	Navigate again to dbamin and create a Photographe + an 'admin' User (link to the Photographe just created, group=1, passwordHash unchanged -corresponds to "membres!"-)
+
 	
-####Create a local folder for photo storage, with an "uploads", "pictures", "thumbnails", "originals" subfolders (see .env)
+####Create a local folder for photo storage, with an "uploads", "pictures", "thumbnails" subfolders (see .env)
 
 ####Build the client side javascript (see "webpack")
 	

@@ -1,0 +1,69 @@
+version: "3.7"
+
+services:
+
+  reverse-proxy:
+    image: traefik:v2.4
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.yaml:/traefik.yaml:ro
+      - ./local_certificates:/etc/certs:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    
+  db:
+    image: "mysql:8.0"
+    container_name: mysql
+    command: --default-authentication-plugin=mysql_native_password --event-scheduler=ON
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: $DB_PASSWORD
+    volumes:
+      - ./dev_database:/var/lib/mysql
+    cap_add:
+      - SYS_NICE
+      
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    expose:
+      - 8080
+    depends_on:
+      - db
+    labels:
+      traefik.enable: true
+      traefik.http.routers.adminer.rule: Host(`dbadmin.localhost`)
+      traefik.http.routers.adminer.entrypoints: "https"
+      traefik.http.routers.adminer.tls: true
+  
+  redis:
+    image: "redis:alpine"
+    container_name: redis
+    restart: always
+    
+  web:
+    build: .
+    container_name: spotair
+    restart: always
+    expose:
+      - 3000
+    volumes:
+      - ./app_api:/app/app_api
+      - ./app_client:/app/app_client
+      - ./app_lib:/app/app_lib
+      - ./www:/app/www
+      - ./passport.config.js:/app/passport.config.js
+      - ./doc:/app/doc
+      - ./test:/app/test
+      - ./$LOCAL_STORAGE_LOCATION:/app/$LOCAL_STORAGE_LOCATION
+    depends_on:
+      - db
+      - redis
+      - reverse-proxy
+    labels:
+      traefik.enable: true
+      traefik.http.routers.web.rule: Host(`localhost`)
+      traefik.http.routers.web.entrypoints: "https"
+      traefik.http.routers.web.tls: true

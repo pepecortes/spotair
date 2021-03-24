@@ -1,0 +1,24 @@
+log:
+  level: INFO
+  format: common
+  
+entryPoints:
+  web:
+    address: :80
+    http:
+      redirections:
+        entryPoint:
+          to: https
+          scheme: https
+  https:
+    address: :443
+
+providers:
+  docker:
+    watch: true
+    exposedbydefault: false
+    
+tls:
+  certificates:
+    certFile = "./local_certificates/local-cert.pem"
+    keyFile = "./local_certificates/local-key.pem"

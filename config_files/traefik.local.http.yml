@@ -1,0 +1,12 @@
+log:
+  level: INFO
+  format: common
+  
+entryPoints:
+  web:
+    address: :80
+
+providers:
+  docker:
+    watch: true
+    exposedbydefault: false

@@ -1,0 +1,30 @@
+log:
+  level: DEBUG
+  format: common
+  
+entryPoints:
+  web:
+    address: :80
+    http:
+      redirections:
+        entryPoint:
+          to: https
+          scheme: https
+  https:
+    address: :443
+
+providers:
+  docker:
+    watch: true
+    exposedbydefault: false
+    
+certificatesResolvers:
+  myResolver:
+    acme:
+#      caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
+      email: webmaster@spotair.org
+      storage: /etc/traefik/acme.json
+      dnsChallenge:
+        provider: ovh
+        delayBeforeCheck: 10
+

@@ -3,6 +3,7 @@
 /Dockerfile
 /docker-compose.yml
 /traefik.toml
+/traefik.yaml
 /traefik.acme.json
 
 # Logs

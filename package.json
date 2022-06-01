@@ -48,7 +48,7 @@
     "sequelize": "^5.21.2",
     "serve-favicon": "^2.5.0",
     "serve-index": "^1.9.1",
-    "sharp": "^0.22.1",
+    "sharp": "^0.30.5",
     "tiny-async-pool": "^1.0.4",
     "vue": "^2.5.17",
     "vue-async-computed": "^3.7.0",

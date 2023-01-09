@@ -40,7 +40,7 @@
     "overlapping-marker-spiderfier": "^1.1.4",
     "passport": "^0.4.0",
     "passport-custom": "^1.0.5",
-    "passport-jwt": "^4.0.0",
+    "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "pluralize": "^7.0.0",
     "probe-image-size": "^4.0.0",
